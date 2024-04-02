@@ -1,0 +1,9 @@
+FROM directus/directus:10.10.4
+
+USER root
+RUN corepack enable
+USER node
+
+RUN pnpm install directus-extension-schema-sync
+# This is for when building for production
+COPY ./schema-sync ./schema-sync
