@@ -11,9 +11,9 @@ services:
   database:
     image: postgis/postgis:13-master
     # Required when running on platform other than amd64, like Apple M1/M2:
-    # platform: linux/amd64
+    platform: linux/amd64
     volumes:
-      - ./data/database:/var/lib/postgresql/data
+      - postgres_data:/var/lib/postgresql/data
     networks:
       - directus-net
     environment:
@@ -47,6 +47,8 @@ services:
     environment:
       KEY: "${KEY}"
       SECRET: "${SECRET}"
+      WEBSOCKETS_ENABLED: "true"
+      SCHEMA_SYNC: "BOTH"
 
       DB_CLIENT: "pg"
       DB_HOST: "database"
@@ -62,8 +64,14 @@ services:
       ADMIN_EMAIL: "${ADMIN_EMAIL}"
       ADMIN_PASSWORD: "${ADMIN_PASSWORD}"
 
-      PUBLIC_URL: "${PUBLIC_URL}"
+      # PUBLIC_URL: "${PUBLIC_URL}"
+
+      # Only required when running behind a reverse proxy like nginx-proxy
       VIRTUAL_HOST: "${VIRTUAL_HOST}"
       VIRTUAL_PORT: "${VIRTUAL_PORT}"
       LETSENCRYPT_HOST: "${LETSENCRYPT_HOST}"
       LETSENCRYPT_EMAIL: "${LETSENCRYPT_EMAIL}"
+
+volumes:
+  postgres_data:
+
