@@ -1,6 +1,10 @@
-# room-booking-tool
+# Room Booking Tool
 
-This template should help get you started developing with Vue 3 in Vite.
+## Docker Setup
+
+Run `docker-compose up` to start the development server.
+In a new terminal window run `docker-compose exec -it directus npx directus schema-sync install --force`
+
 
 ## Recommended IDE Setup
 

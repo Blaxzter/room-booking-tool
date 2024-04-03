@@ -1,22 +1,22 @@
 [
   {
-    "admin_access": false,
-    "app_access": false,
-    "description": "All members with direct booking rights",
-    "enforce_tfa": false,
-    "icon": "supervised_user_circle",
-    "id": "ca14adbd-1ed1-4d09-8288-3bd1b5db402f",
-    "ip_access": null,
-    "name": "Member"
-  },
-  {
     "admin_access": true,
     "app_access": true,
     "description": "$t:admin_description",
     "enforce_tfa": false,
     "icon": "verified",
-    "id": "d64ec73e-52be-488b-a1ee-311694909448",
+    "id": "012f6c75-2941-467a-8ee8-649145716dc2",
     "ip_access": null,
     "name": "Administrator"
+  },
+  {
+    "admin_access": false,
+    "app_access": false,
+    "description": "All members with direct booking rights.",
+    "enforce_tfa": false,
+    "icon": "supervised_user_circle",
+    "id": "7f4b19bf-c64f-4b7d-930a-49173f4428c6",
+    "ip_access": null,
+    "name": "Member"
   }
 ]

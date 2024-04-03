@@ -31,6 +31,7 @@ services:
     build:
       context: ./
       dockerfile: Dockerfile.directus
+    restart: always
     ports:
       - 8055:8055
     volumes:

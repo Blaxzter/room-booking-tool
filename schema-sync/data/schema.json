@@ -163,52 +163,6 @@
       },
       {
         "collection": "bookable_object",
-        "field": "user_created",
-        "type": "uuid",
-        "meta": {
-          "collection": "bookable_object",
-          "conditions": null,
-          "display": "user",
-          "display_options": null,
-          "field": "user_created",
-          "group": null,
-          "hidden": true,
-          "interface": "select-dropdown-m2o",
-          "note": null,
-          "options": {
-            "template": "{{avatar.$thumbnail}} {{first_name}} {{last_name}}"
-          },
-          "readonly": true,
-          "required": false,
-          "sort": 3,
-          "special": [
-            "user-created"
-          ],
-          "translations": null,
-          "validation": null,
-          "validation_message": null,
-          "width": "half"
-        },
-        "schema": {
-          "name": "user_created",
-          "table": "bookable_object",
-          "data_type": "uuid",
-          "default_value": null,
-          "max_length": null,
-          "numeric_precision": null,
-          "numeric_scale": null,
-          "is_nullable": true,
-          "is_unique": false,
-          "is_primary_key": false,
-          "is_generated": false,
-          "generation_expression": null,
-          "has_auto_increment": false,
-          "foreign_key_table": "directus_users",
-          "foreign_key_column": "id"
-        }
-      },
-      {
-        "collection": "bookable_object",
         "field": "date_created",
         "type": "timestamp",
         "meta": {
@@ -226,7 +180,7 @@
           "options": null,
           "readonly": true,
           "required": false,
-          "sort": 4,
+          "sort": 3,
           "special": [
             "date-created"
           ],
@@ -272,7 +226,7 @@
           "options": null,
           "readonly": true,
           "required": false,
-          "sort": 5,
+          "sort": 4,
           "special": [
             "date-updated"
           ],
@@ -298,104 +252,9 @@
           "foreign_key_table": null,
           "foreign_key_column": null
         }
-      },
-      {
-        "collection": "directus_settings",
-        "field": "mv_hash",
-        "type": "string",
-        "meta": null,
-        "schema": {
-          "name": "mv_hash",
-          "table": "directus_settings",
-          "data_type": "character varying",
-          "default_value": "",
-          "max_length": 255,
-          "numeric_precision": null,
-          "numeric_scale": null,
-          "is_nullable": false,
-          "is_unique": false,
-          "is_primary_key": false,
-          "is_generated": false,
-          "generation_expression": null,
-          "has_auto_increment": false,
-          "foreign_key_table": null,
-          "foreign_key_column": null
-        }
-      },
-      {
-        "collection": "directus_settings",
-        "field": "mv_ts",
-        "type": "timestamp",
-        "meta": null,
-        "schema": {
-          "name": "mv_ts",
-          "table": "directus_settings",
-          "data_type": "timestamp with time zone",
-          "default_value": "2020-01-01 00:00:00+00",
-          "max_length": null,
-          "numeric_precision": null,
-          "numeric_scale": null,
-          "is_nullable": false,
-          "is_unique": false,
-          "is_primary_key": false,
-          "is_generated": false,
-          "generation_expression": null,
-          "has_auto_increment": false,
-          "foreign_key_table": null,
-          "foreign_key_column": null
-        }
-      },
-      {
-        "collection": "directus_settings",
-        "field": "mv_locked",
-        "type": "boolean",
-        "meta": null,
-        "schema": {
-          "name": "mv_locked",
-          "table": "directus_settings",
-          "data_type": "boolean",
-          "default_value": false,
-          "max_length": null,
-          "numeric_precision": null,
-          "numeric_scale": null,
-          "is_nullable": false,
-          "is_unique": false,
-          "is_primary_key": false,
-          "is_generated": false,
-          "generation_expression": null,
-          "has_auto_increment": false,
-          "foreign_key_table": null,
-          "foreign_key_column": null
-        }
       }
     ],
-    "relations": [
-      {
-        "collection": "bookable_object",
-        "field": "user_created",
-        "related_collection": "directus_users",
-        "meta": {
-          "junction_field": null,
-          "many_collection": "bookable_object",
-          "many_field": "user_created",
-          "one_allowed_collections": null,
-          "one_collection": "directus_users",
-          "one_collection_field": null,
-          "one_deselect_action": "nullify",
-          "one_field": null,
-          "sort_field": null
-        },
-        "schema": {
-          "table": "bookable_object",
-          "column": "user_created",
-          "foreign_key_table": "directus_users",
-          "foreign_key_column": "id",
-          "constraint_name": "bookable_object_user_created_foreign",
-          "on_update": "NO ACTION",
-          "on_delete": "NO ACTION"
-        }
-      }
-    ]
+    "relations": []
   },
-  "hash": "257cd54207d428ca6f947cab25c5f0c3f558e9b2"
+  "hash": "985a026a3a67eae8096adcc963f029aa5311dd5b"
 }

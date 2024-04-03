@@ -1,0 +1,41 @@
+# Set the default behavior, in case users don't have core.autocrlf set.
+* text=auto eol=lf
+
+# Explicitly declare text files that should use LF.
+*.js text eol=lf
+*.vue text eol=lf
+*.css text eol=lf
+*.html text eol=lf
+*.json text eol=lf
+*.yml text eol=lf
+Dockerfile text eol=lf
+*.sh text eol=lf
+
+# Declare files that will always have CRLF line endings on checkout.
+*.sln text eol=crlf
+*.csproj text eol=crlf
+
+# Denote all binary files (no diff, no merge)
+*.png binary
+*.jpg binary
+*.jpeg binary
+*.gif binary
+*.ico binary
+*.svg binary
+*.woff binary
+*.woff2 binary
+*.ttf binary
+*.eot binary
+*.mp4 binary
+*.mp3 binary
+*.avi binary
+*.mov binary
+*.mkv binary
+*.flv binary
+*.zip binary
+*.gz binary
+*.rar binary
+*.7z binary
+*.dmg binary
+*.iso binary
+*.img binary
