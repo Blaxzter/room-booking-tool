@@ -73,6 +73,13 @@ services:
       LETSENCRYPT_HOST: "${LETSENCRYPT_HOST}"
       LETSENCRYPT_EMAIL: "${LETSENCRYPT_EMAIL}"
 
+      # CORS FOR LOCALHOST
+      CORS_ENABLED: "true"
+      CORS_ORIGIN: "http://localhost:5173"
+      CORS_METHODS: "GET, POST, PUT, PATCH, DELETE, OPTIONS"
+      CORS_ALLOWED_HEADERS: "Content-Type, Authorization, X-Requested-With"
+      CORS_EXPOSED_HEADERS: "Content-Range, X-Content-Range"
+
 volumes:
   postgres_data:
 
