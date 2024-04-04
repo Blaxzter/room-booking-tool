@@ -13,7 +13,8 @@ const app = createApp(App)
 const authenticationOption: AuthenticateOptions = {
   baseUrl: 'http://localhost:8055',
   axios: axios.create({}),
-  providers: {}
+  providers: {},
+  // storageType: 'localStorage',
 };
 
 app.use(VueAuthenticate, authenticationOption);

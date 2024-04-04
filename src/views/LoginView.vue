@@ -3,7 +3,7 @@ import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
-import { inject, ref } from 'vue'
+import { computed, inject, ref } from 'vue'
 import type { VueAuthenticate } from 'vue-authenticate-2'
 
 const $auth = inject('$auth') as VueAuthenticate;
@@ -14,16 +14,27 @@ const password = ref('');
 
 const login = async () => {
   if (!$auth) return;
-  await $auth.login({ email: email.value, password: password.value });
+  console.log('Logging in...')
+  await $auth.login({ email: email.value, password: password.value }).then((res) => {
+    $auth.setToken(res.data)
+  }).catch((error) => {
+    console.error('Login failed:', error)
+  });
   // Execute application logic after successful login
 };
+
+// computed on $auth.isAuthenticated
+const isAuthenticated = computed(() => {
+  return $auth.isAuthenticated();
+})
+
 </script>
 
 <template>
   <Card class="w-full max-w-sm">
     <CardHeader>
       <CardTitle class="text-2xl">
-        Login
+        Login {{ isAuthenticated ? 'Success' : 'Failed' }}
       </CardTitle>
       <CardDescription>
         Enter your email below to login to your account.
