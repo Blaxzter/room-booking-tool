@@ -252,9 +252,265 @@
           "foreign_key_table": null,
           "foreign_key_column": null
         }
+      },
+      {
+        "collection": "bookable_object",
+        "field": "location",
+        "type": "geometry.Point",
+        "meta": {
+          "collection": "bookable_object",
+          "conditions": null,
+          "display": null,
+          "display_options": null,
+          "field": "location",
+          "group": null,
+          "hidden": false,
+          "interface": "map",
+          "note": null,
+          "options": {
+            "defaultView": {
+              "bearing": 0,
+              "center": {
+                "lat": 46.438416292235075,
+                "lng": -6.8249931692289465
+              },
+              "pitch": 0,
+              "zoom": 0.3028243761363059
+            },
+            "geometryType": "Point"
+          },
+          "readonly": false,
+          "required": false,
+          "sort": 6,
+          "special": null,
+          "translations": null,
+          "validation": null,
+          "validation_message": null,
+          "width": "full"
+        },
+        "schema": {
+          "name": "location",
+          "table": "bookable_object",
+          "data_type": "POINT",
+          "default_value": null,
+          "max_length": null,
+          "numeric_precision": null,
+          "numeric_scale": null,
+          "is_nullable": true,
+          "is_unique": false,
+          "is_primary_key": false,
+          "is_generated": false,
+          "generation_expression": null,
+          "has_auto_increment": false,
+          "foreign_key_table": null,
+          "foreign_key_column": null
+        }
+      },
+      {
+        "collection": "bookable_object",
+        "field": "name",
+        "type": "string",
+        "meta": {
+          "collection": "bookable_object",
+          "conditions": null,
+          "display": null,
+          "display_options": null,
+          "field": "name",
+          "group": null,
+          "hidden": false,
+          "interface": "input",
+          "note": null,
+          "options": {
+            "iconLeft": null,
+            "placeholder": "name of the bookable object"
+          },
+          "readonly": false,
+          "required": true,
+          "sort": 5,
+          "special": null,
+          "translations": null,
+          "validation": null,
+          "validation_message": null,
+          "width": "full"
+        },
+        "schema": {
+          "name": "name",
+          "table": "bookable_object",
+          "data_type": "character varying",
+          "default_value": null,
+          "max_length": 255,
+          "numeric_precision": null,
+          "numeric_scale": null,
+          "is_nullable": true,
+          "is_unique": false,
+          "is_primary_key": false,
+          "is_generated": false,
+          "generation_expression": null,
+          "has_auto_increment": false,
+          "foreign_key_table": null,
+          "foreign_key_column": null
+        }
+      },
+      {
+        "collection": "bookable_object",
+        "field": "description",
+        "type": "text",
+        "meta": {
+          "collection": "bookable_object",
+          "conditions": null,
+          "display": null,
+          "display_options": null,
+          "field": "description",
+          "group": null,
+          "hidden": false,
+          "interface": "input-multiline",
+          "note": null,
+          "options": {
+            "placeholder": "Description of the bookable object"
+          },
+          "readonly": false,
+          "required": false,
+          "sort": 7,
+          "special": null,
+          "translations": null,
+          "validation": null,
+          "validation_message": null,
+          "width": "full"
+        },
+        "schema": {
+          "name": "description",
+          "table": "bookable_object",
+          "data_type": "text",
+          "default_value": null,
+          "max_length": null,
+          "numeric_precision": null,
+          "numeric_scale": null,
+          "is_nullable": true,
+          "is_unique": false,
+          "is_primary_key": false,
+          "is_generated": false,
+          "generation_expression": null,
+          "has_auto_increment": false,
+          "foreign_key_table": null,
+          "foreign_key_column": null
+        }
+      },
+      {
+        "collection": "bookable_object",
+        "field": "tags",
+        "type": "json",
+        "meta": {
+          "collection": "bookable_object",
+          "conditions": null,
+          "display": null,
+          "display_options": null,
+          "field": "tags",
+          "group": null,
+          "hidden": false,
+          "interface": "tags",
+          "note": null,
+          "options": null,
+          "readonly": false,
+          "required": false,
+          "sort": 8,
+          "special": [
+            "cast-json"
+          ],
+          "translations": null,
+          "validation": null,
+          "validation_message": null,
+          "width": "full"
+        },
+        "schema": {
+          "name": "tags",
+          "table": "bookable_object",
+          "data_type": "json",
+          "default_value": null,
+          "max_length": null,
+          "numeric_precision": null,
+          "numeric_scale": null,
+          "is_nullable": true,
+          "is_unique": false,
+          "is_primary_key": false,
+          "is_generated": false,
+          "generation_expression": null,
+          "has_auto_increment": false,
+          "foreign_key_table": null,
+          "foreign_key_column": null
+        }
+      },
+      {
+        "collection": "bookable_object",
+        "field": "image",
+        "type": "uuid",
+        "meta": {
+          "collection": "bookable_object",
+          "conditions": null,
+          "display": null,
+          "display_options": null,
+          "field": "image",
+          "group": null,
+          "hidden": false,
+          "interface": "file-image",
+          "note": null,
+          "options": null,
+          "readonly": false,
+          "required": false,
+          "sort": 9,
+          "special": [
+            "file"
+          ],
+          "translations": null,
+          "validation": null,
+          "validation_message": null,
+          "width": "full"
+        },
+        "schema": {
+          "name": "image",
+          "table": "bookable_object",
+          "data_type": "uuid",
+          "default_value": null,
+          "max_length": null,
+          "numeric_precision": null,
+          "numeric_scale": null,
+          "is_nullable": true,
+          "is_unique": false,
+          "is_primary_key": false,
+          "is_generated": false,
+          "generation_expression": null,
+          "has_auto_increment": false,
+          "foreign_key_table": "directus_files",
+          "foreign_key_column": "id"
+        }
       }
     ],
-    "relations": []
+    "relations": [
+      {
+        "collection": "bookable_object",
+        "field": "image",
+        "related_collection": "directus_files",
+        "meta": {
+          "junction_field": null,
+          "many_collection": "bookable_object",
+          "many_field": "image",
+          "one_allowed_collections": null,
+          "one_collection": "directus_files",
+          "one_collection_field": null,
+          "one_deselect_action": "nullify",
+          "one_field": null,
+          "sort_field": null
+        },
+        "schema": {
+          "table": "bookable_object",
+          "column": "image",
+          "foreign_key_table": "directus_files",
+          "foreign_key_column": "id",
+          "constraint_name": "bookable_object_image_foreign",
+          "on_update": "NO ACTION",
+          "on_delete": "SET NULL"
+        }
+      }
+    ]
   },
-  "hash": "985a026a3a67eae8096adcc963f029aa5311dd5b"
+  "hash": "ca1d54605ddc6556acafe0c302779418ca1ae666"
 }
