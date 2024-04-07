@@ -3,6 +3,7 @@ import HomeView from '../views/HomeView.vue'
 import LoginView from '../views/LoginView.vue' // Import the login view
 import { inject } from 'vue'
 import type { VueAuthenticate } from 'vue-authenticate-2'
+import { useAuth } from '@/stores/auth'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -10,7 +11,8 @@ const router = createRouter({
     {
       path: '/',
       name: 'home',
-      component: HomeView
+      component: HomeView,
+      meta: { requiresAuth: true }
     },
     {
       path: '/login',
@@ -21,15 +23,22 @@ const router = createRouter({
       path: '/about',
       name: 'about',
       component: () => import('../views/AboutView.vue'),
-      meta: { requiresAuth: true } // This route is protected
+      meta: { requiresAuth: true }
+    },
+    {
+      path: '/room/:id',
+      name: 'room',
+      component: () => import('../views/RoomView.vue'),
+      meta: { requiresAuth: false }
     }
   ]
 })
 
 router.beforeEach((to, from, next) => {
-  const $auth = inject('$auth') as VueAuthenticate;
-  const isAuthenticated = $auth.isAuthenticated() // Check if the user is authenticated
-  if (to.matched.some(record => record.meta.requiresAuth) && !isAuthenticated) {
+  console.log('router.beforeEach')
+  const { isAuthenticated } = useAuth()
+  console.log('isAuthenticated', isAuthenticated)
+  if (to.matched.some((record) => record.meta.requiresAuth) && !isAuthenticated) {
     next({ name: 'login' }) // Redirect to the login page if the user is not authenticated
   } else {
     next() // Proceed to the next route

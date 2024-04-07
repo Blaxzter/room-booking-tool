@@ -4,6 +4,7 @@
 
 Run `docker-compose up` to start the development server.
 In a new terminal window run `docker-compose exec -it directus npx directus schema-sync install --force`
+Export the database with `docker-compose exec -it directus npx directus schema-sync export`
 
 
 ## Recommended IDE Setup

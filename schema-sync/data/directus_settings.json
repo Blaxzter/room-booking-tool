@@ -1,0 +1,29 @@
+[
+  {
+    "auth_login_attempts": 25,
+    "auth_password_policy": null,
+    "basemaps": null,
+    "custom_aspect_ratios": null,
+    "custom_css": null,
+    "default_appearance": "auto",
+    "default_language": "en-US",
+    "default_theme_dark": null,
+    "default_theme_light": null,
+    "id": 1,
+    "mapbox_key": null,
+    "module_bar": null,
+    "project_color": "#6644FF",
+    "project_descriptor": null,
+    "project_logo": "c5ef5e0d-314c-4bcb-8088-3dd6465c0e15",
+    "project_name": "Directus",
+    "public_background": null,
+    "public_favicon": null,
+    "public_foreground": null,
+    "public_note": null,
+    "storage_asset_presets": null,
+    "storage_asset_transform": "all",
+    "storage_default_folder": null,
+    "theme_dark_overrides": null,
+    "theme_light_overrides": null
+  }
+]

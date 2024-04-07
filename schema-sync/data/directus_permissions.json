@@ -1,0 +1,120 @@
+[
+  {
+    "action": "read",
+    "collection": "bookable_object",
+    "fields": [
+      "name",
+      "location",
+      "date_updated",
+      "description",
+      "tags",
+      "status",
+      "image",
+      "is_internal",
+      "group"
+    ],
+    "permissions": {
+      "_and": [
+        {
+          "group": {
+            "group_id": {
+              "users": {
+                "directus_users_id": {
+                  "_eq": "$CURRENT_USER"
+                }
+              }
+            }
+          }
+        },
+        {
+          "status": {
+            "_eq": "published"
+          }
+        }
+      ]
+    },
+    "presets": null,
+    "role": "7f4b19bf-c64f-4b7d-930a-49173f4428c6",
+    "validation": null
+  },
+  {
+    "action": "create",
+    "collection": "group",
+    "fields": [
+      "*"
+    ],
+    "permissions": {},
+    "presets": null,
+    "role": "7f4b19bf-c64f-4b7d-930a-49173f4428c6",
+    "validation": {}
+  },
+  {
+    "action": "delete",
+    "collection": "group",
+    "fields": null,
+    "permissions": {
+      "_and": [
+        {
+          "user_created": {
+            "_eq": "$CURRENT_USER"
+          }
+        }
+      ]
+    },
+    "presets": null,
+    "role": "7f4b19bf-c64f-4b7d-930a-49173f4428c6",
+    "validation": null
+  },
+  {
+    "action": "read",
+    "collection": "group",
+    "fields": [
+      "name",
+      "id",
+      "date_created",
+      "user_created",
+      "user_updated",
+      "date_updated",
+      "users",
+      "status"
+    ],
+    "permissions": {
+      "_and": [
+        {
+          "users": {
+            "directus_users_id": {
+              "_eq": "$CURRENT_USER.id"
+            }
+          }
+        },
+        {
+          "status": {
+            "_eq": "published"
+          }
+        }
+      ]
+    },
+    "presets": null,
+    "role": "7f4b19bf-c64f-4b7d-930a-49173f4428c6",
+    "validation": null
+  },
+  {
+    "action": "update",
+    "collection": "group",
+    "fields": null,
+    "permissions": {
+      "_and": [
+        {
+          "users": {
+            "role": {
+              "_eq": "admin"
+            }
+          }
+        }
+      ]
+    },
+    "presets": null,
+    "role": "7f4b19bf-c64f-4b7d-930a-49173f4428c6",
+    "validation": null
+  }
+]

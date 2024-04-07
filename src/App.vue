@@ -1,17 +1,27 @@
 <script setup lang="ts">
 import { RouterView } from 'vue-router'
+
+// check auth before mount
+import { onBeforeMount } from 'vue'
+import { useAuth } from '@/stores/auth'
+
+onBeforeMount(async () => {
+  const { isAuthenticated, checkAuth } = useAuth()
+  if (!isAuthenticated) {
+    console.log('Checking auth')
+    await checkAuth()
+      .then(() => {
+        console.log('Auth checked')
+      })
+      .catch((error) => {
+        console.error(error)
+      })
+  }
+})
 </script>
 
 <template>
-  <main>
-    <RouterView />
-  </main>
+  <RouterView />
 </template>
 
-<style scoped>
-main {
-  display: grid;
-  place-items: center;
-  height: 100vh;
-}
-</style>
+<style scoped></style>
