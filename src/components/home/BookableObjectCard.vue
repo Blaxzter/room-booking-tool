@@ -9,7 +9,6 @@ const props = defineProps<{
   width?: number
   height?: number
 }>()
-
 </script>
 
 <template>
@@ -20,12 +19,13 @@ const props = defineProps<{
         :alt="bookableObject.name"
         :width="width"
         :height="height"
-
-        :class="cn(
-          'h-auto w-auto object-cover transition-all hover:scale-105',
-          aspectRatio === 'portrait' ? 'aspect-[3/4]' : 'aspect-square',
-        )"
-      >
+        :class="
+          cn(
+            'h-auto w-auto object-cover transition-all hover:scale-105',
+            aspectRatio === 'portrait' ? 'aspect-[3/4]' : 'aspect-square'
+          )
+        "
+      />
     </div>
     <div class="space-y-1 text-sm">
       <h3 class="font-medium leading-none">
@@ -38,6 +38,4 @@ const props = defineProps<{
   </div>
 </template>
 
-<style scoped>
-
-</style>
+<style scoped></style>
