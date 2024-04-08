@@ -868,7 +868,7 @@
           },
           "readonly": false,
           "required": false,
-          "sort": 3,
+          "sort": 4,
           "special": null,
           "translations": null,
           "validation": null,
@@ -910,7 +910,7 @@
           "options": null,
           "readonly": false,
           "required": false,
-          "sort": 4,
+          "sort": 5,
           "special": null,
           "translations": null,
           "validation": null,
@@ -954,7 +954,7 @@
           },
           "readonly": true,
           "required": false,
-          "sort": 5,
+          "sort": 6,
           "special": [
             "user-created"
           ],
@@ -1000,7 +1000,7 @@
           "options": null,
           "readonly": true,
           "required": false,
-          "sort": 6,
+          "sort": 7,
           "special": [
             "date-created"
           ],
@@ -1046,7 +1046,7 @@
           },
           "readonly": true,
           "required": false,
-          "sort": 7,
+          "sort": 8,
           "special": [
             "user-updated"
           ],
@@ -1092,7 +1092,7 @@
           "options": null,
           "readonly": true,
           "required": false,
-          "sort": 8,
+          "sort": 9,
           "special": [
             "date-updated"
           ],
@@ -1140,7 +1140,7 @@
           },
           "readonly": false,
           "required": false,
-          "sort": 9,
+          "sort": 10,
           "special": [
             "m2m"
           ],
@@ -1202,6 +1202,96 @@
           "has_auto_increment": false,
           "foreign_key_table": null,
           "foreign_key_column": null
+        }
+      },
+      {
+        "collection": "group",
+        "field": "description",
+        "type": "text",
+        "meta": {
+          "collection": "group",
+          "conditions": null,
+          "display": null,
+          "display_options": null,
+          "field": "description",
+          "group": null,
+          "hidden": false,
+          "interface": "input-multiline",
+          "note": null,
+          "options": {
+            "placeholder": "Describe the user of the group"
+          },
+          "readonly": false,
+          "required": false,
+          "sort": 3,
+          "special": null,
+          "translations": null,
+          "validation": null,
+          "validation_message": null,
+          "width": "full"
+        },
+        "schema": {
+          "name": "description",
+          "table": "group",
+          "data_type": "text",
+          "default_value": null,
+          "max_length": null,
+          "numeric_precision": null,
+          "numeric_scale": null,
+          "is_nullable": true,
+          "is_unique": false,
+          "is_primary_key": false,
+          "is_generated": false,
+          "generation_expression": null,
+          "has_auto_increment": false,
+          "foreign_key_table": null,
+          "foreign_key_column": null
+        }
+      },
+      {
+        "collection": "group",
+        "field": "avatar",
+        "type": "uuid",
+        "meta": {
+          "collection": "group",
+          "conditions": null,
+          "display": null,
+          "display_options": null,
+          "field": "avatar",
+          "group": null,
+          "hidden": false,
+          "interface": "file-image",
+          "note": null,
+          "options": {
+            "folder": null
+          },
+          "readonly": false,
+          "required": false,
+          "sort": 11,
+          "special": [
+            "file"
+          ],
+          "translations": null,
+          "validation": null,
+          "validation_message": null,
+          "width": "full"
+        },
+        "schema": {
+          "name": "avatar",
+          "table": "group",
+          "data_type": "uuid",
+          "default_value": null,
+          "max_length": null,
+          "numeric_precision": null,
+          "numeric_scale": null,
+          "is_nullable": true,
+          "is_unique": false,
+          "is_primary_key": false,
+          "is_generated": false,
+          "generation_expression": null,
+          "has_auto_increment": false,
+          "foreign_key_table": "directus_files",
+          "foreign_key_column": "id"
         }
       },
       {
@@ -1520,6 +1610,31 @@
         }
       },
       {
+        "collection": "group",
+        "field": "avatar",
+        "related_collection": "directus_files",
+        "meta": {
+          "junction_field": null,
+          "many_collection": "group",
+          "many_field": "avatar",
+          "one_allowed_collections": null,
+          "one_collection": "directus_files",
+          "one_collection_field": null,
+          "one_deselect_action": "nullify",
+          "one_field": null,
+          "sort_field": null
+        },
+        "schema": {
+          "table": "group",
+          "column": "avatar",
+          "foreign_key_table": "directus_files",
+          "foreign_key_column": "id",
+          "constraint_name": "group_avatar_foreign",
+          "on_update": "NO ACTION",
+          "on_delete": "SET NULL"
+        }
+      },
+      {
         "collection": "group_directus_users",
         "field": "directus_users_id",
         "related_collection": "directus_users",
@@ -1571,5 +1686,5 @@
       }
     ]
   },
-  "hash": "f0c161b2ea69ce2e289231e2c368cc37164b13e4"
+  "hash": "9370fda0507913291e9e480885567023c5356ca1"
 }

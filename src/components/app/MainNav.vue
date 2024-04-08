@@ -1,98 +1,50 @@
 <script setup lang="ts">
-
 import { Button } from '@/components/ui/button'
 import { Menu, Calendar } from 'lucide-vue-next'
 import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet'
+import GroupSwitcher from '@/components/app/GroupSwitcher.vue'
 
+const navElements = [
+  { label: 'Dashboard', href: '' },
+  { label: 'Requests', href: '#' }
+]
 </script>
 
 <template>
-  <nav class="hidden flex-col gap-6 text-lg font-medium md:flex md:flex-row md:items-center md:gap-5 md:text-sm lg:gap-6">
-    <a
-      href="#"
-      class="flex items-center gap-2 text-lg font-semibold md:text-base"
-    >
+  <nav
+    class="hidden flex-col gap-6 text-lg font-medium md:flex md:flex-row md:items-center md:gap-5 md:text-sm lg:gap-6"
+  >
+    <a href="#" class="flex items-center gap-2 text-lg font-semibold md:text-base">
       <Calendar class="h-6 w-6" />
       <span class="sr-only">Object Booking Tool</span>
     </a>
-    <a
-      href="#"
-      class="text-foreground transition-colors hover:text-foreground"
-    >
-      Dashboard
-    </a>
-    <a
-      href="#"
-      class="text-muted-foreground transition-colors hover:text-foreground"
-    >
-      Orders
-    </a>
-    <a
-      href="#"
-      class="text-muted-foreground transition-colors hover:text-foreground"
-    >
-      Products
-    </a>
-    <a
-      href="#"
-      class="text-muted-foreground transition-colors hover:text-foreground"
-    >
-      Customers
-    </a>
-    <a
-      href="#"
-      class="text-muted-foreground transition-colors hover:text-foreground"
-    >
-      Analytics
-    </a>
+    <GroupSwitcher />
+    <template v-for="(navElement, idx) in navElements" :key="idx">
+      <a
+        :href="navElement.href"
+        class="active:text-foreground text-muted-foreground hover:text-foreground"
+        >{{ navElement.label }}</a
+      >
+    </template>
   </nav>
   <Sheet>
     <SheetTrigger as-child>
-      <Button
-        variant="outline"
-        size="icon"
-        class="shrink-0 md:hidden"
-      >
+      <Button variant="outline" size="icon" class="shrink-0 md:hidden">
         <Menu class="h-5 w-5" />
         <span class="sr-only">Toggle navigation menu</span>
       </Button>
     </SheetTrigger>
     <SheetContent side="left">
       <nav class="grid gap-6 text-lg font-medium">
-        <a
-          href="#"
-          class="flex items-center gap-2 text-lg font-semibold"
-        >
+        <a href="#" class="flex items-center gap-2 text-lg font-semibold">
           <Calendar class="h-6 w-6" />
           <span class="sr-only">Object Booking Tool</span>
         </a>
-        <a href="#" class="hover:text-foreground">
-          Dashboard
-        </a>
-        <a
-          href="#"
-          class="text-muted-foreground hover:text-foreground"
-        >
-          Orders
-        </a>
-        <a
-          href="#"
-          class="text-muted-foreground hover:text-foreground"
-        >
-          Products
-        </a>
-        <a
-          href="#"
-          class="text-muted-foreground hover:text-foreground"
-        >
-          Customers
-        </a>
-        <a
-          href="#"
-          class="text-muted-foreground hover:text-foreground"
-        >
-          Analytics
-        </a>
+        <a href="#" class="hover:text-foreground"> Dashboard </a>
+        <a href="#" class="text-muted-foreground hover:text-foreground"> Orders </a>
+        <a href="#" class="text-muted-foreground hover:text-foreground"> Products </a>
+        <a href="#" class="text-muted-foreground hover:text-foreground"> Customers </a>
+        <a href="#" class="text-muted-foreground hover:text-foreground"> Analytics </a>
       </nav>
     </SheetContent>
   </Sheet>

@@ -10,41 +10,47 @@ import {
 } from '@/components/ui/card'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
-import { Terminal } from 'lucide-vue-next'
-import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert'
+import { ChevronRight } from 'lucide-vue-next'
 import { ref } from 'vue'
 
 import { Loader2 } from 'lucide-vue-next'
 import { useAuth } from '@/stores/auth'
 import router from '@/router'
 import { onMounted } from 'vue'
+import { Checkbox } from '@/components/ui/checkbox'
 
 const loading = ref(false)
 const showCheckmark = ref(false)
+const showCross = ref(false)
 
 // set refs for email and password
 const email = ref('')
 const password = ref('')
-const error = ref('')
+const errorMessage = ref('')
+const keepLoggedIn = ref(false)
 
 const { login, isAuthenticated } = useAuth()
 
 const loginWrapper = async () => {
   loading.value = true
-  error.value = ''
+  errorMessage.value = ''
 
-  await login({ email: email.value, password: password.value })
+  await login({ email: email.value, password: password.value, keep_logged_in: keepLoggedIn.value })
     .then(() => {
       console.log('Logged in')
+      showCheckmark.value = true
       setTimeout(() => {
         router.push({ name: 'home' })
       }, 1000)
     })
     .catch((error) => {
-      console.error(error)
-      error.value = 'Invalid email or password'
+      showCross.value = true
+      setTimeout(() => {
+        showCross.value = false
+        loading.value = false
+      }, 1000)
+      errorMessage.value = error.message
     })
-  loading.value = false
 }
 
 // on mounted check if user is authenticated
@@ -63,9 +69,8 @@ onMounted(async () => {
 <template>
   <div class="background-image fixed inset-0 z-0"></div>
   <main>
-    {{ isAuthenticated }}
     <div class="flex justify-center items-center h-screen">
-      <Card class="w-full max-w-sm" v-if="!isAuthenticated">
+      <Card class="w-full max-w-sm" v-if="!isAuthenticated && !loading">
         <CardHeader>
           <CardTitle class="text-2xl"> Login </CardTitle>
           <CardDescription> Enter your email below to login to your account. </CardDescription>
@@ -80,11 +85,21 @@ onMounted(async () => {
             <Input id="password" type="password" required v-model="password" />
           </div>
 
-          <Alert v-if="error">
-            <Terminal class="h-4 w-4" />
-            <AlertTitle> Error </AlertTitle>
-            <AlertDescription> {{ error }} </AlertDescription>
-          </Alert>
+          <!-- keep logged in -->
+          <div class="flex items-center space-x-2 ms-2">
+            <Checkbox id="keep_logged_in" v-model:checked="keepLoggedIn" />
+            <label
+              for="keep_logged_in"
+              class="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+            >
+              Keep me logged in
+            </label>
+          </div>
+
+          <div v-if="errorMessage" class="flex items-center gap-2 text-red-500">
+            <ChevronRight />
+            {{ errorMessage }}
+          </div>
         </CardContent>
         <CardFooter>
           <Button class="w-full" type="submit" @click="loginWrapper">
@@ -98,13 +113,18 @@ onMounted(async () => {
       </Card>
       <Card class="w-full max-w-sm" v-else>
         <CardContent class="grid place-items-center pt-6">
-          <div class="circle-loader mb-2" :class="{ 'load-complete': showCheckmark }">
+          <div
+            class="circle-loader mb-2"
+            :class="{ 'load-complete': showCheckmark, error: showCross }"
+          >
             <div
               class="checkmark draw"
               :style="{ display: !showCheckmark ? 'none' : 'block' }"
             ></div>
+            <div class="cross draw" :style="{ display: !showCross ? 'none' : 'block' }"></div>
           </div>
           <CardTitle v-if="showCheckmark"> Authenticated </CardTitle>
+          <CardTitle v-else-if="showCross"> Invalid email or password </CardTitle>
           <CardTitle v-else> Logging in </CardTitle>
         </CardContent>
       </Card>

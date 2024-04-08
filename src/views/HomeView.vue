@@ -1,6 +1,7 @@
 <script setup lang="ts">
-import { inject, onMounted, ref } from 'vue'
+import { onMounted, ref, watchEffect } from 'vue'
 
+import { Search } from 'lucide-vue-next'
 import { type BookableObject } from '@/types'
 import BookableObjectCard from '@/components/home/BookableObjectCard.vue'
 import { ScrollArea, ScrollBar } from '@/components/ui/scroll-area'
@@ -10,9 +11,11 @@ import MainNav from '@/components/app/MainNav.vue'
 import UserNav from '@/components/app/UserNav.vue'
 import { Separator } from '@/components/ui/separator'
 import { PlusCircledIcon } from '@radix-icons/vue'
-import type { MyDirectusClient } from '@/main'
-import { readItem, readItems } from '@directus/sdk'
+import { readItems } from '@directus/sdk'
 import { useAuth } from '@/stores/auth'
+import GroupSwitcher from '@/components/app/GroupSwitcher.vue'
+import { useWindowSize } from '@vueuse/core'
+const { width } = useWindowSize()
 
 const bookableObjectList = ref<BookableObject[]>([
   {
@@ -109,12 +112,22 @@ const bookableObjectList = ref<BookableObject[]>([
 
 const { client } = useAuth()
 
+const showSearch = ref(true)
+const toggleSearch = () => {
+  showSearch.value = !showSearch.value
+}
+
 // mounted
 onMounted(async () => {
   // await $client.login('mail@fabraham.dev', 'b10ec661-c100-47d9-ad39-d8dce074f728', {mode: 'json'})
   // do a GraphQL request
   const gqlResult = await client.request(readItems('bookable_object'))
   console.log(gqlResult)
+})
+
+watchEffect(() => {
+  const smBreakpoint = 640 // Adjust this to your actual breakpoint
+  showSearch.value = width.value > smBreakpoint
 })
 </script>
 
@@ -123,10 +136,24 @@ onMounted(async () => {
     <div class="border-b">
       <div class="flex h-16 items-center px-4">
         <MainNav />
-        <div class="ml-auto flex items-center space-x-4">
-          <div>
-            <Input type="search" placeholder="Search..." class="md:w-[250px] lg:w-[300px]" />
-          </div>
+        <div class="block md:hidden ms-3" v-show="width > 640 || !showSearch">
+          <GroupSwitcher />
+        </div>
+        <div class="ml-auto flex items-center justify-end space-x-4 flex-grow">
+          <Input
+            type="search"
+            placeholder="Search..."
+            class="ms-3 hidden sm:block lg:w-[300px]"
+            :style="{ display: showSearch ? 'block' : 'none' }"
+          />
+          <Button
+            variant="outline"
+            size="icon"
+            class="sm:hidden flex-shrink-0"
+            @click="toggleSearch"
+          >
+            <Search class="w-4 h-4" />
+          </Button>
           <UserNav />
         </div>
       </div>

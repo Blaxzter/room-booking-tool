@@ -1,54 +1,41 @@
 <script setup lang="ts">
 import {
   DropdownMenu,
-  DropdownMenuContent, DropdownMenuGroup, DropdownMenuItem,
-  DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuShortcut,
+  DropdownMenuContent,
+  DropdownMenuGroup,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuShortcut,
   DropdownMenuTrigger
 } from '@/components/ui/dropdown-menu'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import { Button } from '@/components/ui/button'
-import { useDark, useToggle } from '@vueuse/core';
+import { useDark, useToggle } from '@vueuse/core'
 
-const isDark = useDark();
-const toggleDark = useToggle(isDark);
+const isDark = useDark()
+const toggleDark = useToggle(isDark)
 
+import { onMounted } from 'vue'
 import { useAuth } from '@/stores/auth'
 
-// logout function
-const logout = async () => {
-  if (!$auth) return;
-  await $auth.logout().then(async () => {
-    localStorage.removeItem('access_token');
-    localStorage.removeItem('refresh_token');
-    localStorage.removeItem('expires');
-    await router.push({ name: 'login' });
-  }).catch((error) => {
-    console.error(error);
-  });
-};
-
-
-// Optionally, listen for the shortcut globally to toggle dark mode
-// This example uses the Composition API's onMounted lifecycle hook
-import { inject, onMounted } from 'vue'
-import type { AuthenticationClient } from '@directus/sdk'
-import type { VueAuthenticate } from 'vue-authenticate-2'
-import router from '@/router'
+const { logout } = useAuth()
 
 onMounted(() => {
   document.addEventListener('keydown', (e) => {
-    if ((e.metaKey || e.ctrlKey) && e.shiftKey && e.key === 'L') { // ⌘D for MacOS and Ctrl+D for Windows
-      e.preventDefault(); // Prevent default action of the keypress
-      toggleDark();
+    if ((e.metaKey || e.ctrlKey) && e.shiftKey && e.key === 'L') {
+      // ⌘D for MacOS and Ctrl+D for Windows
+      e.preventDefault() // Prevent default action of the keypress
+      toggleDark()
     }
 
-    if ((e.metaKey || e.ctrlKey) && e.shiftKey && e.key === 'Q') { // ⌘Q for MacOS and Ctrl+Q for Windows
-      e.preventDefault(); // Prevent default action of the keypress
-      logout();
+    if ((e.metaKey || e.ctrlKey) && e.shiftKey && e.key === 'Q') {
+      // ⌘Q for MacOS and Ctrl+Q for Windows
+      e.preventDefault() // Prevent default action of the keypress
+      logout()
     }
-  });
-});
-
+  })
+})
 </script>
 
 <template>
@@ -64,12 +51,8 @@ onMounted(() => {
     <DropdownMenuContent class="w-56" align="end">
       <DropdownMenuLabel class="font-normal flex">
         <div class="flex flex-col space-y-1">
-          <p class="text-sm font-medium leading-none">
-            shadcn
-          </p>
-          <p class="text-xs leading-none text-muted-foreground">
-            m@example.com
-          </p>
+          <p class="text-sm font-medium leading-none">shadcn</p>
+          <p class="text-xs leading-none text-muted-foreground">m@example.com</p>
         </div>
       </DropdownMenuLabel>
       <DropdownMenuSeparator />

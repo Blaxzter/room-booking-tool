@@ -10,6 +10,14 @@ $check-left: (math.div($loader-size, 6) + math.div($loader-size, 12));
 $check-thickness: 3px;
 $check-color: $brand-success;
 
+// Reuse the existing variables
+$brand-error: #d9534f; // Example color for error or cross
+$cross-thickness: 0.2em;
+$cross-color: $brand-error;
+$cross-size: $loader-size * 0.8; // Size of the cross, adjust as necessary
+$cross-line-length: math.div($cross-size, sqrt(1)); // Adjust based on the size of the cross
+
+
 
 .circle-loader {
   border: 1px solid rgba(0, 0, 0, 0.2);
@@ -85,4 +93,55 @@ $check-color: $brand-success;
     width: $check-width;
     opacity: 1;
   }
+}
+
+
+// Define the cross animation
+.cross {
+  display: none;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(calc(-50%), calc(-50% - ($cross-thickness / 2))) rotate(45deg);
+  background-color: $cross-color;
+
+
+  &.draw {
+    &:before, &:after {
+      content: '';
+      position: absolute;
+      background-color: $cross-color;
+      animation: scale-up-center 300ms ease-out forwards;
+    }
+
+    &:before {
+      height: $cross-thickness;
+      width: $cross-line-length;
+      top: 0;
+      left: -($cross-line-length / 2) + ($cross-thickness / 2); // Centering the line
+    }
+
+    &:after {
+      height: $cross-line-length;
+      width: $cross-thickness;
+      left: 0;
+      top: -($cross-line-length / 2) + ($cross-thickness / 2); // Centering the line
+    }
+  }
+}
+
+@keyframes scale-up-center {
+  0% {
+    transform: scale(0.2);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+// Adjust the .circle-loader with error state
+.circle-loader.error {
+  animation: none;
+  border-color: $cross-color; // Switch to error color
+  transition: border 500ms ease-out;
 }

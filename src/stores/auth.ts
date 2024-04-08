@@ -20,18 +20,32 @@ export type MyDirectusClient = DirectusClient<MySchema> &
   RestClient<MySchema>
 
 export const useAuth = defineStore('auth', () => {
+  const _keep_logged_in = ref(localStorage.getItem('keep_logged_in') === 'true')
+  const auth_data = ref({} as AuthenticationData)
+
   const storage = {
     set(value: AuthenticationData) {
-      localStorage.setItem('access_token', value.access_token || '')
-      localStorage.setItem('refresh_token', value.refresh_token || '')
-      localStorage.setItem('expires', value.expires?.toString() || '')
-      localStorage.setItem(
-        'expires_at',
-        (new Date().getTime() + (value.expires || 0))?.toString() || ''
-      )
+      if (!_keep_logged_in.value) {
+        console.log('set auth_data', value)
+        auth_data.value = value
+        auth_data.value.expires_at = new Date().getTime() + (value.expires || 0)
+        return
+      } else {
+        localStorage.setItem('access_token', value.access_token || '')
+        localStorage.setItem('refresh_token', value.refresh_token || '')
+        localStorage.setItem('expires', value.expires?.toString() || '')
+        localStorage.setItem(
+          'expires_at',
+          (new Date().getTime() + (value.expires || 0))?.toString() || ''
+        )
+      }
     },
-    get(key: string | undefined): AuthenticationData | string | null {
+    get(key: string | undefined): AuthenticationData | string | number | null {
       if (key === undefined) {
+        if (!_keep_logged_in.value) {
+          console.log('get auth_data', auth_data.value)
+          return auth_data.value
+        }
         // get all
         return {
           access_token: localStorage.getItem('access_token') || '',
@@ -39,6 +53,19 @@ export const useAuth = defineStore('auth', () => {
           expires: Number(localStorage.getItem('expires')),
           expires_at: Number(localStorage.getItem('expires_at'))
         }
+      }
+
+      if (!_keep_logged_in.value) {
+        const keys: (keyof AuthenticationData)[] = [
+          'access_token',
+          'refresh_token',
+          'expires',
+          'expires_at'
+        ]
+        if (keys.includes(key as keyof AuthenticationData)) {
+          return auth_data.value[key as keyof AuthenticationData] // TypeScript knows key is valid
+        }
+        return null
       }
       return localStorage.getItem(key)
     }
@@ -63,7 +90,17 @@ export const useAuth = defineStore('auth', () => {
     return authenticated.value
   })
 
-  const login = async ({ email, password }: { email: string; password: string }) => {
+  const login = async ({
+    email,
+    password,
+    keep_logged_in
+  }: {
+    email: string
+    password: string
+    keep_logged_in: boolean
+  }) => {
+    _keep_logged_in.value = keep_logged_in
+    localStorage.setItem('keep_logged_in', keep_logged_in ? 'true' : 'false')
     await client
       .login(email, password)
       .then(() => {
@@ -71,7 +108,7 @@ export const useAuth = defineStore('auth', () => {
       })
       .catch((error) => {
         console.error(error)
-        const message = error?.response?.data?.message || 'Failed to log in'
+        const message = error?.errors?.length > 0 ? error.errors[0].detail : 'An error occurred'
         throw new Error(message)
       })
   }
@@ -79,11 +116,6 @@ export const useAuth = defineStore('auth', () => {
   const checkAuth = async () => {
     const access_token = storage.get('access_token')
     const expires_at = Number(storage.get('expires_at'))
-
-    console.log('access_token', access_token)
-    console.log(
-      `current time: ${new Date().getTime() - 5 * 60 * 1000} < expires at ${expires_at - 5 * 60 * 1000} = ${new Date().getTime() < expires_at - 5 * 60 * 1000}`
-    )
 
     // Check if access token exists and if the expires_at time is within the next 5 minutes
     const currentTime = new Date().getTime()
@@ -94,7 +126,7 @@ export const useAuth = defineStore('auth', () => {
       authenticated.value = true
     } else {
       // Access token does not exist, has expired, or expires in less than 5 minutes
-      if (currentTime > expires_at - 5 * 60 * 1000) {
+      if (access_token && currentTime > expires_at - 5 * 60 * 1000) {
         try {
           console.log('Refreshing token')
           await client.refresh()
@@ -113,7 +145,7 @@ export const useAuth = defineStore('auth', () => {
       .logout()
       .catch(console.error)
       .finally(() => {
-        // removeAuthData()
+        authenticated.value = false
         router.push({ name: 'login' })
       })
   }
