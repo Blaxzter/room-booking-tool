@@ -15,6 +15,7 @@ import { readItems } from '@directus/sdk'
 import { useAuth } from '@/stores/auth'
 import GroupSwitcher from '@/components/app/GroupSwitcher.vue'
 import { useWindowSize } from '@vueuse/core'
+import router from '@/router'
 const { width } = useWindowSize()
 
 const bookableObjectList = ref<BookableObject[]>([
@@ -185,7 +186,10 @@ watchEffect(() => {
                 aspect-ratio="portrait"
                 :width="250"
                 :height="330"
-                @click="() => console.log('Clicked', bookableObject)"
+                @click="
+                  () =>
+                    router.push({ name: 'BookableObjectView', params: { id: bookableObject.id } })
+                "
               />
             </div>
             <ScrollBar orientation="horizontal" />

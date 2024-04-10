@@ -16,15 +16,16 @@ const router = createRouter({
       component: () => import('../views/LoginView.vue')
     },
     {
-      path: '/about',
-      name: 'about',
-      component: () => import('../views/AboutView.vue'),
+      path: '/bookable-object/:id',
+      alias: ['/room/:id', '/equipment/:id'],
+      name: 'BookableObjectView',
+      component: () => import('../views/BookableObjectView.vue'),
       meta: { requiresAuth: true }
     },
     {
       path: '/room/:id',
       name: 'room',
-      component: () => import('../views/RoomView.vue'),
+      component: () => import('../views/BookableObjectView.vue'),
       meta: { requiresAuth: false }
     }
   ]

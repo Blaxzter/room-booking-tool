@@ -1,4 +1,3 @@
-
 @use "sass:math";
 
 // Define vars we'll be using
@@ -102,7 +101,7 @@ $cross-line-length: math.div($cross-size, sqrt(1)); // Adjust based on the size 
   position: absolute;
   top: 50%;
   left: 50%;
-  transform: translate(calc(-50%), calc(-50% - ($cross-thickness / 2))) rotate(45deg);
+  transform: translate(calc(-50%), calc(-50% - $cross-thickness / 2)) rotate(45deg);
   background-color: $cross-color;
 
 
@@ -118,14 +117,14 @@ $cross-line-length: math.div($cross-size, sqrt(1)); // Adjust based on the size 
       height: $cross-thickness;
       width: $cross-line-length;
       top: 0;
-      left: -($cross-line-length / 2) + ($cross-thickness / 2); // Centering the line
+      left: -1 * math.div($cross-line-length, 2) + math.div($cross-thickness, 2); // Centering the line
     }
 
     &:after {
       height: $cross-line-length;
       width: $cross-thickness;
       left: 0;
-      top: -($cross-line-length / 2) + ($cross-thickness / 2); // Centering the line
+      top: -1 * math.div($cross-line-length, 2) + math.div($cross-thickness, 2); // Centering the line
     }
   }
 }

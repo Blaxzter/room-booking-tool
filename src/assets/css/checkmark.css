@@ -1,0 +1,113 @@
+.circle-loader {
+  border: 1px solid rgba(0, 0, 0, 0.2);
+  border-left-color: #5cb85c;
+  animation: loader-spin 1.2s infinite linear;
+  position: relative;
+  display: inline-block;
+  vertical-align: top;
+  border-radius: 50%;
+  width: 7em;
+  height: 7em;
+}
+
+.load-complete {
+  -webkit-animation: none;
+  animation: none;
+  border-color: #5cb85c;
+  transition: border 500ms ease-out;
+}
+
+.checkmark {
+  display: none;
+}
+.checkmark.draw:after {
+  animation-duration: 800ms;
+  animation-timing-function: ease;
+  animation-name: checkmark;
+  transform: scaleX(-1) rotate(135deg);
+}
+.checkmark:after {
+  opacity: 1;
+  height: 3.5em;
+  width: 1.75em;
+  transform-origin: left top;
+  border-right: 3px solid #5cb85c;
+  border-top: 3px solid #5cb85c;
+  content: "";
+  left: 1.75em;
+  top: 3.5em;
+  position: absolute;
+}
+
+@keyframes loader-spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+@keyframes checkmark {
+  0% {
+    height: 0;
+    width: 0;
+    opacity: 1;
+  }
+  20% {
+    height: 0;
+    width: 1.75em;
+    opacity: 1;
+  }
+  40% {
+    height: 3.5em;
+    width: 1.75em;
+    opacity: 1;
+  }
+  100% {
+    height: 3.5em;
+    width: 1.75em;
+    opacity: 1;
+  }
+}
+.cross {
+  display: none;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, calc(-50% - 0.1em)) rotate(45deg);
+  background-color: #d9534f;
+}
+.cross.draw:before, .cross.draw:after {
+  content: "";
+  position: absolute;
+  background-color: #d9534f;
+  animation: scale-up-center 300ms ease-out forwards;
+}
+.cross.draw:before {
+  height: 0.2em;
+  width: 5.6em;
+  top: 0;
+  left: -2.7em;
+}
+.cross.draw:after {
+  height: 5.6em;
+  width: 0.2em;
+  left: 0;
+  top: -2.7em;
+}
+
+@keyframes scale-up-center {
+  0% {
+    transform: scale(0.2);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+.circle-loader.error {
+  animation: none;
+  border-color: #d9534f;
+  transition: border 500ms ease-out;
+}
+
+/*# sourceMappingURL=checkmark.css.map */
