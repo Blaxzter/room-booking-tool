@@ -124,18 +124,25 @@ export const useAuth = defineStore('auth', () => {
     if (access_token && expires_at && currentTime < expires_at - 5 * 60 * 1000) {
       // Access token exists and doesn't expire in the next 5 minutes
       authenticated.value = true
+      return true
     } else {
-      // Access token does not exist, has expired, or expires in less than 5 minutes
+      // Access token exist, has expired, or expires in less than 5 minutes
       if (access_token && currentTime > expires_at - 5 * 60 * 1000) {
         try {
           console.log('Refreshing token')
           await client.refresh()
           console.log('Token refreshed')
           authenticated.value = true
+          return true
         } catch (error) {
           console.error(error)
           authenticated.value = false
+          return false
         }
+      } else {
+        // No access token
+        authenticated.value = false
+        return false
       }
     }
   }

@@ -31,14 +31,14 @@ const router = createRouter({
 })
 
 router.beforeEach(async (to, from, next) => {
-  const { checkAuth, isAuthenticated } = useAuth()
-  await checkAuth()
-    .then(() => {
-      console.log('Auth checked')
-    })
-    .catch((error) => {
-      console.error(error)
-    })
+  const { checkAuth } = useAuth()
+  let isAuthenticated = false
+  try {
+    isAuthenticated = await checkAuth()
+  } catch (error) {
+    console.error(error)
+  }
+  
   if (to.matched.some((record) => record.meta.requiresAuth) && !isAuthenticated) {
     console.log('Requires auth')
     next({ name: 'login' }) // Redirect to the login page if the user is not authenticated
