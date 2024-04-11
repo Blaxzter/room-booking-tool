@@ -22,6 +22,7 @@ import { Checkbox } from '@/components/ui/checkbox'
 const loading = ref(false)
 const showCheckmark = ref(false)
 const showCross = ref(false)
+const showScreenGrower = ref(false)
 
 // set refs for email and password
 const email = ref('')
@@ -40,6 +41,10 @@ const loginWrapper = async () => {
     .then(() => {
       console.log('Logged in')
       showCheckmark.value = true
+      setTimeout(() => {
+        showScreenGrower.value = true
+        console.log('show screen grower')
+      }, 900)
       setTimeout(() => {
         let to = getRedirect() || { name: 'home' }
         console.log('Redirecting to', to)
@@ -62,6 +67,9 @@ onMounted(async () => {
     setTimeout(() => {
       showCheckmark.value = true
     }, 1000)
+    setTimeout(() => {
+      showScreenGrower.value = true
+    }, 1900)
     setTimeout(() => {
       let to = getRedirect() || { name: 'home' }
       console.log('Redirecting to', to)
@@ -131,10 +139,14 @@ onMounted(async () => {
           </Button>
         </CardFooter>
       </Card>
-      <Card class="w-full max-w-sm" v-else>
-        <CardContent class="grid place-items-center pt-6">
+      <Card
+        class="w-full max-w-sm h-full max-h-[200px]"
+        v-else
+        :class="{ 'login-screen-grower': showScreenGrower }"
+      >
+        <CardContent class="grid place-items-center pt-6" :class="{ 'fade-out': showScreenGrower }">
           <div
-            class="circle-loader mb-2"
+            class="circle-loader mb-2 h-[200px]"
             :class="{ 'load-complete': showCheckmark, error: showCross }"
           >
             <div
@@ -153,8 +165,8 @@ onMounted(async () => {
 </template>
 
 <style lang="scss">
-// import checkmark from '@/assets/css/checkmark.scss'
-@import '@/assets/css/checkmark.scss';
+// import checkmark from '@/assets/css/login.scss'
+@import '@/assets/css/login';
 
 .background-image {
   z-index: -1000;

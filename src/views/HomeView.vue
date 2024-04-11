@@ -187,8 +187,7 @@ watchEffect(() => {
                 :width="250"
                 :height="330"
                 @click="
-                  () =>
-                    router.push({ name: 'BookableObjectView', params: { id: bookableObject.id } })
+                  () => router.push({ name: 'bookable-object', params: { id: bookableObject.id } })
                 "
               />
             </div>
