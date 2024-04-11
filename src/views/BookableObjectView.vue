@@ -1,6 +1,15 @@
+<script setup lang="ts">
+// get the bookable object id from the route
+import { useRoute } from 'vue-router'
+
+const route = useRoute()
+
+const bookableObjectId = route.params.id
+</script>
+
 <template>
   <div class="about">
-    <h1>This is an about page</h1>
+    <h1>This is an about page {{ bookableObjectId }}</h1>
   </div>
 </template>
 

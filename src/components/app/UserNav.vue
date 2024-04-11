@@ -21,8 +21,8 @@ import { useAuth } from '@/stores/auth'
 
 const { logout } = useAuth()
 
-onMounted(() => {
-  document.addEventListener('keydown', (e) => {
+onMounted(async () => {
+  document.addEventListener('keydown', async (e) => {
     if ((e.metaKey || e.ctrlKey) && e.shiftKey && e.key === 'L') {
       // ⌘D for MacOS and Ctrl+D for Windows
       e.preventDefault() // Prevent default action of the keypress
@@ -32,7 +32,7 @@ onMounted(() => {
     if ((e.metaKey || e.ctrlKey) && e.shiftKey && e.key === 'Q') {
       // ⌘Q for MacOS and Ctrl+Q for Windows
       e.preventDefault() // Prevent default action of the keypress
-      logout()
+      await logout()
     }
   })
 })

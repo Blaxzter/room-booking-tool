@@ -7,44 +7,39 @@ const router = createRouter({
     {
       path: '/',
       name: 'home',
-      component: () => import('../views/HomeView.vue'),
+      alias: ['/bookable-object/', '/room/', '/equipment/', '/home'],
+      component: () => import('@/views/HomeView.vue'),
       meta: { requiresAuth: true }
     },
     {
       path: '/login',
       name: 'login',
-      component: () => import('../views/LoginView.vue')
+      component: () => import('@/views/LoginView.vue')
     },
     {
       path: '/bookable-object/:id',
       alias: ['/room/:id', '/equipment/:id'],
-      name: 'BookableObjectView',
-      component: () => import('../views/BookableObjectView.vue'),
-      meta: { requiresAuth: true }
-    },
-    {
-      path: '/room/:id',
-      name: 'room',
-      component: () => import('../views/BookableObjectView.vue'),
-      meta: { requiresAuth: false }
+      name: 'bookable-object',
+      component: () => import('@/views/BookableObjectView.vue')
     }
   ]
 })
 
 router.beforeEach(async (to, from, next) => {
-  const { checkAuth } = useAuth()
-  let isAuthenticated = false
+  const { checkAuth, setRedirect } = useAuth()
+
   try {
-    isAuthenticated = await checkAuth()
+    const isAuthenticated = await checkAuth()
+    if (to.matched.some((record) => record.meta.requiresAuth) && !isAuthenticated) {
+      setRedirect(to.fullPath)
+      console.log('Requires auth')
+      next({ name: 'login' })
+    } else {
+      next() // Proceed to the next route
+    }
   } catch (error) {
-    console.error(error)
-  }
-  
-  if (to.matched.some((record) => record.meta.requiresAuth) && !isAuthenticated) {
-    console.log('Requires auth')
-    next({ name: 'login' }) // Redirect to the login page if the user is not authenticated
-  } else {
-    next() // Proceed to the next route
+    setRedirect(to.fullPath)
+    next({ name: 'login' })
   }
 })
 

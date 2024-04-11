@@ -23,6 +23,22 @@ export const useAuth = defineStore('auth', () => {
   const _keep_logged_in = ref(localStorage.getItem('keep_logged_in') === 'true')
   const auth_data = ref({} as AuthenticationData)
 
+  const defaultRedirect: string = '/'
+  const redirect = ref(defaultRedirect)
+
+  const setRedirect = (path: string) => {
+    console.log('setRedirect', path)
+    // check if path is not login
+    if (path === '/login') {
+      return
+    }
+    redirect.value = path
+  }
+
+  const getRedirect = () => {
+    return redirect.value
+  }
+
   const storage = {
     set(value: AuthenticationData) {
       if (!_keep_logged_in.value) {
@@ -107,9 +123,7 @@ export const useAuth = defineStore('auth', () => {
         authenticated.value = true
       })
       .catch((error) => {
-        console.error(error)
-        const message = error?.errors?.length > 0 ? error.errors[0].detail : 'An error occurred'
-        throw new Error(message)
+        throw new Error(error?.errors?.length > 0 ? error.errors[0].message : 'An error occurred')
       })
   }
 
@@ -147,15 +161,15 @@ export const useAuth = defineStore('auth', () => {
     }
   }
 
-  const logout = () => {
-    client
+  const logout = async () => {
+    await client
       .logout()
       .catch(console.error)
-      .finally(() => {
+      .finally(async () => {
         authenticated.value = false
-        router.push({ name: 'login' })
+        await router.push({ name: 'login' })
       })
   }
 
-  return { client, login, logout, checkAuth, isAuthenticated }
+  return { client, login, logout, checkAuth, isAuthenticated, setRedirect, getRedirect }
 })

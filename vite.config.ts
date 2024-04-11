@@ -6,13 +6,12 @@ import VueDevTools from 'vite-plugin-vue-devtools'
 
 import tailwind from 'tailwindcss'
 import autoprefixer from 'autoprefixer'
-import stylelint from 'vite-plugin-stylelint'
 
 // https://vitejs.dev/config/
 export default defineConfig({
   css: {
     postcss: {
-      plugins: [tailwind(), autoprefixer(), stylelint()]
+      plugins: [tailwind(), autoprefixer()]
     }
   },
   plugins: [vue(), VueDevTools()],

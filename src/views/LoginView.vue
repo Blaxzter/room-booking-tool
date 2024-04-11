@@ -10,7 +10,7 @@ import {
 } from '@/components/ui/card'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
-import { ChevronRight } from 'lucide-vue-next'
+import { ChevronRight, Eye, EyeOff } from 'lucide-vue-next'
 import { ref } from 'vue'
 
 import { Loader2 } from 'lucide-vue-next'
@@ -28,8 +28,9 @@ const email = ref('')
 const password = ref('')
 const errorMessage = ref('')
 const keepLoggedIn = ref(false)
+const showPassword = ref(false)
 
-const { login, isAuthenticated } = useAuth()
+const { login, isAuthenticated, getRedirect } = useAuth()
 
 const loginWrapper = async () => {
   loading.value = true
@@ -40,7 +41,9 @@ const loginWrapper = async () => {
       console.log('Logged in')
       showCheckmark.value = true
       setTimeout(() => {
-        router.push({ name: 'home' })
+        let to = getRedirect() || { name: 'home' }
+        console.log('Redirecting to', to)
+        router.push(to)
       }, 1000)
     })
     .catch((error) => {
@@ -60,7 +63,9 @@ onMounted(async () => {
       showCheckmark.value = true
     }, 1000)
     setTimeout(() => {
-      router.push({ name: 'home' })
+      let to = getRedirect() || { name: 'home' }
+      console.log('Redirecting to', to)
+      router.push(to)
     }, 2000)
   }
 })
@@ -82,7 +87,22 @@ onMounted(async () => {
           </div>
           <div class="grid gap-2">
             <Label for="password">Password</Label>
-            <Input id="password" type="password" required v-model="password" />
+            <div class="relative w-full max-w-sm items-center">
+              <Input
+                id="password"
+                :type="showPassword ? 'text' : 'password'"
+                required
+                v-model="password"
+              />
+              <Button
+                @click="showPassword = !showPassword"
+                className="absolute end-1 inset-y-0 flex items-center justify-center px-2"
+                type="button"
+              >
+                <EyeOff v-if="showPassword" className="stroke-slate-700/70" :size="18" />
+                <Eye v-else className="stroke-slate-700/70" :size="18" />
+              </Button>
+            </div>
           </div>
 
           <!-- keep logged in -->
