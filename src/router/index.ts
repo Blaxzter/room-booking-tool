@@ -6,10 +6,36 @@ const router = createRouter({
   routes: [
     {
       path: '/',
-      name: 'home',
-      alias: ['/bookable-object/', '/room/', '/equipment/', '/home'],
-      component: () => import('@/views/HomeView.vue'),
-      meta: { requiresAuth: true }
+      component: () => import('@/layouts/MainLayout.vue'),
+      meta: { requiresAuth: true },
+      children: [
+        {
+          path: '/',
+          name: 'home',
+          alias: ['/bookable-object/', '/room/', '/equipment/', '/home'],
+          component: () => import('@/views/HomeView.vue')
+        },
+        {
+          path: '/groups',
+          name: 'groups',
+          component: () => import('@/views/GroupView.vue')
+        },
+        {
+          path: '/requests',
+          name: 'requests',
+          component: () => import('@/views/RequestView.vue')
+        },
+        {
+          path: '/settings',
+          name: 'settings',
+          component: () => import('@/views/SettingsView.vue')
+        },
+        {
+          path: '/profile',
+          name: 'profile',
+          component: () => import('@/views/ProfileView.vue')
+        }
+      ]
     },
     {
       path: '/login',

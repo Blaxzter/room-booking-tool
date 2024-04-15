@@ -16,10 +16,14 @@ import { useDark, useToggle } from '@vueuse/core'
 const isDark = useDark()
 const toggleDark = useToggle(isDark)
 
-import { onMounted } from 'vue'
+import { onMounted, ref } from 'vue'
 import { useAuth } from '@/stores/auth'
+import router from '@/router'
+import DarkscreenToggle from '@/components/animations/DarkscreenToggle.vue'
 
 const { logout } = useAuth()
+
+const toggleDarkmodeAnimation = ref(false)
 
 onMounted(async () => {
   document.addEventListener('keydown', async (e) => {
@@ -57,16 +61,22 @@ onMounted(async () => {
       </DropdownMenuLabel>
       <DropdownMenuSeparator />
       <DropdownMenuGroup>
-        <DropdownMenuItem>
+        <DropdownMenuItem @click="router.push({ name: 'profile' })" class="cursor-pointer">
           Profile
           <DropdownMenuShortcut>⇧⌘P</DropdownMenuShortcut>
         </DropdownMenuItem>
-        <DropdownMenuItem>
+        <DropdownMenuItem
+          @click="toggleDark"
+          class="cursor-pointer my-0 py-0"
+          @mouseenter="toggleDarkmodeAnimation = true"
+          @mouseleave="toggleDarkmodeAnimation = false"
+        >
           <span v-if="isDark">Light mode</span>
           <span v-else>Dark mode</span>
-          <DropdownMenuShortcut>⇧⌘L</DropdownMenuShortcut>
+          <div class="flex-grow" />
+          <DarkscreenToggle :height="30" :toggle-animation="toggleDarkmodeAnimation" />
         </DropdownMenuItem>
-        <DropdownMenuItem>
+        <DropdownMenuItem @click="router.push({ name: 'settings' })" class="cursor-pointer">
           Settings
           <DropdownMenuShortcut>⌘S</DropdownMenuShortcut>
         </DropdownMenuItem>

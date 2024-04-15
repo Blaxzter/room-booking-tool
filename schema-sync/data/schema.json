@@ -767,6 +767,75 @@
         }
       },
       {
+        "collection": "directus_settings",
+        "field": "mv_hash",
+        "type": "string",
+        "meta": null,
+        "schema": {
+          "name": "mv_hash",
+          "table": "directus_settings",
+          "data_type": "character varying",
+          "default_value": "",
+          "max_length": 255,
+          "numeric_precision": null,
+          "numeric_scale": null,
+          "is_nullable": false,
+          "is_unique": false,
+          "is_primary_key": false,
+          "is_generated": false,
+          "generation_expression": null,
+          "has_auto_increment": false,
+          "foreign_key_table": null,
+          "foreign_key_column": null
+        }
+      },
+      {
+        "collection": "directus_settings",
+        "field": "mv_ts",
+        "type": "timestamp",
+        "meta": null,
+        "schema": {
+          "name": "mv_ts",
+          "table": "directus_settings",
+          "data_type": "timestamp with time zone",
+          "default_value": "2020-01-01 00:00:00+00",
+          "max_length": null,
+          "numeric_precision": null,
+          "numeric_scale": null,
+          "is_nullable": false,
+          "is_unique": false,
+          "is_primary_key": false,
+          "is_generated": false,
+          "generation_expression": null,
+          "has_auto_increment": false,
+          "foreign_key_table": null,
+          "foreign_key_column": null
+        }
+      },
+      {
+        "collection": "directus_settings",
+        "field": "mv_locked",
+        "type": "boolean",
+        "meta": null,
+        "schema": {
+          "name": "mv_locked",
+          "table": "directus_settings",
+          "data_type": "boolean",
+          "default_value": false,
+          "max_length": null,
+          "numeric_precision": null,
+          "numeric_scale": null,
+          "is_nullable": false,
+          "is_unique": false,
+          "is_primary_key": false,
+          "is_generated": false,
+          "generation_expression": null,
+          "has_auto_increment": false,
+          "foreign_key_table": null,
+          "foreign_key_column": null
+        }
+      },
+      {
         "collection": "group",
         "field": "id",
         "type": "integer",
@@ -1686,5 +1755,5 @@
       }
     ]
   },
-  "hash": "9370fda0507913291e9e480885567023c5356ca1"
+  "hash": "268b7ab8e816a47e790a5fcc2bd1325806401ec7"
 }

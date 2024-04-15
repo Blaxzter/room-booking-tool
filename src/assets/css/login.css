@@ -107,7 +107,39 @@
 .circle-loader.error {
   animation: none;
   border-color: #d9534f;
-  transition: border 500ms ease-out;
+  transition: border 100ms ease-out;
+}
+
+.login-screen-grower {
+  position: fixed;
+  animation: login-screen-grower-to-login 100ms ease-in forwards;
+}
+
+@keyframes login-screen-grower-to-login {
+  0% {
+    width: 24rem;
+    max-width: 24rem;
+    height: 200px;
+    max-height: 200px;
+  }
+  100% {
+    width: 100vw;
+    max-width: 100vw;
+    height: 100vh;
+    max-height: 100vh;
+  }
+}
+.fade-out {
+  animation: fade-out-keyframes 50ms linear forwards;
+}
+
+@keyframes fade-out-keyframes {
+  0% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+  }
 }
 
 /*# sourceMappingURL=login.css.map */
