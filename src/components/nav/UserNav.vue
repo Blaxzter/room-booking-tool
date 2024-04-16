@@ -66,7 +66,7 @@ onMounted(async () => {
           <DropdownMenuShortcut>⇧⌘P</DropdownMenuShortcut>
         </DropdownMenuItem>
         <DropdownMenuItem
-          @click="toggleDark"
+          @click="() => toggleDark()"
           class="cursor-pointer my-0 py-0"
           @mouseenter="toggleDarkmodeAnimation = true"
           @mouseleave="toggleDarkmodeAnimation = false"

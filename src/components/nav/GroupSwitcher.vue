@@ -37,6 +37,7 @@ import {
   SelectValue
 } from '@/components/ui/select'
 import type { Group } from '@/types'
+import NewGroupDialog from '@/components/groups/NewGroupDialog.vue'
 
 type Groups = { label: string; teams: Group[] }[]
 const groups: Groups = [
@@ -51,7 +52,7 @@ const groups: Groups = [
     ]
   },
   {
-    label: 'Teams',
+    label: 'Groups',
     teams: [
       {
         id: 2,
@@ -140,7 +141,7 @@ const nameInitials = (name: string) => {
             <CommandGroup>
               <DialogTrigger as-child>
                 <CommandItem
-                  value="create-team"
+                  value="create-group"
                   @select="
                     () => {
                       open = false
@@ -149,7 +150,7 @@ const nameInitials = (name: string) => {
                   "
                 >
                   <PlusCircledIcon class="mr-2 h-5 w-5" />
-                  Create Team
+                  Create Group
                 </CommandItem>
               </DialogTrigger>
             </CommandGroup>
@@ -157,41 +158,6 @@ const nameInitials = (name: string) => {
         </Command>
       </PopoverContent>
     </Popover>
-    <DialogContent>
-      <DialogHeader>
-        <DialogTitle>Create team</DialogTitle>
-        <DialogDescription> Add a new team to manage products and customers. </DialogDescription>
-      </DialogHeader>
-      <div>
-        <div class="space-y-4 py-2 pb-4">
-          <div class="space-y-2">
-            <Label for="name">Team name</Label>
-            <Input id="name" placeholder="Acme Inc." />
-          </div>
-          <div class="space-y-2">
-            <Label for="plan">Subscription plan</Label>
-            <Select>
-              <SelectTrigger>
-                <SelectValue placeholder="Select a plan" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="free">
-                  <span class="font-medium">Free</span> -
-                  <span class="text-muted-foreground"> Trial for two weeks </span>
-                </SelectItem>
-                <SelectItem value="pro">
-                  <span class="font-medium">Pro</span> -
-                  <span class="text-muted-foreground"> $9/month per user </span>
-                </SelectItem>
-              </SelectContent>
-            </Select>
-          </div>
-        </div>
-      </div>
-      <DialogFooter>
-        <Button variant="outline" @click="showNewTeamDialog = false"> Cancel </Button>
-        <Button type="submit"> Continue </Button>
-      </DialogFooter>
-    </DialogContent>
+    <NewGroupDialog v-model:open="showNewTeamDialog" @close="showNewTeamDialog = false" />
   </Dialog>
 </template>
