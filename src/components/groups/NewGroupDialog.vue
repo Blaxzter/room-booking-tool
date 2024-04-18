@@ -1,11 +1,5 @@
 <script setup lang="ts">
-import {
-  DialogContent,
-  DialogDescription,
-  DialogFooter,
-  DialogHeader,
-  DialogTitle
-} from '@/components/ui/dialog'
+import { DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from '@/components/ui/dialog'
 import { Label } from '@/components/ui/label'
 import { Input } from '@/components/ui/input'
 import { Button } from '@/components/ui/button'
@@ -15,9 +9,7 @@ import { Button } from '@/components/ui/button'
   <DialogContent>
     <DialogHeader>
       <DialogTitle>Create team</DialogTitle>
-      <DialogDescription
-        >Add a new group to manage rooms and other bookable objects.</DialogDescription
-      >
+      <DialogDescription>Add a new group to manage rooms and other bookable objects.</DialogDescription>
     </DialogHeader>
     <div>
       <div class="space-y-4 py-2 pb-4">
