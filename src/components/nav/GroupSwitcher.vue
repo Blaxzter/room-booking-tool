@@ -8,15 +8,7 @@ import { cn } from '@/lib/utils'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import { Button } from '@/components/ui/button'
 
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogFooter,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger
-} from '@/components/ui/dialog'
+import { Dialog, DialogTrigger } from '@/components/ui/dialog'
 import {
   Command,
   CommandEmpty,
@@ -26,16 +18,11 @@ import {
   CommandList,
   CommandSeparator
 } from '@/components/ui/command'
-import { Input } from '@/components/ui/input'
-import { Label } from '@/components/ui/label'
-import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover'
 import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue
-} from '@/components/ui/select'
+  Popover,
+  PopoverContent,
+  PopoverTrigger
+} from '@/components/ui/popover'
 import type { Group } from '@/types'
 import NewGroupDialog from '@/components/groups/NewGroupDialog.vue'
 
@@ -93,8 +80,13 @@ const nameInitials = (name: string) => {
           :class="cn('w-[200px] justify-between', $attrs.class ?? '')"
         >
           <Avatar class="mr-2 h-5 w-5">
-            <AvatarImage :src="`${selectedTeam.avatar}`" :alt="selectedTeam.name" />
-            <AvatarFallback>{{ nameInitials(selectedTeam.name) }}</AvatarFallback>
+            <AvatarImage
+              :src="`${selectedTeam.avatar}`"
+              :alt="selectedTeam.name"
+            />
+            <AvatarFallback>{{
+              nameInitials(selectedTeam.name)
+            }}</AvatarFallback>
           </Avatar>
           {{ selectedTeam.name }}
           <CaretSortIcon class="ml-auto h-4 w-4 shrink-0 opacity-50" />
@@ -110,7 +102,11 @@ const nameInitials = (name: string) => {
           <CommandList>
             <CommandInput placeholder="Search team..." />
             <CommandEmpty>No team found.</CommandEmpty>
-            <CommandGroup v-for="group in groups" :key="group.label" :heading="group.label">
+            <CommandGroup
+              v-for="group in groups"
+              :key="group.label"
+              :heading="group.label"
+            >
               <CommandItem
                 v-for="team in group.teams"
                 :key="team.name"
@@ -124,13 +120,20 @@ const nameInitials = (name: string) => {
                 "
               >
                 <Avatar class="mr-2 h-5 w-5">
-                  <AvatarImage :src="`${team.avatar}`" :alt="team.name" class="grayscale" />
+                  <AvatarImage
+                    :src="`${team.avatar}`"
+                    :alt="team.name"
+                    class="grayscale"
+                  />
                   <AvatarFallback>{{ nameInitials(team.name) }}</AvatarFallback>
                 </Avatar>
                 {{ team.name }}
                 <CheckIcon
                   :class="
-                    cn('ml-auto h-4 w-4', selectedTeam.id === team.id ? 'opacity-100' : 'opacity-0')
+                    cn(
+                      'ml-auto h-4 w-4',
+                      selectedTeam.id === team.id ? 'opacity-100' : 'opacity-0'
+                    )
                   "
                 />
               </CommandItem>
@@ -158,6 +161,9 @@ const nameInitials = (name: string) => {
         </Command>
       </PopoverContent>
     </Popover>
-    <NewGroupDialog v-model:open="showNewTeamDialog" @close="showNewTeamDialog = false" />
+    <NewGroupDialog
+      v-model:open="showNewTeamDialog"
+      @close="showNewTeamDialog = false"
+    />
   </Dialog>
 </template>

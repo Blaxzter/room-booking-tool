@@ -5,8 +5,10 @@ import { createPinia } from 'pinia'
 
 import dayjs from 'dayjs'
 import weekOfYear from 'dayjs/plugin/weekOfYear'
+import isToday from 'dayjs/plugin/isToday'
 
 dayjs.extend(weekOfYear)
+dayjs.extend(isToday)
 
 import App from './App.vue'
 import router from './router'

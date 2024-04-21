@@ -18,7 +18,7 @@ const bookableObjectId = route.params.id
 
 <template>
   <div
-    class="px-1 py-1 h-full md:py-6 md:px-6 grid h-full items-stretch gap-6 lg:grid-cols-[400px_minmax(0,1fr)]"
+    class="px-1 py-1 h-full md:py-3 md:px-3 grid h-full items-stretch gap-6 lg:grid-cols-[400px_minmax(0,1fr)]"
   >
     <Card class="hidden flex-col space-y-4 sm:flex">
       <CardHeader>
@@ -32,7 +32,7 @@ const bookableObjectId = route.params.id
         </p>
       </CardContent>
     </Card>
-    <CalenderComponent class="calender-content" />
+    <CalenderComponent />
   </div>
 </template>
 
