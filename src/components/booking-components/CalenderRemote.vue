@@ -1,22 +1,25 @@
 <script setup lang="ts">
-import { CalendarDays, CalendarClock, CalendarFold } from 'lucide-vue-next'
-import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs'
+import { ChevronRight, ChevronLeft } from 'lucide-vue-next'
+import { Button } from '@/components/ui/button'
+
+// define emits for prev and next
+const emits = defineEmits(['prev', 'next'])
 </script>
 
 <template>
-  <Tabs default-value="dayView">
-    <TabsList>
-      <TabsTrigger value="dayView" @click="$emit('toggle-day-view')">
-        <CalendarDays />
-      </TabsTrigger>
-      <TabsTrigger value="timeView" @click="$emit('toggle-time-view')">
-        <CalendarClock />
-      </TabsTrigger>
-      <TabsTrigger value="listView" @click="$emit('toggle-list-view')">
-        <CalendarFold />
-      </TabsTrigger>
-    </TabsList>
-  </Tabs>
+  <div>
+    <Button
+      @click="emits('prev')"
+      variant="secondary"
+      size="icon"
+      class="me-0.5"
+    >
+      <ChevronLeft />
+    </Button>
+    <Button @click="emits('next')" variant="secondary" size="icon">
+      <ChevronRight />
+    </Button>
+  </div>
 </template>
 
 <style scoped></style>
