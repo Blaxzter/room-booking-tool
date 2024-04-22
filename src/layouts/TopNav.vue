@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import MainNav from '@/components/nav/MainNav.vue'
-import GroupSwitcher from '@/components/nav/GroupSwitcher.vue'
+import GroupSwitcher from '@/components/groups/GroupSwitcher.vue'
 import { Search } from 'lucide-vue-next'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
@@ -35,7 +35,12 @@ watchEffect(() => {
           class="ms-3 hidden sm:block lg:w-[300px]"
           :style="{ display: showSearch ? 'block' : 'none' }"
         />
-        <Button variant="outline" size="icon" class="sm:hidden flex-shrink-0" @click="toggleSearch">
+        <Button
+          variant="outline"
+          size="icon"
+          class="sm:hidden flex-shrink-0"
+          @click="toggleSearch"
+        >
           <Search class="w-4 h-4" />
         </Button>
         <UserNav />

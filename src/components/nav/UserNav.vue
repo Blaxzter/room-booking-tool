@@ -56,12 +56,19 @@ onMounted(async () => {
       <DropdownMenuLabel class="font-normal flex">
         <div class="flex flex-col space-y-1">
           <p class="text-sm font-medium leading-none">shadcn</p>
-          <p class="text-xs leading-none text-muted-foreground">m@example.com</p>
+          <p class="text-xs leading-none text-muted-foreground">
+            m@example.com
+          </p>
         </div>
       </DropdownMenuLabel>
       <DropdownMenuSeparator />
       <DropdownMenuGroup>
-        <DropdownMenuItem @click="router.push({ name: 'profile' })" class="cursor-pointer">
+        <DropdownMenuItem
+          @click="
+            router.push({ name: 'settings', params: { page: 'profile' } })
+          "
+          class="cursor-pointer"
+        >
           Profile
           <DropdownMenuShortcut>⇧⌘P</DropdownMenuShortcut>
         </DropdownMenuItem>
@@ -74,9 +81,15 @@ onMounted(async () => {
           <span v-if="isDark">Light mode</span>
           <span v-else>Dark mode</span>
           <div class="flex-grow" />
-          <DarkscreenToggle :height="30" :toggle-animation="toggleDarkmodeAnimation" />
+          <DarkscreenToggle
+            :height="30"
+            :toggle-animation="toggleDarkmodeAnimation"
+          />
         </DropdownMenuItem>
-        <DropdownMenuItem @click="router.push({ name: 'settings' })" class="cursor-pointer">
+        <DropdownMenuItem
+          @click="router.push({ name: 'settings' })"
+          class="cursor-pointer"
+        >
           Settings
           <DropdownMenuShortcut>⌘S</DropdownMenuShortcut>
         </DropdownMenuItem>

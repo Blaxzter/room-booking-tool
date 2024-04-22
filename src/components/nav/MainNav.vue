@@ -2,7 +2,7 @@
 import { Button } from '@/components/ui/button'
 import { Menu, Calendar } from 'lucide-vue-next'
 import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet'
-import GroupSwitcher from '@/components/nav/GroupSwitcher.vue'
+import GroupSwitcher from '@/components/groups/GroupSwitcher.vue'
 
 const navElements = [
   { label: 'Dashboard', routeName: 'home' },
@@ -39,7 +39,10 @@ const navElements = [
     </SheetTrigger>
     <SheetContent side="left">
       <nav class="grid gap-6 text-lg font-medium">
-        <RouterLink :to="{ name: 'home' }" class="flex items-center gap-2 text-lg font-semibold">
+        <RouterLink
+          :to="{ name: 'home' }"
+          class="flex items-center gap-2 text-lg font-semibold"
+        >
           <Calendar class="h-6 w-6" />
           <span class="sr-only">Object Booking Tool</span>
         </RouterLink>

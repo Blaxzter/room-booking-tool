@@ -29,11 +29,6 @@ const router = createRouter({
           path: '/settings',
           name: 'settings',
           component: () => import('@/views/SettingsView.vue')
-        },
-        {
-          path: '/profile',
-          name: 'profile',
-          component: () => import('@/views/ProfileView.vue')
         }
       ]
     },
@@ -56,7 +51,10 @@ router.beforeEach(async (to, from, next) => {
 
   try {
     const isAuthenticated = await checkAuth()
-    if (to.matched.some((record) => record.meta.requiresAuth) && !isAuthenticated) {
+    if (
+      to.matched.some((record) => record.meta.requiresAuth) &&
+      !isAuthenticated
+    ) {
       setRedirect(to.fullPath)
       console.log('Requires auth')
       next({ name: 'login' })
