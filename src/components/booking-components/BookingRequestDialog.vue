@@ -124,7 +124,7 @@ const createBooking = () => {
           </Label>
           <Checkbox
             id="confirm-booking"
-            v-model="booking.confirmBooking"
+            v-model="booking.confirmed"
             class="col-span-3"
           />
         </div>
