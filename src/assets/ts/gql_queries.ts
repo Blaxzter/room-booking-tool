@@ -1,3 +1,5 @@
+import type { BookableObject, Group } from '@/types'
+
 export const getGroupQuery = (id: number) => `
 query Initial_Data {
     group(filter: { id: { _eq: "${id}" } }) {
@@ -53,3 +55,13 @@ query Bookable_object {
     }
 }
 `
+
+export interface GetGroupQueryResponse {
+  group: Group[]
+  bookable_object: BookableObject[]
+}
+
+export interface GetInitialDataQueryResponse {
+  group: Group[]
+  bookable_object: BookableObject[]
+}

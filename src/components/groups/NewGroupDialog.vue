@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { defineEmits } from 'vue'
 import {
   DialogContent,
   DialogDescription,
@@ -9,6 +10,10 @@ import {
 import { Label } from '@/components/ui/label'
 import { Input } from '@/components/ui/input'
 import { Button } from '@/components/ui/button'
+
+const emit = defineEmits(['close'])
+// define open as v-model
+const open = defineModel()
 
 const groupNames: string[] = [
   'Power Rangers',
@@ -47,17 +52,12 @@ const groupNames: string[] = [
         </div>
         <div class="space-y-2">
           <Label for="avatar">Avatar</Label>
-          <input
-            type="file"
-            id="avatar"
-            accept="image/*"
-            @change="handleAvatarUpload"
-          />
+          <input type="file" id="avatar" accept="image/*" />
         </div>
       </div>
     </div>
     <DialogFooter>
-      <Button variant="outline" @click="$emit('close')"> Cancel </Button>
+      <Button variant="outline" @click="emit('close')"> Cancel </Button>
       <Button type="submit"> Continue </Button>
     </DialogFooter>
   </DialogContent>

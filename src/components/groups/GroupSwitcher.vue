@@ -1,5 +1,6 @@
 <script setup lang="ts">
-import { ref } from 'vue'
+import { computed, type ComputedRef, ref, watch } from 'vue'
+import _ from 'lodash'
 import { CaretSortIcon } from '@radix-icons/vue'
 import { CheckIcon } from '@radix-icons/vue'
 import { PlusCircledIcon } from '@radix-icons/vue'
@@ -25,39 +26,27 @@ import {
 } from '@/components/ui/popover'
 import type { Group } from '@/types'
 import NewGroupDialog from '@/components/groups/NewGroupDialog.vue'
+import { useAuth } from '@/stores/auth'
+import { useGroups } from '@/stores/groups'
+import { storeToRefs } from 'pinia'
 
-type Groups = { label: string; teams: Group[] }[]
-const groups: Groups = [
-  {
-    label: 'Personal Account',
-    teams: [
-      {
-        id: 1,
-        name: 'Alicia Koch',
-        description: 'personal'
-      }
-    ]
-  },
-  {
-    label: 'Groups',
-    teams: [
-      {
-        id: 2,
-        name: 'Acme Inc.',
-        description: 'acme-inc'
-      },
-      {
-        id: 3,
-        name: 'Monsters Inc.',
-        description: 'monsters'
-      }
-    ]
+type GroupsDisplayData = { label: string; teams: Group[] }[]
+
+const groupStore = useGroups()
+const authStore = useAuth()
+const { user } = storeToRefs(authStore)
+const { selectGroup } = groupStore
+const { groups, selectedGroup } = storeToRefs(groupStore)
+
+const userName = () => {
+  if (user.value) {
+    if (user.value.first_name || user.value.last_name) {
+      return `${user.value.first_name} ${user.value.last_name}`
+    }
+    return user.value.email
   }
-]
-
-const open = ref(false)
-const showNewTeamDialog = ref(false)
-const selectedTeam = ref<Group>(groups[0].teams[0])
+  return 'Unknown'
+}
 
 const nameInitials = (name: string) => {
   const [firstName, lastName] = name.split(' ')
@@ -65,6 +54,53 @@ const nameInitials = (name: string) => {
     return `${firstName.charAt(0)}${lastName.charAt(0)}`
   }
   return name.charAt(0) + name.charAt(1)
+}
+
+const displayData: ComputedRef<GroupsDisplayData> = computed(() => {
+  return [
+    {
+      label: 'Personal Account',
+      teams: [
+        {
+          id: 1,
+          name: userName(),
+          description: 'personal'
+        }
+      ]
+    },
+    {
+      label: 'Groups',
+      teams: _.map(
+        groups.value,
+        (group: Group): Group => ({
+          id: Number(group.id),
+          name: group.name,
+          description: group.description
+        })
+      )
+    }
+  ]
+})
+
+const open = ref(false)
+const showNewTeamDialog = ref(false)
+let selectedTeam = computed(() => {
+  if (selectedGroup.value != null) {
+    return selectedGroup.value
+  }
+  return displayData.value[0].teams[0]
+})
+
+const filterGroups = (
+  val: Record<string, any>[],
+  term: string
+): Record<string, any>[] => {
+  return val.filter((group, index) => {
+    if (index === val.length - 1) {
+      return true
+    }
+    return group.name.toLowerCase().includes(term.toLowerCase())
+  })
 }
 </script>
 
@@ -88,22 +124,21 @@ const nameInitials = (name: string) => {
               nameInitials(selectedTeam.name)
             }}</AvatarFallback>
           </Avatar>
-          {{ selectedTeam.name }}
+          <div
+            class="whitespace-nowrap overflow-ellipsis overflow-hidden w-[150px]"
+          >
+            {{ selectedTeam.name }}
+          </div>
           <CaretSortIcon class="ml-auto h-4 w-4 shrink-0 opacity-50" />
         </Button>
       </PopoverTrigger>
       <PopoverContent class="w-[200px] p-0">
-        <Command
-          :filter-function="
-            (list: Group[], term: string): Group[] =>
-              list.filter((i: Group) => i.name?.toLowerCase()?.includes(term))
-          "
-        >
+        <Command :filter-function="filterGroups">
           <CommandList>
             <CommandInput placeholder="Search team..." />
             <CommandEmpty>No team found.</CommandEmpty>
             <CommandGroup
-              v-for="group in groups"
+              v-for="group in displayData"
               :key="group.label"
               :heading="group.label"
             >
@@ -114,7 +149,7 @@ const nameInitials = (name: string) => {
                 class="text-sm"
                 @select="
                   () => {
-                    selectedTeam = team
+                    selectGroup(team)
                     open = false
                   }
                 "
@@ -127,7 +162,11 @@ const nameInitials = (name: string) => {
                   />
                   <AvatarFallback>{{ nameInitials(team.name) }}</AvatarFallback>
                 </Avatar>
-                {{ team.name }}
+                <div
+                  class="whitespace-nowrap overflow-ellipsis overflow-hidden w-[120px]"
+                >
+                  {{ team.name }}
+                </div>
                 <CheckIcon
                   :class="
                     cn(
@@ -161,9 +200,6 @@ const nameInitials = (name: string) => {
         </Command>
       </PopoverContent>
     </Popover>
-    <NewGroupDialog
-      v-model:open="showNewTeamDialog"
-      @close="showNewTeamDialog = false"
-    />
+    <NewGroupDialog @close="showNewTeamDialog = false" />
   </Dialog>
 </template>

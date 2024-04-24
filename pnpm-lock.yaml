@@ -50,6 +50,9 @@ dependencies:
   dayjs:
     specifier: ^1.11.10
     version: 1.11.10
+  lodash:
+    specifier: ^4.17.21
+    version: 4.17.21
   lottie-web-vue:
     specifier: ^2.0.7
     version: 2.0.7(typescript@5.4.5)
@@ -91,6 +94,9 @@ devDependencies:
   '@tsconfig/node20':
     specifier: ^20.1.2
     version: 20.1.4
+  '@types/lodash':
+    specifier: ^4.17.0
+    version: 4.17.0
   '@types/node':
     specifier: ^20.11.28
     version: 20.12.7
@@ -1117,6 +1123,10 @@ packages:
 
   /@types/json-schema@7.0.15:
     resolution: {integrity: sha512-5+fP8P8MFNC+AyZCDxrB2pkZFPGzqQWUzpSeuuVLvm8VMcorNYavBqoFcxK8bQz4Qsbn4oUEEem4wDLfcysGHA==}
+    dev: true
+
+  /@types/lodash@4.17.0:
+    resolution: {integrity: sha512-t7dhREVv6dbNj0q17X12j7yDG4bD/DHYX7o5/DbDxobP0HnGPgpRz2Ej77aL7TZT3DSw13fqUTj8J4mMnqa7WA==}
     dev: true
 
   /@types/node@20.12.7:
@@ -2568,7 +2578,6 @@ packages:
 
   /lodash@4.17.21:
     resolution: {integrity: sha512-v2kDEe57lecTulaDIuNTPy3Ry4gLGJ6Z1O3vE1krgXZNrsQ+LFTGHVxVjcXPs17LhbZVGedAJv8XZ1tvj5FvSg==}
-    dev: true
 
   /lottie-web-vue@2.0.7(typescript@5.4.5):
     resolution: {integrity: sha512-YELWt2WiRqqpsI/TVbmL4mRh0u4GSInvJ8eu2sTWCg49n/Bkzub7GlroumFxthk3VFU1k0IiLPpr9TxTePa/0A==}

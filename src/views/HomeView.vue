@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { onMounted } from 'vue'
+import { computed, onMounted } from 'vue'
 
 import BookableObjectCard from '@/components/home/BookableObjectCard.vue'
 import { ScrollArea, ScrollBar } from '@/components/ui/scroll-area'
@@ -9,11 +9,19 @@ import { PlusCircledIcon } from '@radix-icons/vue'
 import router from '@/router'
 import { bookableObjectList } from '@/assets/ts/tempdata'
 import { useInitialDataStore } from '@/stores/initial'
+import { useBookableObjects } from '@/stores/bookableObjects'
 
 const { fetchInitialData } = useInitialDataStore()
 
+const { bookableObjects } = useBookableObjects()
+
+const computedBookableObjectList = computed(() => {
+  console.log(bookableObjects)
+  return bookableObjects
+})
+
 onMounted(async () => {
-  const gqlResult = fetchInitialData()
+  fetchInitialData()
 })
 </script>
 

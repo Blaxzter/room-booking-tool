@@ -26,7 +26,7 @@ export type MyDirectusClient = DirectusClient<MySchema> &
 export const useAuth = defineStore('auth', () => {
   const _keep_logged_in = ref(localStorage.getItem('keep_logged_in') === 'true')
   const auth_data = ref({} as AuthenticationData)
-  const authUser = ref({} as any)
+  const user = ref<User>({} as any)
 
   const defaultRedirect: string = '/'
   const redirect = ref(defaultRedirect)
@@ -114,10 +114,10 @@ export const useAuth = defineStore('auth', () => {
   })
 
   const getCurrentUserData = async () => {
-    authUser.value = await client.request<User>(readMe())
+    user.value = await client.request<User>(readMe())
     // write to local storage
-    localStorage.setItem('user_data', JSON.stringify(authUser.value))
-    return authUser.value
+    localStorage.setItem('user', JSON.stringify(user.value))
+    return user.value
   }
 
   const login = async ({
@@ -161,7 +161,7 @@ export const useAuth = defineStore('auth', () => {
       expires_at &&
       currentTime < expires_at - 5 * 60 * 1000
     ) {
-      authUser.value = JSON.parse(localStorage.getItem('user_data') || '{}')
+      user.value = JSON.parse(localStorage.getItem('user') || '{}')
       // Access token exists and doesn't expire in the next 5 minutes
       authenticated.value = true
       return true
@@ -199,16 +199,14 @@ export const useAuth = defineStore('auth', () => {
       })
   }
 
-  const getAuthenticatedUser = (): User => authUser.value
-
   return {
     client,
+    user,
     login,
     logout,
     checkAuth,
     isAuthenticated,
     setRedirect,
-    getRedirect,
-    getAuthenticatedUser
+    getRedirect
   }
 })

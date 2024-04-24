@@ -44,11 +44,6 @@ export type Group = {
   avatar?: string
 }
 
-export type InitialData = {
-  bookable_objects: BookableObject[]
-  groups: Group[]
-}
-
 export type User = {
   id: string
   first_name: string
