@@ -26,13 +26,13 @@ export const useInitialDataStore = defineStore('initial', () => {
       const user_data = get_local_user_data()
       let received_data = null
       if (user_data && user_data.selected_group) {
-        received_data = await client.query<InitialData>(
-          getGroupQuery(user_data.selected_group)
-        )
+        const groupQuery = getGroupQuery(user_data.selected_group)
+        console.log('groupQuery', groupQuery)
+        received_data = await client.query<InitialData>(groupQuery)
       } else {
-        received_data = await client.query<InitialData>(
-          getInitialDataQuery(getAuthenticatedUser().id)
-        )
+        const initialDataQuery = getInitialDataQuery(getAuthenticatedUser().id)
+        console.log('initialDataQuery', initialDataQuery)
+        received_data = await client.query<InitialData>(initialDataQuery)
       }
       console.log('received_data', received_data)
     } catch (error) {

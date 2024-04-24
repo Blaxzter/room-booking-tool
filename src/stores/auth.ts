@@ -115,6 +115,8 @@ export const useAuth = defineStore('auth', () => {
 
   const getCurrentUserData = async () => {
     authUser.value = await client.request<User>(readMe())
+    // write to local storage
+    localStorage.setItem('user_data', JSON.stringify(authUser.value))
     return authUser.value
   }
 
@@ -159,6 +161,7 @@ export const useAuth = defineStore('auth', () => {
       expires_at &&
       currentTime < expires_at - 5 * 60 * 1000
     ) {
+      authUser.value = JSON.parse(localStorage.getItem('user_data') || '{}')
       // Access token exists and doesn't expire in the next 5 minutes
       authenticated.value = true
       return true
@@ -168,6 +171,7 @@ export const useAuth = defineStore('auth', () => {
         try {
           console.log('Refreshing token')
           await client.refresh()
+          await getCurrentUserData()
           console.log('Token refreshed')
           authenticated.value = true
           return true
@@ -190,6 +194,7 @@ export const useAuth = defineStore('auth', () => {
       .catch(console.error)
       .finally(async () => {
         authenticated.value = false
+        localStorage.removeItem('user_data')
         await router.push({ name: 'login' })
       })
   }

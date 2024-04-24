@@ -38,7 +38,7 @@ query Bookable_object {
         description
     }
     bookable_object(
-        filter: { owner: { _eq: "${user_id}" } }
+        filter: { owner: { id: { _eq: "${user_id}" } } }
     ) {
         id
         status
@@ -50,7 +50,6 @@ query Bookable_object {
         tags
         image
         is_internal
-        owner
     }
 }
 `
