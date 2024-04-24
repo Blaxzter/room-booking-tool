@@ -43,3 +43,29 @@ export type Group = {
   description: string
   avatar?: string
 }
+
+export type InitialData = {
+  bookable_objects: BookableObject[]
+  groups: Group[]
+}
+
+export type User = {
+  id: string
+  first_name: string
+  last_name: string
+  email: string
+  password: string
+  location: string
+  title: string
+  description: string | null
+  tags: string[] | null
+  avatar: string | null
+  language: string
+  appearance: string
+  tfa_secret: string | null
+  status: 'active' | 'inactive'
+  role: string
+  token: string | null
+  last_access: string
+  last_page: string
+}

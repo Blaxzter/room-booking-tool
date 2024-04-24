@@ -10,18 +10,23 @@ import {
   createDirectus,
   type DirectusClient,
   rest,
-  type RestClient
+  readMe,
+  graphql,
+  type RestClient,
+  type GraphqlClient
 } from '@directus/sdk'
-import type { MySchema } from '@/types'
+import type { MySchema, User } from '@/types'
 import router from '@/router'
 
 export type MyDirectusClient = DirectusClient<MySchema> &
   AuthenticationClient<MySchema> &
-  RestClient<MySchema>
+  RestClient<MySchema> &
+  GraphqlClient<MySchema>
 
 export const useAuth = defineStore('auth', () => {
   const _keep_logged_in = ref(localStorage.getItem('keep_logged_in') === 'true')
   const auth_data = ref({} as AuthenticationData)
+  const authUser = ref({} as any)
 
   const defaultRedirect: string = '/'
   const redirect = ref(defaultRedirect)
@@ -87,7 +92,8 @@ export const useAuth = defineStore('auth', () => {
     }
   }
 
-  const typedStorage: AuthenticationStorage = storage as unknown as AuthenticationStorage
+  const typedStorage: AuthenticationStorage =
+    storage as unknown as AuthenticationStorage
 
   const backendUrl = import.meta.env.VITE_BACKEND_URL as string
   const authMode: AuthenticationMode = 'json'
@@ -100,11 +106,17 @@ export const useAuth = defineStore('auth', () => {
   const client: MyDirectusClient = createDirectus<MySchema>(backendUrl)
     .with(authentication(authMode, authConfig))
     .with(rest())
+    .with(graphql())
 
   const authenticated = ref(false)
   const isAuthenticated = computed(() => {
     return authenticated.value
   })
+
+  const getCurrentUserData = async () => {
+    authUser.value = await client.request<User>(readMe())
+    return authUser.value
+  }
 
   const login = async ({
     email,
@@ -119,12 +131,19 @@ export const useAuth = defineStore('auth', () => {
     localStorage.setItem('keep_logged_in', keep_logged_in ? 'true' : 'false')
     await client
       .login(email, password)
-      .then(() => {
+      .then(async (res) => {
+        console.log('Logged in', res)
         authenticated.value = true
       })
       .catch((error) => {
-        throw new Error(error?.errors?.length > 0 ? error.errors[0].message : 'An error occurred')
+        throw new Error(
+          error?.errors?.length > 0
+            ? error.errors[0].message
+            : 'An error occurred'
+        )
       })
+
+    await getCurrentUserData()
   }
 
   const checkAuth = async () => {
@@ -135,7 +154,11 @@ export const useAuth = defineStore('auth', () => {
     const currentTime = new Date().getTime()
 
     // Check if access token exists and expires_at is more than 5 minutes from now
-    if (access_token && expires_at && currentTime < expires_at - 5 * 60 * 1000) {
+    if (
+      access_token &&
+      expires_at &&
+      currentTime < expires_at - 5 * 60 * 1000
+    ) {
       // Access token exists and doesn't expire in the next 5 minutes
       authenticated.value = true
       return true
@@ -171,5 +194,16 @@ export const useAuth = defineStore('auth', () => {
       })
   }
 
-  return { client, login, logout, checkAuth, isAuthenticated, setRedirect, getRedirect }
+  const getAuthenticatedUser = (): User => authUser.value
+
+  return {
+    client,
+    login,
+    logout,
+    checkAuth,
+    isAuthenticated,
+    setRedirect,
+    getRedirect,
+    getAuthenticatedUser
+  }
 })

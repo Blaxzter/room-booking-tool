@@ -16,6 +16,7 @@ services:
       - postgres_data:/var/lib/postgresql/data
     networks:
       - directus-net
+    restart: always
     environment:
       POSTGRES_USER: "${POSTGRES_USER}"
       POSTGRES_PASSWORD: "${POSTGRES_PASSWORD}"
@@ -25,6 +26,7 @@ services:
 
   cache:
     image: redis:6
+    restart: always
     networks:
       - directus-net
 

@@ -1,11 +1,17 @@
 import { defineStore } from 'pinia'
-import { type AuthenticationClient, type DirectusClient, type RestClient } from '@directus/sdk'
-import type { MySchema } from '@/types'
+import { ref } from 'vue'
+import type { Group } from '@/types'
 
-export type MyDirectusClient = DirectusClient<MySchema> &
-  AuthenticationClient<MySchema> &
-  RestClient<MySchema>
+export const useGroups = defineStore('group', () => {
+  const groups = ref<Group[]>([])
 
-export const useAuth = defineStore('group', () => {
-  return {}
+  const setGroups = (data: Group[]) => {
+    groups.value = data
+  }
+
+  const addGroup = (group: Group) => {
+    groups.value.push(group)
+  }
+
+  return { groups, setGroups, addGroup }
 })

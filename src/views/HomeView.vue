@@ -6,16 +6,14 @@ import { ScrollArea, ScrollBar } from '@/components/ui/scroll-area'
 import { Button } from '@/components/ui/button'
 import { Separator } from '@/components/ui/separator'
 import { PlusCircledIcon } from '@radix-icons/vue'
-import { readItems } from '@directus/sdk'
-import { useAuth } from '@/stores/auth'
 import router from '@/router'
 import { bookableObjectList } from '@/assets/ts/tempdata'
+import { useInitialDataStore } from '@/stores/initial'
 
-const { client } = useAuth()
+const { fetchInitialData } = useInitialDataStore()
 
 onMounted(async () => {
-  const gqlResult = await client.request(readItems('bookable_object'))
-  console.log(gqlResult)
+  const gqlResult = fetchInitialData()
 })
 </script>
 
@@ -26,7 +24,9 @@ onMounted(async () => {
         <div class="flex items-center justify-between">
           <div class="space-y-1">
             <h2 class="text-2xl font-semibold tracking-tight">Listen Now</h2>
-            <p class="text-sm text-muted-foreground">Top picks for you. Updated daily.</p>
+            <p class="text-sm text-muted-foreground">
+              Top picks for you. Updated daily.
+            </p>
           </div>
           <div class="ml-auto mr-4">
             <Button>
@@ -48,7 +48,11 @@ onMounted(async () => {
                 :width="250"
                 :height="330"
                 @click="
-                  () => router.push({ name: 'bookable-object', params: { id: bookableObject.id } })
+                  () =>
+                    router.push({
+                      name: 'bookable-object',
+                      params: { id: bookableObject.id }
+                    })
                 "
               />
             </div>
