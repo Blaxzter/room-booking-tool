@@ -65,3 +65,21 @@ export interface GetInitialDataQueryResponse {
   group: Group[]
   bookable_object: BookableObject[]
 }
+
+export const getBookableObjectByGroup = (group_id: number | string) => `
+query Bookable_object {
+    bookable_object(filter: { group: { id: { _eq: "${group_id}" } } }) {
+        id
+        status
+        date_created
+        date_updated
+        location
+        name
+        description
+        tags
+        image
+        is_internal
+    }
+}
+
+`

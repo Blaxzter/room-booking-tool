@@ -84,6 +84,9 @@ const displayData: ComputedRef<GroupsDisplayData> = computed(() => {
 
 const open = ref(false)
 const showNewTeamDialog = ref(false)
+
+const emit = defineEmits(['selectedGroup'])
+
 let selectedTeam = computed(() => {
   if (selectedGroup.value != null) {
     return selectedGroup.value

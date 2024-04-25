@@ -6,18 +6,27 @@ import { ScrollArea, ScrollBar } from '@/components/ui/scroll-area'
 import { Button } from '@/components/ui/button'
 import { Separator } from '@/components/ui/separator'
 import { PlusCircledIcon } from '@radix-icons/vue'
+import { storeToRefs } from 'pinia'
+
 import router from '@/router'
-import { bookableObjectList } from '@/assets/ts/tempdata'
+
 import { useInitialDataStore } from '@/stores/initial'
 import { useBookableObjects } from '@/stores/bookableObjects'
+import { useGroups } from '@/stores/groups'
+import CalenderLoader from '@/components/animations/CalenderLoader.vue'
 
 const { fetchInitialData } = useInitialDataStore()
 
-const { bookableObjects } = useBookableObjects()
+const { selectedGroup } = storeToRefs(useGroups())
+const bookableObjectStore = useBookableObjects()
+const { getBookableObjectByGroupId } = bookableObjectStore
+const { loading } = storeToRefs(bookableObjectStore)
 
-const computedBookableObjectList = computed(() => {
-  console.log(bookableObjects)
-  return bookableObjects
+const bookableObjectRandoms = ['Rooms', 'Objects', 'Spaces', 'Anything']
+
+const bookableObjects = computed(() => {
+  if (!selectedGroup.value) return []
+  return getBookableObjectByGroupId(selectedGroup.value.id)
 })
 
 onMounted(async () => {
@@ -31,24 +40,32 @@ onMounted(async () => {
       <div class="h-full px-4 py-6 lg:px-8">
         <div class="flex items-center justify-between">
           <div class="space-y-1">
-            <h2 class="text-2xl font-semibold tracking-tight">Listen Now</h2>
+            <h2 class="text-2xl font-semibold tracking-tight">
+              Your
+              <span>{{
+                bookableObjectRandoms[
+                  Math.floor(Math.random() * bookableObjectRandoms.length)
+                ]
+              }}</span>
+            </h2>
             <p class="text-sm text-muted-foreground">
-              Top picks for you. Updated daily.
+              Here you can find all the bookable objects you have access to
+              within the selected group.
             </p>
           </div>
           <div class="ml-auto mr-4">
             <Button>
               <PlusCircledIcon class="mr-2 h-4 w-4" />
-              Add music
+              Add new
             </Button>
           </div>
         </div>
         <Separator class="my-4" />
         <div class="relative">
-          <ScrollArea>
+          <ScrollArea v-if="loading">
             <div class="flex space-x-4 pb-4">
               <BookableObjectCard
-                v-for="bookableObject in bookableObjectList"
+                v-for="bookableObject in bookableObjects"
                 :key="bookableObject.name"
                 :bookable-object="bookableObject"
                 class="w-[250px]"
@@ -66,6 +83,7 @@ onMounted(async () => {
             </div>
             <ScrollBar orientation="horizontal" />
           </ScrollArea>
+          <CalenderLoader :height="150" v-else />
         </div>
       </div>
     </div>
