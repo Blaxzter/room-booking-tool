@@ -31,6 +31,7 @@ export const useBookableObjects = defineStore('bookableObjects', () => {
   const fetchBookableObjects = async (group_id: number | string) => {
     // Fetch bookable objects from the server
     loading.value = true
+    console.log('fetching bookable objects')
     await client
       .query<BookableObject[]>(getBookableObjectByGroup(group_id))
       .then((res) => {

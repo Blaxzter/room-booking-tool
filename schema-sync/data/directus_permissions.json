@@ -1,5 +1,16 @@
 [
   {
+    "action": "create",
+    "collection": "bookable_object",
+    "fields": [
+      "*"
+    ],
+    "permissions": {},
+    "presets": null,
+    "role": "7f4b19bf-c64f-4b7d-930a-49173f4428c6",
+    "validation": {}
+  },
+  {
     "action": "read",
     "collection": "bookable_object",
     "fields": [
@@ -41,6 +52,17 @@
     "validation": null
   },
   {
+    "action": "create",
+    "collection": "bookable_object_group",
+    "fields": [
+      "*"
+    ],
+    "permissions": {},
+    "presets": null,
+    "role": "7f4b19bf-c64f-4b7d-930a-49173f4428c6",
+    "validation": {}
+  },
+  {
     "action": "read",
     "collection": "bookable_object_group",
     "fields": [
@@ -59,6 +81,17 @@
         }
       ]
     },
+    "presets": null,
+    "role": "7f4b19bf-c64f-4b7d-930a-49173f4428c6",
+    "validation": {}
+  },
+  {
+    "action": "create",
+    "collection": "Booking",
+    "fields": [
+      "*"
+    ],
+    "permissions": {},
     "presets": null,
     "role": "7f4b19bf-c64f-4b7d-930a-49173f4428c6",
     "validation": {}

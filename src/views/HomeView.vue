@@ -14,6 +14,7 @@ import { useInitialDataStore } from '@/stores/initial'
 import { useBookableObjects } from '@/stores/bookableObjects'
 import { useGroups } from '@/stores/groups'
 import CalenderLoader from '@/components/animations/CalenderLoader.vue'
+import { bookableObjectList } from '@/assets/ts/tempdata'
 
 const { fetchInitialData } = useInitialDataStore()
 
@@ -62,10 +63,11 @@ onMounted(async () => {
         </div>
         <Separator class="my-4" />
         <div class="relative">
-          <ScrollArea v-if="loading">
-            <div class="flex space-x-4 pb-4">
+          <CalenderLoader :height="150" v-if="loading" />
+          <ScrollArea v-else>
+            <div class="flex space-x-4 pb-4" v-if="bookableObjectList.length">
               <BookableObjectCard
-                v-for="bookableObject in bookableObjects"
+                v-for="bookableObject in bookableObjectList"
                 :key="bookableObject.name"
                 :bookable-object="bookableObject"
                 class="w-[250px]"
@@ -81,9 +83,13 @@ onMounted(async () => {
                 "
               />
             </div>
+            <div v-else>
+              <p class="text-center text-muted-foreground">
+                No bookable objects found
+              </p>
+            </div>
             <ScrollBar orientation="horizontal" />
           </ScrollArea>
-          <CalenderLoader :height="150" v-else />
         </div>
       </div>
     </div>
