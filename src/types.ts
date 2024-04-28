@@ -30,11 +30,40 @@ export const BookingImpl: Booking = {
 
 export type BookableObject = {
   id: number
+  status: string
+  date_created: string
+  date_updated: string
+  location?: {
+    type: string
+    coordinates: number[]
+  }
   name: string
-  description: string
-  image: string
-  location: string
-  tags: string[]
+  description?: string
+  tags?: string[] | null
+  image?: string | null
+  is_internal: boolean
+  owner: string
+  uniqueId: string
+  group: number[]
+}
+
+export const BookableObjectImpl: BookableObject = {
+  id: 0,
+  status: '',
+  date_created: '',
+  date_updated: '',
+  location: {
+    type: '',
+    coordinates: []
+  },
+  name: '',
+  description: '',
+  tags: null,
+  image: null,
+  is_internal: false,
+  owner: '',
+  uniqueId: '',
+  group: []
 }
 
 export type Group = {

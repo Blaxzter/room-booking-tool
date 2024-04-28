@@ -1,0 +1,19 @@
+@use "sass:math";
+
+@function random_pastel() {
+  $r: random(255);
+  $g: random(255);
+  $b: random(255);
+
+  // mix white
+  $r: math.div($r + 255, 2);
+  $g: math.div($g + 255, 2);
+  $b: math.div($b + 255, 2);
+  @return rgb($r, $g, $b);
+}
+
+@for $i from 0 to 501 {
+  .pastel-color-#{$i}{
+    background: random_pastel();
+  }
+}

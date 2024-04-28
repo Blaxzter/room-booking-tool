@@ -50,6 +50,9 @@ dependencies:
   dayjs:
     specifier: ^1.11.10
     version: 1.11.10
+  emoji-mart-vue-fast:
+    specifier: ^15.0.2
+    version: 15.0.2(vue@3.4.24)
   lodash:
     specifier: ^4.17.21
     version: 4.17.21
@@ -1804,6 +1807,11 @@ packages:
     resolution: {integrity: sha512-Kvp459HrV2FEJ1CAsi1Ku+MY3kasH19TFykTz2xWmMeq6bk2NU3XXvfJ+Q61m0xktWwt+1HSYf3JZsTms3aRJg==}
     dev: true
 
+  /core-js@3.37.0:
+    resolution: {integrity: sha512-fu5vHevQ8ZG4og+LXug8ulUtVxjOcEYvifJr7L5Bfq9GOztVqsKd9/59hUk2ZSbCrS3BqUr3EpaYGIYzq7g3Ug==}
+    requiresBuild: true
+    dev: false
+
   /cross-spawn@7.0.3:
     resolution: {integrity: sha512-iRDPJKUPVEND7dHPO8rkbOnPpyDygcDFtWjpeWNCgy8WP2rXcxXL8TskReQl6OrB2G7+UJrags1q15Fudc7G6w==}
     engines: {node: '>= 8'}
@@ -1897,6 +1905,16 @@ packages:
   /electron-to-chromium@1.4.746:
     resolution: {integrity: sha512-jeWaIta2rIG2FzHaYIhSuVWqC6KJYo7oSBX4Jv7g+aVujKztfvdpf+n6MGwZdC5hQXbax4nntykLH2juIQrfPg==}
     dev: true
+
+  /emoji-mart-vue-fast@15.0.2(vue@3.4.24):
+    resolution: {integrity: sha512-q7VaE6yRrlQd+jpHPToh1XnIatgACkQjBj0vQ7uNaWrbVsKlhZaOsqZVoegT5IZt5XkYoR2x4MHMNep/BJP9rw==}
+    peerDependencies:
+      vue: '>2.0.0'
+    dependencies:
+      '@babel/runtime': 7.24.4
+      core-js: 3.37.0
+      vue: 3.4.24(typescript@5.4.5)
+    dev: false
 
   /emoji-regex@8.0.0:
     resolution: {integrity: sha512-MSjYzcWNOA0ewAHpz0MxpYFvwg6yjy1NG3xteoqz644VCo/RPgnr1/GGt+ic3iJTzQ8Eu3TdM14SawnVUmGE6A==}

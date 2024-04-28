@@ -7,6 +7,10 @@ import { Input } from '@/components/ui/input'
 import UserNav from '@/components/nav/UserNav.vue'
 import { ref, watchEffect } from 'vue'
 import { useWindowSize } from '@vueuse/core'
+import { storeToRefs } from 'pinia'
+import { useGlobal } from '@/stores/global'
+
+const { searchString } = storeToRefs(useGlobal())
 
 const { width } = useWindowSize()
 
@@ -34,6 +38,7 @@ watchEffect(() => {
           placeholder="Search..."
           class="ms-3 hidden sm:block lg:w-[300px]"
           :style="{ display: showSearch ? 'block' : 'none' }"
+          v-model="searchString"
         />
         <Button
           variant="outline"

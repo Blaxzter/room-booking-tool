@@ -194,7 +194,7 @@ onMounted(async () => {
 
 .background-image {
   z-index: -1000;
-  background-image: url('https://source.unsplash.com/random?orientation=landscape&collections=11649432');
+  background-image: url('https://source.unsplash.com/random/?Nature&Landscape&horizontal&hd');
   filter: blur(2px) opacity(0.9);
   background-size: cover;
   background-position: center;
