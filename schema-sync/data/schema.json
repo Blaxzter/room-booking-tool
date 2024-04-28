@@ -1,7 +1,7 @@
 {
   "snapshot": {
     "version": 1,
-    "directus": "10.10.4",
+    "directus": "10.10.7",
     "vendor": "postgres",
     "collections": [
       {
@@ -1398,6 +1398,50 @@
         }
       },
       {
+        "collection": "bookable_object",
+        "field": "uniqueId",
+        "type": "string",
+        "meta": {
+          "collection": "bookable_object",
+          "conditions": null,
+          "display": null,
+          "display_options": null,
+          "field": "uniqueId",
+          "group": null,
+          "hidden": true,
+          "interface": "input",
+          "note": null,
+          "options": {
+            "iconLeft": "vpn_key"
+          },
+          "readonly": true,
+          "required": false,
+          "sort": 13,
+          "special": null,
+          "translations": null,
+          "validation": null,
+          "validation_message": null,
+          "width": "full"
+        },
+        "schema": {
+          "name": "uniqueId",
+          "table": "bookable_object",
+          "data_type": "character varying",
+          "default_value": null,
+          "max_length": 255,
+          "numeric_precision": null,
+          "numeric_scale": null,
+          "is_nullable": true,
+          "is_unique": true,
+          "is_primary_key": false,
+          "is_generated": false,
+          "generation_expression": null,
+          "has_auto_increment": false,
+          "foreign_key_table": null,
+          "foreign_key_column": null
+        }
+      },
+      {
         "collection": "bookable_object_group",
         "field": "id",
         "type": "integer",
@@ -2534,6 +2578,21 @@
         }
       },
       {
+        "collection": "directus_webhooks",
+        "field": "migrated_flow",
+        "related_collection": "directus_flows",
+        "meta": null,
+        "schema": {
+          "table": "directus_webhooks",
+          "column": "migrated_flow",
+          "foreign_key_table": "directus_flows",
+          "foreign_key_column": "id",
+          "constraint_name": "directus_webhooks_migrated_flow_foreign",
+          "on_update": "NO ACTION",
+          "on_delete": "SET NULL"
+        }
+      },
+      {
         "collection": "group",
         "field": "user_created",
         "related_collection": "directus_users",
@@ -2685,5 +2744,5 @@
       }
     ]
   },
-  "hash": "58f4a18d1ce1348a50ab6f93b695053e070fe2b0"
+  "hash": "43ffc603ab39ed2a930ddacc276b2714c49f84c1"
 }

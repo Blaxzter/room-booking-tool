@@ -3,12 +3,23 @@
     "action": "create",
     "collection": "bookable_object",
     "fields": [
-      "*"
+      "id",
+      "status",
+      "owner",
+      "date_created",
+      "date_updated",
+      "name",
+      "location",
+      "description",
+      "image",
+      "is_internal",
+      "tags",
+      "group"
     ],
-    "permissions": {},
+    "permissions": null,
     "presets": null,
     "role": "7f4b19bf-c64f-4b7d-930a-49173f4428c6",
-    "validation": {}
+    "validation": null
   },
   {
     "action": "read",
