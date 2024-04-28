@@ -1,0 +1,250 @@
+[
+  {
+    "role": "62a8abe7-e3ae-462e-b038-58ce5a2f5475",
+    "collection": "bookable_object_group",
+    "action": "create",
+    "permissions": {},
+    "validation": {},
+    "presets": null,
+    "fields": [
+      "*"
+    ],
+    "_syncId": "905f387c-e21c-462a-9b96-f6f221e81de2"
+  },
+  {
+    "role": "62a8abe7-e3ae-462e-b038-58ce5a2f5475",
+    "collection": "bookable_object_group",
+    "action": "read",
+    "permissions": {
+      "_and": [
+        {
+          "group_id": {
+            "users": {
+              "directus_users_id": {
+                "_eq": "$CURRENT_USER.id"
+              }
+            }
+          }
+        }
+      ]
+    },
+    "validation": {},
+    "presets": null,
+    "fields": [
+      "*"
+    ],
+    "_syncId": "5c90da34-fc6d-4f67-86cc-2e2bedda8c3f"
+  },
+  {
+    "role": "62a8abe7-e3ae-462e-b038-58ce5a2f5475",
+    "collection": "bookable_object",
+    "action": "create",
+    "permissions": null,
+    "validation": null,
+    "presets": null,
+    "fields": [
+      "id",
+      "status",
+      "owner",
+      "date_created",
+      "date_updated",
+      "name",
+      "location",
+      "description",
+      "image",
+      "is_internal",
+      "tags",
+      "group"
+    ],
+    "_syncId": "2f3c5d4c-3c7b-44a5-aeda-2d7579f2b32d"
+  },
+  {
+    "role": "62a8abe7-e3ae-462e-b038-58ce5a2f5475",
+    "collection": "bookable_object",
+    "action": "read",
+    "permissions": {
+      "_and": [
+        {
+          "group": {
+            "group_id": {
+              "users": {
+                "directus_users_id": {
+                  "_eq": "$CURRENT_USER"
+                }
+              }
+            }
+          }
+        },
+        {
+          "status": {
+            "_eq": "published"
+          }
+        }
+      ]
+    },
+    "validation": null,
+    "presets": null,
+    "fields": [
+      "name",
+      "location",
+      "date_updated",
+      "description",
+      "tags",
+      "status",
+      "image",
+      "is_internal",
+      "group",
+      "date_created",
+      "id",
+      "owner"
+    ],
+    "_syncId": "48e1bbb0-318a-4002-b612-355faba1787f"
+  },
+  {
+    "role": "62a8abe7-e3ae-462e-b038-58ce5a2f5475",
+    "collection": "Booking",
+    "action": "create",
+    "permissions": {},
+    "validation": {},
+    "presets": null,
+    "fields": [
+      "*"
+    ],
+    "_syncId": "e3ed4e8f-c595-4ea3-bfce-742bbbbc2953"
+  },
+  {
+    "role": "62a8abe7-e3ae-462e-b038-58ce5a2f5475",
+    "collection": "directus_users",
+    "action": "read",
+    "permissions": {
+      "_and": [
+        {
+          "id": {
+            "_eq": "$CURRENT_USER"
+          }
+        }
+      ]
+    },
+    "validation": {},
+    "presets": null,
+    "fields": [
+      "*",
+      "last_name",
+      "password",
+      "avatar",
+      "location",
+      "title",
+      "description",
+      "tags",
+      "preferences_divider",
+      "language",
+      "tfa_secret",
+      "email_notifications",
+      "theming_divider",
+      "appearance",
+      "theme_light",
+      "theme_light_overrides",
+      "theme_dark",
+      "theme_dark_overrides",
+      "admin_divider",
+      "status",
+      "role",
+      "token",
+      "id",
+      "last_page",
+      "last_access",
+      "provider",
+      "external_identifier",
+      "auth_data",
+      "first_name"
+    ],
+    "_syncId": "a712308f-bb96-4569-8f70-5142178a6129"
+  },
+  {
+    "role": "62a8abe7-e3ae-462e-b038-58ce5a2f5475",
+    "collection": "group",
+    "action": "create",
+    "permissions": {},
+    "validation": {},
+    "presets": null,
+    "fields": [
+      "*"
+    ],
+    "_syncId": "bac95c80-40ad-4049-8686-3f2f461c042d"
+  },
+  {
+    "role": "62a8abe7-e3ae-462e-b038-58ce5a2f5475",
+    "collection": "group",
+    "action": "delete",
+    "permissions": {
+      "_and": [
+        {
+          "user_created": {
+            "_eq": "$CURRENT_USER"
+          }
+        }
+      ]
+    },
+    "validation": null,
+    "presets": null,
+    "fields": null,
+    "_syncId": "8d9bf222-0ad3-4e7d-8543-8544630b9e49"
+  },
+  {
+    "role": "62a8abe7-e3ae-462e-b038-58ce5a2f5475",
+    "collection": "group",
+    "action": "read",
+    "permissions": {
+      "_and": [
+        {
+          "users": {
+            "directus_users_id": {
+              "_eq": "$CURRENT_USER.id"
+            }
+          }
+        },
+        {
+          "status": {
+            "_eq": "published"
+          }
+        }
+      ]
+    },
+    "validation": null,
+    "presets": null,
+    "fields": [
+      "name",
+      "id",
+      "date_created",
+      "user_created",
+      "user_updated",
+      "date_updated",
+      "users",
+      "status",
+      "description",
+      "sort",
+      "owner"
+    ],
+    "_syncId": "a8ec1f4b-ad82-4bb2-836e-1acee571b9ac"
+  },
+  {
+    "role": "62a8abe7-e3ae-462e-b038-58ce5a2f5475",
+    "collection": "group",
+    "action": "update",
+    "permissions": {
+      "_and": [
+        {
+          "users": {
+            "role": {
+              "_eq": "admin"
+            }
+          }
+        }
+      ]
+    },
+    "validation": null,
+    "presets": null,
+    "fields": null,
+    "_syncId": "134b8848-7480-4cf5-81f6-f837705f45c3"
+  }
+]

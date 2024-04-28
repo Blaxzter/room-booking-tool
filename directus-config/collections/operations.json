@@ -1,0 +1,84 @@
+[
+  {
+    "name": "create random string",
+    "key": "create_random_string",
+    "type": "exec",
+    "position_x": 22,
+    "position_y": 8,
+    "options": {
+      "code": "module.exports = async function(data) {\n\tlet result = '';\n    const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';\n    const charactersLength = characters.length;\n    let counter = 0;\n    while (counter < 15) {\n      result += characters.charAt(Math.floor(Math.random() * charactersLength));\n      counter += 1;\n    }\n\treturn {\n    \t\"randomString\": result\n    };\n}"
+    },
+    "resolve": "9f886300-231b-48e1-8963-4ae77b5c1a64",
+    "reject": null,
+    "flow": "0c5d8064-2bf3-4284-b88b-23eeac843879",
+    "_syncId": "2656a256-78dd-40f6-9c90-1719cf7fc81f"
+  },
+  {
+    "name": "Run Script",
+    "key": "exec_2g71r",
+    "type": "exec",
+    "position_x": 19,
+    "position_y": 1,
+    "options": {
+      "code": "module.exports = async function(data) {\n\tlet result = '';\n    const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';\n    const charactersLength = characters.length;\n    let counter = 0;\n    while (counter < 15) {\n      result += characters.charAt(Math.floor(Math.random() * charactersLength));\n      counter += 1;\n    }\n\treturn {\n    \t\"randomString\": result\n    };\n}"
+    },
+    "resolve": "3d2f81d7-1471-4feb-81a4-23bcc94580bb",
+    "reject": null,
+    "flow": "926fe0af-3868-43dc-8962-6b17426e51f6",
+    "_syncId": "0198296a-ab56-4c8a-b38f-b89003ccb803"
+  },
+  {
+    "name": "Run Script",
+    "key": "exec_4mfng",
+    "type": "exec",
+    "position_x": 37,
+    "position_y": 1,
+    "options": {
+      "code": "module.exports = async function(data) {\n\t\n\treturn {\n    \t...{{ $trigger.payload }},\n        \"uniqueId\": \"{{ $last.randomString }}\"        \n    };\n}"
+    },
+    "resolve": null,
+    "reject": null,
+    "flow": "926fe0af-3868-43dc-8962-6b17426e51f6",
+    "_syncId": "3d2f81d7-1471-4feb-81a4-23bcc94580bb"
+  },
+  {
+    "name": "Update Data",
+    "key": "item_update_bg87p",
+    "type": "item-update",
+    "position_x": 23,
+    "position_y": 24,
+    "options": {
+      "permissions": "$full",
+      "collection": "bookable_object",
+      "query": {
+        "filter": {
+          "id": {
+            "_in": "{{ $trigger.body.keys }}"
+          }
+        }
+      },
+      "payload": {
+        "uniqueId": "{{ $last.randomString }}"
+      },
+      "key": []
+    },
+    "resolve": null,
+    "reject": null,
+    "flow": "0c5d8064-2bf3-4284-b88b-23eeac843879",
+    "_syncId": "9f886300-231b-48e1-8963-4ae77b5c1a64"
+  },
+  {
+    "name": "Log to Console",
+    "key": "log_edne5",
+    "type": "log",
+    "position_x": 48,
+    "position_y": 14,
+    "options": {
+      "message": "{{ $last.randomString }}"
+    },
+    "resolve": null,
+    "reject": null,
+    "flow": "0c5d8064-2bf3-4284-b88b-23eeac843879",
+    "_syncId": "d3b708dd-9828-4410-aacd-bd99541c33b2"
+  }
+]

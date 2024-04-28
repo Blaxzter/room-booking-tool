@@ -1,0 +1,41 @@
+[
+  {
+    "name": "Button Create Unique ID",
+    "icon": "stylus_laser_pointer",
+    "color": null,
+    "description": null,
+    "status": "active",
+    "trigger": "manual",
+    "accountability": "all",
+    "options": {
+      "collections": [
+        "bookable_object"
+      ],
+      "async": true,
+      "location": "item"
+    },
+    "operation": "2656a256-78dd-40f6-9c90-1719cf7fc81f",
+    "_syncId": "0c5d8064-2bf3-4284-b88b-23eeac843879"
+  },
+  {
+    "name": "Create Unique ID",
+    "icon": "bolt",
+    "color": null,
+    "description": null,
+    "status": "active",
+    "trigger": "event",
+    "accountability": "activity",
+    "options": {
+      "type": "filter",
+      "return": "$last",
+      "scope": [
+        "items.create"
+      ],
+      "collections": [
+        "bookable_object"
+      ]
+    },
+    "operation": "0198296a-ab56-4c8a-b38f-b89003ccb803",
+    "_syncId": "926fe0af-3868-43dc-8962-6b17426e51f6"
+  }
+]

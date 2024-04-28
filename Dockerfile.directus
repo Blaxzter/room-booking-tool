@@ -4,6 +4,7 @@ USER root
 RUN corepack enable
 USER node
 
-RUN pnpm install directus-extension-schema-sync
+RUN pnpm install directus-extension-sync
+# RUN pnpm install directus-extension-schema-sync
 # This is for when building for production
-COPY ./schema-sync ./schema-sync
+# COPY ./schema-sync ./schema-sync
