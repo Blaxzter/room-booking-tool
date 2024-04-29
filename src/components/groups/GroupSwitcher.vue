@@ -1,9 +1,8 @@
 <script setup lang="ts">
 import { computed, type ComputedRef, ref, watch } from 'vue'
 import _ from 'lodash'
-import { CaretSortIcon } from '@radix-icons/vue'
-import { CheckIcon } from '@radix-icons/vue'
-import { PlusCircledIcon } from '@radix-icons/vue'
+import { CaretSortIcon, CheckIcon, PlusCircledIcon } from '@radix-icons/vue'
+import { LoaderIcon } from 'lucide-vue-next'
 
 import { cn } from '@/lib/utils'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
@@ -19,11 +18,7 @@ import {
   CommandList,
   CommandSeparator
 } from '@/components/ui/command'
-import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger
-} from '@/components/ui/popover'
+import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover'
 import type { Group } from '@/types'
 import NewGroupDialog from '@/components/groups/NewGroupDialog.vue'
 import { useAuth } from '@/stores/auth'
@@ -36,7 +31,7 @@ const groupStore = useGroups()
 const authStore = useAuth()
 const { user } = storeToRefs(authStore)
 const { selectGroup } = groupStore
-const { groups, selectedGroup } = storeToRefs(groupStore)
+const { groups, selectedGroupId } = storeToRefs(groupStore)
 
 const userName = () => {
   if (user.value) {
@@ -49,6 +44,9 @@ const userName = () => {
 }
 
 const nameInitials = (name: string) => {
+  if (!name) {
+    return ''
+  }
   const [firstName, lastName] = name.split(' ')
   if (firstName && lastName) {
     return `${firstName.charAt(0)}${lastName.charAt(0)}`
@@ -73,7 +71,7 @@ const displayData: ComputedRef<GroupsDisplayData> = computed(() => {
       teams: _.map(
         groups.value,
         (group: Group): Group => ({
-          id: Number(group.id),
+          id: group.id,
           name: group.name,
           description: group.description
         })
@@ -85,25 +83,26 @@ const displayData: ComputedRef<GroupsDisplayData> = computed(() => {
 const open = ref(false)
 const showNewTeamDialog = ref(false)
 
-const emit = defineEmits(['selectedGroup'])
-
 let selectedTeam = computed(() => {
-  if (selectedGroup.value != null) {
-    return selectedGroup.value
+  console.log('GroupSwitcher', groups.value, selectedGroupId.value)
+  if (selectedGroupId.value != null) {
+    return _.find(groups.value, { id: selectedGroupId.value })
   }
   return displayData.value[0].teams[0]
 })
 
-const filterGroups = (
-  val: Record<string, any>[],
-  term: string
-): Record<string, any>[] => {
+const filterGroups = (val: Record<string, any>[], term: string): Record<string, any>[] => {
   return val.filter((group, index) => {
     if (index === val.length - 1) {
       return true
     }
     return group.name.toLowerCase().includes(term.toLowerCase())
   })
+}
+
+const groupClicked = async (team: Group) => {
+  await selectGroup(team)
+  open.value = false
 }
 </script>
 
@@ -117,67 +116,40 @@ const filterGroups = (
           aria-expanded="true"
           aria-label="Select a team"
           :class="cn('w-[200px] justify-between', $attrs.class ?? '')"
+          v-if="selectedTeam"
         >
           <Avatar class="mr-2 h-5 w-5">
-            <AvatarImage
-              :src="`${selectedTeam.avatar}`"
-              :alt="selectedTeam.name"
-            />
-            <AvatarFallback>{{
-              nameInitials(selectedTeam.name)
-            }}</AvatarFallback>
+            <AvatarImage :src="`${selectedTeam.avatar}`" :alt="selectedTeam.name" />
+            <AvatarFallback>{{ nameInitials(selectedTeam.name) }}</AvatarFallback>
           </Avatar>
-          <div
-            class="whitespace-nowrap overflow-ellipsis overflow-hidden w-[150px]"
-          >
+          <div class="whitespace-nowrap overflow-ellipsis overflow-hidden w-[150px]">
             {{ selectedTeam.name }}
           </div>
           <CaretSortIcon class="ml-auto h-4 w-4 shrink-0 opacity-50" />
         </Button>
+        <LoaderIcon v-else className="animate-spin" />
       </PopoverTrigger>
       <PopoverContent class="w-[200px] p-0">
         <Command :filter-function="filterGroups">
           <CommandList>
             <CommandInput placeholder="Search team..." />
             <CommandEmpty>No team found.</CommandEmpty>
-            <CommandGroup
-              v-for="group in displayData"
-              :key="group.label"
-              :heading="group.label"
-            >
+            <CommandGroup v-for="group in displayData" :key="group.label" :heading="group.label">
               <CommandItem
                 v-for="team in group.teams"
                 :key="team.name"
                 :value="team"
                 class="text-sm"
-                @select="
-                  () => {
-                    selectGroup(team)
-                    open = false
-                  }
-                "
+                @select="groupClicked(team)"
               >
                 <Avatar class="mr-2 h-5 w-5">
-                  <AvatarImage
-                    :src="`${team.avatar}`"
-                    :alt="team.name"
-                    class="grayscale"
-                  />
+                  <AvatarImage :src="`${team.avatar}`" :alt="team.name" class="grayscale" />
                   <AvatarFallback>{{ nameInitials(team.name) }}</AvatarFallback>
                 </Avatar>
-                <div
-                  class="whitespace-nowrap overflow-ellipsis overflow-hidden w-[120px]"
-                >
+                <div class="whitespace-nowrap overflow-ellipsis overflow-hidden w-[120px]">
                   {{ team.name }}
                 </div>
-                <CheckIcon
-                  :class="
-                    cn(
-                      'ml-auto h-4 w-4',
-                      selectedTeam.id === team.id ? 'opacity-100' : 'opacity-0'
-                    )
-                  "
-                />
+                <CheckIcon :class="cn('ml-auto h-4 w-4', selectedTeam.id === team.id ? 'opacity-100' : 'opacity-0')" />
               </CommandItem>
             </CommandGroup>
           </CommandList>

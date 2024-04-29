@@ -3,9 +3,9 @@ export type MySchema = {
 }
 
 export type Booking = {
-  id: number
-  bookable_object_id: number
-  created_user_id: number
+  id: string
+  bookable_object_id: string
+  created_user_id: string
   start_date: string
   end_date: string
   is_full_day: boolean
@@ -16,9 +16,9 @@ export type Booking = {
 }
 
 export const BookingImpl: Booking = {
-  id: 0,
-  bookable_object_id: 0,
-  created_user_id: 0,
+  id: '0',
+  bookable_object_id: '0',
+  created_user_id: '0',
   start_date: '',
   end_date: '',
   is_full_day: false,
@@ -67,7 +67,7 @@ export const BookableObjectImpl: BookableObject = {
 }
 
 export type Group = {
-  id: number
+  id: string
   name: string
   description: string
   avatar?: string
@@ -92,4 +92,8 @@ export type User = {
   token: string | null
   last_access: string
   last_page: string
+}
+
+export type LocalUserData = {
+  selected_group?: string
 }

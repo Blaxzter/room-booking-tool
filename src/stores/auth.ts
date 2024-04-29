@@ -55,10 +55,7 @@ export const useAuth = defineStore('auth', () => {
         localStorage.setItem('access_token', value.access_token || '')
         localStorage.setItem('refresh_token', value.refresh_token || '')
         localStorage.setItem('expires', value.expires?.toString() || '')
-        localStorage.setItem(
-          'expires_at',
-          (new Date().getTime() + (value.expires || 0))?.toString() || ''
-        )
+        localStorage.setItem('expires_at', (new Date().getTime() + (value.expires || 0))?.toString() || '')
       }
     },
     get(key: string | undefined): AuthenticationData | string | number | null {
@@ -77,12 +74,7 @@ export const useAuth = defineStore('auth', () => {
       }
 
       if (!_keep_logged_in.value) {
-        const keys: (keyof AuthenticationData)[] = [
-          'access_token',
-          'refresh_token',
-          'expires',
-          'expires_at'
-        ]
+        const keys: (keyof AuthenticationData)[] = ['access_token', 'refresh_token', 'expires', 'expires_at']
         if (keys.includes(key as keyof AuthenticationData)) {
           return auth_data.value[key as keyof AuthenticationData] // TypeScript knows key is valid
         }
@@ -92,8 +84,7 @@ export const useAuth = defineStore('auth', () => {
     }
   }
 
-  const typedStorage: AuthenticationStorage =
-    storage as unknown as AuthenticationStorage
+  const typedStorage: AuthenticationStorage = storage as unknown as AuthenticationStorage
 
   const backendUrl = import.meta.env.VITE_BACKEND_URL as string
   const authMode: AuthenticationMode = 'json'
@@ -138,11 +129,7 @@ export const useAuth = defineStore('auth', () => {
         authenticated.value = true
       })
       .catch((error) => {
-        throw new Error(
-          error?.errors?.length > 0
-            ? error.errors[0].message
-            : 'An error occurred'
-        )
+        throw new Error(error?.errors?.length > 0 ? error.errors[0].message : 'An error occurred')
       })
 
     await getCurrentUserData()
@@ -156,11 +143,7 @@ export const useAuth = defineStore('auth', () => {
     const currentTime = new Date().getTime()
 
     // Check if access token exists and expires_at is more than 5 minutes from now
-    if (
-      access_token &&
-      expires_at &&
-      currentTime < expires_at - 5 * 60 * 1000
-    ) {
+    if (access_token && expires_at && currentTime < expires_at - 5 * 60 * 1000) {
       user.value = JSON.parse(localStorage.getItem('user') || '{}')
       // Access token exists and doesn't expire in the next 5 minutes
       authenticated.value = true

@@ -1,26 +1,31 @@
 import { defineStore } from 'pinia'
-import { computed, type Ref, ref } from 'vue'
+import { ref } from 'vue'
 import type { Group } from '@/types'
+import { useBookableObjects } from '@/stores/bookableObjects'
+import { useUser } from '@/stores/user'
 
 export const useGroups = defineStore('group', () => {
-  const selectedGroup = ref<Group | null>(null)
+  const { setSelectedGroup, getSelectedGroup } = useUser()
+  const { fetchBookableObjectsByGroupId } = useBookableObjects()
 
   const groups = ref<Group[]>([])
+  const selectedGroupId = ref<string | null>(getSelectedGroup() || null)
 
-  const selectGroup = (group: Group) => {
+  const selectGroup = async (group: Group) => {
     console.log('selecting group', group)
-    selectedGroup.value = group
-    localStorage.setItem('selected_group', group.id.toString())
+    setSelectedGroup(group.id)
+    selectedGroupId.value = group.id
+    await fetchBookableObjectsByGroupId(group.id)
   }
 
-  const setGroups = (data: Group[]) => {
+  const setGroups = async (data: Group[]) => {
     groups.value = data
 
-    const selected_group = localStorage.getItem('selected_group')
+    const selected_group = getSelectedGroup()
     if (selected_group) {
-      const group = groups.value.find((g) => g.id === parseInt(selected_group))
+      const group = groups.value.find((g) => g.id === selected_group)
       if (group) {
-        selectGroup(group)
+        await selectGroup(group)
       }
     }
   }
@@ -29,5 +34,5 @@ export const useGroups = defineStore('group', () => {
     groups.value.push(group)
   }
 
-  return { groups, selectedGroup, setGroups, addGroup, selectGroup }
+  return { groups, selectedGroupId, setGroups, addGroup, selectGroup }
 })

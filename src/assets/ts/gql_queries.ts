@@ -1,8 +1,8 @@
 import type { BookableObject, Group } from '@/types'
 
-export const getGroupQuery = (id: number) => `
+export const getGroupQuery = (id: string) => `
 query Initial_Data {
-    group(filter: { id: { _eq: "${id}" } }) {
+    group {
         id
         status
         sort
@@ -11,19 +11,17 @@ query Initial_Data {
         name
         description
     }
-    bookable_object_group(filter: { group_id: { id: { _eq: "${id}" } } }) {
+    bookable_object(filter: { group: { id: { _eq: ${id} } } }) {
         id
-        bookable_object_id {
-            id
-            status
-            date_created
-            date_updated
-            location
-            name
-            description
-            tags
-            is_internal
-        }
+        status
+        date_created
+        date_updated
+        location
+        name
+        description
+        tags
+        image
+        is_internal
     }
 }
 `
@@ -66,7 +64,7 @@ export interface GetInitialDataQueryResponse {
   bookable_object: BookableObject[]
 }
 
-export const getBookableObjectByGroup = (group_id: number | string) => `
+export const getBookableObjectByGroup = (group_id: string) => `
 query Bookable_object {
     bookable_object(filter: { group: { id: { _eq: "${group_id}" } } }) {
         id

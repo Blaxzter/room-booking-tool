@@ -1,13 +1,16 @@
-import { defineStore } from 'pinia'
-import { ref } from 'vue'
-import type { BookableObject, Group } from '@/types'
+import { defineStore, storeToRefs } from 'pinia'
+import { computed, ref } from 'vue'
+import type { BookableObject } from '@/types'
 import { useAuth } from '@/stores/auth'
 import { getBookableObjectByGroup } from '@/assets/ts/gql_queries'
 import { useToast } from '@/components/ui/toast'
 
+import { useGroups } from '@/stores/groups'
+
 export const useBookableObjects = defineStore('bookableObjects', () => {
   const { client } = useAuth()
   const { toast } = useToast()
+  const { selectedGroupId } = storeToRefs(useGroups())
 
   const loading = ref(false)
 
@@ -20,16 +23,24 @@ export const useBookableObjects = defineStore('bookableObjects', () => {
     selectedBookableObject.value = bookableObject
   }
 
-  const setBookableObjects = (data: BookableObject[]) => {
+  const setBookableObjects = ({ data, groupId = null }: { data: BookableObject[]; groupId?: string | null }) => {
+    console.log('setBookableObjects', data)
     bookableObjects.value = data
+    if (groupId) {
+      groupBookableObjects.value[groupId] = data
+    }
   }
 
   const addBookableObject = (bookableObject: BookableObject) => {
     bookableObjects.value.push(bookableObject)
   }
 
-  const fetchBookableObjects = async (group_id: number | string) => {
+  const fetchBookableObjectsByGroupId = async (group_id: string) => {
     // Fetch bookable objects from the server
+    if (groupBookableObjects.value[group_id]) {
+      return groupBookableObjects.value[group_id]
+    }
+
     loading.value = true
     console.log('fetching bookable objects')
     await client
@@ -37,6 +48,7 @@ export const useBookableObjects = defineStore('bookableObjects', () => {
       .then((res) => {
         groupBookableObjects.value[group_id] = res
         loading.value = false
+        setBookableObjects({ data: res, groupId: group_id })
         return res
       })
       .catch((error) => {
@@ -50,25 +62,28 @@ export const useBookableObjects = defineStore('bookableObjects', () => {
     return bookableObjects
   }
 
-  const getBookableObjectByGroupId = async (
-    group_id: number | string
-  ): Promise<BookableObject[]> => {
+  const getBookableObjectBySelectedGroup = computed(() => {
+    if (!selectedGroupId?.value) {
+      return []
+    }
+
+    const group_id = selectedGroupId.value
+    console.log('group_id', group_id)
     if (!groupBookableObjects.value[group_id]) {
-      await fetchBookableObjects(group_id).then((res) => {
-        return res
-      })
+      return []
     }
 
     return groupBookableObjects.value[group_id]
-  }
+  })
 
   return {
     bookableObjects,
     selectedBookableObject,
     loading,
+    fetchBookableObjectsByGroupId,
     setBookableObjects,
     addBookableObject,
     selectBookableObject,
-    getBookableObjectByGroupId
+    getBookableObjectBySelectedGroup
   }
 })

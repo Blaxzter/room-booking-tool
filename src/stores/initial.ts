@@ -9,40 +9,30 @@ import {
 } from '@/assets/ts/gql_queries'
 import { useGroups } from '@/stores/groups'
 import { useBookableObjects } from '@/stores/bookableObjects'
-
-type LocalUserData = {
-  selected_group?: number
-}
+import { useUser } from '@/stores/user'
 
 export const useInitialDataStore = defineStore('initial', () => {
   const { client, user } = useAuth()
 
   const { setGroups } = useGroups()
   const { setBookableObjects } = useBookableObjects()
-
-  const get_local_user_data = () => {
-    const user_data = localStorage.getItem('user_data')
-    if (user_data) {
-      return JSON.parse(user_data) as LocalUserData
-    }
-    return {}
-  }
+  const { getSelectedGroup } = useUser()
 
   const fetchInitialData = async () => {
     try {
-      const user_data = get_local_user_data()
+      const selectedGroup = getSelectedGroup()
       let received_data = null
-      if (user_data && user_data.selected_group) {
-        const groupQuery = getGroupQuery(user_data.selected_group)
+      if (selectedGroup) {
+        const groupQuery = getGroupQuery(selectedGroup)
         received_data = await client.query<GetGroupQueryResponse>(groupQuery)
+        setBookableObjects({ data: received_data.bookable_object, groupId: selectedGroup })
       } else {
         const initialDataQuery = getInitialDataQuery(user.id)
-        received_data =
-          await client.query<GetInitialDataQueryResponse>(initialDataQuery)
+        received_data = await client.query<GetInitialDataQueryResponse>(initialDataQuery)
+        setBookableObjects({ data: received_data.bookable_object })
       }
       console.log(received_data)
-      setGroups(received_data.group)
-      setBookableObjects(received_data.bookable_object)
+      await setGroups(received_data.group)
     } catch (error) {
       console.error(error)
     }
