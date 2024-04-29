@@ -1,20 +1,24 @@
 <script setup lang="ts">
 import { computed, onMounted } from 'vue'
+import { storeToRefs } from 'pinia'
+import { useRouter } from 'vue-router'
 
-import BookableObjectCard from '@/components/home/BookableObjectCard.vue'
 import { ScrollArea, ScrollBar } from '@/components/ui/scroll-area'
 import { Separator } from '@/components/ui/separator'
-import { storeToRefs } from 'pinia'
 
 import { useInitialDataStore } from '@/stores/initial'
 import { useBookableObjects } from '@/stores/bookableObjects'
-
-import CalenderLoader from '@/components/animations/CalenderLoader.vue'
-import { bookableObjectList } from '@/assets/ts/tempdata'
-import BookableObjectRequestDialog from '@/components/home/BookableObjectRequestDialog.vue'
-import { bookableObjectRandoms } from '@/assets/ts/constants'
-import NameFade from '@/components/utils/NameFade.vue'
 import { useGlobal } from '@/stores/global'
+
+import BookableObjectCard from '@/components/home/BookableObjectCard.vue'
+import CalenderLoader from '@/components/animations/CalenderLoader.vue'
+import BookableObjectRequestDialog from '@/components/home/BookableObjectRequestDialog.vue'
+import NameFade from '@/components/utils/NameFade.vue'
+
+import { bookableObjectList } from '@/assets/ts/tempdata'
+import { bookableObjectRandoms } from '@/assets/ts/constants'
+
+const router = useRouter()
 
 const bookableObjectStore = useBookableObjects()
 
