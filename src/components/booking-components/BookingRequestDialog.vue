@@ -53,17 +53,11 @@ const createBooking = () => {
 </script>
 
 <template>
-  <Dialog
-    v-model:open="dialogOpen"
-    :modal="true"
-    @update:open="closeDialogDismiss"
-  >
+  <Dialog v-model:open="dialogOpen" :modal="true" @update:open="closeDialogDismiss">
     <DialogContent class="sm:max-w-[425px]" :trap-focus="true">
       <DialogHeader>
         <DialogTitle>Room Booking</DialogTitle>
-        <DialogDescription>
-          Please provide the details for your room booking.
-        </DialogDescription>
+        <DialogDescription> Please provide the details for your room booking. </DialogDescription>
       </DialogHeader>
       <div class="grid gap-4 py-4">
         <div class="grid grid-cols-4 items-center gap-4">
@@ -72,29 +66,17 @@ const createBooking = () => {
         </div>
         <div class="grid grid-cols-4 items-center gap-4">
           <Label for="start-time" class="text-right"> Start Time </Label>
-          <Input
-            type="time"
-            id="start-time"
-            v-model:value="startTime"
-            class="col-span-3"
-          />
+          <Input type="time" id="start-time" v-model:value="startTime" class="col-span-3" />
         </div>
         <div class="grid grid-cols-4 items-center gap-4">
           <Label for="end-time" class="text-right"> End Time </Label>
-          <Input
-            type="time"
-            id="end-time"
-            v-model:value="endTime"
-            class="col-span-3"
-          />
+          <Input type="time" id="end-time" v-model:value="endTime" class="col-span-3" />
         </div>
         <div class="grid grid-cols-4 items-center gap-4">
           <Label for="contact-info" class="text-right"> E-Mail </Label>
           <div class="relative max-w-sm items-center col-span-3">
             <Input id="contact-info" v-model="booking.mail" class="pl-10" />
-            <span
-              class="absolute start-0 inset-y-0 flex items-center justify-center px-2"
-            >
+            <span class="absolute start-0 inset-y-0 flex items-center justify-center px-2">
               <Mail class="size-6 text-muted-foreground" />
             </span>
           </div>
@@ -103,30 +85,18 @@ const createBooking = () => {
           <Label for="contact-info" class="text-right"> E-Mail </Label>
           <div class="relative max-w-sm items-center col-span-3">
             <Input id="contact-info" v-model="booking.phone" class="pl-10" />
-            <span
-              class="absolute start-0 inset-y-0 flex items-center justify-center px-2"
-            >
+            <span class="absolute start-0 inset-y-0 flex items-center justify-center px-2">
               <Phone class="size-6 text-muted-foreground" />
             </span>
           </div>
         </div>
         <div class="grid grid-cols-4 items-center gap-4">
           <Label for="description" class="text-right"> Description </Label>
-          <Textarea
-            id="description"
-            v-model="booking.description"
-            class="col-span-3"
-          />
+          <Textarea id="description" v-model="booking.description" class="col-span-3" />
         </div>
         <div class="grid grid-cols-4 items-center gap-4">
-          <Label for="confirm-booking" class="text-right">
-            Confirm Booking
-          </Label>
-          <Checkbox
-            id="confirm-booking"
-            v-model="booking.confirmed"
-            class="col-span-3"
-          />
+          <Label for="confirm-booking" class="text-right"> Confirm Booking </Label>
+          <Checkbox id="confirm-booking" v-model="booking.confirmed" class="col-span-3" />
         </div>
       </div>
       <DialogFooter>

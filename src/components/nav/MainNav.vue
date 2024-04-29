@@ -14,10 +14,7 @@ const navElements = [
   <nav
     class="hidden flex-col gap-6 text-lg font-medium md:flex md:flex-row md:items-center md:gap-5 md:text-sm lg:gap-6"
   >
-    <RouterLink
-      :to="{ name: 'home' }"
-      class="flex items-center gap-2 text-lg font-semibold md:text-base"
-    >
+    <RouterLink :to="{ name: 'home' }" class="flex items-center gap-2 text-lg font-semibold md:text-base">
       <Calendar class="h-6 w-6" />
       <span class="sr-only">Object Booking Tool</span>
     </RouterLink>
@@ -39,10 +36,7 @@ const navElements = [
     </SheetTrigger>
     <SheetContent side="left">
       <nav class="grid gap-6 text-lg font-medium">
-        <RouterLink
-          :to="{ name: 'home' }"
-          class="flex items-center gap-2 text-lg font-semibold"
-        >
+        <RouterLink :to="{ name: 'home' }" class="flex items-center gap-2 text-lg font-semibold">
           <Calendar class="h-6 w-6" />
           <span class="sr-only">Object Booking Tool</span>
         </RouterLink>

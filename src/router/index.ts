@@ -51,10 +51,7 @@ router.beforeEach(async (to, from, next) => {
 
   try {
     const isAuthenticated = await checkAuth()
-    if (
-      to.matched.some((record) => record.meta.requiresAuth) &&
-      !isAuthenticated
-    ) {
+    if (to.matched.some((record) => record.meta.requiresAuth) && !isAuthenticated) {
       setRedirect(to.fullPath)
       console.log('Requires auth')
       next({ name: 'login' })

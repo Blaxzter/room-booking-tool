@@ -1,23 +1,9 @@
 <script setup lang="ts">
-import {
-  CalendarDays,
-  CalendarClock,
-  CalendarFold,
-  CalendarRange
-} from 'lucide-vue-next'
+import { CalendarDays, CalendarClock, CalendarFold, CalendarRange } from 'lucide-vue-next'
 import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs'
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipProvider,
-  TooltipTrigger
-} from '@/components/ui/tooltip'
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip'
 
-export type CalendarViewType =
-  | 'dayGridFourWeek'
-  | 'timeGridWeek'
-  | 'timeGridDay'
-  | 'listWeek'
+export type CalendarViewType = 'dayGridFourWeek' | 'timeGridWeek' | 'timeGridDay' | 'listWeek'
 
 const model = defineModel<CalendarViewType>()
 

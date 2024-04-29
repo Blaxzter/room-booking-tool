@@ -15,12 +15,9 @@ defineOptions({
   inheritAttrs: false
 })
 
-const props = withDefaults(
-  defineProps<SelectContentProps & { class?: HTMLAttributes['class'] }>(),
-  {
-    position: 'popper'
-  }
-)
+const props = withDefaults(defineProps<SelectContentProps & { class?: HTMLAttributes['class'] }>(), {
+  position: 'popper'
+})
 const emits = defineEmits<SelectContentEmits>()
 
 const delegatedProps = computed(() => {
@@ -50,8 +47,7 @@ const forwarded = useForwardPropsEmits(delegatedProps, emits)
         :class="
           cn(
             'p-1',
-            position === 'popper' &&
-              'h-[--radix-select-trigger-height] w-full min-w-[--radix-select-trigger-width]'
+            position === 'popper' && 'h-[--radix-select-trigger-height] w-full min-w-[--radix-select-trigger-width]'
           )
         "
       >

@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed, onMounted, toRefs } from 'vue'
+import { computed, onMounted } from 'vue'
 
 import BookableObjectCard from '@/components/home/BookableObjectCard.vue'
 import { ScrollArea, ScrollBar } from '@/components/ui/scroll-area'
@@ -61,14 +61,14 @@ onMounted(async () => {
           <ScrollArea v-else>
             <div class="flex space-x-4 pb-4" v-if="bookableObjectList.length">
               <BookableObjectCard
-                v-for="(bookableObject, idx) in filteredBookableObjectList"
+                v-for="bookableObject in filteredBookableObjectList"
                 :key="bookableObject.name"
                 :bookable-object="bookableObject"
                 class="w-[250px]"
                 aspect-ratio="portrait"
                 :width="250"
                 :height="330"
-                :index="idx"
+                :index="bookableObject.id % 500"
                 @click="
                   () =>
                     router.push({

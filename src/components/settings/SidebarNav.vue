@@ -56,12 +56,7 @@ onMounted(() => {
       as="a"
       @click="selectPage(item.value)"
       variant="ghost"
-      :class="
-        cn(
-          'w-full text-left justify-start',
-          selectedPage === item.value && 'bg-muted hover:bg-muted'
-        )
-      "
+      :class="cn('w-full text-left justify-start', selectedPage === item.value && 'bg-muted hover:bg-muted')"
     >
       {{ item.title }}
     </Button>

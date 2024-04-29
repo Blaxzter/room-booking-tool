@@ -1,13 +1,6 @@
 <script setup lang="ts">
 import { Button } from '@/components/ui/button'
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardFooter,
-  CardHeader,
-  CardTitle
-} from '@/components/ui/card'
+import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { ChevronRight, Eye, EyeOff } from 'lucide-vue-next'
@@ -90,40 +83,23 @@ onMounted(async () => {
       <Card class="w-full max-w-sm" v-if="!isAuthenticated && !loading">
         <CardHeader>
           <CardTitle class="text-2xl"> Login </CardTitle>
-          <CardDescription>
-            Enter your email below to login to your account.
-          </CardDescription>
+          <CardDescription> Enter your email below to login to your account. </CardDescription>
         </CardHeader>
         <CardContent class="grid gap-4">
           <div class="grid gap-2">
             <Label for="email">Email</Label>
-            <Input
-              id="email"
-              type="email"
-              placeholder="m@example.com"
-              required
-              v-model="email"
-            />
+            <Input id="email" type="email" placeholder="m@example.com" required v-model="email" />
           </div>
           <div class="grid gap-2">
             <Label for="password">Password</Label>
             <div class="relative w-full max-w-sm items-center">
-              <Input
-                id="password"
-                :type="showPassword ? 'text' : 'password'"
-                required
-                v-model="password"
-              />
+              <Input id="password" :type="showPassword ? 'text' : 'password'" required v-model="password" />
               <Button
                 @click="showPassword = !showPassword"
                 className="absolute end-1 inset-y-0 flex items-center justify-center px-2"
                 type="button"
               >
-                <EyeOff
-                  v-if="showPassword"
-                  className="text-current"
-                  :size="18"
-                />
+                <EyeOff v-if="showPassword" className="text-current" :size="18" />
                 <Eye v-else className="text-current" :size="18" />
               </Button>
             </div>
@@ -155,32 +131,14 @@ onMounted(async () => {
           </Button>
         </CardFooter>
       </Card>
-      <Card
-        class="w-full max-w-sm h-full max-h-[200px]"
-        v-else
-        :class="{ 'login-screen-grower': showScreenGrower }"
-      >
-        <CardContent
-          class="grid place-items-center pt-6"
-          :class="{ 'fade-out': showScreenGrower }"
-        >
-          <div
-            class="circle-loader mb-2 h-[200px]"
-            :class="{ 'load-complete': showCheckmark, error: showCross }"
-          >
-            <div
-              class="checkmark draw"
-              :style="{ display: !showCheckmark ? 'none' : 'block' }"
-            ></div>
-            <div
-              class="cross draw"
-              :style="{ display: !showCross ? 'none' : 'block' }"
-            ></div>
+      <Card class="w-full max-w-sm h-full max-h-[200px]" v-else :class="{ 'login-screen-grower': showScreenGrower }">
+        <CardContent class="grid place-items-center pt-6" :class="{ 'fade-out': showScreenGrower }">
+          <div class="circle-loader mb-2 h-[200px]" :class="{ 'load-complete': showCheckmark, error: showCross }">
+            <div class="checkmark draw" :style="{ display: !showCheckmark ? 'none' : 'block' }"></div>
+            <div class="cross draw" :style="{ display: !showCross ? 'none' : 'block' }"></div>
           </div>
           <CardTitle v-if="showCheckmark"> Authenticated </CardTitle>
-          <CardTitle v-else-if="showCross">
-            Invalid email or password
-          </CardTitle>
+          <CardTitle v-else-if="showCross"> Invalid email or password </CardTitle>
           <CardTitle v-else> Logging in </CardTitle>
         </CardContent>
       </Card>

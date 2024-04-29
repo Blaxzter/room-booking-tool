@@ -14,10 +14,7 @@ const props = defineProps<{
 </script>
 
 <template>
-  <div
-    :class="cn('space-y-3', $attrs.class ?? '')"
-    class="hover:cursor-pointer"
-  >
+  <div :class="cn('space-y-3', $attrs.class ?? '')" class="hover:cursor-pointer">
     <div class="overflow-hidden rounded-md">
       <img
         v-if="bookableObject.image"

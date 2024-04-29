@@ -4,14 +4,7 @@ import { useForm } from 'vee-validate'
 import { toTypedSchema } from '@vee-validate/zod'
 import * as z from 'zod'
 
-import {
-  FormControl,
-  FormDescription,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage
-} from '@/components/ui/form'
+import { FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form'
 import { Separator } from '@/components/ui/separator'
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group'
 import { Switch } from '@/components/ui/switch'
@@ -57,9 +50,7 @@ const onSubmit = handleSubmit((values, { resetForm }) => {
 <template>
   <div>
     <h3 class="text-lg font-medium">Notifications</h3>
-    <p class="text-sm text-muted-foreground">
-      Configure how you receive notifications.
-    </p>
+    <p class="text-sm text-muted-foreground">Configure how you receive notifications.</p>
   </div>
   <Separator />
   <form class="space-y-8" @submit="onSubmit">
@@ -78,9 +69,7 @@ const onSubmit = handleSubmit((values, { resetForm }) => {
               <FormControl>
                 <RadioGroupItem value="mentions" />
               </FormControl>
-              <FormLabel class="font-normal">
-                Direct messages and mentions
-              </FormLabel>
+              <FormLabel class="font-normal"> Direct messages and mentions </FormLabel>
             </FormItem>
             <FormItem class="flex items-center space-x-3 space-y-0">
               <FormControl>
@@ -97,19 +86,11 @@ const onSubmit = handleSubmit((values, { resetForm }) => {
     <div>
       <h3 class="mb-4 text-lg font-medium">Email Notifications</h3>
       <div class="space-y-4">
-        <FormField
-          v-slot="{ handleChange, value }"
-          type="checkbox"
-          name="communication_emails"
-        >
-          <FormItem
-            class="flex flex-row items-center justify-between rounded-lg border p-4"
-          >
+        <FormField v-slot="{ handleChange, value }" type="checkbox" name="communication_emails">
+          <FormItem class="flex flex-row items-center justify-between rounded-lg border p-4">
             <div class="space-y-0.5">
               <FormLabel class="text-base"> Communication emails </FormLabel>
-              <FormDescription>
-                Receive emails about your account activity.
-              </FormDescription>
+              <FormDescription> Receive emails about your account activity. </FormDescription>
             </div>
             <FormControl>
               <Switch :checked="value" @update:checked="handleChange" />
@@ -117,19 +98,11 @@ const onSubmit = handleSubmit((values, { resetForm }) => {
           </FormItem>
         </FormField>
 
-        <FormField
-          v-slot="{ handleChange, value }"
-          type="checkbox"
-          name="marketing_emails"
-        >
-          <FormItem
-            class="flex flex-row items-center justify-between rounded-lg border p-4"
-          >
+        <FormField v-slot="{ handleChange, value }" type="checkbox" name="marketing_emails">
+          <FormItem class="flex flex-row items-center justify-between rounded-lg border p-4">
             <div class="space-y-0.5">
               <FormLabel class="text-base"> Marketing emails </FormLabel>
-              <FormDescription>
-                Receive emails about new products, features, and more.
-              </FormDescription>
+              <FormDescription> Receive emails about new products, features, and more. </FormDescription>
             </div>
             <FormControl>
               <Switch :checked="value" @update:checked="handleChange" />
@@ -137,19 +110,11 @@ const onSubmit = handleSubmit((values, { resetForm }) => {
           </FormItem>
         </FormField>
 
-        <FormField
-          v-slot="{ handleChange, value }"
-          type="checkbox"
-          name="social_emails"
-        >
-          <FormItem
-            class="flex flex-row items-center justify-between rounded-lg border p-4"
-          >
+        <FormField v-slot="{ handleChange, value }" type="checkbox" name="social_emails">
+          <FormItem class="flex flex-row items-center justify-between rounded-lg border p-4">
             <div class="space-y-0.5">
               <FormLabel class="text-base"> Social emails </FormLabel>
-              <FormDescription>
-                Receive emails for friend requests, follows, and more.
-              </FormDescription>
+              <FormDescription> Receive emails for friend requests, follows, and more. </FormDescription>
             </div>
             <FormControl>
               <Switch :checked="value" @update:checked="handleChange" />
@@ -157,19 +122,11 @@ const onSubmit = handleSubmit((values, { resetForm }) => {
           </FormItem>
         </FormField>
 
-        <FormField
-          v-slot="{ handleChange, value }"
-          type="checkbox"
-          name="security_emails"
-        >
-          <FormItem
-            class="flex flex-row items-center justify-between rounded-lg border p-4"
-          >
+        <FormField v-slot="{ handleChange, value }" type="checkbox" name="security_emails">
+          <FormItem class="flex flex-row items-center justify-between rounded-lg border p-4">
             <div class="space-y-0.5">
               <FormLabel class="text-base"> Security emails </FormLabel>
-              <FormDescription>
-                Receive emails about your account activity and security.
-              </FormDescription>
+              <FormDescription> Receive emails about your account activity and security. </FormDescription>
             </div>
             <FormControl>
               <Switch :checked="value" @update:checked="handleChange" />

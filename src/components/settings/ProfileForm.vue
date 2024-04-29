@@ -7,24 +7,10 @@ import { Cross1Icon } from '@radix-icons/vue'
 import { cn } from '@/lib/utils'
 
 import { Input } from '@/components/ui/input'
-import {
-  FormControl,
-  FormDescription,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage
-} from '@/components/ui/form'
+import { FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form'
 import { Separator } from '@/components/ui/separator'
 import { Textarea } from '@/components/ui/textarea'
-import {
-  Select,
-  SelectContent,
-  SelectGroup,
-  SelectItem,
-  SelectTrigger,
-  SelectValue
-} from '@/components/ui/select'
+import { Select, SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
 import { Button } from '@/components/ui/button'
 import { toast } from '@/components/ui/toast'
 
@@ -63,10 +49,7 @@ const { handleSubmit, resetForm } = useForm({
   validationSchema: profileFormSchema,
   initialValues: {
     bio: 'I own a computer.',
-    urls: [
-      { value: 'https://shadcn.com' },
-      { value: 'https://twitter.com/shadcn' }
-    ]
+    urls: [{ value: 'https://shadcn.com' }, { value: 'https://twitter.com/shadcn' }]
   }
 })
 
@@ -85,9 +68,7 @@ const onSubmit = handleSubmit((values) => {
 <template>
   <div>
     <h3 class="text-lg font-medium">Profile</h3>
-    <p class="text-sm text-muted-foreground">
-      This is how others will see you on the site.
-    </p>
+    <p class="text-sm text-muted-foreground">This is how others will see you on the site.</p>
   </div>
   <Separator />
   <form class="space-y-8" @submit="onSubmit">
@@ -98,8 +79,8 @@ const onSubmit = handleSubmit((values) => {
           <Input type="text" placeholder="shadcn" v-bind="componentField" />
         </FormControl>
         <FormDescription>
-          This is your public display name. It can be your real name or a
-          pseudonym. You can only change this once every 30 days.
+          This is your public display name. It can be your real name or a pseudonym. You can only change this once every
+          30 days.
         </FormDescription>
         <FormMessage />
       </FormItem>
@@ -117,19 +98,13 @@ const onSubmit = handleSubmit((values) => {
           </FormControl>
           <SelectContent>
             <SelectGroup>
-              <SelectItem
-                v-for="email in verifiedEmails"
-                :key="email"
-                :value="email"
-              >
+              <SelectItem v-for="email in verifiedEmails" :key="email" :value="email">
                 {{ email }}
               </SelectItem>
             </SelectGroup>
           </SelectContent>
         </Select>
-        <FormDescription>
-          You can manage verified email addresses in your email settings.
-        </FormDescription>
+        <FormDescription> You can manage verified email addresses in your email settings. </FormDescription>
         <FormMessage />
       </FormItem>
     </FormField>
@@ -138,14 +113,10 @@ const onSubmit = handleSubmit((values) => {
       <FormItem>
         <FormLabel>Bio</FormLabel>
         <FormControl>
-          <Textarea
-            placeholder="Tell us a little bit about yourself"
-            v-bind="componentField"
-          />
+          <Textarea placeholder="Tell us a little bit about yourself" v-bind="componentField" />
         </FormControl>
         <FormDescription>
-          You can <span>@mention</span> other users and organizations to link to
-          them.
+          You can <span>@mention</span> other users and organizations to link to them.
         </FormDescription>
         <FormMessage />
       </FormItem>
@@ -156,9 +127,7 @@ const onSubmit = handleSubmit((values) => {
         <div v-for="(field, index) in fields" :key="`urls-${field.key}`">
           <FormField v-slot="{ componentField }" :name="`urls[${index}].value`">
             <FormItem>
-              <FormLabel :class="cn(index !== 0 && 'sr-only')">
-                URLs
-              </FormLabel>
+              <FormLabel :class="cn(index !== 0 && 'sr-only')"> URLs </FormLabel>
               <FormDescription :class="cn(index !== 0 && 'sr-only')">
                 Add links to your website, blog, or social media profiles.
               </FormDescription>
@@ -166,11 +135,7 @@ const onSubmit = handleSubmit((values) => {
                 <FormControl>
                   <Input type="url" v-bind="componentField" />
                 </FormControl>
-                <button
-                  type="button"
-                  class="absolute py-2 pe-3 end-0 text-muted-foreground"
-                  @click="remove(index)"
-                >
+                <button type="button" class="absolute py-2 pe-3 end-0 text-muted-foreground" @click="remove(index)">
                   <Cross1Icon class="w-3" />
                 </button>
               </div>
@@ -179,13 +144,7 @@ const onSubmit = handleSubmit((values) => {
           </FormField>
         </div>
 
-        <Button
-          type="button"
-          variant="outline"
-          size="sm"
-          class="text-xs w-20 mt-2"
-          @click="push({ value: '' })"
-        >
+        <Button type="button" variant="outline" size="sm" class="text-xs w-20 mt-2" @click="push({ value: '' })">
           Add URL
         </Button>
       </FieldArray>
@@ -194,9 +153,7 @@ const onSubmit = handleSubmit((values) => {
     <div class="flex gap-2 justify-start">
       <Button type="submit"> Update profile </Button>
 
-      <Button type="button" variant="outline" @click="resetForm">
-        Reset form
-      </Button>
+      <Button type="button" variant="outline" @click="resetForm"> Reset form </Button>
     </div>
   </form>
 </template>

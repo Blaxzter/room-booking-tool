@@ -40,12 +40,7 @@ watchEffect(() => {
           :style="{ display: showSearch ? 'block' : 'none' }"
           v-model="searchString"
         />
-        <Button
-          variant="outline"
-          size="icon"
-          class="sm:hidden flex-shrink-0"
-          @click="toggleSearch"
-        >
+        <Button variant="outline" size="icon" class="sm:hidden flex-shrink-0" @click="toggleSearch">
           <Search class="w-4 h-4" />
         </Button>
         <UserNav />

@@ -11,9 +11,7 @@ import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardHeader } from '@/components/ui/card'
 import { computed, onMounted, ref } from 'vue'
 import { type CalendarOptions } from '@fullcalendar/core'
-import CalenderTabs, {
-  type CalendarViewType
-} from '@/components/booking-components/CalenderTabs.vue'
+import CalenderTabs, { type CalendarViewType } from '@/components/booking-components/CalenderTabs.vue'
 import CalenderRemote from '@/components/booking-components/CalenderRemote.vue'
 import dayjs from 'dayjs'
 import BookingRequestDialog from '@/components/booking-components/BookingRequestDialog.vue'
@@ -125,13 +123,7 @@ onMounted(() => {
         {{ currentDateString }}
       </h2>
       <div class="flex-grow" />
-      <Button
-        @click="selectToday"
-        class="me-3"
-        :variant="isToday ? 'outline' : 'default'"
-      >
-        Today
-      </Button>
+      <Button @click="selectToday" class="me-3" :variant="isToday ? 'outline' : 'default'"> Today </Button>
       <calender-remote class="me-3" @prev="togglePrev" @next="toggleNext" />
       <calender-tabs v-model="selectedTab" @update:model-value="switchTab" />
     </card-header>

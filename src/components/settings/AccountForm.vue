@@ -4,41 +4,17 @@ import * as z from 'zod'
 import { toDate } from 'radix-vue/date'
 import { toTypedSchema } from '@vee-validate/zod'
 import { Check, ChevronsUpDown } from 'lucide-vue-next'
-import {
-  CalendarDate,
-  DateFormatter,
-  getLocalTimeZone,
-  today
-} from '@internationalized/date'
+import { CalendarDate, DateFormatter, getLocalTimeZone, today } from '@internationalized/date'
 import { cn } from '@/lib/utils'
 
 import { CalendarIcon } from 'lucide-vue-next'
 
-import {
-  Form,
-  FormControl,
-  FormDescription,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage
-} from '@/components/ui/form'
+import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form'
 import { Input } from '@/components/ui/input'
 import { Separator } from '@/components/ui/separator'
-import {
-  Command,
-  CommandEmpty,
-  CommandGroup,
-  CommandInput,
-  CommandItem,
-  CommandList
-} from '@/components/ui/command'
+import { Command, CommandEmpty, CommandGroup, CommandInput, CommandItem, CommandList } from '@/components/ui/command'
 import { Button } from '@/components/ui/button'
-import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger
-} from '@/components/ui/popover'
+import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover'
 import { Calendar } from '@/components/ui/calendar'
 import { toast } from '@/components/ui/toast'
 
@@ -100,26 +76,17 @@ async function onSubmit(values: any) {
 <template>
   <div>
     <h3 class="text-lg font-medium">Account</h3>
-    <p class="text-sm text-muted-foreground">
-      Update your account settings. Set your preferred language and timezone.
-    </p>
+    <p class="text-sm text-muted-foreground">Update your account settings. Set your preferred language and timezone.</p>
   </div>
   <Separator />
-  <Form
-    v-slot="{ setValues }"
-    :validation-schema="accountFormSchema"
-    class="space-y-8"
-    @submit="onSubmit"
-  >
+  <Form v-slot="{ setValues }" :validation-schema="accountFormSchema" class="space-y-8" @submit="onSubmit">
     <FormField v-slot="{ componentField }" name="name">
       <FormItem>
         <FormLabel>Name</FormLabel>
         <FormControl>
           <Input type="text" placeholder="Your name" v-bind="componentField" />
         </FormControl>
-        <FormDescription>
-          This is the name that will be displayed on your profile and in emails.
-        </FormDescription>
+        <FormDescription> This is the name that will be displayed on your profile and in emails. </FormDescription>
         <FormMessage />
       </FormItem>
     </FormField>
@@ -132,19 +99,10 @@ async function onSubmit(values: any) {
             <FormControl>
               <Button
                 variant="outline"
-                :class="
-                  cn(
-                    'w-[240px] justify-start text-left font-normal',
-                    !value && 'text-muted-foreground'
-                  )
-                "
+                :class="cn('w-[240px] justify-start text-left font-normal', !value && 'text-muted-foreground')"
               >
                 <CalendarIcon class="mr-2 h-4 w-4 opacity-50" />
-                <span>{{
-                  value
-                    ? df.format(toDate(dateValue, getLocalTimeZone()))
-                    : 'Pick a date'
-                }}</span>
+                <span>{{ value ? df.format(toDate(dateValue, getLocalTimeZone())) : 'Pick a date' }}</span>
               </Button>
             </FormControl>
           </PopoverTrigger>
@@ -180,9 +138,7 @@ async function onSubmit(values: any) {
             />
           </PopoverContent>
         </Popover>
-        <FormDescription>
-          Your date of birth is used to calculate your age.
-        </FormDescription>
+        <FormDescription> Your date of birth is used to calculate your age. </FormDescription>
         <FormMessage />
       </FormItem>
       <input type="hidden" v-bind="field" />
@@ -199,19 +155,9 @@ async function onSubmit(values: any) {
                 variant="outline"
                 role="combobox"
                 :aria-expanded="open"
-                :class="
-                  cn(
-                    'w-[200px] justify-between',
-                    !value && 'text-muted-foreground'
-                  )
-                "
+                :class="cn('w-[200px] justify-between', !value && 'text-muted-foreground')"
               >
-                {{
-                  value
-                    ? languages.find((language) => language.value === value)
-                        ?.label
-                    : 'Select language...'
-                }}
+                {{ value ? languages.find((language) => language.value === value)?.label : 'Select language...' }}
 
                 <ChevronsUpDown class="ml-2 h-4 w-4 shrink-0 opacity-50" />
               </Button>
@@ -239,14 +185,7 @@ async function onSubmit(values: any) {
                       }
                     "
                   >
-                    <Check
-                      :class="
-                        cn(
-                          'mr-2 h-4 w-4',
-                          value === language.value ? 'opacity-100' : 'opacity-0'
-                        )
-                      "
-                    />
+                    <Check :class="cn('mr-2 h-4 w-4', value === language.value ? 'opacity-100' : 'opacity-0')" />
                     {{ language.label }}
                   </CommandItem>
                 </CommandGroup>
@@ -255,9 +194,7 @@ async function onSubmit(values: any) {
           </PopoverContent>
         </Popover>
 
-        <FormDescription>
-          This is the language that will be used in the dashboard.
-        </FormDescription>
+        <FormDescription> This is the language that will be used in the dashboard. </FormDescription>
         <FormMessage />
       </FormItem>
     </FormField>

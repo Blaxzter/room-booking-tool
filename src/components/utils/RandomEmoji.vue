@@ -21,13 +21,7 @@ const santaEmojiObject = computed(() => {
 </script>
 
 <template>
-  <emoji
-    :data="emojiIndex"
-    :emoji="emojiObject"
-    :size="64"
-    :fallback="emojiFallback"
-    :native="true"
-  />
+  <emoji :data="emojiIndex" :emoji="emojiObject" :size="64" :fallback="emojiFallback" :native="true" />
 </template>
 
 <style scoped></style>

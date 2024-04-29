@@ -41,29 +41,16 @@ const createBookableObject = () => {
           Create
           <NameFade :messages="bookableObjectRandoms" />
         </DialogTitle>
-        <DialogDescription>
-          Please find the details of your bookableObject.
-        </DialogDescription>
+        <DialogDescription> Please find the details of your bookableObject. </DialogDescription>
       </DialogHeader>
       <div class="grid gap-4 py-4">
         <div class="grid grid-cols-4 items-center gap-4">
           <Label for="name" class="text-right"> Name </Label>
-          <Input
-            type="text"
-            id="name"
-            v-model="bookableObject.name"
-            class="col-span-3"
-          />
+          <Input type="text" id="name" v-model="bookableObject.name" class="col-span-3" />
         </div>
         <div class="grid grid-cols-4 items-center gap-4">
           <Label for="description" class="text-right"> Description </Label>
-          <Textarea
-            type="text"
-            id="description"
-            v-model="bookableObject.description"
-            class="col-span-3"
-            readonly
-          />
+          <Textarea type="text" id="description" v-model="bookableObject.description" class="col-span-3" readonly />
         </div>
       </div>
       <DialogFooter>

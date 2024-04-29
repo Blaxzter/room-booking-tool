@@ -13,13 +13,10 @@ defineOptions({
   inheritAttrs: false
 })
 
-const props = withDefaults(
-  defineProps<PopoverContentProps & { class?: HTMLAttributes['class'] }>(),
-  {
-    align: 'center',
-    sideOffset: 4
-  }
-)
+const props = withDefaults(defineProps<PopoverContentProps & { class?: HTMLAttributes['class'] }>(), {
+  align: 'center',
+  sideOffset: 4
+})
 const emits = defineEmits<PopoverContentEmits>()
 
 const delegatedProps = computed(() => {
