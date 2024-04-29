@@ -6,7 +6,7 @@ import { useUser } from '@/stores/user'
 
 export const useGroups = defineStore('group', () => {
   const { setSelectedGroup, getSelectedGroup } = useUser()
-  const { fetchBookableObjectsByGroupId } = useBookableObjects()
+  const { fetchBookableObjectsByGroupId, fetchUserBookableObjects } = useBookableObjects()
 
   const groups = ref<Group[]>([])
   const selectedGroupId = ref<string | null>(getSelectedGroup() || null)
@@ -15,7 +15,8 @@ export const useGroups = defineStore('group', () => {
     console.log('selecting group', group)
     setSelectedGroup(group.id)
     selectedGroupId.value = group.id
-    await fetchBookableObjectsByGroupId(group.id)
+    if (group.id !== '-1') await fetchBookableObjectsByGroupId(group.id)
+    else fetchUserBookableObjects()
   }
 
   const setGroups = async (data: Group[]) => {

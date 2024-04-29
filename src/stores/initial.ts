@@ -10,6 +10,7 @@ import {
 import { useGroups } from '@/stores/groups'
 import { useBookableObjects } from '@/stores/bookableObjects'
 import { useUser } from '@/stores/user'
+import _ from 'lodash'
 
 export const useInitialDataStore = defineStore('initial', () => {
   const { client, user } = useAuth()
@@ -22,7 +23,7 @@ export const useInitialDataStore = defineStore('initial', () => {
     try {
       const selectedGroup = getSelectedGroup()
       let received_data = null
-      if (selectedGroup) {
+      if (!_.isNil(selectedGroup) && selectedGroup !== '-1') {
         const groupQuery = getGroupQuery(selectedGroup)
         received_data = await client.query<GetGroupQueryResponse>(groupQuery)
         setBookableObjects({ data: received_data.bookable_object, groupId: selectedGroup })

@@ -25,7 +25,7 @@ const { loading, bookableObjects } = storeToRefs(bookableObjectStore)
 
 const filteredBookableObjectList = computed(() => {
   if (!bookableObjects.value) return []
-  console.log(filteredBookableObjectList)
+  console.log('bookableObjects.value', bookableObjects.value)
   return bookableObjects.value.filter((bookableObject) => {
     return bookableObject.name.toLowerCase().includes(searchString.value.toLowerCase())
   })

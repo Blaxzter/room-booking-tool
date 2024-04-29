@@ -2,13 +2,13 @@ import { defineStore, storeToRefs } from 'pinia'
 import { computed, ref } from 'vue'
 import type { BookableObject } from '@/types'
 import { useAuth } from '@/stores/auth'
-import { getBookableObjectByGroup } from '@/assets/ts/gql_queries'
+import { getBookableObjectByGroup, type BookableObjectRequest, userBookableObject } from '@/assets/ts/gql_queries'
 import { useToast } from '@/components/ui/toast'
 
 import { useGroups } from '@/stores/groups'
 
 export const useBookableObjects = defineStore('bookableObjects', () => {
-  const { client } = useAuth()
+  const { client, user } = useAuth()
   const { toast } = useToast()
   const { selectedGroupId } = storeToRefs(useGroups())
 
@@ -38,26 +38,53 @@ export const useBookableObjects = defineStore('bookableObjects', () => {
   const fetchBookableObjectsByGroupId = async (group_id: string) => {
     // Fetch bookable objects from the server
     if (groupBookableObjects.value[group_id]) {
-      return groupBookableObjects.value[group_id]
+      bookableObjects.value = groupBookableObjects.value[group_id]
+    } else {
+      loading.value = true
+      console.log('fetching bookable objects')
+      await client
+        .query<BookableObjectRequest>(getBookableObjectByGroup(group_id))
+        .then((res) => {
+          console.log('fetchBookableObjectsByGroupId', res.bookable_object)
+          setBookableObjects({ data: res.bookable_object, groupId: group_id })
+          loading.value = false
+          return res
+        })
+        .catch((error) => {
+          loading.value = false
+          toast({
+            title: 'Error',
+            description: error.message
+          })
+        })
     }
 
-    loading.value = true
-    console.log('fetching bookable objects')
-    await client
-      .query<BookableObject[]>(getBookableObjectByGroup(group_id))
-      .then((res) => {
-        groupBookableObjects.value[group_id] = res
-        loading.value = false
-        setBookableObjects({ data: res, groupId: group_id })
-        return res
-      })
-      .catch((error) => {
-        loading.value = false
-        toast({
-          title: 'Error',
-          description: error.message
+    return bookableObjects
+  }
+
+  const fetchUserBookableObjects = async () => {
+    // Fetch bookable objects from the server
+    if (groupBookableObjects.value['-1']) {
+      bookableObjects.value = groupBookableObjects.value['-1']
+    } else {
+      loading.value = true
+      console.log('fetching bookable objects')
+      await client
+        .query<BookableObjectRequest>(userBookableObject(user.id))
+        .then((res) => {
+          console.log('fetchBookableObjectsByGroupId', res.bookable_object)
+          setBookableObjects({ data: res.bookable_object, groupId: '-1' })
+          loading.value = false
+          return res
         })
-      })
+        .catch((error) => {
+          loading.value = false
+          toast({
+            title: 'Error',
+            description: error.message
+          })
+        })
+    }
 
     return bookableObjects
   }
@@ -81,6 +108,7 @@ export const useBookableObjects = defineStore('bookableObjects', () => {
     selectedBookableObject,
     loading,
     fetchBookableObjectsByGroupId,
+    fetchUserBookableObjects,
     setBookableObjects,
     addBookableObject,
     selectBookableObject,

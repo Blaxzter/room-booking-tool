@@ -78,6 +78,27 @@ query Bookable_object {
         image
         is_internal
     }
-}
+}`
 
+export const userBookableObject = (user_id: string) => `
+query Bookable_object {
+    bookable_object(
+        filter: { owner: { id: { _eq: "${user_id}" } } }
+    ) {
+        id
+        status
+        date_created
+        date_updated
+        location
+        name
+        description
+        tags
+        image
+        is_internal
+    }
+}
 `
+
+export interface BookableObjectRequest {
+  bookable_object: BookableObject[]
+}
