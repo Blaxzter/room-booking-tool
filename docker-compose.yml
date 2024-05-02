@@ -39,8 +39,7 @@ services:
     ports:
       - 8055:8055
     volumes:
-      - ./uploads:/directus/uploads
-      - ./schema-sync:/directus/schema-sync
+      - ./directus-uploads:/directus/uploads
       # If you want to load extensions from the host
       # - ./extensions:/directus/extensions
     depends_on:

@@ -10,6 +10,9 @@ query Initial_Data {
         date_updated
         name
         description
+        avatar {
+            id
+        }
     }
     bookable_object(filter: { group: { id: { _eq: ${id} } } }) {
         id
@@ -36,6 +39,9 @@ query Bookable_object {
         date_updated
         name
         description
+        avatar {
+            id
+        }
     }
     bookable_object(
         filter: { owner: { id: { _eq: "${user_id}" } } }
@@ -48,7 +54,9 @@ query Bookable_object {
         name
         description
         tags
-        image
+        image {
+          id
+        }
         is_internal
     }
 }
@@ -75,7 +83,9 @@ query Bookable_object {
         name
         description
         tags
-        image
+        image {
+          id
+        }
         is_internal
     }
 }`
@@ -93,7 +103,9 @@ query Bookable_object {
         name
         description
         tags
-        image
+        image {
+          id
+        }
         is_internal
     }
 }

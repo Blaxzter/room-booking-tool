@@ -11,17 +11,20 @@ const emojiObject = computed(() => {
   return emojiIndex.findEmoji(randomEmoji)
 })
 
+const prop = defineProps({
+  size: {
+    type: Number,
+    default: 64
+  }
+})
+
 function emojiFallback(emoji) {
   return `:${emoji.short_names[0]}:`
 }
-
-const santaEmojiObject = computed(() => {
-  return emojiIndex.findEmoji(':santa:')
-})
 </script>
 
 <template>
-  <emoji :data="emojiIndex" :emoji="emojiObject" :size="64" :fallback="emojiFallback" :native="true" />
+  <emoji :data="emojiIndex" :emoji="emojiObject" :size="prop.size" :fallback="emojiFallback" :native="true" />
 </template>
 
 <style scoped></style>

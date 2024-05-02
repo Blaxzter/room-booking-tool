@@ -147,6 +147,12 @@ export const useAuth = defineStore('auth', () => {
       user.value = JSON.parse(localStorage.getItem('user') || '{}')
       // Access token exists and doesn't expire in the next 5 minutes
       authenticated.value = true
+      auth_data.value = {
+        access_token: access_token as string,
+        refresh_token: storage.get('refresh_token') as string,
+        expires: storage.get('expires') as number,
+        expires_at: expires_at
+      }
       return true
     } else {
       // Access token exist, has expired, or expires in less than 5 minutes
@@ -185,6 +191,7 @@ export const useAuth = defineStore('auth', () => {
   return {
     client,
     user,
+    auth_data,
     login,
     logout,
     checkAuth,

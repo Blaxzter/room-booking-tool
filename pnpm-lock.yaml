@@ -83,6 +83,9 @@ dependencies:
   vue-authenticate-2:
     specifier: ^2.2.0
     version: 2.2.0(axios@1.6.8)(vue@3.4.24)
+  vue-avatar-cropper:
+    specifier: ^6.1.1
+    version: 6.1.1(vue@3.4.24)
   vue-router:
     specifier: ^4.3.0
     version: 4.3.2(vue@3.4.24)
@@ -1812,6 +1815,10 @@ packages:
     requiresBuild: true
     dev: false
 
+  /cropperjs@1.6.2:
+    resolution: {integrity: sha512-nhymn9GdnV3CqiEHJVai54TULFAE3VshJTXSqSJKa8yXAKyBKDWdhHarnlIPrshJ0WMFTGuFvG02YjLXfPiuOA==}
+    dev: false
+
   /cross-spawn@7.0.3:
     resolution: {integrity: sha512-iRDPJKUPVEND7dHPO8rkbOnPpyDygcDFtWjpeWNCgy8WP2rXcxXL8TskReQl6OrB2G7+UJrags1q15Fudc7G6w==}
     engines: {node: '>= 8'}
@@ -2671,6 +2678,12 @@ packages:
     engines: {node: '>= 0.6'}
     dependencies:
       mime-db: 1.52.0
+    dev: false
+
+  /mime@4.0.3:
+    resolution: {integrity: sha512-KgUb15Oorc0NEKPbvfa0wRU+PItIEZmiv+pyAO2i0oTIVTJhlzMclU7w4RXWQrSOVH5ax/p/CkIO7KI4OyFJTQ==}
+    engines: {node: '>=16'}
+    hasBin: true
     dev: false
 
   /mimic-fn@4.0.0:
@@ -3571,6 +3584,17 @@ packages:
       vue: 3.4.24(typescript@5.4.5)
     optionalDependencies:
       '@rollup/rollup-linux-x64-gnu': 4.16.2
+    dev: false
+
+  /vue-avatar-cropper@6.1.1(vue@3.4.24):
+    resolution: {integrity: sha512-IdS1arePgcW5JIfopwG+TdEYs1xl8ctzy0Vy74aax2zQsEFb+GPitWaf2TOvPRHFiDIjTkYBmQ619qPEDmoCmw==}
+    engines: {node: '>=10'}
+    peerDependencies:
+      vue: ^3.2.21
+    dependencies:
+      cropperjs: 1.6.2
+      mime: 4.0.3
+      vue: 3.4.24(typescript@5.4.5)
     dev: false
 
   /vue-demi@0.14.7(vue@3.4.24):

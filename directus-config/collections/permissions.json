@@ -37,6 +37,28 @@
   },
   {
     "role": "62a8abe7-e3ae-462e-b038-58ce5a2f5475",
+    "collection": "bookable_object_group",
+    "action": "update",
+    "permissions": {
+      "_and": [
+        {
+          "group_id": {
+            "users": {
+              "directus_users_id": {
+                "_eq": "$CURRENT_USER"
+              }
+            }
+          }
+        }
+      ]
+    },
+    "validation": null,
+    "presets": null,
+    "fields": null,
+    "_syncId": "d7d06a75-796d-49d1-856b-9c13e9a25f44"
+  },
+  {
+    "role": "62a8abe7-e3ae-462e-b038-58ce5a2f5475",
     "collection": "bookable_object",
     "action": "create",
     "permissions": null,
@@ -102,6 +124,41 @@
   },
   {
     "role": "62a8abe7-e3ae-462e-b038-58ce5a2f5475",
+    "collection": "bookable_object",
+    "action": "update",
+    "permissions": {
+      "_and": [
+        {
+          "group": {
+            "group_id": {
+              "users": {
+                "directus_users_id": {
+                  "_eq": "$CURRENT_USER"
+                }
+              }
+            }
+          }
+        },
+        {
+          "group": {
+            "group_id": {
+              "users": {
+                "role": {
+                  "_eq": "admin"
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
+    "validation": null,
+    "presets": null,
+    "fields": null,
+    "_syncId": "f2c82f35-2d43-4cfc-8182-3e1c632ef94d"
+  },
+  {
+    "role": "62a8abe7-e3ae-462e-b038-58ce5a2f5475",
     "collection": "Booking",
     "action": "create",
     "permissions": {},
@@ -111,6 +168,149 @@
       "*"
     ],
     "_syncId": "e3ed4e8f-c595-4ea3-bfce-742bbbbc2953"
+  },
+  {
+    "role": "62a8abe7-e3ae-462e-b038-58ce5a2f5475",
+    "collection": "Booking",
+    "action": "read",
+    "permissions": {
+      "_and": [
+        {
+          "bookable_object_id": {
+            "group": {
+              "group_id": {
+                "users": {
+                  "directus_users_id": {
+                    "_eq": "$CURRENT_USER"
+                  }
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
+    "validation": null,
+    "presets": null,
+    "fields": [
+      "id",
+      "status",
+      "date_created",
+      "user_created",
+      "user_updated",
+      "date_updated",
+      "start_date",
+      "bookable_object_id",
+      "is_full_day",
+      "end_date",
+      "phone",
+      "mail",
+      "description",
+      "confirmed"
+    ],
+    "_syncId": "517d22a4-0f60-4150-ac28-60ade2e186d4"
+  },
+  {
+    "role": "62a8abe7-e3ae-462e-b038-58ce5a2f5475",
+    "collection": "Booking",
+    "action": "update",
+    "permissions": {
+      "_and": [
+        {
+          "bookable_object_id": {
+            "group": {
+              "group_id": {
+                "users": {
+                  "directus_users_id": {
+                    "_eq": "$CURRENT_USER"
+                  }
+                }
+              }
+            }
+          }
+        },
+        {
+          "bookable_object_id": {
+            "group": {
+              "group_id": {
+                "users": {
+                  "role": {
+                    "_eq": "member"
+                  }
+                }
+              }
+            }
+          }
+        },
+        {
+          "bookable_object_id": {
+            "group": {
+              "group_id": {
+                "users": {
+                  "role": {
+                    "_eq": "admin"
+                  }
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
+    "validation": null,
+    "presets": null,
+    "fields": null,
+    "_syncId": "7496817e-694b-4b31-891e-f2821faeba10"
+  },
+  {
+    "role": "62a8abe7-e3ae-462e-b038-58ce5a2f5475",
+    "collection": "directus_files",
+    "action": "create",
+    "permissions": {},
+    "validation": {},
+    "presets": null,
+    "fields": [
+      "*"
+    ],
+    "_syncId": "9c7dbd1c-edef-4805-8960-4de09e968f15"
+  },
+  {
+    "role": "62a8abe7-e3ae-462e-b038-58ce5a2f5475",
+    "collection": "directus_files",
+    "action": "delete",
+    "permissions": {
+      "_and": [
+        {
+          "uploaded_by": {
+            "_eq": "$CURRENT_USER"
+          }
+        }
+      ]
+    },
+    "validation": null,
+    "presets": null,
+    "fields": null,
+    "_syncId": "61337a98-5d29-4004-9c86-01584a0090d8"
+  },
+  {
+    "role": "62a8abe7-e3ae-462e-b038-58ce5a2f5475",
+    "collection": "directus_files",
+    "action": "read",
+    "permissions": {
+      "_and": [
+        {
+          "uploaded_by": {
+            "_eq": "$CURRENT_USER"
+          }
+        }
+      ]
+    },
+    "validation": {},
+    "presets": null,
+    "fields": [
+      "*"
+    ],
+    "_syncId": "f40eed12-3aff-43e7-976a-a023df66ebaf"
   },
   {
     "role": "62a8abe7-e3ae-462e-b038-58ce5a2f5475",
@@ -159,6 +359,63 @@
       "first_name"
     ],
     "_syncId": "a712308f-bb96-4569-8f70-5142178a6129"
+  },
+  {
+    "role": "62a8abe7-e3ae-462e-b038-58ce5a2f5475",
+    "collection": "group_directus_users",
+    "action": "create",
+    "permissions": {},
+    "validation": {},
+    "presets": null,
+    "fields": [
+      "*"
+    ],
+    "_syncId": "37c38c5f-e79e-482d-91cd-c1834e161f13"
+  },
+  {
+    "role": "62a8abe7-e3ae-462e-b038-58ce5a2f5475",
+    "collection": "group_directus_users",
+    "action": "read",
+    "permissions": {
+      "_and": [
+        {
+          "directus_users_id": {
+            "_eq": "$CURRENT_USER"
+          }
+        }
+      ]
+    },
+    "validation": {},
+    "presets": null,
+    "fields": [
+      "*"
+    ],
+    "_syncId": "cfbf30fa-5825-4375-85a6-23e304b77b5b"
+  },
+  {
+    "role": "62a8abe7-e3ae-462e-b038-58ce5a2f5475",
+    "collection": "group_directus_users",
+    "action": "update",
+    "permissions": {
+      "_and": [
+        {
+          "directus_users_id": {
+            "_eq": "$CURRENT_USER"
+          }
+        },
+        {
+          "role": {
+            "_eq": "admin"
+          }
+        }
+      ]
+    },
+    "validation": {},
+    "presets": null,
+    "fields": [
+      "*"
+    ],
+    "_syncId": "20bfc9d1-8cba-4bce-b0e2-41f44ad5b23b"
   },
   {
     "role": "62a8abe7-e3ae-462e-b038-58ce5a2f5475",
@@ -223,7 +480,8 @@
       "status",
       "description",
       "sort",
-      "owner"
+      "owner",
+      "avatar"
     ],
     "_syncId": "a8ec1f4b-ad82-4bb2-836e-1acee571b9ac"
   },

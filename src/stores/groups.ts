@@ -1,5 +1,5 @@
 import { defineStore } from 'pinia'
-import { ref } from 'vue'
+import { computed, ref } from 'vue'
 import type { Group } from '@/types'
 import { useBookableObjects } from '@/stores/bookableObjects'
 import { useUser } from '@/stores/user'
@@ -9,7 +9,7 @@ export const useGroups = defineStore('group', () => {
   const { fetchBookableObjectsByGroupId, fetchUserBookableObjects } = useBookableObjects()
 
   const groups = ref<Group[]>([])
-  const selectedGroupId = ref<string | null>(getSelectedGroup() || null)
+  const selectedGroupId = ref<string | undefined>(getSelectedGroup() || undefined)
 
   const selectGroup = async (group: Group) => {
     console.log('selecting group', group)
@@ -35,5 +35,7 @@ export const useGroups = defineStore('group', () => {
     groups.value.push(group)
   }
 
-  return { groups, selectedGroupId, setGroups, addGroup, selectGroup }
+  const selectedGroup = computed(() => groups.value.find((g) => g.id === selectedGroupId.value) as Group | undefined)
+
+  return { groups, selectedGroupId, selectedGroup, setGroups, addGroup, selectGroup }
 })

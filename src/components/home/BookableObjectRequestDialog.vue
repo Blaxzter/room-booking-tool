@@ -1,7 +1,11 @@
 <script setup lang="ts">
-import { Button } from '@/components/ui/button'
-import { Checkbox } from '@/components/ui/checkbox'
-import { Textarea } from '@/components/ui/textarea'
+import { h, watch } from 'vue'
+import { useForm } from 'vee-validate'
+import { toTypedSchema } from '@vee-validate/zod'
+import * as z from 'zod'
+import { storeToRefs } from 'pinia'
+
+import { FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form'
 import {
   Dialog,
   DialogContent,
@@ -11,20 +15,59 @@ import {
   DialogTitle,
   DialogTrigger
 } from '@/components/ui/dialog'
+import { PlusCircledIcon } from '@radix-icons/vue'
 import { Input } from '@/components/ui/input'
+import { Label } from '@/components/ui/label'
+import { toast } from '@/components/ui/toast'
+import { Button } from '@/components/ui/button'
+import { Checkbox } from '@/components/ui/checkbox'
+
+import { Textarea } from '@/components/ui/textarea'
+import GroupSelect from '@/components/bits/GroupSelect.vue'
+
 import NameFade from '@/components/utils/NameFade.vue'
 
-import { Label } from '@/components/ui/label'
-import { ref } from 'vue'
-import { BookableObjectImpl, type BookableObject } from '@/types'
-import { PlusCircledIcon } from '@radix-icons/vue'
+import { useGroups } from '@/stores/groups'
 import { bookableObjectRandoms } from '@/assets/ts/constants'
 
-const bookableObject = ref<BookableObject>(BookableObjectImpl)
+const { selectedGroup, selectedGroupId } = storeToRefs(useGroups())
 
-const createBookableObject = () => {
-  console.log('Creating bookableObject', bookableObject.value)
-}
+const formSchema = toTypedSchema(
+  z.object({
+    name: z.string({
+      required_error: 'Please enter a name.'
+    }),
+    description: z.string({
+      required_error: 'Please enter a description.'
+    }),
+    groupName: z.string({
+      required_error: 'Please select an email to display.'
+    })
+  })
+)
+
+const { handleSubmit } = useForm({
+  validationSchema: formSchema,
+  initialValues: {
+    groupName: selectedGroupId.value
+  }
+})
+
+// watch selectedGroup
+watch(selectedGroup, (value) => {
+  console.log('selectedGroup', value)
+})
+
+const onSubmit = handleSubmit((values) => {
+  toast({
+    title: 'You submitted the following values:',
+    description: h(
+      'pre',
+      { class: 'mt-2 w-[340px] rounded-md bg-slate-950 p-4' },
+      h('code', { class: 'text-white' }, JSON.stringify(values, null, 2))
+    )
+  })
+})
 </script>
 
 <template>
@@ -43,21 +86,44 @@ const createBookableObject = () => {
         </DialogTitle>
         <DialogDescription> Please find the details of your bookableObject. </DialogDescription>
       </DialogHeader>
-      <div class="grid gap-4 py-4">
-        <div class="grid grid-cols-4 items-center gap-4">
-          <Label for="name" class="text-right"> Name </Label>
-          <Input type="text" id="name" v-model="bookableObject.name" class="col-span-3" />
-        </div>
-        <div class="grid grid-cols-4 items-center gap-4">
-          <Label for="description" class="text-right"> Description </Label>
-          <Textarea type="text" id="description" v-model="bookableObject.description" class="col-span-3" readonly />
-        </div>
-      </div>
-      <DialogFooter>
-        <Button @click="createBookableObject" class="min-w-[120px]">
-          <span>Create <NameFade :messages="bookableObjectRandoms" /></span>
-        </Button>
-      </DialogFooter>
+      <form class="grid gap-4 py-4" @submit="onSubmit">
+        <FormField v-slot="{ componentField }" name="name">
+          <FormItem>
+            <FormLabel>Name</FormLabel>
+            <FormControl>
+              <Input type="text" placeholder="The moon" v-bind="componentField" />
+            </FormControl>
+            <FormDescription> Please enter the name of the bookable object. </FormDescription>
+            <FormMessage />
+          </FormItem>
+        </FormField>
+        <FormField v-slot="{ componentField }" name="description">
+          <FormItem>
+            <FormLabel>Description</FormLabel>
+            <FormControl>
+              <Textarea placeholder="The moon is a beautiful place." v-bind="componentField" />
+            </FormControl>
+            <FormDescription> Please enter the description of the bookable object. </FormDescription>
+            <FormMessage />
+          </FormItem>
+        </FormField>
+        <FormField v-slot="{ componentField }" name="groupName">
+          <FormItem>
+            <FormLabel>Group</FormLabel>
+            <GroupSelect :selectedGroup="componentField" />
+            <FormDescription>
+              Please select the group of the bookable object.
+              <span v-if="selectedGroupId">Your currently selected group is chosen by default.</span>
+            </FormDescription>
+            <FormMessage />
+          </FormItem>
+        </FormField>
+        <DialogFooter>
+          <Button type="submit" class="min-w-[120px]">
+            <span>Create <NameFade :messages="bookableObjectRandoms" /></span>
+          </Button>
+        </DialogFooter>
+      </form>
     </DialogContent>
   </Dialog>
 </template>
