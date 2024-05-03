@@ -1,5 +1,352 @@
 [
   {
+    "role": "3038fc7f-e60d-4282-af54-ce712665a9fb",
+    "collection": "directus_dashboards",
+    "action": "create",
+    "permissions": {},
+    "validation": null,
+    "presets": null,
+    "fields": [
+      "*"
+    ],
+    "_syncId": "de655cbe-a8a8-4423-9d47-3d160ffef575"
+  },
+  {
+    "role": "3038fc7f-e60d-4282-af54-ce712665a9fb",
+    "collection": "directus_dashboards",
+    "action": "delete",
+    "permissions": {},
+    "validation": null,
+    "presets": null,
+    "fields": [
+      "*"
+    ],
+    "_syncId": "6f3bc1a3-c8f2-44ce-b6b8-1d97644249fe"
+  },
+  {
+    "role": "3038fc7f-e60d-4282-af54-ce712665a9fb",
+    "collection": "directus_dashboards",
+    "action": "read",
+    "permissions": {},
+    "validation": null,
+    "presets": null,
+    "fields": [
+      "*"
+    ],
+    "_syncId": "738f87f7-2f8e-4873-aa9c-3773917ab607"
+  },
+  {
+    "role": "3038fc7f-e60d-4282-af54-ce712665a9fb",
+    "collection": "directus_dashboards",
+    "action": "update",
+    "permissions": {},
+    "validation": null,
+    "presets": null,
+    "fields": [
+      "*"
+    ],
+    "_syncId": "0d8f37de-1124-4974-9a38-8da01ad18b64"
+  },
+  {
+    "role": "3038fc7f-e60d-4282-af54-ce712665a9fb",
+    "collection": "directus_fields",
+    "action": "delete",
+    "permissions": {},
+    "validation": {},
+    "presets": null,
+    "fields": [
+      "*"
+    ],
+    "_syncId": "08ba1309-3c0d-41fc-b171-56b31ca9b6b9"
+  },
+  {
+    "role": "3038fc7f-e60d-4282-af54-ce712665a9fb",
+    "collection": "directus_files",
+    "action": "create",
+    "permissions": {},
+    "validation": null,
+    "presets": null,
+    "fields": [
+      "*"
+    ],
+    "_syncId": "dfd0b874-13c8-4750-83c5-ef18fe49881b"
+  },
+  {
+    "role": "3038fc7f-e60d-4282-af54-ce712665a9fb",
+    "collection": "directus_files",
+    "action": "delete",
+    "permissions": {},
+    "validation": null,
+    "presets": null,
+    "fields": [
+      "*"
+    ],
+    "_syncId": "f41ed18d-2300-410c-ac46-41b165974728"
+  },
+  {
+    "role": "3038fc7f-e60d-4282-af54-ce712665a9fb",
+    "collection": "directus_files",
+    "action": "read",
+    "permissions": {},
+    "validation": null,
+    "presets": null,
+    "fields": [
+      "*"
+    ],
+    "_syncId": "8a7cde1a-edc6-4c00-bb3f-cf704d61c17d"
+  },
+  {
+    "role": "3038fc7f-e60d-4282-af54-ce712665a9fb",
+    "collection": "directus_files",
+    "action": "update",
+    "permissions": {},
+    "validation": null,
+    "presets": null,
+    "fields": [
+      "*"
+    ],
+    "_syncId": "f73e4d03-fc64-4cb8-b381-97b5e100229a"
+  },
+  {
+    "role": "3038fc7f-e60d-4282-af54-ce712665a9fb",
+    "collection": "directus_flows",
+    "action": "read",
+    "permissions": {
+      "trigger": {
+        "_eq": "manual"
+      }
+    },
+    "validation": null,
+    "presets": null,
+    "fields": [
+      "id",
+      "status",
+      "name",
+      "icon",
+      "color",
+      "options",
+      "trigger"
+    ],
+    "_syncId": "fae44247-571b-4904-9999-3ae07a0332db"
+  },
+  {
+    "role": "3038fc7f-e60d-4282-af54-ce712665a9fb",
+    "collection": "directus_folders",
+    "action": "create",
+    "permissions": {},
+    "validation": null,
+    "presets": null,
+    "fields": [
+      "*"
+    ],
+    "_syncId": "5691c3e4-4c19-4b97-a193-2def7223de52"
+  },
+  {
+    "role": "3038fc7f-e60d-4282-af54-ce712665a9fb",
+    "collection": "directus_folders",
+    "action": "delete",
+    "permissions": {},
+    "validation": null,
+    "presets": null,
+    "fields": null,
+    "_syncId": "46408a27-dd5a-4438-b4a4-d99a848affb0"
+  },
+  {
+    "role": "3038fc7f-e60d-4282-af54-ce712665a9fb",
+    "collection": "directus_folders",
+    "action": "read",
+    "permissions": {},
+    "validation": null,
+    "presets": null,
+    "fields": [
+      "*"
+    ],
+    "_syncId": "2d64d07c-06f3-41d9-bf20-359389e4fd88"
+  },
+  {
+    "role": "3038fc7f-e60d-4282-af54-ce712665a9fb",
+    "collection": "directus_folders",
+    "action": "update",
+    "permissions": {},
+    "validation": null,
+    "presets": null,
+    "fields": [
+      "*"
+    ],
+    "_syncId": "5571859c-ffb0-4b77-b353-7d603d54fd29"
+  },
+  {
+    "role": "3038fc7f-e60d-4282-af54-ce712665a9fb",
+    "collection": "directus_panels",
+    "action": "create",
+    "permissions": {},
+    "validation": null,
+    "presets": null,
+    "fields": [
+      "*"
+    ],
+    "_syncId": "e669a87e-0f86-47b8-af16-a548decbacc5"
+  },
+  {
+    "role": "3038fc7f-e60d-4282-af54-ce712665a9fb",
+    "collection": "directus_panels",
+    "action": "delete",
+    "permissions": {},
+    "validation": null,
+    "presets": null,
+    "fields": [
+      "*"
+    ],
+    "_syncId": "b716e87b-b0e2-4b30-8c00-8a313d37ca41"
+  },
+  {
+    "role": "3038fc7f-e60d-4282-af54-ce712665a9fb",
+    "collection": "directus_panels",
+    "action": "read",
+    "permissions": {},
+    "validation": null,
+    "presets": null,
+    "fields": [
+      "*"
+    ],
+    "_syncId": "bbb83786-9f86-4ac1-b09f-0b81f10fdd6f"
+  },
+  {
+    "role": "3038fc7f-e60d-4282-af54-ce712665a9fb",
+    "collection": "directus_panels",
+    "action": "update",
+    "permissions": {},
+    "validation": null,
+    "presets": null,
+    "fields": [
+      "*"
+    ],
+    "_syncId": "1feeb74d-6649-4590-8bd3-f31c5bb02a37"
+  },
+  {
+    "role": "3038fc7f-e60d-4282-af54-ce712665a9fb",
+    "collection": "directus_roles",
+    "action": "read",
+    "permissions": {},
+    "validation": null,
+    "presets": null,
+    "fields": [
+      "*"
+    ],
+    "_syncId": "e9807b2b-2a2a-4133-a8fa-2f7d4c056e4c"
+  },
+  {
+    "role": "3038fc7f-e60d-4282-af54-ce712665a9fb",
+    "collection": "directus_shares",
+    "action": "create",
+    "permissions": {},
+    "validation": null,
+    "presets": null,
+    "fields": [
+      "*"
+    ],
+    "_syncId": "a41170cb-676f-47a4-b719-7d1752424e28"
+  },
+  {
+    "role": "3038fc7f-e60d-4282-af54-ce712665a9fb",
+    "collection": "directus_shares",
+    "action": "delete",
+    "permissions": {
+      "user_created": {
+        "_eq": "$CURRENT_USER"
+      }
+    },
+    "validation": null,
+    "presets": null,
+    "fields": [
+      "*"
+    ],
+    "_syncId": "9e608bc9-df96-47df-b373-70504db866d8"
+  },
+  {
+    "role": "3038fc7f-e60d-4282-af54-ce712665a9fb",
+    "collection": "directus_shares",
+    "action": "read",
+    "permissions": {
+      "_or": [
+        {
+          "role": {
+            "_eq": "$CURRENT_ROLE"
+          }
+        },
+        {
+          "role": {
+            "_null": true
+          }
+        }
+      ]
+    },
+    "validation": null,
+    "presets": null,
+    "fields": [
+      "*"
+    ],
+    "_syncId": "3fc6a848-6307-4116-940f-e562af836987"
+  },
+  {
+    "role": "3038fc7f-e60d-4282-af54-ce712665a9fb",
+    "collection": "directus_shares",
+    "action": "update",
+    "permissions": {
+      "user_created": {
+        "_eq": "$CURRENT_USER"
+      }
+    },
+    "validation": null,
+    "presets": null,
+    "fields": [
+      "*"
+    ],
+    "_syncId": "53638f56-1057-4ed0-b950-ad0059677e76"
+  },
+  {
+    "role": "3038fc7f-e60d-4282-af54-ce712665a9fb",
+    "collection": "directus_users",
+    "action": "read",
+    "permissions": {},
+    "validation": null,
+    "presets": null,
+    "fields": [
+      "*"
+    ],
+    "_syncId": "9d645292-a5b6-43e4-9718-1edcb8469160"
+  },
+  {
+    "role": "3038fc7f-e60d-4282-af54-ce712665a9fb",
+    "collection": "directus_users",
+    "action": "update",
+    "permissions": {
+      "id": {
+        "_eq": "$CURRENT_USER"
+      }
+    },
+    "validation": null,
+    "presets": null,
+    "fields": [
+      "first_name",
+      "last_name",
+      "email",
+      "password",
+      "location",
+      "title",
+      "description",
+      "avatar",
+      "language",
+      "appearance",
+      "theme_light",
+      "theme_dark",
+      "theme_light_overrides",
+      "theme_dark_overrides",
+      "tfa_secret"
+    ],
+    "_syncId": "91882fba-2d24-4cbf-8531-f49c9d01e9f9"
+  },
+  {
     "role": "62a8abe7-e3ae-462e-b038-58ce5a2f5475",
     "collection": "bookable_object_group",
     "action": "create",

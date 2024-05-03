@@ -3,9 +3,20 @@
 ## Docker Setup
 
 Run `docker-compose up` to start the development server.
-In a new terminal window run `docker-compose exec -it directus npx directus schema-sync install --force`
-Export the database with `docker-compose exec -it directus npx directus schema-sync export`
 
+### Directus Setup
+After the directus instance is running you have to create the schema, roles and permissions.  
+The extension used is [directus-sync](https://github.com/tractr/directus-sync?tab=readme-ov-file#installation). 
+
+```sh
+npx directus-sync push -u http://localhost:8055 -e 'email' -p 'password'
+```
+
+## Directus after work until another solution is found
+
+1. In the Delete Avatar Image on Delete flow: change api endpoint to your host address.
+   - To solve this you could create a run script that changes this in the exported flow.  
+     directus-config/collections/operations.json
 
 ## Recommended IDE Setup
 
