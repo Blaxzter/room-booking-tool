@@ -1,13 +1,22 @@
 <script setup lang="ts">
 import { computed, ref } from 'vue'
+import { useRoute, useRouter } from 'vue-router'
+
 import { Separator } from '@/components/ui/separator'
 
-import SidebarNav from '@/components/settings/SidebarNav.vue'
+import SidebarNav from '@/components/settings/SettingsSidebarNav.vue'
 import ProfileForm from '@/components/settings/ProfileForm.vue'
 import AccountForm from '@/components/settings/AccountForm.vue'
 import NotificationsForm from '@/components/settings/NotificationsForm.vue'
 
-const selectedPage = ref('profile')
+const router = useRouter()
+const route = useRoute()
+
+const selectedPage = ref<string>(route.params.tab as string)
+if (!['profile', 'account', 'notifications'].includes(selectedPage.value)) {
+  selectedPage.value = 'profile'
+  router.replace({ name: 'settings', params: { tab: 'profile' } })
+}
 
 const pages: Record<string, any> = {
   profile: ProfileForm,

@@ -1,8 +1,18 @@
 <script setup lang="ts">
+import { computed } from 'vue'
+
 import { Button } from '@/components/ui/button'
 import { Menu, Calendar } from 'lucide-vue-next'
 import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet'
+
 import GroupSwitcher from '@/components/groups/GroupSwitcher.vue'
+import { useRoute } from 'vue-router'
+
+const route = useRoute()
+
+const routeName = computed(() => {
+  return route.name
+})
 
 const navElements = [
   { label: 'Dashboard', routeName: 'home' },
@@ -22,7 +32,8 @@ const navElements = [
     <template v-for="(navElement, idx) in navElements" :key="idx">
       <RouterLink
         :to="{ name: navElement.routeName }"
-        class="active:text-foreground text-muted-foreground hover:text-foreground"
+        class="hover:text-foreground"
+        :class="routeName === navElement.routeName ? 'text-foreground' : 'text-muted-foreground'"
         >{{ navElement.label }}</RouterLink
       >
     </template>
@@ -44,6 +55,7 @@ const navElements = [
           <RouterLink
             :to="{ name: navElement.routeName }"
             class="active:text-foreground text-muted-foreground hover:text-foreground"
+            :class="routeName === navElement.routeName ? 'text-red-500' : ''"
             >{{ navElement.label }}</RouterLink
           >
         </template>

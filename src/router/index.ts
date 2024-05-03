@@ -26,9 +26,15 @@ const router = createRouter({
           component: () => import('@/views/RequestView.vue')
         },
         {
-          path: '/settings',
+          path: '/settings/:tab',
           name: 'settings',
           component: () => import('@/views/SettingsView.vue')
+        },
+        {
+          path: '/bookable-object-edit/:id',
+          alias: ['/room-edit/:id', '/equipment-edit/:id'],
+          name: 'bookable-object-edit',
+          component: () => import('@/views/BookableObjectEditView.vue')
         }
       ]
     },
