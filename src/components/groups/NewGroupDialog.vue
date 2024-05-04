@@ -1,41 +1,65 @@
 <script setup lang="ts">
+import { ref } from 'vue'
+import { toTypedSchema } from '@vee-validate/zod'
+import * as z from 'zod'
+import { useForm } from 'vee-validate'
+
+import { randomGroupName } from '@/assets/ts/constants'
+import { useGroups } from '@/stores/groups'
+
 import { DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from '@/components/ui/dialog'
+import { FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form'
 import { Label } from '@/components/ui/label'
 import { Input } from '@/components/ui/input'
+import { Textarea } from '@/components/ui/textarea'
 import { Button } from '@/components/ui/button'
-import { DropdownMenu, DropdownMenuContent, DropdownMenuTrigger } from '@/components/ui/dropdown-menu'
+import { useToast } from '@/components/ui/toast'
 
-import data from 'emoji-mart-vue-fast/data/all.json'
-import { Emoji, Picker, EmojiIndex } from 'emoji-mart-vue-fast/src'
 import AvatarUploadComponent from '@/components/utils/AvatarUploadComponent.vue'
-import RandomEmoji from '@/components/utils/RandomEmoji.vue'
-import { ref } from 'vue'
+import EmojiPicker from '@/components/utils/EmojiPicker.vue'
+
+const { toast } = useToast()
+const { createGroup } = useGroups()
 
 const emit = defineEmits(['close'])
-// define open as v-model
-const open = defineModel()
 
-const emojiIndex = new EmojiIndex(data)
-const selectedEmoji = ref<string | null>(null)
+const selectedEmoji = ref<string | undefined>(undefined)
+const avatarUpload = ref()
 
-const showEmoji = (emoji) => {
-  selectedEmoji.value = emoji.native
-}
+const profileFormSchema = toTypedSchema(
+  z.object({
+    name: z
+      .string()
+      .min(2, {
+        message: 'Group name must be at least 2 characters.'
+      })
+      .max(30, {
+        message: 'Group name must not be longer than 30 characters.'
+      }),
+    description: z
+      .string()
+      .max(160, { message: 'Group description must not be longer than 160 characters.' })
+      .optional(),
+    emoji: z.string().optional(),
+    avatar: z.string().optional()
+  })
+)
 
-const groupNames: string[] = [
-  'Power Rangers',
-  'Die Fantastischen Vier',
-  'Die Ärzte',
-  'Scorpions',
-  'Simpsons',
-  'Die drei ???',
-  'Backstreet Boys',
-  "Destiny's Child",
-  'Nirvana',
-  'The Beatles',
-  'ABBA',
-  'Queen'
-]
+const { handleSubmit } = useForm({
+  validationSchema: profileFormSchema,
+  initialValues: {}
+})
+
+const onSubmit = handleSubmit(async (values) => {
+  values.avatar = await avatarUpload.value.uploadImage()
+  values.emoji = selectedEmoji.value
+  console.log(values)
+  const newGroup = await createGroup(values)
+  toast({
+    title: 'Group created',
+    description: `The group ${newGroup.name} has been created.`
+  })
+})
 </script>
 
 <template>
@@ -44,44 +68,48 @@ const groupNames: string[] = [
       <DialogTitle>Create group</DialogTitle>
       <DialogDescription> Add a new group to manage rooms and other bookable objects. </DialogDescription>
     </DialogHeader>
-    <div>
-      <div class="space-y-4 py-2 pb-4">
-        <div class="space-y-2">
-          <Label for="name">Group Image</Label>
-          <div class="flex items-center justify-center">
-            <div class="mt-1 flex flex-col items-center">
-              <AvatarUploadComponent />
-              <div class="text-sm text-gray-500 mt-3">Upload an Image</div>
-            </div>
+    <form class="space-y-4" @submit="onSubmit">
+      <div class="space-y-2">
+        <Label for="name">Group Image</Label>
+        <div class="flex items-center justify-center">
+          <div class="mt-1 flex flex-col items-center w-[120px]">
+            <AvatarUploadComponent ref="avatarUpload" />
+            <div class="text-sm text-gray-500 mt-3">Upload an Image</div>
+          </div>
 
-            <div class="mx-5">or</div>
+          <div class="mx-5 mb-7">or</div>
 
-            <div class="flex flex-col items-center">
-              <DropdownMenu>
-                <DropdownMenuTrigger>
-                  <div class="border border-gray-200 rounded-full cursor-pointer mt-1">
-                    <emoji v-if="selectedEmoji" :data="emojiIndex" :emoji="selectedEmoji" :size="50" :native="true" />
-                    <RandomEmoji v-else :size="50" />
-                  </div>
-                </DropdownMenuTrigger>
-                <DropdownMenuContent>
-                  <Picker :data="emojiIndex" set="twitter" @select="showEmoji" />
-                </DropdownMenuContent>
-              </DropdownMenu>
-              <div class="text-sm text-gray-500 mt-2">Select an Emoji</div>
-            </div>
+          <div class="flex flex-col items-center w-[120px]">
+            <EmojiPicker v-model="selectedEmoji" />
+            <div class="text-sm text-gray-500 mt-3">Select an Emoji</div>
           </div>
         </div>
-        <div class="space-y-2">
-          <Label for="name">Group name</Label>
-          <Input id="name" :placeholder="groupNames[Math.floor(Math.random() * groupNames.length)]" />
-        </div>
       </div>
-    </div>
-    <DialogFooter>
-      <Button variant="outline" @click="emit('close')"> Cancel </Button>
-      <Button type="submit"> Continue </Button>
-    </DialogFooter>
+      <FormField v-slot="{ componentField }" name="name">
+        <FormItem>
+          <FormLabel>Group name</FormLabel>
+          <FormControl>
+            <Input type="text" :placeholder="randomGroupName()" v-bind="componentField" />
+          </FormControl>
+          <FormDescription> This is the name of the group that will be displayed to users. </FormDescription>
+          <FormMessage />
+        </FormItem>
+      </FormField>
+      <FormField v-slot="{ componentField }" name="description">
+        <FormItem>
+          <FormLabel>Description</FormLabel>
+          <FormControl>
+            <Textarea placeholder="A short description of the group" v-bind="componentField" />
+          </FormControl>
+          <FormDescription> This is a short description of the group that will be displayed to users. </FormDescription>
+          <FormMessage />
+        </FormItem>
+      </FormField>
+      <DialogFooter>
+        <Button variant="outline" @click="emit('close')"> Cancel </Button>
+        <Button type="submit"> Continue </Button>
+      </DialogFooter>
+    </form>
   </DialogContent>
 </template>
 

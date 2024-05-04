@@ -1,8 +1,10 @@
-import { defineStore } from 'pinia'
+import { defineStore, storeToRefs } from 'pinia'
 import { computed, ref } from 'vue'
-import type { Group } from '@/types'
+import type { GroupDirectusUser, CreateGroupRequest, Group } from '@/types'
 import { useBookableObjects } from '@/stores/bookableObjects'
 import { useUser } from '@/stores/user'
+import { useAuth } from '@/stores/auth'
+import { createItem } from '@directus/sdk'
 
 export const useGroups = defineStore('group', () => {
   const { setSelectedGroup, getSelectedGroup } = useUser()
@@ -13,9 +15,9 @@ export const useGroups = defineStore('group', () => {
 
   const selectGroup = async (group: Group) => {
     console.log('selecting group', group)
-    setSelectedGroup(group.id)
+    setSelectedGroup(group.id as string)
     selectedGroupId.value = group.id
-    if (group.id !== '-1') await fetchBookableObjectsByGroupId(group.id)
+    if (group.id !== '-1') await fetchBookableObjectsByGroupId(group.id as string)
     else fetchUserBookableObjects()
   }
 
@@ -37,5 +39,24 @@ export const useGroups = defineStore('group', () => {
 
   const selectedGroup = computed(() => groups.value.find((g) => g.id === selectedGroupId.value) as Group | undefined)
 
-  return { groups, selectedGroupId, selectedGroup, setGroups, addGroup, selectGroup }
+  const createGroup = async (group: CreateGroupRequest) => {
+    const { client } = useAuth()
+    const { user } = storeToRefs(useAuth())
+
+    group.owner = user.value.id
+    group.users = [
+      {
+        directus_users_id: user.value.id,
+        role: 'admin'
+      }
+    ]
+    console.log(group)
+    const result = await client.request(createItem('group', group))
+    console.log(result)
+    // cast result to Group
+    addGroup(result as Group)
+    return result
+  }
+
+  return { groups, selectedGroupId, selectedGroup, setGroups, addGroup, selectGroup, createGroup }
 })

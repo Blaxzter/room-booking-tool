@@ -1,5 +1,8 @@
 export type MySchema = {
   bookable_object: BookableObject[]
+  booking: Booking[]
+  group: Group[]
+  user: User[]
 }
 
 export type Booking = {
@@ -67,10 +70,38 @@ export const BookableObjectImpl: BookableObject = {
 }
 
 export type Group = {
-  id: string
+  id?: string
   name: string
-  description: string
+  description?: string
+  owner?: string
+  avatar?: {
+    id: string
+  }
+  emoji?: string
+  users?: GroupDirectusUser[]
+}
+
+export type CreateGroupRequest = {
+  name: string
+  description?: string
+  owner?: string
+  emoji?: string
   avatar?: string
+  users?: GroupDirectusUser[]
+}
+
+export type GroupUser = {
+  id?: string
+  first_name: string
+  last_name: string
+  email: string
+}
+
+export type GroupDirectusUser = {
+  id?: string
+  directus_users_id: string
+  group_id?: string
+  role: string
 }
 
 export type User = {

@@ -3,7 +3,7 @@ import { ref } from 'vue'
 import { cn } from '@/lib/utils'
 import { EllipsisVertical } from 'lucide-vue-next'
 import type { BookableObject } from '@/types'
-import RandomEmoji from '@/components/utils/RandomEmoji.vue'
+import RandomEmoji from '@/components/utils/Emoji.vue'
 import { Button } from '@/components/ui/button'
 
 import { useRouter } from 'vue-router'

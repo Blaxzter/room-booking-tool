@@ -10,6 +10,7 @@ query Initial_Data {
         date_updated
         name
         description
+        emoji
         avatar {
             id
         }
@@ -23,7 +24,9 @@ query Initial_Data {
         name
         description
         tags
-        image
+        image {
+          id
+        }
         is_internal
     }
 }
@@ -39,6 +42,7 @@ query Bookable_object {
         date_updated
         name
         description
+        emoji
         avatar {
             id
         }

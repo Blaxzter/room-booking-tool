@@ -1,35 +1,9 @@
-<template>
-  <div class="rounded text-center">
-    <Avatar
-      class="w-[5rem] h-[5rem] cursor-pointer hover:opacity-75"
-      :class="`pastel-color-${random}`"
-      @click="showCropper = true"
-    >
-      <AvatarImage v-if="avatar" :src="avatar" />
-      <AvatarFallback>
-        <UploadIcon class="w-8 h-8" />
-      </AvatarFallback>
-    </Avatar>
-    <avatar-cropper
-      :cropper-options="{
-        aspectRatio: 1,
-        autoCropArea: 1,
-        movable: true,
-        zoomable: true
-      }"
-      v-model="showCropper"
-      :upload-handler="uploadHandler"
-      upload-file-name="group-image"
-    />
-  </div>
-</template>
-
 <script setup lang="ts">
 import { ref } from 'vue'
-import { deleteFile, uploadFiles } from '@directus/sdk'
+import { uploadFiles } from '@directus/sdk'
 
-import { UploadIcon } from 'lucide-vue-next'
-// noinspection TypeScriptCheckImport
+import { UploadIcon, XIcon } from 'lucide-vue-next'
+// @ts-ignore
 import AvatarCropper from 'vue-avatar-cropper'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 
@@ -38,8 +12,8 @@ import { useAuth } from '@/stores/auth'
 const { client } = useAuth()
 
 const showCropper = ref(false)
-const selectedImageId = ref<string | null>(null)
-const avatar = ref<string | undefined>(undefined)
+const avatar = ref<string>('')
+const toBeUploadedImage = ref<Blob | null>(null)
 
 const emits = defineEmits(['message'])
 
@@ -51,26 +25,67 @@ const uploadHandler = (copperJsInstance: any) => {
       if (!blob) {
         return
       }
-      if (selectedImageId.value) {
-        await client.request(deleteFile(selectedImageId.value))
-      }
-
-      const formData = new FormData()
-      formData.append('folder', '9fd6c738-e603-4af0-9a7f-7512a44494f6')
-      formData.append('file', blob, 'group-image.png')
-
-      const result = await client.request(uploadFiles(formData))
-      selectedImageId.value = result.id
-      avatar.value = `http://localhost:8055/assets/${result.id}`
+      // create local url from blob
+      avatar.value = URL.createObjectURL(blob)
+      toBeUploadedImage.value = blob
     },
     'image/png, image/gif, image/jpeg, image/bmp, image/x-icon',
     0.9
   )
 }
 
+const clearImage = () => {
+  avatar.value = ''
+  toBeUploadedImage.value = null
+}
+
 // random number between 1 and 500
 const random = Math.floor(Math.random() * 500) + 1
+
+const uploadImage = async (): Promise<string | undefined> => {
+  if (!toBeUploadedImage.value) {
+    return undefined
+  }
+
+  const formData = new FormData()
+  formData.append('folder', '9fd6c738-e603-4af0-9a7f-7512a44494f6')
+  formData.append('file', toBeUploadedImage.value, 'group-image.png')
+
+  const result = await client.request(uploadFiles(formData))
+  return result.id
+}
+
+defineExpose({ uploadImage })
 </script>
+
+<template>
+  <div class="rounded text-center relative">
+    <div v-if="toBeUploadedImage" class="absolute end-[-5px] top-[-5px]">
+      <XIcon class="w-4 h-4 cursor-pointer hover:opacity-75" @click="clearImage" />
+    </div>
+    <Avatar
+      class="w-[5rem] h-[5rem] cursor-pointer hover:opacity-75"
+      :class="`pastel-color-${random}`"
+      @click="showCropper = true"
+    >
+      <AvatarImage :src="avatar" />
+      <AvatarFallback>
+        <UploadIcon class="w-8 h-8" />
+      </AvatarFallback>
+    </Avatar>
+
+    <avatar-cropper
+      :cropper-options="{
+        aspectRatio: 1,
+        autoCropArea: 1,
+        movable: true,
+        zoomable: true
+      }"
+      v-model="showCropper"
+      :upload-handler="uploadHandler"
+    />
+  </div>
+</template>
 
 <style lang="scss">
 @import '@/assets/css/colors.scss';

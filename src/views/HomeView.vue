@@ -15,8 +15,8 @@ import CalenderLoader from '@/components/animations/CalenderLoader.vue'
 import BookableObjectRequestDialog from '@/components/home/BookableObjectRequestDialog.vue'
 import NameFade from '@/components/utils/NameFade.vue'
 
-import { bookableObjectList } from '@/assets/ts/tempdata'
 import { bookableObjectRandoms } from '@/assets/ts/constants'
+import NotFoundAnimation from '@/components/animations/NotFoundAnimation.vue'
 
 const router = useRouter()
 
@@ -63,7 +63,7 @@ onMounted(async () => {
         <div class="relative">
           <CalenderLoader :height="150" v-if="loading" />
           <ScrollArea v-else>
-            <div class="flex space-x-4 pb-4" v-if="bookableObjectList.length">
+            <div class="flex space-x-4 pb-4" v-if="bookableObjects.length > 0">
               <BookableObjectCard
                 v-for="bookableObject in filteredBookableObjectList"
                 :key="bookableObject.name"
@@ -82,8 +82,11 @@ onMounted(async () => {
                 "
               />
             </div>
-            <div v-else>
-              <p class="text-center text-muted-foreground">No bookable objects found</p>
+            <div v-else class="mt-3">
+              <NotFoundAnimation :height="200" />
+              <p class="text-center text-muted-foreground">
+                No bookable <NameFade :messages="bookableObjectRandoms" /> found.
+              </p>
             </div>
             <ScrollBar orientation="horizontal" />
           </ScrollArea>

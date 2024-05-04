@@ -24,8 +24,9 @@ import NewGroupDialog from '@/components/groups/NewGroupDialog.vue'
 import { useAuth } from '@/stores/auth'
 import { useGroups } from '@/stores/groups'
 import { storeToRefs } from 'pinia'
+import Emoji from '@/components/utils/Emoji.vue'
 
-type GroupsDisplayData = { label: string | null; teams: Group[] }[]
+type GroupsDisplayData = { label: string; teams: Group[] }[]
 
 const groupStore = useGroups()
 const authStore = useAuth()
@@ -73,7 +74,9 @@ const displayData: ComputedRef<GroupsDisplayData> = computed(() => {
         (group: Group): Group => ({
           id: group.id,
           name: group.name,
-          description: group.description
+          description: group.description,
+          avatar: group.avatar,
+          emoji: group.emoji
         })
       )
     }
@@ -120,10 +123,15 @@ const groupClicked = async (team: Group) => {
           :class="cn('w-[200px] justify-between', $attrs.class ?? '')"
           v-if="selectedTeam"
         >
-          <Avatar class="mr-2 h-5 w-5">
-            <AvatarImage :src="`${selectedTeam.avatar}`" :alt="selectedTeam.name" />
-            <AvatarFallback>{{ nameInitials(selectedTeam.name) }}</AvatarFallback>
+          <Avatar class="mr-2 h-5 w-5" v-if="!selectedTeam.emoji || selectedTeam?.avatar?.id">
+            <AvatarImage :src="`http://localhost:8055/assets/${selectedTeam?.avatar?.id}`" :alt="selectedTeam.name" />
+            <AvatarFallback>
+              {{ nameInitials(selectedTeam.name) }}
+            </AvatarFallback>
           </Avatar>
+          <div v-else class="me-2 w-[20px] h-[20px]">
+            {{ selectedTeam.emoji }}
+          </div>
           <div class="whitespace-nowrap overflow-ellipsis overflow-hidden w-[150px]">
             {{ selectedTeam.name }}
           </div>
@@ -144,14 +152,19 @@ const groupClicked = async (team: Group) => {
                 class="text-sm"
                 @select="groupClicked(team)"
               >
-                <Avatar class="mr-2 h-5 w-5">
-                  <AvatarImage :src="`${team.avatar}`" :alt="team.name" class="grayscale" />
-                  <AvatarFallback>{{ nameInitials(team.name) }}</AvatarFallback>
+                <Avatar class="mr-2 h-5 w-5" v-if="!team.emoji || team?.avatar?.id">
+                  <AvatarImage :src="`http://localhost:8055/assets/${team?.avatar?.id}`" :alt="team.name" />
+                  <AvatarFallback>
+                    {{ nameInitials(team.name) }}
+                  </AvatarFallback>
                 </Avatar>
+                <div v-else class="me-2 w-[20px] h-[20px]">
+                  {{ team.emoji }}
+                </div>
                 <div class="whitespace-nowrap overflow-ellipsis overflow-hidden w-[120px]">
                   {{ team.name }}
                 </div>
-                <CheckIcon :class="cn('ml-auto h-4 w-4', selectedTeam.id === team.id ? 'opacity-100' : 'opacity-0')" />
+                <CheckIcon :class="cn('ml-auto h-4 w-4', selectedTeam?.id === team.id ? 'opacity-100' : 'opacity-0')" />
               </CommandItem>
             </CommandGroup>
           </CommandList>

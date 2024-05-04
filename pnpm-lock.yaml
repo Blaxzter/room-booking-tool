@@ -32,6 +32,9 @@ dependencies:
   '@radix-icons/vue':
     specifier: ^1.0.0
     version: 1.0.0(vue@3.4.24)
+  '@tanstack/vue-table':
+    specifier: ^8.16.0
+    version: 8.16.0(vue@3.4.24)
   '@vee-validate/zod':
     specifier: ^4.12.6
     version: 4.12.6(vue@3.4.24)
@@ -47,6 +50,9 @@ dependencies:
   clsx:
     specifier: ^2.1.0
     version: 2.1.0
+  country-flag-emoji-polyfill:
+    specifier: ^0.1.8
+    version: 0.1.8
   dayjs:
     specifier: ^1.11.10
     version: 1.11.10
@@ -1106,8 +1112,23 @@ packages:
       tslib: 2.6.2
     dev: false
 
+  /@tanstack/table-core@8.16.0:
+    resolution: {integrity: sha512-dCG8vQGk4js5v88/k83tTedWOwjGnIyONrKpHpfmSJB8jwFHl8GSu1sBBxbtACVAPtAQgwNxl0rw1d3RqRM1Tg==}
+    engines: {node: '>=12'}
+    dev: false
+
   /@tanstack/virtual-core@3.4.0:
     resolution: {integrity: sha512-75jXqXxqq5M5Veb9KP1STi8kA5u408uOOAefk2ftHDGCpUk3RP6zX++QqfbmHJTBiU72NQ+ghgCZVts/Wocz8Q==}
+    dev: false
+
+  /@tanstack/vue-table@8.16.0(vue@3.4.24):
+    resolution: {integrity: sha512-CsmX3sEjR1BMlNk9nBYlrnWlAOJR34pirbmpgLN0UZs7N1Z66U+nEqaqNm4FnvkEnauODuHWVbFv3QZuoJ0BXw==}
+    engines: {node: '>=12'}
+    peerDependencies:
+      vue: '>=3.2'
+    dependencies:
+      '@tanstack/table-core': 8.16.0
+      vue: 3.4.24(typescript@5.4.5)
     dev: false
 
   /@tanstack/vue-virtual@3.4.0(vue@3.4.24):
@@ -1813,6 +1834,10 @@ packages:
   /core-js@3.37.0:
     resolution: {integrity: sha512-fu5vHevQ8ZG4og+LXug8ulUtVxjOcEYvifJr7L5Bfq9GOztVqsKd9/59hUk2ZSbCrS3BqUr3EpaYGIYzq7g3Ug==}
     requiresBuild: true
+    dev: false
+
+  /country-flag-emoji-polyfill@0.1.8:
+    resolution: {integrity: sha512-Mbah52sADS3gshUYhK5142gtUuJpHYOXlXtLFI3Ly4RqgkmPMvhX9kMZSTqDM8P7UqtSW99eHKFphhQSGXA3Cg==}
     dev: false
 
   /cropperjs@1.6.2:

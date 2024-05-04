@@ -1,4 +1,29 @@
 @use "sass:math";
+@use "sass:color";
+
+@function luminance($color) {
+  $rgb: red($color) * 0.2126 + green($color) * 0.7152 + blue($color) * 0.0722;
+  @return $rgb / 255;
+}
+
+@function contrast_ratio($color1, $color2) {
+  $l1: luminance($color1) + 0.05;
+  $l2: luminance($color2) + 0.05;
+
+  @return if($l1 > $l2, $l1 / $l2, $l2 / $l1);
+}
+
+@function text-color-for-background($background) {
+  $black_contrast: contrast_ratio($background, rgb(2 6 23));
+  $white_contrast: contrast_ratio($background, rgb(248 250 252));
+
+  @if $black_contrast > $white_contrast {
+    @return rgb(2 6 23);
+  } @else {
+    @return rgb(248 250 252);
+  }
+}
+
 
 @function random_pastel() {
   $r: random(255);
@@ -13,7 +38,9 @@
 }
 
 @for $i from 0 to 501 {
-  .pastel-color-#{$i}{
-    background: random_pastel();
+  $bg-color: random_pastel();
+  .pastel-color-#{$i} {
+    background: $bg-color;
+    color: text-color-for-background($bg-color);
   }
 }
