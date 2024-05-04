@@ -1,39 +1,33 @@
 {
   "collection": "group",
-  "field": "owner",
-  "type": "uuid",
+  "field": "emoji",
+  "type": "string",
   "meta": {
     "collection": "group",
     "conditions": null,
-    "display": "related-values",
-    "display_options": {
-      "template": "{{first_name}} {{last_name}} {{email}}"
-    },
-    "field": "owner",
+    "display": null,
+    "display_options": null,
+    "field": "emoji",
     "group": null,
     "hidden": false,
-    "interface": "select-dropdown-m2o",
+    "interface": "input",
     "note": null,
-    "options": {
-      "template": "{{first_name}} {{last_name}} {{email}}"
-    },
+    "options": null,
     "readonly": false,
-    "required": true,
-    "sort": 4,
-    "special": [
-      "m2o"
-    ],
+    "required": false,
+    "sort": 3,
+    "special": null,
     "translations": null,
     "validation": null,
     "validation_message": null,
     "width": "full"
   },
   "schema": {
-    "name": "owner",
+    "name": "emoji",
     "table": "group",
-    "data_type": "uuid",
+    "data_type": "character varying",
     "default_value": null,
-    "max_length": null,
+    "max_length": 255,
     "numeric_precision": null,
     "numeric_scale": null,
     "is_nullable": true,
@@ -42,7 +36,7 @@
     "is_generated": false,
     "generation_expression": null,
     "has_auto_increment": false,
-    "foreign_key_table": "directus_users",
-    "foreign_key_column": "id"
+    "foreign_key_table": null,
+    "foreign_key_column": null
   }
 }

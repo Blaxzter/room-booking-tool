@@ -229,10 +229,10 @@ type Subscription {
   directus_versions_mutated(event: EventEnum): directus_versions_mutated
   group_directus_users_mutated(event: EventEnum): group_directus_users_mutated
   bookable_object_group_mutated(event: EventEnum): bookable_object_group_mutated
-  group_mutated(event: EventEnum): group_mutated
   bookable_object_mutated(event: EventEnum): bookable_object_mutated
   directus_settings_mutated(event: EventEnum): directus_settings_mutated
   directus_sync_id_map_mutated(event: EventEnum): directus_sync_id_map_mutated
+  group_mutated(event: EventEnum): group_mutated
 }
 
 """The `Boolean` scalar type represents `true` or `false`."""
@@ -1513,6 +1513,7 @@ type group {
   description: String
   avatar(filter: directus_files_filter, sort: [String], limit: Int, offset: Int, page: Int, search: String): directus_files
   owner(filter: directus_users_filter, sort: [String], limit: Int, offset: Int, page: Int, search: String): directus_users
+  emoji: String
   users(filter: group_directus_users_filter, sort: [String], limit: Int, offset: Int, page: Int, search: String): [group_directus_users]
   users_func: count_functions
 }
@@ -2364,6 +2365,7 @@ input group_filter {
   description: string_filter_operators
   avatar: directus_files_filter
   owner: directus_users_filter
+  emoji: string_filter_operators
   users: group_directus_users_filter
   users_func: count_function_filter_operators
   _and: [group_filter]

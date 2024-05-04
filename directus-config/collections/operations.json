@@ -20,7 +20,7 @@
     "position_x": 37,
     "position_y": 1,
     "options": {
-      "code": "module.exports = async function(data) {\n    if (data?.$last.length > 0) { // check if payload from $last operation is not empty\n        const ids = [];\n        data?.$last.map(item => {\n             // add file-field (asset) id to array of ids\n             ids.push(item?.avatar); \n\n             // it can be another additional file field in your data model\n             // e.g. ids.push(item?.my_image_field);\n             //        ids.push(item?.my_whatever_file_field); \n        })\n        return ids; // This will be the ready-to-go-array of file ids for the DELETE request body\n    }\n    return {};\n}"
+      "code": "module.exports = async function(data) {\n    if (data?.$last.length > 0) { // check if payload from $last operation is not empty\n        const ids = [];\n        data?.$last.map(item => {\n             // add file-field (asset) id to array of ids\n             if (item?.avatar)\n             \tids.push(item?.avatar); \n\n             // it can be another additional file field in your data model\n             // e.g. ids.push(item?.my_image_field);\n             //        ids.push(item?.my_whatever_file_field); \n        })\n        return ids; // This will be the ready-to-go-array of file ids for the DELETE request body\n    }\n    return {};\n}"
     },
     "resolve": "f2814457-4acd-4727-a4fb-f4a817b8eadf",
     "reject": null,
