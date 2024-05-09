@@ -41,7 +41,11 @@ const profileFormSchema = toTypedSchema(
       .max(160, { message: 'Group description must not be longer than 160 characters.' })
       .optional(),
     emoji: z.string().optional(),
-    avatar: z.string().optional()
+    avatar: z
+      .object({
+        id: z.string()
+      })
+      .optional()
   })
 )
 
@@ -51,9 +55,8 @@ const { handleSubmit } = useForm({
 })
 
 const onSubmit = handleSubmit(async (values) => {
-  values.avatar = await avatarUpload.value.uploadImage()
+  values.avatar = { id: await avatarUpload.value.uploadImage() }
   values.emoji = selectedEmoji.value
-  console.log(values)
   const newGroup = await createGroup(values)
   toast({
     title: 'Group created',

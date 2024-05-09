@@ -3,14 +3,14 @@
 
 @function luminance($color) {
   $rgb: red($color) * 0.2126 + green($color) * 0.7152 + blue($color) * 0.0722;
-  @return $rgb / 255;
+  @return math.div($rgb, 255);
 }
 
 @function contrast_ratio($color1, $color2) {
   $l1: luminance($color1) + 0.05;
   $l2: luminance($color2) + 0.05;
 
-  @return if($l1 > $l2, $l1 / $l2, $l2 / $l1);
+  @return if($l1 > $l2, math.div($l1, $l2), math.div($l2, $l1));
 }
 
 @function text-color-for-background($background) {

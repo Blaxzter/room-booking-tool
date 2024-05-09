@@ -70,7 +70,7 @@ export const BookableObjectImpl: BookableObject = {
 }
 
 export type Group = {
-  id?: string
+  id: string
   name: string
   description?: string
   owner?: string
@@ -86,7 +86,9 @@ export type CreateGroupRequest = {
   description?: string
   owner?: string
   emoji?: string
-  avatar?: string
+  avatar?: {
+    id: string
+  }
   users?: GroupDirectusUser[]
 }
 

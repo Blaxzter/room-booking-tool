@@ -24,7 +24,6 @@ import NewGroupDialog from '@/components/groups/NewGroupDialog.vue'
 import { useAuth } from '@/stores/auth'
 import { useGroups } from '@/stores/groups'
 import { storeToRefs } from 'pinia'
-import Emoji from '@/components/utils/Emoji.vue'
 
 type GroupsDisplayData = { label: string; teams: Group[] }[]
 
@@ -89,7 +88,9 @@ const showNewTeamDialog = ref(false)
 let selectedTeam = computed(() => {
   console.log('GroupSwitcher', selectedGroupId.value)
   if (selectedGroupId.value != null && selectedGroupId.value !== '-1') {
-    return _.find(groups.value, { id: selectedGroupId.value })
+    const foundGroup = _.find(groups.value, { id: `${selectedGroupId.value}` })
+    console.log('foundGroup', foundGroup)
+    return foundGroup
   }
   return displayData.value[0].teams[0]
 })

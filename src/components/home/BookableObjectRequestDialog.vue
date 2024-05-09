@@ -35,7 +35,8 @@ const stepRefMap: Record<number, any> = {
 
 const steptoValues: Record<number, any> = {
   0: {},
-  1: {}
+  1: {},
+  2: {}
 }
 
 const nextStep = async () => {
@@ -82,7 +83,7 @@ const nextStep = async () => {
             </DialogTitle>
             <DialogDescription> Manage the permission and access. </DialogDescription>
           </DialogHeader>
-          <AccessSettings ref="accessSettings">
+          <AccessSettings ref="accessSettings" :initial-values="steptoValues[1]">
             <template v-slot:footer>
               <DialogFooter>
                 <Button @click="activeStep--" type="button"> Back </Button>

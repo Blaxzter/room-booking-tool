@@ -15,10 +15,16 @@ import { bookableObjectRandoms, bookableObjectRandomsLower } from '@/assets/ts/c
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from '@/components/ui/collapsible'
 
 interface InitialValues {
-  public_visible: boolean
-  confirm_booking_required: boolean
-  confirm_role: string
+  splash_image_object: Blob
+  emoji: string
+  object_type: string
 }
+
+const objectTypes = [
+  { id: 'room', name: 'Room' },
+  { id: 'object', name: 'Object' },
+  { id: 'equipment', name: 'Equipment' }
+]
 
 const props = defineProps({
   initialValues: {
@@ -27,48 +33,27 @@ const props = defineProps({
   }
 })
 
+const { splash_image_object, emoji, object_type } = props.initialValues
+
 const formSchema = toTypedSchema(
   z.object({
-    public_visible: z.boolean(),
-    confirm_booking_required: z.boolean(),
-    confirm_role: z.string().optional()
+    splash_image_object: z.any(),
+    emoji: z.string().optional(),
+    object_type: z.string().optional()
   })
 )
-
-const { public_visible, confirm_booking_required, confirm_role } = props.initialValues
 
 const { values, validate } = useForm({
   validationSchema: formSchema,
   initialValues: {
-    public_visible: public_visible || false,
-    confirm_booking_required: confirm_booking_required || false,
-    confirm_role: confirm_role
+    splash_image_object: splash_image_object || '',
+    emoji: emoji,
+    object_type: object_type
   }
 })
 
-const roles = [
-  { id: 'admin', name: 'Admin' },
-  { id: 'member', name: 'Member' }
-]
-
 const getValues = computed(() => values)
 defineExpose({ getValues, validate })
-
-// Copy link stuff
-
-const visibleMessage = ref('')
-
-const currentHost = computed(() => {
-  return window.location.protocol + '//' + window.location.host
-})
-
-const randomString = computed(() => {
-  return Math.random().toString(36).substring(2, 10)
-})
-
-const copyLink = () => {
-  navigator.clipboard.writeText(`${window.location.host}/${visibleMessage.value}/${randomString.value}`)
-}
 </script>
 
 <template>
