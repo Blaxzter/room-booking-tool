@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { h, watch } from 'vue'
+import { computed, watch, type PropType } from 'vue'
 import { useForm } from 'vee-validate'
 import { toTypedSchema } from '@vee-validate/zod'
 import * as z from 'zod'
@@ -7,7 +7,6 @@ import { storeToRefs } from 'pinia'
 
 import { FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form'
 import { Input } from '@/components/ui/input'
-import { toast } from '@/components/ui/toast'
 import { Button } from '@/components/ui/button'
 
 import { Textarea } from '@/components/ui/textarea'
@@ -17,9 +16,21 @@ import NameFade from '@/components/utils/NameFade.vue'
 
 import { useGroups } from '@/stores/groups'
 import { bookableObjectRandoms } from '@/assets/ts/constants'
-import DefaultSettings from '@/components/bookable-object/edit/DefaultSettings.vue'
 
 const { selectedGroup, selectedGroupId } = storeToRefs(useGroups())
+
+interface InitialValues {
+  name?: string
+  description?: string
+  groupName?: string
+}
+
+const props = defineProps({
+  initialValues: {
+    type: Object as PropType<InitialValues>,
+    required: true
+  }
+})
 
 const formSchema = toTypedSchema(
   z.object({
@@ -35,10 +46,14 @@ const formSchema = toTypedSchema(
   })
 )
 
-const { handleSubmit } = useForm({
+const { name, description, groupName } = props.initialValues
+
+const { values, validate } = useForm({
   validationSchema: formSchema,
   initialValues: {
-    groupName: selectedGroupId.value
+    name: name,
+    description: description,
+    groupName: groupName || selectedGroupId.value
   }
 })
 
@@ -47,20 +62,12 @@ watch(selectedGroup, (value) => {
   console.log('selectedGroup', value)
 })
 
-const onSubmit = handleSubmit((values) => {
-  toast({
-    title: 'You submitted the following values:',
-    description: h(
-      'pre',
-      { class: 'mt-2 w-[340px] rounded-md bg-slate-950 p-4' },
-      h('code', { class: 'text-white' }, JSON.stringify(values, null, 2))
-    )
-  })
-})
+const getValues = computed(() => values)
+defineExpose({ getValues, validate })
 </script>
 
 <template>
-  <form class="grid gap-4 py-4" @submit="onSubmit">
+  <form class="grid gap-4 py-4">
     <FormField v-slot="{ componentField }" name="name">
       <FormItem>
         <FormLabel>Name</FormLabel>

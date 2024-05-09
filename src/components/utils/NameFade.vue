@@ -14,6 +14,8 @@ const props = defineProps({
   } as any as PropType<string[]>
 })
 
+const emit = defineEmits(['valueChanged'])
+
 const messageIndex = ref(0)
 
 const currentMessage = computed(() => {
@@ -23,6 +25,7 @@ const currentMessage = computed(() => {
 onMounted(() => {
   setInterval(() => {
     messageIndex.value = (messageIndex.value + 1) % props.messages!.length
+    emit('valueChanged', currentMessage.value)
   }, 4000)
 })
 </script>

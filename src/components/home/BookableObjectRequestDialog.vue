@@ -14,14 +14,38 @@ import {
   DialogTrigger
 } from '@/components/ui/dialog'
 
-import { bookableObjectRandoms } from '@/assets/ts/constants'
-import DefaultSettings from '@/components/bookable-object/edit/DefaultSettings.vue'
 import StepperComponent from '@/components/utils/StepperComponent.vue'
+import DefaultSettings from '@/components/bookable-object/edit/DefaultSettings.vue'
+import AccessSettings from '@/components/bookable-object/edit/AccessSettings.vue'
+
+import { bookableObjectRandoms } from '@/assets/ts/constants'
 
 import { ref } from 'vue'
 
 const activeStep = ref(0)
 const steps = ['Basic Info', 'Permissions', 'Additional']
+
+const defaultSettings = ref({})
+const accessSettings = ref({})
+
+const stepRefMap: Record<number, any> = {
+  0: defaultSettings,
+  1: accessSettings
+}
+
+const steptoValues: Record<number, any> = {
+  0: {},
+  1: {}
+}
+
+const nextStep = async () => {
+  const valRes = await stepRefMap[activeStep.value].value.validate()
+  console.log('valRes', valRes)
+  if (valRes.valid) {
+    steptoValues[activeStep.value] = valRes.values
+    activeStep.value++
+  }
+}
 </script>
 
 <template>
@@ -40,12 +64,12 @@ const steps = ['Basic Info', 'Permissions', 'Additional']
               Create
               <NameFade :messages="bookableObjectRandoms" />
             </DialogTitle>
-            <DialogDescription> Please fill in the details of your bookableObject. </DialogDescription>
+            <DialogDescription> Please fill in the details. </DialogDescription>
           </DialogHeader>
-          <DefaultSettings>
+          <DefaultSettings ref="defaultSettings" :initial-values="steptoValues[0]">
             <template v-slot:footer>
               <DialogFooter>
-                <Button @click="activeStep++"> Next </Button>
+                <Button @click="nextStep" type="button"> Next </Button>
               </DialogFooter>
             </template>
           </DefaultSettings>
@@ -53,15 +77,19 @@ const steps = ['Basic Info', 'Permissions', 'Additional']
         <template v-slot:step-1>
           <DialogHeader>
             <DialogTitle class="fade-transition">
-              Create
+              Access of
               <NameFade :messages="bookableObjectRandoms" />
             </DialogTitle>
-            <DialogDescription> Please fill in the details of your bookableObject. </DialogDescription>
+            <DialogDescription> Manage the permission and access. </DialogDescription>
           </DialogHeader>
-          <DialogFooter>
-            <Button @click="activeStep--"> Back </Button>
-            <Button @click="activeStep++"> Next </Button>
-          </DialogFooter>
+          <AccessSettings ref="accessSettings">
+            <template v-slot:footer>
+              <DialogFooter>
+                <Button @click="activeStep--" type="button"> Back </Button>
+                <Button @click="nextStep" type="button"> Next </Button>
+              </DialogFooter>
+            </template>
+          </AccessSettings>
         </template>
       </StepperComponent>
     </DialogContent>

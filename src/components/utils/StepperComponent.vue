@@ -1,3 +1,17 @@
+<script setup lang="ts">
+import { ref, watch } from 'vue'
+import { TabsContent, TabsList, TabsRoot, TabsTrigger } from 'radix-vue'
+import { CircleIcon, CircleCheckBigIcon } from 'lucide-vue-next'
+
+const steps = ref(['Basic Info', 'Permissions', 'Additional'])
+
+const activeStep = defineModel({ default: 0, required: true })
+
+watch(activeStep, (newValue) => {
+  console.log('activeStep', newValue)
+})
+</script>
+
 <template>
   <TabsRoot class="stepper" v-model="activeStep">
     <TabsList class="flex justify-between w-full px-2 py-2">
@@ -5,6 +19,7 @@
         <TabsTrigger
           :class="['stepper-trigger mb-3', { 'stepper-trigger-active': index === activeStep }]"
           :value="index"
+          :disabled="activeStep <= index"
         >
           <div class="flex flex-col items-center">
             <div class="mb-1">
@@ -25,20 +40,6 @@
   </TabsRoot>
 </template>
 
-<script setup lang="ts">
-import { ref, watch } from 'vue'
-import { TabsContent, TabsList, TabsRoot, TabsTrigger } from 'radix-vue'
-import { CircleIcon, CircleCheckBigIcon } from 'lucide-vue-next'
-
-const steps = ref(['Basic Info', 'Permissions', 'Additional'])
-
-const activeStep = defineModel({ default: 0, required: true })
-
-watch(activeStep, (newValue) => {
-  console.log('activeStep', newValue)
-})
-</script>
-
 <style lang="scss">
 .stepper {
   display: flex;
@@ -50,7 +51,6 @@ watch(activeStep, (newValue) => {
   display: flex;
   flex-direction: column;
   align-items: center;
-  cursor: pointer;
   color: hsl(var(--secondary));
 }
 
