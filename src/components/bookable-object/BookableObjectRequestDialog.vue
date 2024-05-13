@@ -4,21 +4,13 @@ import { ChevronRightIcon, PlusCircledIcon } from '@radix-icons/vue'
 import NameFade from '@/components/utils/NameFade.vue'
 
 import { Button } from '@/components/ui/button'
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogFooter,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger
-} from '@/components/ui/dialog'
+import { Dialog, DialogContent, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog'
 
 import StepperComponent from '@/components/utils/StepperComponent.vue'
 import DefaultSettings from '@/components/bookable-object/edit/DefaultSettings.vue'
 import AccessSettings from '@/components/bookable-object/edit/AccessSettings.vue'
 
-import { bookableObjectRandoms } from '@/assets/ts/constants'
+import { bookableObjectRandomsSingular } from '@/assets/ts/constants'
 
 import { ref } from 'vue'
 
@@ -58,15 +50,14 @@ const nextStep = async () => {
       </Button>
     </DialogTrigger>
     <DialogContent :trap-focus="true">
+      <DialogHeader class="mb-2">
+        <DialogTitle class="fade-transition">
+          Create a new
+          <NameFade :messages="bookableObjectRandomsSingular" />
+        </DialogTitle>
+      </DialogHeader>
       <StepperComponent v-model="activeStep" :steps="steps">
         <template v-slot:step-0>
-          <DialogHeader>
-            <DialogTitle class="fade-transition">
-              Create
-              <NameFade :messages="bookableObjectRandoms" />
-            </DialogTitle>
-            <DialogDescription> Please fill in the details. </DialogDescription>
-          </DialogHeader>
           <DefaultSettings ref="defaultSettings" :initial-values="steptoValues[0]">
             <template v-slot:footer>
               <DialogFooter>
@@ -76,13 +67,6 @@ const nextStep = async () => {
           </DefaultSettings>
         </template>
         <template v-slot:step-1>
-          <DialogHeader>
-            <DialogTitle class="fade-transition">
-              Access of
-              <NameFade :messages="bookableObjectRandoms" />
-            </DialogTitle>
-            <DialogDescription> Manage the permission and access. </DialogDescription>
-          </DialogHeader>
           <AccessSettings ref="accessSettings" :initial-values="steptoValues[1]">
             <template v-slot:footer>
               <DialogFooter>

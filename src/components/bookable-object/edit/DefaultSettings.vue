@@ -1,9 +1,8 @@
 <script setup lang="ts">
-import { computed, watch, type PropType } from 'vue'
+import { computed, type PropType } from 'vue'
 import { useForm } from 'vee-validate'
 import { toTypedSchema } from '@vee-validate/zod'
 import * as z from 'zod'
-import { storeToRefs } from 'pinia'
 
 import { FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form'
 import { Input } from '@/components/ui/input'
@@ -14,15 +13,12 @@ import GroupSelect from '@/components/bits/GroupSelect.vue'
 
 import NameFade from '@/components/utils/NameFade.vue'
 
-import { useGroups } from '@/stores/groups'
 import { bookableObjectRandoms } from '@/assets/ts/constants'
-
-const { selectedGroup, selectedGroupId } = storeToRefs(useGroups())
 
 interface InitialValues {
   name?: string
   description?: string
-  groupName?: string
+  groupId?: string
 }
 
 const props = defineProps({
@@ -40,26 +36,21 @@ const formSchema = toTypedSchema(
     description: z.string({
       required_error: 'Please enter a description.'
     }),
-    groupName: z.string({
-      required_error: 'Please select an email to display.'
+    groupId: z.string({
+      required_error: 'Please select a group.'
     })
   })
 )
 
-const { name, description, groupName } = props.initialValues
+const { name, description, groupId } = props.initialValues
 
 const { values, validate } = useForm({
   validationSchema: formSchema,
   initialValues: {
     name: name,
     description: description,
-    groupName: groupName || selectedGroupId.value
+    groupId: groupId
   }
-})
-
-// watch selectedGroup
-watch(selectedGroup, (value) => {
-  console.log('selectedGroup', value)
 })
 
 const getValues = computed(() => values)
@@ -67,7 +58,7 @@ defineExpose({ getValues, validate })
 </script>
 
 <template>
-  <form class="grid gap-4 py-4">
+  <form class="grid gap-4 py-4 w-full">
     <FormField v-slot="{ componentField }" name="name">
       <FormItem>
         <FormLabel>Name</FormLabel>
@@ -88,14 +79,11 @@ defineExpose({ getValues, validate })
         <FormMessage />
       </FormItem>
     </FormField>
-    <FormField v-slot="{ componentField }" name="groupName">
+    <FormField v-slot="{ componentField }" name="groupId">
       <FormItem>
         <FormLabel>Group</FormLabel>
-        <GroupSelect :selectedGroup="componentField" />
-        <FormDescription>
-          Please select the group of the bookable object.
-          <span v-if="selectedGroupId">Your currently selected group is chosen by default.</span>
-        </FormDescription>
+        <GroupSelect v-bind="componentField" :include-person="true" />
+        <FormDescription> Please select the group of the bookable object. </FormDescription>
         <FormMessage />
       </FormItem>
     </FormField>

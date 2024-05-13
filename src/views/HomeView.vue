@@ -12,7 +12,7 @@ import { useGlobal } from '@/stores/global'
 
 import BookableObjectCard from '@/components/home/BookableObjectCard.vue'
 import CalenderLoader from '@/components/animations/CalenderLoader.vue'
-import BookableObjectRequestDialog from '@/components/home/BookableObjectRequestDialog.vue'
+import BookableObjectRequestDialog from '@/components/bookable-object/BookableObjectRequestDialog.vue'
 import NameFade from '@/components/utils/NameFade.vue'
 
 import { bookableObjectRandoms } from '@/assets/ts/constants'

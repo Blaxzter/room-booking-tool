@@ -188,6 +188,13 @@ export const useAuth = defineStore('auth', () => {
       })
   }
 
+  const userName = computed(() => user.value?.first_name + ' ' + user.value?.last_name)
+  const email = computed(() => user.value?.email)
+  const hasName = computed(() => userName.value.trim() !== '')
+  const name = computed(() => (hasName.value ? userName.value : email.value))
+  const avatar = computed(() => user.value?.avatar ?? '')
+  const avatarFallback = computed(() => user.value?.first_name?.charAt(0) + user.value?.last_name?.charAt(0))
+
   return {
     client,
     user,
@@ -197,6 +204,12 @@ export const useAuth = defineStore('auth', () => {
     checkAuth,
     isAuthenticated,
     setRedirect,
-    getRedirect
+    getRedirect,
+    userName,
+    email,
+    hasName,
+    name,
+    avatar,
+    avatarFallback
   }
 })

@@ -1,3 +1,4 @@
+export const bookableObjectRandomsSingular = ['Room', 'Object', 'Space', 'Anything']
 export const bookableObjectRandoms = ['Rooms', 'Objects', 'Spaces', 'Anything']
 export const bookableObjectRandomsLower = ['rooms', 'objects', 'spaces', 'anything']
 

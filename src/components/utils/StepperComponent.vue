@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { ref, watch } from 'vue'
 import { TabsContent, TabsList, TabsRoot, TabsTrigger } from 'radix-vue'
-import { CircleIcon, CircleCheckBigIcon } from 'lucide-vue-next'
+import { CircleIcon, CircleDotIcon, CircleCheckBigIcon } from 'lucide-vue-next'
 
 const steps = ref(['Basic Info', 'Permissions', 'Additional'])
 
@@ -17,13 +17,14 @@ watch(activeStep, (newValue) => {
     <TabsList class="flex justify-between w-full px-2 py-2">
       <template v-for="(step, index) in steps" :key="index">
         <TabsTrigger
-          :class="['stepper-trigger mb-3', { 'stepper-trigger-active': index === activeStep }]"
+          :class="['stepper-trigger', { 'stepper-trigger-active': index === activeStep }]"
           :value="index"
           :disabled="activeStep <= index"
         >
           <div class="flex flex-col items-center">
             <div class="mb-1">
-              <CircleIcon class="h-6 w-6" v-if="activeStep <= index" />
+              <CircleIcon class="h-6 w-6" v-if="activeStep < index" />
+              <CircleDotIcon class="h-6 w-6" v-else-if="activeStep === index" />
               <CircleCheckBigIcon class="h-6 w-6" v-else />
             </div>
             <div>

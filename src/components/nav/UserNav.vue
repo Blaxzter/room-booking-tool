@@ -23,14 +23,9 @@ import router from '@/router'
 import DarkscreenToggle from '@/components/animations/DarkscreenToggle.vue'
 
 const { logout } = useAuth()
-const { user } = storeToRefs(useAuth())
+const { avatar, avatarFallback, name, hasName, email } = storeToRefs(useAuth())
 
 const toggleDarkmodeAnimation = ref(false)
-
-const userName = computed(() => user.value?.first_name + ' ' + user.value?.last_name)
-const email = computed(() => user.value?.email)
-const avatar = computed(() => user.value?.avatar ?? '')
-const avatarFallback = computed(() => user.value?.first_name?.charAt(0) + user.value?.last_name?.charAt(0))
 
 onMounted(async () => {
   document.addEventListener('keydown', async (e) => {
@@ -62,8 +57,8 @@ onMounted(async () => {
     <DropdownMenuContent class="w-56" align="end">
       <DropdownMenuLabel class="font-normal flex">
         <div class="flex flex-col space-y-1">
-          <p class="text-sm font-medium leading-none">{{ userName }}</p>
-          <p class="text-xs leading-none text-muted-foreground">{{ email }}</p>
+          <p class="text-sm font-medium leading-none">{{ name }}</p>
+          <p class="text-xs leading-none text-muted-foreground" v-if="hasName">{{ email }}</p>
         </div>
       </DropdownMenuLabel>
       <DropdownMenuSeparator />
