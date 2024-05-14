@@ -18,8 +18,6 @@ const toBeUploadedImage = ref<Blob | null>(null)
 const emits = defineEmits(['message'])
 
 const uploadHandler = (copperJsInstance: any) => {
-  console.log('uploadHandler', copperJsInstance)
-
   copperJsInstance.getCroppedCanvas({ width: 512, height: 512 }).toBlob(
     async (blob: Blob | null) => {
       if (!blob) {

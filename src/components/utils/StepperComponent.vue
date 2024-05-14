@@ -6,10 +6,6 @@ import { CircleIcon, CircleDotIcon, CircleCheckBigIcon } from 'lucide-vue-next'
 const steps = ref(['Basic Info', 'Permissions', 'Additional'])
 
 const activeStep = defineModel({ default: 0, required: true })
-
-watch(activeStep, (newValue) => {
-  console.log('activeStep', newValue)
-})
 </script>
 
 <template>

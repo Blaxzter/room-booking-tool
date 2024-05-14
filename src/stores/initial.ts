@@ -26,14 +26,14 @@ export const useInitialDataStore = defineStore('initial', () => {
       if (!_.isNil(selectedGroup) && selectedGroup !== '-1') {
         const groupQuery = getGroupQuery(selectedGroup)
         received_data = await client.query<GetGroupQueryResponse>(groupQuery)
-        console.log(received_data.group)
+
         setBookableObjects({ data: received_data.bookable_object, groupId: selectedGroup })
       } else {
         const initialDataQuery = getInitialDataQuery(user.id)
         received_data = await client.query<GetInitialDataQueryResponse>(initialDataQuery)
         setBookableObjects({ data: received_data.bookable_object })
       }
-      console.log(received_data)
+
       await setGroups(received_data.group)
     } catch (error) {
       console.error(error)

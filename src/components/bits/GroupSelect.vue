@@ -1,22 +1,30 @@
 <script setup lang="ts">
-import { defineProps, onMounted, computed, ref, type PropType } from 'vue'
+import _ from 'lodash'
+import { computed, defineProps, onBeforeMount, ref, useAttrs } from 'vue'
 import { storeToRefs } from 'pinia'
 
 import { FormControl } from '@/components/ui/form'
-import { Select, SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
-
-import type { Group } from '@/types'
+import {
+  Select,
+  SelectContent,
+  SelectGroup,
+  SelectItem,
+  SelectItemText,
+  SelectSeparator,
+  SelectTrigger,
+  SelectValue
+} from '@/components/ui/select'
 
 import { useGroups } from '@/stores/groups'
 import { useAuth } from '@/stores/auth'
 
 const { name } = storeToRefs(useAuth())
-
+const attrs = useAttrs()
 const { selectedGroupId, groups } = storeToRefs(useGroups())
 
 const group = ref<string | undefined>(undefined)
 
-const emit = defineEmits(['input', 'blur', 'change'])
+const emit = defineEmits(['input'])
 
 const props = defineProps({
   includePerson: {
@@ -25,26 +33,9 @@ const props = defineProps({
   }
 })
 
-import { useAttrs } from 'vue'
-
-const attrs = useAttrs()
-
-if (Object.keys(attrs).length > 0) {
-  console.log('Attrs has values:', attrs)
-} else {
-  console.log('Attrs is empty')
-}
-
-const combindedGroups = computed(() => {
-  if (props.includePerson) {
-    return [{ id: '-1', name: name.value }, ...groups.value]
-  }
-  return groups
-}) as unknown as Group[]
-
-const getInitialGroup = () => {
-  if (Object.keys(attrs).length > 0 && attrs['modelValue'] !== undefined) {
-    return attrs['modelValue']
+const getInitialGroup = (): string | undefined => {
+  if (Object.keys(attrs).length > 0 && !_.isNil(attrs['modelValue'])) {
+    return attrs['modelValue'] as string
   } else if (selectedGroupId.value) {
     return selectedGroupId.value
   } else if (props.includePerson) {
@@ -56,13 +47,13 @@ const getInitialGroup = () => {
   return undefined
 }
 
-onMounted(() => {
+const selectedGroupValue = computed(() => {
+  return group.value === '-1' ? `No Group - ${name.value}` : _.find(groups.value, { id: group.value })?.name
+})
+
+onBeforeMount(() => {
   group.value = getInitialGroup()
-  if (group.value) {
-    console.log('Emited group')
-    emit('input', group.value)
-  }
-  console.log('GroupSelect', group.value)
+  emit('input', group.value)
 })
 </script>
 
@@ -70,14 +61,24 @@ onMounted(() => {
   <Select v-model="group" v-bind="$attrs">
     <FormControl>
       <SelectTrigger>
-        <SelectValue placeholder="Select a group" />
+        <SelectValue placeholder="Select a group" asChild>
+          {{ selectedGroupValue }}
+        </SelectValue>
       </SelectTrigger>
     </FormControl>
     <SelectContent>
       <SelectGroup>
-        <SelectItem v-for="group in combindedGroups" :key="group.id" :value="group.id">
-          {{ group.name }}
-          <div v-if="group.id === '-1'" class="text-muted-foreground text-xs">Personal</div>
+        <SelectItem :value="'-1'">
+          <SelectItemText> No Group </SelectItemText>
+          <div class="text-muted-foreground text-xs">Personal - {{ name }}</div>
+        </SelectItem>
+      </SelectGroup>
+      <SelectSeparator />
+      <SelectGroup>
+        <SelectItem v-for="group in groups" :key="group.id" :value="group.id">
+          <SelectItemText>
+            {{ group.name }}
+          </SelectItemText>
         </SelectItem>
       </SelectGroup>
     </SelectContent>

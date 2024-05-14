@@ -5,7 +5,6 @@ export const useGlobal = defineStore('global', () => {
   const searchString: Ref<string> = ref('')
 
   const setSearchString = (newSearchString: string): void => {
-    console.log('setting search string', newSearchString)
     searchString.value = newSearchString
   }
 

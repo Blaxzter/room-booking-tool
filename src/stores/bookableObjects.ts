@@ -24,7 +24,6 @@ export const useBookableObjects = defineStore('bookableObjects', () => {
   }
 
   const setBookableObjects = ({ data, groupId = null }: { data: BookableObject[]; groupId?: string | null }) => {
-    console.log('setBookableObjects', data)
     bookableObjects.value = data
     if (groupId) {
       groupBookableObjects.value[groupId] = data
@@ -41,11 +40,9 @@ export const useBookableObjects = defineStore('bookableObjects', () => {
       bookableObjects.value = groupBookableObjects.value[group_id]
     } else {
       loading.value = true
-      console.log('fetching bookable objects')
       await client
         .query<BookableObjectRequest>(getBookableObjectByGroup(group_id))
         .then((res) => {
-          console.log('fetchBookableObjectsByGroupId', res.bookable_object)
           setBookableObjects({ data: res.bookable_object, groupId: group_id })
           loading.value = false
           return res
@@ -68,11 +65,9 @@ export const useBookableObjects = defineStore('bookableObjects', () => {
       bookableObjects.value = groupBookableObjects.value['-1']
     } else {
       loading.value = true
-      console.log('fetching bookable objects')
       await client
         .query<BookableObjectRequest>(userBookableObject(user.id))
         .then((res) => {
-          console.log('fetchBookableObjectsByGroupId', res.bookable_object)
           setBookableObjects({ data: res.bookable_object, groupId: '-1' })
           loading.value = false
           return res
@@ -95,7 +90,6 @@ export const useBookableObjects = defineStore('bookableObjects', () => {
     }
 
     const group_id = selectedGroupId.value
-    console.log('group_id', group_id)
     if (!groupBookableObjects.value[group_id]) {
       return []
     }

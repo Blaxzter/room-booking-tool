@@ -46,8 +46,6 @@ const closeDialogDismiss = (state: boolean) => {
 
 const createBooking = () => {
   eventCreated.value = true
-  console.log('Event created!')
-  console.log(props.args)
   dialogOpen.value = false
 }
 </script>

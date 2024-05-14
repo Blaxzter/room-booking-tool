@@ -27,7 +27,6 @@ export const useUser = defineStore('user', () => {
   }
 
   const getSelectedGroup = () => {
-    console.log('getSelectedGroup', localUserData.value)
     if (!localUserData.value) {
       getLocalUserData()
     }

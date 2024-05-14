@@ -32,7 +32,6 @@ export const useAuth = defineStore('auth', () => {
   const redirect = ref(defaultRedirect)
 
   const setRedirect = (path: string) => {
-    console.log('setRedirect', path)
     // check if path is not login
     if (path === '/login') {
       return
@@ -47,7 +46,6 @@ export const useAuth = defineStore('auth', () => {
   const storage = {
     set(value: AuthenticationData) {
       if (!_keep_logged_in.value) {
-        console.log('set auth_data', value)
         auth_data.value = value
         auth_data.value.expires_at = new Date().getTime() + (value.expires || 0)
         return
@@ -61,7 +59,6 @@ export const useAuth = defineStore('auth', () => {
     get(key: string | undefined): AuthenticationData | string | number | null {
       if (key === undefined) {
         if (!_keep_logged_in.value) {
-          console.log('get auth_data', auth_data.value)
           return auth_data.value
         }
         // get all
@@ -125,7 +122,6 @@ export const useAuth = defineStore('auth', () => {
     await client
       .login(email, password)
       .then(async (res) => {
-        console.log('Logged in', res)
         authenticated.value = true
       })
       .catch((error) => {
@@ -158,10 +154,8 @@ export const useAuth = defineStore('auth', () => {
       // Access token exist, has expired, or expires in less than 5 minutes
       if (access_token && currentTime > expires_at - 5 * 60 * 1000) {
         try {
-          console.log('Refreshing token')
           await client.refresh()
           await getCurrentUserData()
-          console.log('Token refreshed')
           authenticated.value = true
           return true
         } catch (error) {

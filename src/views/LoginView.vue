@@ -36,15 +36,12 @@ const loginWrapper = async () => {
     keep_logged_in: keepLoggedIn.value
   })
     .then(() => {
-      console.log('Logged in')
       showCheckmark.value = true
       setTimeout(() => {
         showScreenGrower.value = true
-        console.log('show screen grower')
       }, 900)
       setTimeout(() => {
         let to = getRedirect() || { name: 'home' }
-        console.log('Redirecting to', to)
         router.push(to)
       }, 1000)
     })
@@ -69,7 +66,6 @@ onMounted(async () => {
     }, 1900)
     setTimeout(() => {
       let to = getRedirect() || { name: 'home' }
-      console.log('Redirecting to', to)
       router.push(to)
     }, 2000)
   }

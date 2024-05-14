@@ -33,7 +33,6 @@ const steptoValues: Record<number, any> = {
 
 const nextStep = async () => {
   const valRes = await stepRefMap[activeStep.value].value.validate()
-  console.log('valRes', valRes)
   if (valRes.valid) {
     steptoValues[activeStep.value] = valRes.values
     activeStep.value++

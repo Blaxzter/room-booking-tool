@@ -14,9 +14,8 @@ export const useGroups = defineStore('group', () => {
   const selectedGroupId = ref<string | undefined>(getSelectedGroup() || undefined)
 
   const selectGroup = async (group: Group) => {
-    console.log('selecting group', group)
     setSelectedGroup(group.id as string)
-    selectedGroupId.value = group.id
+    selectedGroupId.value = `${group.id}`
     if (group.id !== '-1') await fetchBookableObjectsByGroupId(group.id as string)
     else fetchUserBookableObjects()
   }
@@ -50,9 +49,7 @@ export const useGroups = defineStore('group', () => {
         role: 'admin'
       }
     ]
-    console.log(group)
     const result = await client.request(createItem('group', group))
-    console.log(result)
     // cast result to Group
     addGroup(result as Group)
     return result

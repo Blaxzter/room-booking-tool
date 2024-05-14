@@ -69,7 +69,6 @@ const calendarOptions = {
 } as CalendarOptions
 
 const switchTab = (tab: CalendarViewType) => {
-  console.log(tab)
   fullCalenderApi().changeView(tab)
   currentDateString.value = fullCalenderData().viewTitle
   selectedDay.value = dayjs(fullCalenderData().currentDate)
@@ -94,13 +93,11 @@ const selectToday = () => {
 }
 
 const dismissTempEvent = () => {
-  console.log('dismiss')
   createdTempEvent.value?.remove()
   openEventDialog.value = false
 }
 
 const closeDialog = () => {
-  console.log('close')
   openEventDialog.value = false
 }
 

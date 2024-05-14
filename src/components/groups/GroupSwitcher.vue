@@ -86,10 +86,8 @@ const open = ref(false)
 const showNewTeamDialog = ref(false)
 
 let selectedTeam = computed(() => {
-  console.log('GroupSwitcher', selectedGroupId.value)
   if (selectedGroupId.value != null && selectedGroupId.value !== '-1') {
     const foundGroup = _.find(groups.value, { id: `${selectedGroupId.value}` })
-    console.log('foundGroup', foundGroup)
     return foundGroup
   }
   return displayData.value[0].teams[0]
@@ -106,7 +104,6 @@ const filterGroups = (val: Record<string, any>[], term: string): Record<string, 
 
 const groupClicked = async (team: Group) => {
   // todo check what happens on selecting the user name (all)
-  console.log('groupClicked', team)
   await selectGroup(team)
   open.value = false
 }
