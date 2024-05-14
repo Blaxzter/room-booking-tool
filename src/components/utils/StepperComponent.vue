@@ -31,7 +31,7 @@ const activeStep = defineModel({ default: 0, required: true })
         <div v-if="index < steps.length - 1" class="flex-grow h-[2px] mx-2 mt-[10px] bg-secondary"></div>
       </template>
     </TabsList>
-    <TabsContent :value="index" v-for="(step, index) in steps" :key="index">
+    <TabsContent :value="index" v-for="(step, index) in steps" :key="index" class="w-full">
       <slot :name="`step-${index}`"> Missing content for step {{ index }} </slot>
     </TabsContent>
   </TabsRoot>

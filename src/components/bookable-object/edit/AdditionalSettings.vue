@@ -1,18 +1,19 @@
 <script setup lang="ts">
-import { computed, ref, type PropType } from 'vue'
+import { computed, type PropType, ref } from 'vue'
 import { useForm } from 'vee-validate'
 import { toTypedSchema } from '@vee-validate/zod'
 import * as z from 'zod'
 
 import { FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form'
-import { Checkbox } from '@/components/ui/checkbox'
 import { Button } from '@/components/ui/button'
 import { Select, SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
-import { CopyIcon } from '@radix-icons/vue'
 
 import NameFade from '@/components/utils/NameFade.vue'
 import { bookableObjectRandoms, bookableObjectRandomsLower } from '@/assets/ts/constants'
-import { Collapsible, CollapsibleContent, CollapsibleTrigger } from '@/components/ui/collapsible'
+import EmojiPicker from '@/components/utils/EmojiPicker.vue'
+import { Label } from '@/components/ui/label'
+import AvatarUploadComponent from '@/components/utils/AvatarUploadComponent.vue'
+import GroupSelect from '@/components/bits/GroupSelect.vue'
 
 interface InitialValues {
   splash_image_object: Blob
@@ -35,10 +36,11 @@ const props = defineProps({
 
 const { splash_image_object, emoji, object_type } = props.initialValues
 
+const selectedEmoji = ref<string | undefined>(emoji)
+const avatarUpload = ref()
+
 const formSchema = toTypedSchema(
   z.object({
-    splash_image_object: z.any(),
-    emoji: z.string().optional(),
     object_type: z.string().optional()
   })
 )
@@ -46,84 +48,47 @@ const formSchema = toTypedSchema(
 const { values, validate } = useForm({
   validationSchema: formSchema,
   initialValues: {
-    splash_image_object: splash_image_object || '',
-    emoji: emoji,
-    object_type: object_type
+    object_type: object_type || 'room'
   }
 })
 
+const upload = async () => {
+  return { id: await avatarUpload.value.uploadImage() } as { id: string }
+}
+
 const getValues = computed(() => values)
-defineExpose({ getValues, validate })
+defineExpose({ getValues, validate, upload })
 </script>
 
 <template>
   <form class="grid gap-5 py-4">
-    <FormField v-slot="{ value, handleChange }" name="public_visible">
-      <FormItem class="flex flex-row items-start gap-x-3 space-y-0 rounded-md">
-        <FormControl>
-          <Checkbox :checked="value" @update:checked="handleChange" />
-        </FormControl>
-        <div class="space-y-1 leading-none">
-          <FormLabel>Public Visible</FormLabel>
-          <FormDescription> Toggle to make the bookable object publicly visible. </FormDescription>
-          <FormMessage />
-        </div>
-      </FormItem>
-    </FormField>
-
-    <Collapsible v-model:open="values.public_visible">
-      <CollapsibleContent>
-        <div>Link</div>
-        <div class="flex items-center justify-between gap-x-2 border rounded px-3 py-0.5">
-          <span class="text-sm text-gray-500"
-            >{{ currentHost }}/<NameFade
-              :messages="bookableObjectRandomsLower"
-              @value-changed="visibleMessage = $event"
-            />/{{ randomString }}</span
-          >
-          <CollapsibleTrigger>
-            <Button size="sm" variant="ghost" @click="copyLink" type="button">
-              <CopyIcon class="h-4 w-4" />
-            </Button>
-          </CollapsibleTrigger>
-        </div>
-      </CollapsibleContent>
-    </Collapsible>
-
-    <FormField v-slot="{ value, handleChange }" name="confirm_booking_required">
-      <FormItem class="flex flex-row items-start gap-x-3 space-y-0 rounded-md">
-        <FormControl>
-          <Checkbox :checked="value" @update:checked="handleChange" />
-        </FormControl>
-        <div class="space-y-1 leading-none">
-          <FormLabel>Confirm Booking Required</FormLabel>
-          <FormDescription> Toggle to require confirmation for booking. </FormDescription>
-          <FormMessage />
-        </div>
-      </FormItem>
-    </FormField>
-
-    <FormField v-slot="{ componentField }" name="confirm_role">
+    <div class="grid gap-2">
+      <Label>Display Image</Label>
+      <AvatarUploadComponent ref="avatarUpload" :is-square="true" :height="8" />
+      <div class="text-sm text-muted-foreground">Upload an splash image.</div>
+    </div>
+    <FormField v-slot="{ componentField }" name="object_type">
       <FormItem>
-        <FormLabel>Confirm Role</FormLabel>
+        <FormLabel>Choose <NameFade :messages="bookableObjectRandoms" /></FormLabel>
         <Select v-bind="componentField">
           <FormControl>
             <SelectTrigger>
-              <SelectValue placeholder="Select a role" />
+              <SelectValue />
             </SelectTrigger>
           </FormControl>
           <SelectContent>
             <SelectGroup>
-              <SelectItem v-for="role in roles" :key="role.id" :value="role.id">
-                {{ role.name }}
+              <SelectItem v-for="objectType in objectTypes" :key="objectType.id" :value="objectType.id">
+                {{ objectType.name }}
               </SelectItem>
             </SelectGroup>
           </SelectContent>
         </Select>
-        <FormDescription> Select the role a group member needs to confirm a booking. </FormDescription>
+        <FormDescription> Choose the type of <NameFade :messages="bookableObjectRandomsLower" />. </FormDescription>
         <FormMessage />
       </FormItem>
     </FormField>
+
     <slot name="footer">
       <Button type="submit" class="min-w-[120px]">
         <span>Update <NameFade :messages="bookableObjectRandoms" /></span>

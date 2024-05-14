@@ -17,6 +17,7 @@ import { Collapsible, CollapsibleContent, CollapsibleTrigger } from '@/component
 interface InitialValues {
   public_visible: boolean
   confirm_booking_required: boolean
+  information_shared: boolean
   confirm_role: string
 }
 
@@ -31,18 +32,20 @@ const formSchema = toTypedSchema(
   z.object({
     public_visible: z.boolean(),
     confirm_booking_required: z.boolean(),
+    information_shared: z.boolean(),
     confirm_role: z.string().optional()
   })
 )
 
-const { public_visible, confirm_booking_required, confirm_role } = props.initialValues
+const { public_visible, confirm_booking_required, confirm_role, information_shared } = props.initialValues
 
 const { values, validate } = useForm({
   validationSchema: formSchema,
   initialValues: {
     public_visible: public_visible || false,
     confirm_booking_required: confirm_booking_required || false,
-    confirm_role: confirm_role
+    information_shared: information_shared || false,
+    confirm_role: confirm_role || 'member'
   }
 })
 
@@ -111,34 +114,54 @@ const copyLink = () => {
           <Checkbox :checked="value" @update:checked="handleChange" />
         </FormControl>
         <div class="space-y-1 leading-none">
-          <FormLabel>Confirm Booking Required</FormLabel>
-          <FormDescription> Toggle to require confirmation for booking. </FormDescription>
+          <FormLabel>Booking requires confirmation</FormLabel>
+          <FormDescription>
+            If this is set to off, a booking doesnt require confirmation and it gets automatically confirmed.
+          </FormDescription>
           <FormMessage />
         </div>
       </FormItem>
     </FormField>
 
-    <FormField v-slot="{ componentField }" name="confirm_role">
-      <FormItem>
-        <FormLabel>Confirm Role</FormLabel>
-        <Select v-bind="componentField">
-          <FormControl>
-            <SelectTrigger>
-              <SelectValue placeholder="Select a role" />
-            </SelectTrigger>
-          </FormControl>
-          <SelectContent>
-            <SelectGroup>
-              <SelectItem v-for="role in roles" :key="role.id" :value="role.id">
-                {{ role.name }}
-              </SelectItem>
-            </SelectGroup>
-          </SelectContent>
-        </Select>
-        <FormDescription> Select the role a group member needs to confirm a booking. </FormDescription>
-        <FormMessage />
+    <Collapsible v-model:open="values.confirm_booking_required">
+      <CollapsibleContent>
+        <FormField v-slot="{ componentField }" name="confirm_role">
+          <FormItem>
+            <FormLabel>Confirm Role</FormLabel>
+            <Select v-bind="componentField">
+              <FormControl>
+                <SelectTrigger>
+                  <SelectValue placeholder="Select a role" />
+                </SelectTrigger>
+              </FormControl>
+              <SelectContent>
+                <SelectGroup>
+                  <SelectItem v-for="role in roles" :key="role.id" :value="role.id">
+                    {{ role.name }}
+                  </SelectItem>
+                </SelectGroup>
+              </SelectContent>
+            </Select>
+            <FormDescription> Select the role a group member needs to confirm a booking. </FormDescription>
+            <FormMessage />
+          </FormItem>
+        </FormField>
+      </CollapsibleContent>
+    </Collapsible>
+
+    <FormField v-slot="{ value, handleChange }" name="information_shared">
+      <FormItem class="flex flex-row items-start gap-x-3 space-y-0 rounded-md">
+        <FormControl>
+          <Checkbox :checked="value" @update:checked="handleChange" />
+        </FormControl>
+        <div class="space-y-1 leading-none">
+          <FormLabel>Information shared</FormLabel>
+          <FormDescription> Everyone with the sharing link can view booking details. </FormDescription>
+          <FormMessage />
+        </div>
       </FormItem>
     </FormField>
+
     <slot name="footer">
       <Button type="submit" class="min-w-[120px]">
         <span>Update <NameFade :messages="bookableObjectRandoms" /></span>

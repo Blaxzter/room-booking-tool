@@ -33,9 +33,11 @@ const formSchema = toTypedSchema(
     name: z.string({
       required_error: 'Please enter a name.'
     }),
-    description: z.string({
-      required_error: 'Please enter a description.'
-    }),
+    description: z
+      .string({
+        required_error: 'Please enter a description.'
+      })
+      .optional(),
     groupId: z.string({
       required_error: 'Please select a group.'
     })

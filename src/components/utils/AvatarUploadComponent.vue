@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref } from 'vue'
+import { ref, defineProps, computed } from 'vue'
 import { uploadFiles } from '@directus/sdk'
 
 import { UploadIcon, XIcon } from 'lucide-vue-next'
@@ -16,20 +16,39 @@ const avatar = ref<string>('')
 const toBeUploadedImage = ref<Blob | null>(null)
 
 const emits = defineEmits(['message'])
+const props = defineProps({
+  isSquare: {
+    type: Boolean,
+    default: false
+  },
+  height: {
+    type: Number,
+    default: 5
+  },
+  imageHeight: {
+    type: Number,
+    default: 512
+  }
+})
 
 const uploadHandler = (copperJsInstance: any) => {
-  copperJsInstance.getCroppedCanvas({ width: 512, height: 512 }).toBlob(
-    async (blob: Blob | null) => {
-      if (!blob) {
-        return
-      }
-      // create local url from blob
-      avatar.value = URL.createObjectURL(blob)
-      toBeUploadedImage.value = blob
-    },
-    'image/png, image/gif, image/jpeg, image/bmp, image/x-icon',
-    0.9
-  )
+  copperJsInstance
+    .getCroppedCanvas({
+      width: props.isSquare ? props.imageHeight * 0.75 : props.imageHeight,
+      height: props.imageHeight
+    })
+    .toBlob(
+      async (blob: Blob | null) => {
+        if (!blob) {
+          return
+        }
+        // create local url from blob
+        avatar.value = URL.createObjectURL(blob)
+        toBeUploadedImage.value = blob
+      },
+      'image/png, image/gif, image/jpeg, image/bmp, image/x-icon',
+      0.9
+    )
 }
 
 const clearImage = () => {
@@ -46,24 +65,35 @@ const uploadImage = async (): Promise<string | undefined> => {
   }
 
   const formData = new FormData()
-  formData.append('folder', '9fd6c738-e603-4af0-9a7f-7512a44494f6')
-  formData.append('file', toBeUploadedImage.value, 'group-image.png')
+  formData.append('folder', '76196db0-2d35-4646-ac32-8df8a9986615')
+  formData.append('file', toBeUploadedImage.value, 'object-image.png')
 
   const result = await client.request(uploadFiles(formData))
   return result.id
 }
 
+const avatarCssVars = computed(() => {
+  return {
+    '--avatar-roundness': props.isSquare ? '0' : '50%'
+  }
+})
+
 defineExpose({ uploadImage })
 </script>
 
 <template>
-  <div class="rounded text-center relative">
+  <div class="text-center relative rounded">
     <div v-if="toBeUploadedImage" class="absolute end-[-5px] top-[-5px]">
       <XIcon class="w-4 h-4 cursor-pointer hover:opacity-75" @click="clearImage" />
     </div>
     <Avatar
-      class="w-[5rem] h-[5rem] cursor-pointer hover:opacity-75"
+      class="cursor-pointer hover:opacity-75"
       :class="`pastel-color-${random}`"
+      :style="{
+        width: `${props.height * (isSquare ? 0.75 : 1)}rem`,
+        height: `${props.height}rem`
+      }"
+      :shape="isSquare ? 'square' : 'circle'"
       @click="showCropper = true"
     >
       <AvatarImage :src="avatar" />
@@ -73,8 +103,9 @@ defineExpose({ uploadImage })
     </Avatar>
 
     <avatar-cropper
+      :style="avatarCssVars"
       :cropper-options="{
-        aspectRatio: 1,
+        aspectRatio: isSquare ? 0.75 : 1,
         autoCropArea: 1,
         movable: true,
         zoomable: true
@@ -94,7 +125,7 @@ defineExpose({ uploadImage })
 }
 .avatar {
   width: 160px;
-  border-radius: 100%;
+  border-radius: var(--avatar-roundness);
   display: block;
   margin: 20px auto;
 }
@@ -116,7 +147,7 @@ defineExpose({ uploadImage })
 
 .cropper-face.cropper-move {
   cursor: move;
-  border-radius: 50%;
+  border-radius: var(--avatar-roundness);
   border: 1px rgba(255, 255, 255, 0.7) solid;
 }
 
@@ -126,7 +157,7 @@ defineExpose({ uploadImage })
   width: 100%;
   height: 100%;
   background: white;
-  border-radius: 100%;
+  border-radius: var(--avatar-roundness);
   opacity: 0.1 !important;
 }
 

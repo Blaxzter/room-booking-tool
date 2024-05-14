@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ChevronRightIcon, PlusCircledIcon } from '@radix-icons/vue'
+import { PlusCircledIcon } from '@radix-icons/vue'
 
 import NameFade from '@/components/utils/NameFade.vue'
 
@@ -9,6 +9,7 @@ import { Dialog, DialogContent, DialogFooter, DialogHeader, DialogTitle, DialogT
 import StepperComponent from '@/components/utils/StepperComponent.vue'
 import DefaultSettings from '@/components/bookable-object/edit/DefaultSettings.vue'
 import AccessSettings from '@/components/bookable-object/edit/AccessSettings.vue'
+import AdditionalSettings from '@/components/bookable-object/edit/AdditionalSettings.vue'
 
 import { bookableObjectRandomsSingular } from '@/assets/ts/constants'
 
@@ -17,12 +18,16 @@ import { ref } from 'vue'
 const activeStep = ref(0)
 const steps = ['Basic Info', 'Permissions', 'Additional']
 
-const defaultSettings = ref({})
-const accessSettings = ref({})
+const defaultSettings = ref()
+const accessSettings = ref()
+const additionalSettings = ref()
+
+const open = ref(false)
 
 const stepRefMap: Record<number, any> = {
   0: defaultSettings,
-  1: accessSettings
+  1: accessSettings,
+  2: additionalSettings
 }
 
 const steptoValues: Record<number, any> = {
@@ -31,17 +36,28 @@ const steptoValues: Record<number, any> = {
   2: {}
 }
 
+const createObject = async () => {
+  additionalSettings.value.upload().then((res: { id: string }) => {
+    steptoValues[2] = res
+  })
+  console.log('Creating object with values:', steptoValues)
+}
+
 const nextStep = async () => {
   const valRes = await stepRefMap[activeStep.value].value.validate()
   if (valRes.valid) {
     steptoValues[activeStep.value] = valRes.values
-    activeStep.value++
+    if (activeStep.value < steps.length) activeStep.value++
+    if (activeStep.value === steps.length) {
+      createObject()
+      open.value = false
+    }
   }
 }
 </script>
 
 <template>
-  <Dialog>
+  <Dialog v-model:open="open">
     <DialogTrigger>
       <Button>
         <PlusCircledIcon class="mr-2 h-4 w-4" />
@@ -74,6 +90,16 @@ const nextStep = async () => {
               </DialogFooter>
             </template>
           </AccessSettings>
+        </template>
+        <template v-slot:step-2>
+          <AdditionalSettings ref="additionalSettings" :initial-values="steptoValues[2]">
+            <template v-slot:footer>
+              <DialogFooter>
+                <Button @click="activeStep--" type="button"> Back </Button>
+                <Button @click="nextStep" type="button">Create</Button>
+              </DialogFooter>
+            </template>
+          </AdditionalSettings>
         </template>
       </StepperComponent>
     </DialogContent>
