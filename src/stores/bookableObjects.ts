@@ -1,6 +1,6 @@
 import { defineStore, storeToRefs } from 'pinia'
 import { computed, ref } from 'vue'
-import type { BookableObject } from '@/types'
+import type { BookableObject, CreateGroupRequest, Group } from '@/types'
 import { useAuth } from '@/stores/auth'
 import { getBookableObjectByGroup, type BookableObjectRequest, userBookableObject } from '@/assets/ts/gql_queries'
 import { useToast } from '@/components/ui/toast'
@@ -96,6 +96,8 @@ export const useBookableObjects = defineStore('bookableObjects', () => {
 
     return groupBookableObjects.value[group_id]
   })
+
+  const createBookableObject = async (bookableObject: CreateBookableObjectRequest) => {}
 
   return {
     bookableObjects,

@@ -40,6 +40,13 @@ const createObject = async () => {
   additionalSettings.value.upload().then((res: { id: string }) => {
     steptoValues[2] = res
   })
+
+  const createObject = {
+    ...steptoValues[0],
+    ...steptoValues[1],
+    ...steptoValues[2]
+  }
+
   console.log('Creating object with values:', steptoValues)
 }
 
