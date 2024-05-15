@@ -10,10 +10,8 @@ import { Select, SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectVa
 
 import NameFade from '@/components/utils/NameFade.vue'
 import { bookableObjectRandoms, bookableObjectRandomsLower } from '@/assets/ts/constants'
-import EmojiPicker from '@/components/utils/EmojiPicker.vue'
 import { Label } from '@/components/ui/label'
 import AvatarUploadComponent from '@/components/utils/AvatarUploadComponent.vue'
-import GroupSelect from '@/components/bits/GroupSelect.vue'
 
 interface InitialValues {
   splash_image_object: Blob
@@ -34,9 +32,8 @@ const props = defineProps({
   }
 })
 
-const { splash_image_object, emoji, object_type } = props.initialValues
+const { emoji, object_type } = props.initialValues
 
-const selectedEmoji = ref<string | undefined>(emoji)
 const avatarUpload = ref()
 
 const formSchema = toTypedSchema(

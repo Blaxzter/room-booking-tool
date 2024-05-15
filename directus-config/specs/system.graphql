@@ -229,10 +229,10 @@ type Subscription {
   directus_versions_mutated(event: EventEnum): directus_versions_mutated
   group_directus_users_mutated(event: EventEnum): group_directus_users_mutated
   bookable_object_group_mutated(event: EventEnum): bookable_object_group_mutated
-  bookable_object_mutated(event: EventEnum): bookable_object_mutated
   directus_settings_mutated(event: EventEnum): directus_settings_mutated
   directus_sync_id_map_mutated(event: EventEnum): directus_sync_id_map_mutated
   group_mutated(event: EventEnum): group_mutated
+  bookable_object_mutated(event: EventEnum): bookable_object_mutated
 }
 
 """The `Boolean` scalar type represents `true` or `false`."""
@@ -334,6 +334,11 @@ type bookable_object {
   is_internal: Boolean
   owner(filter: directus_users_filter, sort: [String], limit: Int, offset: Int, page: Int, search: String): directus_users
   uniqueId: String
+  type: String
+  sharing_id: String
+  confirm_booking_required: Boolean
+  information_shared: Boolean
+  confirm_role: String
   group(filter: bookable_object_group_filter, sort: [String], limit: Int, offset: Int, page: Int, search: String): [bookable_object_group]
   group_func: count_functions
 }
@@ -1614,6 +1619,11 @@ input bookable_object_filter {
   is_internal: boolean_filter_operators
   owner: directus_users_filter
   uniqueId: string_filter_operators
+  type: string_filter_operators
+  sharing_id: string_filter_operators
+  confirm_booking_required: boolean_filter_operators
+  information_shared: boolean_filter_operators
+  confirm_role: string_filter_operators
   group: bookable_object_group_filter
   group_func: count_function_filter_operators
   _and: [bookable_object_filter]

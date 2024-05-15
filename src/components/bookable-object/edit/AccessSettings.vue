@@ -15,7 +15,7 @@ import { bookableObjectRandoms, bookableObjectRandomsLower } from '@/assets/ts/c
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from '@/components/ui/collapsible'
 
 interface InitialValues {
-  public_visible: boolean
+  is_internal: boolean
   confirm_booking_required: boolean
   information_shared: boolean
   confirm_role: string
@@ -30,32 +30,20 @@ const props = defineProps({
 
 const formSchema = toTypedSchema(
   z.object({
-    public_visible: z.boolean(),
+    is_internal: z.boolean(),
+    sharing_id: z.string().optional(),
     confirm_booking_required: z.boolean(),
     information_shared: z.boolean(),
     confirm_role: z.string().optional()
   })
 )
 
-const { public_visible, confirm_booking_required, confirm_role, information_shared } = props.initialValues
-
-const { values, validate } = useForm({
-  validationSchema: formSchema,
-  initialValues: {
-    public_visible: public_visible || false,
-    confirm_booking_required: confirm_booking_required || false,
-    information_shared: information_shared || false,
-    confirm_role: confirm_role || 'member'
-  }
-})
+const { is_internal, confirm_booking_required, confirm_role, information_shared } = props.initialValues
 
 const roles = [
   { id: 'admin', name: 'Admin' },
   { id: 'member', name: 'Member' }
 ]
-
-const getValues = computed(() => values)
-defineExpose({ getValues, validate })
 
 // Copy link stuff
 
@@ -65,18 +53,29 @@ const currentHost = computed(() => {
   return window.location.protocol + '//' + window.location.host
 })
 
-const randomString = computed(() => {
-  return Math.random().toString(36).substring(2, 10)
-})
+const randomString = Math.random().toString(36).substring(2, 10)
 
 const copyLink = () => {
-  navigator.clipboard.writeText(`${window.location.host}/${visibleMessage.value}/${randomString.value}`)
+  navigator.clipboard.writeText(`${window.location.host}/${visibleMessage.value}/${randomString}`)
 }
+
+const { values, validate } = useForm({
+  validationSchema: formSchema,
+  initialValues: {
+    is_internal: is_internal || false,
+    sharing_id: randomString,
+    confirm_booking_required: confirm_booking_required || false,
+    information_shared: information_shared || true,
+    confirm_role: confirm_role || 'member'
+  }
+})
+const getValues = computed(() => values)
+defineExpose({ getValues, validate })
 </script>
 
 <template>
   <form class="grid gap-5 py-4">
-    <FormField v-slot="{ value, handleChange }" name="public_visible">
+    <FormField v-slot="{ value, handleChange }" name="is_internal">
       <FormItem class="flex flex-row items-start gap-x-3 space-y-0 rounded-md">
         <FormControl>
           <Checkbox :checked="value" @update:checked="handleChange" />
@@ -89,7 +88,7 @@ const copyLink = () => {
       </FormItem>
     </FormField>
 
-    <Collapsible v-model:open="values.public_visible">
+    <Collapsible v-model:open="values.is_internal">
       <CollapsibleContent>
         <div>Link</div>
         <div class="flex items-center justify-between gap-x-2 border rounded px-3 py-0.5">
