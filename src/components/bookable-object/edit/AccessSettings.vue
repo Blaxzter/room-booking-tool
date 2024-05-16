@@ -31,7 +31,7 @@ const props = defineProps({
 const formSchema = toTypedSchema(
   z.object({
     is_internal: z.boolean(),
-    sharing_id: z.string().optional(),
+    uniqueId: z.string().optional(),
     confirm_booking_required: z.boolean(),
     information_shared: z.boolean(),
     confirm_role: z.string().optional()
@@ -63,7 +63,7 @@ const { values, validate } = useForm({
   validationSchema: formSchema,
   initialValues: {
     is_internal: is_internal || false,
-    sharing_id: randomString,
+    uniqueId: randomString,
     confirm_booking_required: confirm_booking_required || false,
     information_shared: information_shared || true,
     confirm_role: confirm_role || 'member'

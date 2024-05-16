@@ -12,6 +12,7 @@ import AccessSettings from '@/components/bookable-object/edit/AccessSettings.vue
 import AdditionalSettings from '@/components/bookable-object/edit/AdditionalSettings.vue'
 
 import { bookableObjectRandomsSingular } from '@/assets/ts/constants'
+import { useBookableObjects } from '@/stores/bookableObjects'
 
 import { ref } from 'vue'
 
@@ -37,27 +38,38 @@ const steptoValues: Record<number, any> = {
 }
 
 const createObject = async () => {
-  additionalSettings.value.upload().then((res: { id: string }) => {
-    steptoValues[2] = res
+  await additionalSettings.value.upload().then((res: { id: string } | undefined) => {
+    if (!res) return
+    steptoValues[2] = { ...steptoValues[2], ...{ image: res } }
   })
 
   const createObject = {
     ...steptoValues[0],
     ...steptoValues[1],
-    ...steptoValues[2]
+    ...{ ...steptoValues[2], ...{ type: steptoValues[2].object_type } }
   }
 
-  console.log('Creating object with values:', steptoValues)
+  if (createObject.groupId === '-1') {
+    createObject.group = []
+  } else {
+    createObject.group = [{ group_id: { id: createObject.groupId } }]
+  }
+  delete createObject.groupId
+
+  console.log('Creating object with values:', createObject)
+  const { createBookableObject } = useBookableObjects()
+  await createBookableObject(createObject)
 }
 
 const nextStep = async () => {
   const valRes = await stepRefMap[activeStep.value].value.validate()
+  console.log('Validation result:', valRes)
   if (valRes.valid) {
     steptoValues[activeStep.value] = valRes.values
-    if (activeStep.value < steps.length) activeStep.value++
-    if (activeStep.value === steps.length) {
-      createObject()
-      open.value = false
+    if (activeStep.value < steps.length - 1) activeStep.value++
+    else {
+      await createObject()
+      // open.value = false
     }
   }
 }
@@ -83,7 +95,7 @@ const nextStep = async () => {
           <DefaultSettings ref="defaultSettings" :initial-values="steptoValues[0]">
             <template v-slot:footer>
               <DialogFooter>
-                <Button @click="nextStep" type="button"> Next </Button>
+                <Button @click="nextStep" type="button"> Next</Button>
               </DialogFooter>
             </template>
           </DefaultSettings>
@@ -92,8 +104,8 @@ const nextStep = async () => {
           <AccessSettings ref="accessSettings" :initial-values="steptoValues[1]">
             <template v-slot:footer>
               <DialogFooter>
-                <Button @click="activeStep--" type="button"> Back </Button>
-                <Button @click="nextStep" type="button"> Next </Button>
+                <Button @click="activeStep--" type="button"> Back</Button>
+                <Button @click="nextStep" type="button"> Next</Button>
               </DialogFooter>
             </template>
           </AccessSettings>
@@ -102,7 +114,7 @@ const nextStep = async () => {
           <AdditionalSettings ref="additionalSettings" :initial-values="steptoValues[2]">
             <template v-slot:footer>
               <DialogFooter>
-                <Button @click="activeStep--" type="button"> Back </Button>
+                <Button @click="activeStep--" type="button"> Back</Button>
                 <Button @click="nextStep" type="button">Create</Button>
               </DialogFooter>
             </template>

@@ -34,20 +34,41 @@ export const BookingImpl: Booking = {
 export type BookableObject = {
   id: number
   status: string
+  owner: { id: string }
   date_created: string
   date_updated: string
+  name: string
   location?: {
     type: string
     coordinates: number[]
   }
-  name: string
   description?: string
   tags?: string[] | null
-  image?: string | null
+  image?: { id: string } | null
   is_internal: boolean
-  owner: string
   uniqueId: string
-  group: number[]
+  group?: { group_id: Group }[] | number[]
+  type?: string
+  confirm_booking_required?: boolean
+  information_shared?: boolean
+}
+
+export type CreateBookableObjectRequest = {
+  status: string
+  owner: { id: string }
+  name: string
+  location?: {
+    type: string
+    coordinates: number[]
+  }
+  description?: string
+  tags?: string[] | null
+  image?: { id: string } | null
+  is_internal: boolean
+  group?: { group_id: Group }[]
+  type?: string
+  confirm_booking_required?: boolean
+  information_shared?: boolean
 }
 
 export const BookableObjectImpl: BookableObject = {
@@ -64,7 +85,7 @@ export const BookableObjectImpl: BookableObject = {
   tags: null,
   image: null,
   is_internal: false,
-  owner: '',
+  owner: { id: '' },
   uniqueId: '',
   group: []
 }

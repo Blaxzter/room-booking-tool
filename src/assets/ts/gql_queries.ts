@@ -1,6 +1,6 @@
 import type { BookableObject, Group } from '@/types'
 
-export const getGroupQuery = (id: string) => `
+export const getGroupQuery = (group_id: string) => `
 query Initial_Data {
     group {
         id
@@ -15,7 +15,7 @@ query Initial_Data {
             id
         }
     }
-    bookable_object(filter: { group: { id: { _eq: ${id} } } }) {
+    bookable_object(filter: { group: { group_id: { id: { _eq: "${group_id}" } } } }) {
         id
         status
         date_created
@@ -25,9 +25,17 @@ query Initial_Data {
         description
         tags
         image {
-          id
+            id
         }
         is_internal
+        group {
+            id
+        }
+        uniqueId
+        type
+        confirm_booking_required
+        information_shared
+        confirm_role
     }
 }
 `
@@ -59,9 +67,17 @@ query Bookable_object {
         description
         tags
         image {
-          id
+            id
         }
         is_internal
+        group {
+            id
+        }
+        uniqueId
+        type
+        confirm_booking_required
+        information_shared
+        confirm_role
     }
 }
 `
@@ -78,7 +94,7 @@ export interface GetInitialDataQueryResponse {
 
 export const getBookableObjectByGroup = (group_id: string) => `
 query Bookable_object {
-    bookable_object(filter: { group: { id: { _eq: "${group_id}" } } }) {
+    bookable_object(filter: { group: { group_id: { id: { _eq: "${group_id}" } } } }) {
         id
         status
         date_created
@@ -88,9 +104,17 @@ query Bookable_object {
         description
         tags
         image {
-          id
+            id
         }
         is_internal
+        group {
+            id
+        }
+        uniqueId
+        type
+        confirm_booking_required
+        information_shared
+        confirm_role
     }
 }`
 
@@ -108,9 +132,17 @@ query Bookable_object {
         description
         tags
         image {
-          id
+            id
         }
         is_internal
+        group {
+            id
+        }
+        uniqueId
+        type
+        confirm_booking_required
+        information_shared
+        confirm_role
     }
 }
 `

@@ -62,7 +62,7 @@ onMounted(async () => {
         <div class="relative">
           <CalenderLoader :height="150" v-if="loading" />
           <ScrollArea v-else>
-            <div class="flex space-x-4 pb-4" v-if="bookableObjects.length > 0">
+            <div class="flex space-x-4 pb-4 overflow-visible" v-if="bookableObjects.length > 0">
               <BookableObjectCard
                 v-for="bookableObject in filteredBookableObjectList"
                 :key="bookableObject.name"
@@ -75,7 +75,7 @@ onMounted(async () => {
                 @click="
                   () =>
                     router.push({
-                      name: 'bookable-object',
+                      name: 'my-bookable-object',
                       params: { id: bookableObject.id }
                     })
                 "

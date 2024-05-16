@@ -32,7 +32,7 @@ const props = defineProps({
   }
 })
 
-const { emoji, object_type } = props.initialValues
+const { object_type } = props.initialValues
 
 const avatarUpload = ref()
 
@@ -50,7 +50,11 @@ const { values, validate } = useForm({
 })
 
 const upload = async () => {
-  return { id: await avatarUpload.value.uploadImage() } as { id: string }
+  const uploaded_image_id = await avatarUpload.value.uploadImage()
+  if (!uploaded_image_id) {
+    return undefined
+  }
+  return { id: uploaded_image_id } as { id: string }
 }
 
 const getValues = computed(() => values)

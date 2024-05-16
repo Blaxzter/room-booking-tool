@@ -1,11 +1,12 @@
 import { defineStore, storeToRefs } from 'pinia'
 import { computed, ref } from 'vue'
-import type { BookableObject, CreateGroupRequest, Group } from '@/types'
+import type { BookableObject, CreateBookableObjectRequest } from '@/types'
 import { useAuth } from '@/stores/auth'
 import { getBookableObjectByGroup, type BookableObjectRequest, userBookableObject } from '@/assets/ts/gql_queries'
 import { useToast } from '@/components/ui/toast'
-
+import { createItem } from '@directus/sdk'
 import { useGroups } from '@/stores/groups'
+import _ from 'lodash'
 
 export const useBookableObjects = defineStore('bookableObjects', () => {
   const { client, user } = useAuth()
@@ -31,7 +32,25 @@ export const useBookableObjects = defineStore('bookableObjects', () => {
   }
 
   const addBookableObject = (bookableObject: BookableObject) => {
-    bookableObjects.value.push(bookableObject)
+    if (!_.isNil(bookableObject?.group) && bookableObject?.group.length > 0) {
+      for (const group_association of bookableObject.group) {
+        if (!groupBookableObjects.value[`${group_association}`]) {
+          groupBookableObjects.value[`${group_association}`] = []
+        }
+        groupBookableObjects.value[`${group_association}`].push(bookableObject)
+        if (`${group_association}` === selectedGroupId.value) {
+          bookableObjects.value.push(bookableObject)
+        }
+      }
+    }
+
+    if (!groupBookableObjects.value['-1']) {
+      groupBookableObjects.value['-1'] = []
+    }
+    groupBookableObjects.value['-1'].push(bookableObject)
+    if (_.isNil(selectedGroupId) || selectedGroupId.value === '-1') {
+      bookableObjects.value.push(bookableObject)
+    }
   }
 
   const fetchBookableObjectsByGroupId = async (group_id: string) => {
@@ -97,7 +116,21 @@ export const useBookableObjects = defineStore('bookableObjects', () => {
     return groupBookableObjects.value[group_id]
   })
 
-  const createBookableObject = async (bookableObject: CreateBookableObjectRequest) => {}
+  const createBookableObject = async (bookableObject: CreateBookableObjectRequest) => {
+    const { client } = useAuth()
+    const { user } = storeToRefs(useAuth())
+
+    bookableObject.owner = { id: user.value.id }
+    if (!bookableObject.group || bookableObject.group?.length === 0) {
+      bookableObject.group = []
+    }
+    bookableObject.status = 'published'
+    const result = await client.request(createItem('bookable_object', bookableObject))
+    console.log(result)
+    // cast result to BookableObject
+    addBookableObject(result as BookableObject)
+    return result
+  }
 
   return {
     bookableObjects,
@@ -108,6 +141,7 @@ export const useBookableObjects = defineStore('bookableObjects', () => {
     setBookableObjects,
     addBookableObject,
     selectBookableObject,
-    getBookableObjectBySelectedGroup
+    getBookableObjectBySelectedGroup,
+    createBookableObject
   }
 })

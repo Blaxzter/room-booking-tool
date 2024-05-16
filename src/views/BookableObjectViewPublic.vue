@@ -6,7 +6,7 @@ import CalenderComponent from '@/components/booking-components/CalenderComponent
 
 const route = useRoute()
 
-// thats gonna be the private internal route -> Get more information, requires login -> auth check and so on
+// thats gonna be the public internal route -> Use unique id to resolve the bookable object and bookings
 const bookableObjectId = route.params.id
 </script>
 
