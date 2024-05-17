@@ -2,11 +2,11 @@ import { defineStore } from 'pinia'
 import { useAuth } from '@/stores/auth'
 
 import {
-  getInitialDataQuery,
   getGroupQuery,
   type GetGroupQueryResponse,
+  getInitialDataQuery,
   type GetInitialDataQueryResponse
-} from '@/assets/ts/gql_queries'
+} from '@/assets/ts/queries/initial_data'
 import { useGroups } from '@/stores/groups'
 import { useBookableObjects } from '@/stores/bookableObjects'
 import { useUser } from '@/stores/user'

@@ -1,26 +1,34 @@
 <script setup lang="ts">
 // get the bookable object id from the route
+import { onMounted, ref } from 'vue'
 import { useRoute } from 'vue-router'
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
+
 import CalenderComponent from '@/components/booking-components/CalenderComponent.vue'
+import BookableSideInfo from '@/components/booking-components/BookableSideInfo.vue'
 
+import { useBookableObjects } from '@/stores/bookableObjects'
+
+// store refs
 const route = useRoute()
+const { getBookableObjectById } = useBookableObjects()
 
-// thats gonna be the public internal route -> Use unique id to resolve the bookable object and bookings
+// refs
+const loading = ref(true)
+
+const bookableObject = ref()
+
+// thats gonna be the private internal route -> Get more information, requires login -> auth check and so on
 const bookableObjectId = route.params.id
+
+onMounted(async () => {
+  bookableObject.value = await getBookableObjectById({ id: bookableObjectId as string, isUniqueId: true })
+  loading.value = false
+})
 </script>
 
 <template>
   <div class="px-1 py-1 h-full md:py-3 md:px-3 grid items-stretch gap-6 lg:grid-cols-[400px_minmax(0,1fr)]">
-    <Card class="hidden flex-col space-y-4 sm:flex">
-      <CardHeader>
-        <CardTitle class="text-2xl"> Booking room information </CardTitle>
-        <CardDescription> Room id: {{ bookableObjectId }} </CardDescription>
-      </CardHeader>
-      <CardContent>
-        <p>This is a room booking page. Here you can book a room for a meeting or an event.</p>
-      </CardContent>
-    </Card>
+    <BookableSideInfo :bookableObject="bookableObject" />
     <CalenderComponent />
   </div>
 </template>

@@ -2,11 +2,16 @@ import { defineStore, storeToRefs } from 'pinia'
 import { computed, ref } from 'vue'
 import type { BookableObject, CreateBookableObjectRequest } from '@/types'
 import { useAuth } from '@/stores/auth'
-import { getBookableObjectByGroup, type BookableObjectRequest, userBookableObject } from '@/assets/ts/gql_queries'
+import { type BookableObjectsRequest, userBookableObject } from '@/assets/ts/queries/initial_data'
 import { useToast } from '@/components/ui/toast'
 import { createItem } from '@directus/sdk'
 import { useGroups } from '@/stores/groups'
 import _ from 'lodash'
+import {
+  type BookableObjectRequest,
+  getBookableObjectByGroup,
+  qGetBookableObjectById
+} from '@/assets/ts/queries/bookable_objects'
 
 export const useBookableObjects = defineStore('bookableObjects', () => {
   const { client, user } = useAuth()
@@ -17,7 +22,7 @@ export const useBookableObjects = defineStore('bookableObjects', () => {
 
   const selectedBookableObject = ref<BookableObject | null>(null)
   const bookableObjects = ref<BookableObject[]>([])
-  // keep group bookable objects as key value pair
+
   const groupBookableObjects = ref<{ [key: string]: BookableObject[] }>({})
 
   const selectBookableObject = (bookableObject: BookableObject) => {
@@ -60,7 +65,7 @@ export const useBookableObjects = defineStore('bookableObjects', () => {
     } else {
       loading.value = true
       await client
-        .query<BookableObjectRequest>(getBookableObjectByGroup(group_id))
+        .query<BookableObjectsRequest>(getBookableObjectByGroup(group_id))
         .then((res) => {
           setBookableObjects({ data: res.bookable_object, groupId: group_id })
           loading.value = false
@@ -85,7 +90,7 @@ export const useBookableObjects = defineStore('bookableObjects', () => {
     } else {
       loading.value = true
       await client
-        .query<BookableObjectRequest>(userBookableObject(user.id))
+        .query<BookableObjectsRequest>(userBookableObject(user.id))
         .then((res) => {
           setBookableObjects({ data: res.bookable_object, groupId: '-1' })
           loading.value = false
@@ -132,6 +137,41 @@ export const useBookableObjects = defineStore('bookableObjects', () => {
     return result
   }
 
+  const allLoadedBookableObjects = computed(() => {
+    // merge all bookable objects from groups and current visible -> unique by id with lodash
+    return _.uniqBy(_.flatten(_.values(groupBookableObjects.value)), 'id')
+  })
+
+  const getBookableObjectById = async ({
+    id,
+    isUniqueId = false
+  }: {
+    id: string
+    isUniqueId: boolean
+  }): Promise<BookableObject | void> => {
+    const localBookableObject = allLoadedBookableObjects.value.find(
+      (bookableObject) => bookableObject.id === Number(id)
+    )
+
+    if (!localBookableObject) {
+      loading.value = true
+      return await client
+        .query<BookableObjectRequest>(qGetBookableObjectById({ id: id, isUniqueId: isUniqueId }))
+        .then((res) => {
+          loading.value = false
+          return res.bookable_object[0]
+        })
+        .catch((error) => {
+          loading.value = false
+          toast({
+            title: 'Error',
+            description: error.message
+          })
+        })
+    }
+    return localBookableObject
+  }
+
   return {
     bookableObjects,
     selectedBookableObject,
@@ -142,6 +182,7 @@ export const useBookableObjects = defineStore('bookableObjects', () => {
     addBookableObject,
     selectBookableObject,
     getBookableObjectBySelectedGroup,
-    createBookableObject
+    createBookableObject,
+    getBookableObjectById
   }
 })

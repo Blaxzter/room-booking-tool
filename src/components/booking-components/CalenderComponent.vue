@@ -1,15 +1,16 @@
 <script setup lang="ts">
+import { computed, defineProps, onMounted, ref } from 'vue'
+
 import FullCalendar from '@fullcalendar/vue3'
 import dayGridPlugin from '@fullcalendar/daygrid'
 import timeGridPlugin from '@fullcalendar/timeGrid'
 import interactionPlugin from '@fullcalendar/interaction'
+
 import listPlugin from '@fullcalendar/list'
 
 import { CalendarIcon } from 'lucide-vue-next'
-
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardHeader } from '@/components/ui/card'
-import { computed, onMounted, ref } from 'vue'
 import { type CalendarOptions } from '@fullcalendar/core'
 import CalenderTabs, { type CalendarViewType } from '@/components/booking-components/CalenderTabs.vue'
 import CalenderRemote from '@/components/booking-components/CalenderRemote.vue'
@@ -29,6 +30,10 @@ const currentDateString = ref<string | undefined>('')
 const openEventDialog = ref(false)
 const openEventProps = ref({})
 const createdTempEvent = ref<EventImpl | null>(null)
+
+const props = defineProps({
+  topPadding: { type: Number, default: 0 }
+})
 
 const calendarOptions = {
   timeZone: 'UTC',
@@ -106,6 +111,10 @@ const isToday = computed(() => {
   return selectedDay.value?.isToday()
 })
 
+const styleProps = computed(() => {
+  return `--top-padding: ${props.topPadding}px`
+})
+
 onMounted(() => {
   currentDateString.value = fullCalenderData().viewTitle
   selectedDay.value = dayjs(fullCalenderData().currentDate)
@@ -113,7 +122,7 @@ onMounted(() => {
 </script>
 
 <template>
-  <Card class="calender-content">
+  <Card class="calender-content" :style="styleProps">
     <card-header class="flex flex-row items-center">
       <CalendarIcon class="me-2" />
       <h2 class="text-lg font-semibold" v-if="fullCalenderRef">
@@ -136,13 +145,17 @@ onMounted(() => {
   />
 </template>
 
-<style>
+<style lang="scss">
+:root {
+  --top-padding: 0;
+}
+
 .calender-content {
-  height: calc(100vh - 2rem);
-  max-height: calc(100vh - 2rem);
+  height: calc(100vh - 2rem - var(--top-padding));
+  max-height: calc(100vh - 2rem - var(--top-padding));
 
   @media (min-width: 1024px) {
-    max-height: calc(100vh - 2rem);
+    max-height: calc(100vh - 2rem - var(--top-padding));
   }
 
   .calender-wrapper {
