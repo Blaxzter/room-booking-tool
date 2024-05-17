@@ -11890,10 +11890,6 @@
             "nullable": true,
             "type": "string"
           },
-          "sharing_id": {
-            "nullable": true,
-            "type": "string"
-          },
           "confirm_booking_required": {
             "nullable": true,
             "type": "boolean"

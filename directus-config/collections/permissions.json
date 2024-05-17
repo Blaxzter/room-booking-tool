@@ -408,22 +408,11 @@
     "role": "62a8abe7-e3ae-462e-b038-58ce5a2f5475",
     "collection": "bookable_object",
     "action": "create",
-    "permissions": null,
-    "validation": null,
+    "permissions": {},
+    "validation": {},
     "presets": null,
     "fields": [
-      "id",
-      "status",
-      "owner",
-      "date_created",
-      "date_updated",
-      "name",
-      "location",
-      "description",
-      "image",
-      "is_internal",
-      "tags",
-      "group"
+      "*"
     ],
     "_syncId": "2f3c5d4c-3c7b-44a5-aeda-2d7579f2b32d"
   },
@@ -434,20 +423,35 @@
     "permissions": {
       "_and": [
         {
-          "group": {
-            "group_id": {
-              "users": {
-                "directus_users_id": {
-                  "_eq": "$CURRENT_USER"
+          "_and": [
+            {
+              "status": {
+                "_eq": "published"
+              }
+            }
+          ]
+        },
+        {
+          "_or": [
+            {
+              "group": {
+                "group_id": {
+                  "users": {
+                    "directus_users_id": {
+                      "_eq": "$CURRENT_USER.id"
+                    }
+                  }
+                }
+              }
+            },
+            {
+              "owner": {
+                "id": {
+                  "_eq": "$CURRENT_USER.id"
                 }
               }
             }
-          }
-        },
-        {
-          "status": {
-            "_eq": "published"
-          }
+          ]
         }
       ]
     },
@@ -465,7 +469,12 @@
       "group",
       "date_created",
       "id",
-      "owner"
+      "owner",
+      "uniqueId",
+      "type",
+      "information_shared",
+      "confirm_booking_required",
+      "confirm_role"
     ],
     "_syncId": "48e1bbb0-318a-4002-b612-355faba1787f"
   },

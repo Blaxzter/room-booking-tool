@@ -165,7 +165,6 @@ type bookable_object {
   owner(filter: directus_users_filter, sort: [String], limit: Int, offset: Int, page: Int, search: String): directus_users
   uniqueId: String
   type: String
-  sharing_id: String
   confirm_booking_required: Boolean
   information_shared: Boolean
   confirm_role: String
@@ -202,7 +201,6 @@ type bookable_object_aggregated_count {
   owner: Int
   uniqueId: Int
   type: Int
-  sharing_id: Int
   confirm_booking_required: Int
   information_shared: Int
   confirm_role: Int
@@ -949,7 +947,6 @@ type version_bookable_object {
   owner: JSON
   uniqueId: String
   type: String
-  sharing_id: String
   confirm_booking_required: Boolean
   information_shared: Boolean
   confirm_role: String
@@ -1053,7 +1050,6 @@ input bookable_object_filter {
   owner: directus_users_filter
   uniqueId: string_filter_operators
   type: string_filter_operators
-  sharing_id: string_filter_operators
   confirm_booking_required: boolean_filter_operators
   information_shared: boolean_filter_operators
   confirm_role: string_filter_operators
@@ -1127,7 +1123,6 @@ input create_bookable_object_input {
   owner: create_directus_users_input
   uniqueId: String
   type: String
-  sharing_id: String
   confirm_booking_required: Boolean
   information_shared: Boolean
   confirm_role: String
@@ -1623,7 +1618,6 @@ input update_bookable_object_input {
   owner: update_directus_users_input
   uniqueId: String
   type: String
-  sharing_id: String
   confirm_booking_required: Boolean
   information_shared: Boolean
   confirm_role: String

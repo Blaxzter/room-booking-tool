@@ -335,7 +335,6 @@ type bookable_object {
   owner(filter: directus_users_filter, sort: [String], limit: Int, offset: Int, page: Int, search: String): directus_users
   uniqueId: String
   type: String
-  sharing_id: String
   confirm_booking_required: Boolean
   information_shared: Boolean
   confirm_role: String
@@ -1620,7 +1619,6 @@ input bookable_object_filter {
   owner: directus_users_filter
   uniqueId: string_filter_operators
   type: string_filter_operators
-  sharing_id: string_filter_operators
   confirm_booking_required: boolean_filter_operators
   information_shared: boolean_filter_operators
   confirm_role: string_filter_operators
