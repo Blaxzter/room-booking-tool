@@ -12,10 +12,10 @@ import { CalendarIcon } from 'lucide-vue-next'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardHeader } from '@/components/ui/card'
 import { type CalendarOptions } from '@fullcalendar/core'
-import CalenderTabs, { type CalendarViewType } from '@/components/booking-components/CalenderTabs.vue'
-import CalenderRemote from '@/components/booking-components/CalenderRemote.vue'
+import CalenderTabs, { type CalendarViewType } from '@/components/booking-components/calender/CalenderTabs.vue'
+import CalenderRemote from '@/components/booking-components/calender/CalenderRemote.vue'
 import dayjs from 'dayjs'
-import BookingRequestDialog from '@/components/booking-components/BookingRequestDialog.vue'
+import BookingRequestWrapper from '@/components/booking-components/booking-request-dialog/BookingRequestWrapper.vue'
 import { EventImpl } from '@fullcalendar/core/internal'
 
 const fullCalenderRef = ref<InstanceType<typeof FullCalendar>>()
@@ -35,6 +35,10 @@ const props = defineProps({
   topPadding: { type: Number, default: 0 }
 })
 
+const startDate = ref('')
+const startTime = ref('')
+const endTime = ref('')
+
 const calendarOptions = {
   timeZone: 'UTC',
   plugins: [dayGridPlugin, timeGridPlugin, interactionPlugin, listPlugin],
@@ -45,6 +49,7 @@ const calendarOptions = {
   dayMaxEvents: false,
   weekends: true,
   height: '100%',
+  width: '100%',
   initialView: 'dayGridFourWeek',
   firstDay: 1,
   views: {
@@ -68,6 +73,9 @@ const calendarOptions = {
       end: arg.end,
       allDay: arg.allDay
     })
+    startDate.value = dayjs(arg.start).format('YYYY-MM-DD')
+    startTime.value = dayjs(arg.start).format('HH:mm')
+    endTime.value = dayjs(arg.end).format('HH:mm')
     openEventDialog.value = true
     openEventProps.value = arg
   }
@@ -119,6 +127,8 @@ onMounted(() => {
   currentDateString.value = fullCalenderData().viewTitle
   selectedDay.value = dayjs(fullCalenderData().currentDate)
 })
+
+// setTimeout(() => window.dispatchEvent(new Event('resize')), 20)
 </script>
 
 <template>
@@ -137,11 +147,14 @@ onMounted(() => {
       <full-calendar :options="calendarOptions" ref="fullCalenderRef" />
     </CardContent>
   </Card>
-  <booking-request-dialog
+  <booking-request-wrapper
     v-model="openEventDialog"
     :args="openEventProps"
     @close="closeDialog"
     @dismiss="dismissTempEvent"
+    :start-date="startDate"
+    :start-time="startTime"
+    :end-time="endTime"
   />
 </template>
 
@@ -151,6 +164,7 @@ onMounted(() => {
 }
 
 .calender-content {
+  width: 100% !important;
   height: calc(100vh - 2rem - var(--top-padding));
   max-height: calc(100vh - 2rem - var(--top-padding));
 
@@ -184,7 +198,7 @@ onMounted(() => {
 }
 
 .fc-daygrid-day {
-  height: calc((100vh - 15rem) / 4);
+  //height: calc((100vh - 15rem) / 4);
   &:hover {
     background: hsl(var(--secondary));
     cursor: pointer;
@@ -193,5 +207,19 @@ onMounted(() => {
       text-decoration: underline;
     }
   }
+}
+
+.fc-col-header,
+.fc-timegrid-body {
+  width: 100% !important;
+}
+.fc-scrollgrid-sync-table {
+  width: 100% !important;
+}
+.fc-daygrid-body {
+  width: 100% !important;
+}
+.fc-daygrid-body-balanced {
+  width: 100% !important;
 }
 </style>

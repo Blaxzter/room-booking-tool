@@ -3,7 +3,7 @@
 import { onMounted, ref } from 'vue'
 import { useRoute } from 'vue-router'
 
-import CalenderComponent from '@/components/booking-components/CalenderComponent.vue'
+import CalenderComponent from '@/components/booking-components/calender/CalenderComponent.vue'
 import BookableSideInfo from '@/components/booking-components/BookableSideInfo.vue'
 
 import { useBookableObjects } from '@/stores/bookableObjects'

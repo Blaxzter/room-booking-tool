@@ -11,6 +11,7 @@ import { cn } from '@/lib/utils'
 
 const props = defineProps<{
   class?: HTMLAttributes['class']
+  horizontal?: boolean
 }>()
 
 const id = useId()
@@ -18,7 +19,7 @@ provide(FORM_ITEM_INJECTION_KEY, id)
 </script>
 
 <template>
-  <div :class="cn('space-y-2', props.class)">
+  <div :class="cn(horizontal ? '' : 'space-y-2', props.class)">
     <slot />
   </div>
 </template>

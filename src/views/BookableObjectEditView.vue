@@ -1,8 +1,6 @@
 <script setup lang="ts">
 // get the bookable object id from the route
 import { useRoute } from 'vue-router'
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
-import CalenderComponent from '@/components/booking-components/CalenderComponent.vue'
 
 const route = useRoute()
 

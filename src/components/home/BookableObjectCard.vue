@@ -5,6 +5,7 @@ import type { BookableObject } from '@/types'
 import RandomEmoji from '@/components/utils/Emoji.vue'
 
 import BookableObjectMenuButton from '@/components/bookable-object/BookableObjectMenuButton.vue'
+import BookingCardSplashImage from '@/components/home/BookingCardSplashImage.vue'
 
 // add bookable object as prop
 defineProps<{
@@ -27,18 +28,13 @@ const open = ref(false)
     @mouseleave="mouseover = false"
   >
     <div class="overflow-hidden rounded-md relative">
-      <img
+      <BookingCardSplashImage
         v-if="bookableObject.image"
-        :src="`http://localhost:8055/assets/${bookableObject.image.id}`"
-        :alt="bookableObject.name"
+        :alt_name="bookableObject.name"
+        :image_id="bookableObject.image.id"
         :width="width"
         :height="height"
-        :class="
-          cn(
-            'h-auto w-auto object-cover transition-all hover:scale-105',
-            aspectRatio === 'portrait' ? 'aspect-[3/4]' : 'aspect-square'
-          )
-        "
+        :aspectRatio="aspectRatio"
       />
       <div v-else>
         <div
