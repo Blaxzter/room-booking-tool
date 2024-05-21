@@ -1,0 +1,25 @@
+{
+  "collection": "bookable_object_group",
+  "field": "bookable_object_id",
+  "related_collection": "bookable_object",
+  "meta": {
+    "junction_field": "group_id",
+    "many_collection": "bookable_object_group",
+    "many_field": "bookable_object_id",
+    "one_allowed_collections": null,
+    "one_collection": "bookable_object",
+    "one_collection_field": null,
+    "one_deselect_action": "nullify",
+    "one_field": "group",
+    "sort_field": null
+  },
+  "schema": {
+    "table": "bookable_object_group",
+    "column": "bookable_object_id",
+    "foreign_key_table": "bookable_object",
+    "foreign_key_column": "id",
+    "constraint_name": "bookable_object_group_bookable_object_id_foreign",
+    "on_update": "NO ACTION",
+    "on_delete": "SET NULL"
+  }
+}
