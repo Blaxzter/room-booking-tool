@@ -1,0 +1,60 @@
+{
+  "collection": "bookable_object",
+  "field": "type",
+  "type": "string",
+  "meta": {
+    "collection": "bookable_object",
+    "conditions": null,
+    "display": null,
+    "display_options": null,
+    "field": "type",
+    "group": null,
+    "hidden": false,
+    "interface": "select-dropdown",
+    "note": null,
+    "options": {
+      "choices": [
+        {
+          "text": "Room",
+          "value": "room",
+          "icon": "nest_multi_room"
+        },
+        {
+          "text": "Object",
+          "value": "object",
+          "icon": "sports_rugby"
+        },
+        {
+          "text": "Equipment",
+          "value": "equipment",
+          "icon": "exercise"
+        }
+      ]
+    },
+    "readonly": false,
+    "required": true,
+    "sort": 15,
+    "special": null,
+    "translations": null,
+    "validation": null,
+    "validation_message": null,
+    "width": "full"
+  },
+  "schema": {
+    "name": "type",
+    "table": "bookable_object",
+    "data_type": "character varying",
+    "default_value": "room",
+    "max_length": 255,
+    "numeric_precision": null,
+    "numeric_scale": null,
+    "is_nullable": true,
+    "is_unique": false,
+    "is_primary_key": false,
+    "is_generated": false,
+    "generation_expression": null,
+    "has_auto_increment": false,
+    "foreign_key_table": null,
+    "foreign_key_column": null
+  }
+}

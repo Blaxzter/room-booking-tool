@@ -1,0 +1,28 @@
+{
+  "collection": "bookable_object",
+  "meta": {
+    "accountability": "all",
+    "archive_app_filter": true,
+    "archive_field": "status",
+    "archive_value": "archived",
+    "collapse": "open",
+    "collection": "bookable_object",
+    "color": null,
+    "display_template": "{{name}}",
+    "group": null,
+    "hidden": false,
+    "icon": "bedroom_child",
+    "item_duplication_fields": null,
+    "note": null,
+    "preview_url": null,
+    "singleton": false,
+    "sort": null,
+    "sort_field": null,
+    "translations": null,
+    "unarchive_value": "draft",
+    "versioning": false
+  },
+  "schema": {
+    "name": "bookable_object"
+  }
+}
