@@ -1,8 +1,4 @@
 type Query {
-  booking(filter: booking_filter, sort: [String], limit: Int, offset: Int, page: Int, search: String): [booking!]!
-  booking_by_id(id: ID!, version: String): booking
-  booking_aggregated(groupBy: [String], filter: booking_filter, limit: Int, offset: Int, page: Int, search: String, sort: [String]): [booking_aggregated!]!
-  booking_by_version(version: String!, id: ID!): version_booking
   group_directus_users(filter: group_directus_users_filter, sort: [String], limit: Int, offset: Int, page: Int, search: String): [group_directus_users!]!
   group_directus_users_by_id(id: ID!, version: String): group_directus_users
   group_directus_users_aggregated(groupBy: [String], filter: group_directus_users_filter, limit: Int, offset: Int, page: Int, search: String, sort: [String]): [group_directus_users_aggregated!]!
@@ -11,6 +7,10 @@ type Query {
   bookable_object_group_by_id(id: ID!, version: String): bookable_object_group
   bookable_object_group_aggregated(groupBy: [String], filter: bookable_object_group_filter, limit: Int, offset: Int, page: Int, search: String, sort: [String]): [bookable_object_group_aggregated!]!
   bookable_object_group_by_version(version: String!, id: ID!): version_bookable_object_group
+  booking(filter: booking_filter, sort: [String], limit: Int, offset: Int, page: Int, search: String): [booking!]!
+  booking_by_id(id: ID!, version: String): booking
+  booking_aggregated(groupBy: [String], filter: booking_filter, limit: Int, offset: Int, page: Int, search: String, sort: [String]): [booking_aggregated!]!
+  booking_by_version(version: String!, id: ID!): version_booking
   directus_sync_id_map(filter: directus_sync_id_map_filter, sort: [String], limit: Int, offset: Int, page: Int, search: String): [directus_sync_id_map!]!
   directus_sync_id_map_by_id(id: ID!, version: String): directus_sync_id_map
   directus_sync_id_map_aggregated(groupBy: [String], filter: directus_sync_id_map_filter, limit: Int, offset: Int, page: Int, search: String, sort: [String]): [directus_sync_id_map_aggregated!]!
@@ -26,27 +26,27 @@ type Query {
 }
 
 type Mutation {
-  create_booking_items(filter: booking_filter, sort: [String], limit: Int, offset: Int, page: Int, search: String, data: [create_booking_input!]): [booking!]!
-  create_booking_item(data: create_booking_input!): booking
   create_group_directus_users_items(filter: group_directus_users_filter, sort: [String], limit: Int, offset: Int, page: Int, search: String, data: [create_group_directus_users_input!]): [group_directus_users!]!
   create_group_directus_users_item(data: create_group_directus_users_input!): group_directus_users
   create_bookable_object_group_items(filter: bookable_object_group_filter, sort: [String], limit: Int, offset: Int, page: Int, search: String, data: [create_bookable_object_group_input!]): [bookable_object_group!]!
   create_bookable_object_group_item(data: create_bookable_object_group_input!): bookable_object_group
+  create_booking_items(filter: booking_filter, sort: [String], limit: Int, offset: Int, page: Int, search: String, data: [create_booking_input!]): [booking!]!
+  create_booking_item(data: create_booking_input!): booking
   create_directus_sync_id_map_items(filter: directus_sync_id_map_filter, sort: [String], limit: Int, offset: Int, page: Int, search: String, data: [create_directus_sync_id_map_input!]): [directus_sync_id_map!]!
   create_directus_sync_id_map_item(data: create_directus_sync_id_map_input!): directus_sync_id_map
   create_group_items(filter: group_filter, sort: [String], limit: Int, offset: Int, page: Int, search: String, data: [create_group_input!]): [group!]!
   create_group_item(data: create_group_input!): group
   create_bookable_object_items(filter: bookable_object_filter, sort: [String], limit: Int, offset: Int, page: Int, search: String, data: [create_bookable_object_input!]): [bookable_object!]!
   create_bookable_object_item(data: create_bookable_object_input!): bookable_object
-  update_booking_items(filter: booking_filter, sort: [String], limit: Int, offset: Int, page: Int, search: String, ids: [ID]!, data: update_booking_input!): [booking!]!
-  update_booking_batch(filter: booking_filter, sort: [String], limit: Int, offset: Int, page: Int, search: String, data: [update_booking_input!]): [booking!]!
-  update_booking_item(id: ID!, data: update_booking_input!): booking
   update_group_directus_users_items(filter: group_directus_users_filter, sort: [String], limit: Int, offset: Int, page: Int, search: String, ids: [ID]!, data: update_group_directus_users_input!): [group_directus_users!]!
   update_group_directus_users_batch(filter: group_directus_users_filter, sort: [String], limit: Int, offset: Int, page: Int, search: String, data: [update_group_directus_users_input!]): [group_directus_users!]!
   update_group_directus_users_item(id: ID!, data: update_group_directus_users_input!): group_directus_users
   update_bookable_object_group_items(filter: bookable_object_group_filter, sort: [String], limit: Int, offset: Int, page: Int, search: String, ids: [ID]!, data: update_bookable_object_group_input!): [bookable_object_group!]!
   update_bookable_object_group_batch(filter: bookable_object_group_filter, sort: [String], limit: Int, offset: Int, page: Int, search: String, data: [update_bookable_object_group_input!]): [bookable_object_group!]!
   update_bookable_object_group_item(id: ID!, data: update_bookable_object_group_input!): bookable_object_group
+  update_booking_items(filter: booking_filter, sort: [String], limit: Int, offset: Int, page: Int, search: String, ids: [ID]!, data: update_booking_input!): [booking!]!
+  update_booking_batch(filter: booking_filter, sort: [String], limit: Int, offset: Int, page: Int, search: String, data: [update_booking_input!]): [booking!]!
+  update_booking_item(id: ID!, data: update_booking_input!): booking
   update_directus_sync_id_map_items(filter: directus_sync_id_map_filter, sort: [String], limit: Int, offset: Int, page: Int, search: String, ids: [ID]!, data: update_directus_sync_id_map_input!): [directus_sync_id_map!]!
   update_directus_sync_id_map_batch(filter: directus_sync_id_map_filter, sort: [String], limit: Int, offset: Int, page: Int, search: String, data: [update_directus_sync_id_map_input!]): [directus_sync_id_map!]!
   update_directus_sync_id_map_item(id: ID!, data: update_directus_sync_id_map_input!): directus_sync_id_map
@@ -56,12 +56,12 @@ type Mutation {
   update_bookable_object_items(filter: bookable_object_filter, sort: [String], limit: Int, offset: Int, page: Int, search: String, ids: [ID]!, data: update_bookable_object_input!): [bookable_object!]!
   update_bookable_object_batch(filter: bookable_object_filter, sort: [String], limit: Int, offset: Int, page: Int, search: String, data: [update_bookable_object_input!]): [bookable_object!]!
   update_bookable_object_item(id: ID!, data: update_bookable_object_input!): bookable_object
-  delete_booking_items(ids: [ID]!): delete_many
-  delete_booking_item(id: ID!): delete_one
   delete_group_directus_users_items(ids: [ID]!): delete_many
   delete_group_directus_users_item(id: ID!): delete_one
   delete_bookable_object_group_items(ids: [ID]!): delete_many
   delete_bookable_object_group_item(id: ID!): delete_one
+  delete_booking_items(ids: [ID]!): delete_many
+  delete_booking_item(id: ID!): delete_one
   delete_directus_sync_id_map_items(ids: [ID]!): delete_many
   delete_directus_sync_id_map_item(id: ID!): delete_one
   delete_group_items(ids: [ID]!): delete_many
@@ -87,10 +87,10 @@ type Subscription {
   directus_dashboards_mutated(event: EventEnum): directus_dashboards_mutated
   directus_operations_mutated(event: EventEnum): directus_operations_mutated
   directus_translations_mutated(event: EventEnum): directus_translations_mutated
-  booking_mutated(event: EventEnum): booking_mutated
   directus_versions_mutated(event: EventEnum): directus_versions_mutated
   group_directus_users_mutated(event: EventEnum): group_directus_users_mutated
   bookable_object_group_mutated(event: EventEnum): bookable_object_group_mutated
+  booking_mutated(event: EventEnum): booking_mutated
   directus_settings_mutated(event: EventEnum): directus_settings_mutated
   directus_sync_id_map_mutated(event: EventEnum): directus_sync_id_map_mutated
   group_mutated(event: EventEnum): group_mutated
@@ -287,14 +287,14 @@ type booking_aggregated {
   count: booking_aggregated_count
   countDistinct: booking_aggregated_count
   avg: booking_aggregated_fields
-  sum: Booking_aggregated_fields
-  avgDistinct: Booking_aggregated_fields
-  sumDistinct: Booking_aggregated_fields
-  min: Booking_aggregated_fields
-  max: Booking_aggregated_fields
+  sum: booking_aggregated_fields
+  avgDistinct: booking_aggregated_fields
+  sumDistinct: booking_aggregated_fields
+  min: booking_aggregated_fields
+  max: booking_aggregated_fields
 }
 
-type Booking_aggregated_count {
+type booking_aggregated_count {
   id: Int
   status: Int
   user_created: Int
@@ -317,15 +317,15 @@ type Booking_aggregated_count {
   confirmed: Int
 }
 
-type Booking_aggregated_fields {
+type booking_aggregated_fields {
   id: Float
   bookable_object_id: Float
 }
 
-type Booking_mutated {
+type booking_mutated {
   key: ID!
   event: EventEnum
-  data: Booking
+  data: booking
 }
 
 type count_functions {
@@ -961,7 +961,7 @@ type version_bookable_object_group {
 }
 
 """"""
-type version_Booking {
+type version_booking {
   id: ID
   status: String
   user_created: JSON
@@ -1067,7 +1067,7 @@ input bookable_object_group_filter {
   _or: [bookable_object_group_filter]
 }
 
-input Booking_filter {
+input booking_filter {
   id: number_filter_operators
   status: string_filter_operators
   user_created: directus_users_filter
@@ -1086,8 +1086,8 @@ input Booking_filter {
   phone: string_filter_operators
   description: string_filter_operators
   confirmed: boolean_filter_operators
-  _and: [Booking_filter]
-  _or: [Booking_filter]
+  _and: [booking_filter]
+  _or: [booking_filter]
 }
 
 input boolean_filter_operators {
@@ -1129,7 +1129,7 @@ input create_bookable_object_input {
   group: [create_bookable_object_group_input]
 }
 
-input create_Booking_input {
+input create_booking_input {
   id: ID
   status: String
   user_created: create_directus_users_input
@@ -1624,7 +1624,7 @@ input update_bookable_object_input {
   group: [update_bookable_object_group_input]
 }
 
-input update_Booking_input {
+input update_booking_input {
   id: ID
   status: String
   user_created: update_directus_users_input

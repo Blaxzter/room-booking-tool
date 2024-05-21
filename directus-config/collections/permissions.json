@@ -523,46 +523,17 @@
     "fields": [
       "*"
     ],
-    "_syncId": "e3ed4e8f-c595-4ea3-bfce-742bbbbc2953"
+    "_syncId": "82523057-c94c-406e-bcb6-0e3bfb526b81"
   },
   {
     "role": "62a8abe7-e3ae-462e-b038-58ce5a2f5475",
     "collection": "booking",
     "action": "read",
-    "permissions": {
-      "_and": [
-        {
-          "bookable_object_id": {
-            "group": {
-              "group_id": {
-                "users": {
-                  "directus_users_id": {
-                    "_eq": "$CURRENT_USER"
-                  }
-                }
-              }
-            }
-          }
-        }
-      ]
-    },
-    "validation": null,
+    "permissions": {},
+    "validation": {},
     "presets": null,
     "fields": [
-      "id",
-      "status",
-      "date_created",
-      "user_created",
-      "user_updated",
-      "date_updated",
-      "start_date",
-      "bookable_object_id",
-      "is_full_day",
-      "end_date",
-      "phone",
-      "mail",
-      "description",
-      "confirmed"
+      "*"
     ],
     "_syncId": "517d22a4-0f60-4150-ac28-60ade2e186d4"
   },
@@ -634,33 +605,19 @@
     "role": "62a8abe7-e3ae-462e-b038-58ce5a2f5475",
     "collection": "directus_files",
     "action": "delete",
-    "permissions": {
-      "_and": [
-        {
-          "uploaded_by": {
-            "_eq": "$CURRENT_USER"
-          }
-        }
-      ]
-    },
-    "validation": null,
+    "permissions": {},
+    "validation": {},
     "presets": null,
-    "fields": null,
-    "_syncId": "61337a98-5d29-4004-9c86-01584a0090d8"
+    "fields": [
+      "*"
+    ],
+    "_syncId": "f0bc0441-2a2a-4d09-ba74-ac190b8d4e72"
   },
   {
     "role": "62a8abe7-e3ae-462e-b038-58ce5a2f5475",
     "collection": "directus_files",
     "action": "read",
-    "permissions": {
-      "_and": [
-        {
-          "uploaded_by": {
-            "_eq": "$CURRENT_USER"
-          }
-        }
-      ]
-    },
+    "permissions": null,
     "validation": {},
     "presets": null,
     "fields": [
@@ -732,15 +689,7 @@
     "role": "62a8abe7-e3ae-462e-b038-58ce5a2f5475",
     "collection": "group_directus_users",
     "action": "read",
-    "permissions": {
-      "_and": [
-        {
-          "directus_users_id": {
-            "_eq": "$CURRENT_USER"
-          }
-        }
-      ]
-    },
+    "permissions": null,
     "validation": {},
     "presets": null,
     "fields": [

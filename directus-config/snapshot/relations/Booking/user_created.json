@@ -2,17 +2,7 @@
   "collection": "booking",
   "field": "user_created",
   "related_collection": "directus_users",
-  "meta": {
-    "junction_field": null,
-    "many_collection": "booking",
-    "many_field": "user_created",
-    "one_allowed_collections": null,
-    "one_collection": "directus_users",
-    "one_collection_field": null,
-    "one_deselect_action": "nullify",
-    "one_field": null,
-    "sort_field": null
-  },
+  "meta": null,
   "schema": {
     "table": "booking",
     "column": "user_created",
