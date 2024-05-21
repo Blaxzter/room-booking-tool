@@ -1,9 +1,9 @@
 {
-  "collection": "Booking",
+  "collection": "booking",
   "field": "confirmed",
   "type": "boolean",
   "meta": {
-    "collection": "Booking",
+    "collection": "booking",
     "conditions": null,
     "display": null,
     "display_options": null,
@@ -26,7 +26,7 @@
   },
   "schema": {
     "name": "confirmed",
-    "table": "Booking",
+    "table": "booking",
     "data_type": "boolean",
     "default_value": false,
     "max_length": null,

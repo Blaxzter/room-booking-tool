@@ -1,9 +1,9 @@
 {
-  "collection": "Booking",
+  "collection": "booking",
   "field": "description",
   "type": "text",
   "meta": {
-    "collection": "Booking",
+    "collection": "booking",
     "conditions": null,
     "display": null,
     "display_options": null,
@@ -28,7 +28,7 @@
   },
   "schema": {
     "name": "description",
-    "table": "Booking",
+    "table": "booking",
     "data_type": "text",
     "default_value": null,
     "max_length": null,

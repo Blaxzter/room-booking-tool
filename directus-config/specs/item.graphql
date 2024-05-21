@@ -1,8 +1,8 @@
 type Query {
-  Booking(filter: Booking_filter, sort: [String], limit: Int, offset: Int, page: Int, search: String): [Booking!]!
-  Booking_by_id(id: ID!, version: String): Booking
-  Booking_aggregated(groupBy: [String], filter: Booking_filter, limit: Int, offset: Int, page: Int, search: String, sort: [String]): [Booking_aggregated!]!
-  Booking_by_version(version: String!, id: ID!): version_Booking
+  booking(filter: booking_filter, sort: [String], limit: Int, offset: Int, page: Int, search: String): [booking!]!
+  booking_by_id(id: ID!, version: String): booking
+  booking_aggregated(groupBy: [String], filter: booking_filter, limit: Int, offset: Int, page: Int, search: String, sort: [String]): [booking_aggregated!]!
+  booking_by_version(version: String!, id: ID!): version_booking
   group_directus_users(filter: group_directus_users_filter, sort: [String], limit: Int, offset: Int, page: Int, search: String): [group_directus_users!]!
   group_directus_users_by_id(id: ID!, version: String): group_directus_users
   group_directus_users_aggregated(groupBy: [String], filter: group_directus_users_filter, limit: Int, offset: Int, page: Int, search: String, sort: [String]): [group_directus_users_aggregated!]!
@@ -26,8 +26,8 @@ type Query {
 }
 
 type Mutation {
-  create_Booking_items(filter: Booking_filter, sort: [String], limit: Int, offset: Int, page: Int, search: String, data: [create_Booking_input!]): [Booking!]!
-  create_Booking_item(data: create_Booking_input!): Booking
+  create_booking_items(filter: booking_filter, sort: [String], limit: Int, offset: Int, page: Int, search: String, data: [create_booking_input!]): [booking!]!
+  create_booking_item(data: create_booking_input!): booking
   create_group_directus_users_items(filter: group_directus_users_filter, sort: [String], limit: Int, offset: Int, page: Int, search: String, data: [create_group_directus_users_input!]): [group_directus_users!]!
   create_group_directus_users_item(data: create_group_directus_users_input!): group_directus_users
   create_bookable_object_group_items(filter: bookable_object_group_filter, sort: [String], limit: Int, offset: Int, page: Int, search: String, data: [create_bookable_object_group_input!]): [bookable_object_group!]!
@@ -38,9 +38,9 @@ type Mutation {
   create_group_item(data: create_group_input!): group
   create_bookable_object_items(filter: bookable_object_filter, sort: [String], limit: Int, offset: Int, page: Int, search: String, data: [create_bookable_object_input!]): [bookable_object!]!
   create_bookable_object_item(data: create_bookable_object_input!): bookable_object
-  update_Booking_items(filter: Booking_filter, sort: [String], limit: Int, offset: Int, page: Int, search: String, ids: [ID]!, data: update_Booking_input!): [Booking!]!
-  update_Booking_batch(filter: Booking_filter, sort: [String], limit: Int, offset: Int, page: Int, search: String, data: [update_Booking_input!]): [Booking!]!
-  update_Booking_item(id: ID!, data: update_Booking_input!): Booking
+  update_booking_items(filter: booking_filter, sort: [String], limit: Int, offset: Int, page: Int, search: String, ids: [ID]!, data: update_booking_input!): [booking!]!
+  update_booking_batch(filter: booking_filter, sort: [String], limit: Int, offset: Int, page: Int, search: String, data: [update_booking_input!]): [booking!]!
+  update_booking_item(id: ID!, data: update_booking_input!): booking
   update_group_directus_users_items(filter: group_directus_users_filter, sort: [String], limit: Int, offset: Int, page: Int, search: String, ids: [ID]!, data: update_group_directus_users_input!): [group_directus_users!]!
   update_group_directus_users_batch(filter: group_directus_users_filter, sort: [String], limit: Int, offset: Int, page: Int, search: String, data: [update_group_directus_users_input!]): [group_directus_users!]!
   update_group_directus_users_item(id: ID!, data: update_group_directus_users_input!): group_directus_users
@@ -56,8 +56,8 @@ type Mutation {
   update_bookable_object_items(filter: bookable_object_filter, sort: [String], limit: Int, offset: Int, page: Int, search: String, ids: [ID]!, data: update_bookable_object_input!): [bookable_object!]!
   update_bookable_object_batch(filter: bookable_object_filter, sort: [String], limit: Int, offset: Int, page: Int, search: String, data: [update_bookable_object_input!]): [bookable_object!]!
   update_bookable_object_item(id: ID!, data: update_bookable_object_input!): bookable_object
-  delete_Booking_items(ids: [ID]!): delete_many
-  delete_Booking_item(id: ID!): delete_one
+  delete_booking_items(ids: [ID]!): delete_many
+  delete_booking_item(id: ID!): delete_one
   delete_group_directus_users_items(ids: [ID]!): delete_many
   delete_group_directus_users_item(id: ID!): delete_one
   delete_bookable_object_group_items(ids: [ID]!): delete_many
@@ -87,7 +87,7 @@ type Subscription {
   directus_dashboards_mutated(event: EventEnum): directus_dashboards_mutated
   directus_operations_mutated(event: EventEnum): directus_operations_mutated
   directus_translations_mutated(event: EventEnum): directus_translations_mutated
-  Booking_mutated(event: EventEnum): Booking_mutated
+  booking_mutated(event: EventEnum): booking_mutated
   directus_versions_mutated(event: EventEnum): directus_versions_mutated
   group_directus_users_mutated(event: EventEnum): group_directus_users_mutated
   bookable_object_group_mutated(event: EventEnum): bookable_object_group_mutated
@@ -254,7 +254,7 @@ type bookable_object_mutated {
   data: bookable_object
 }
 
-type Booking {
+type booking {
   id: ID!
   status: String
   user_created(filter: directus_users_filter, sort: [String], limit: Int, offset: Int, page: Int, search: String): directus_users
@@ -281,12 +281,12 @@ type Booking {
   confirmed: Boolean
 }
 
-type Booking_aggregated {
+type booking_aggregated {
   group: JSON
   countAll: Int
-  count: Booking_aggregated_count
-  countDistinct: Booking_aggregated_count
-  avg: Booking_aggregated_fields
+  count: booking_aggregated_count
+  countDistinct: booking_aggregated_count
+  avg: booking_aggregated_fields
   sum: Booking_aggregated_fields
   avgDistinct: Booking_aggregated_fields
   sumDistinct: Booking_aggregated_fields

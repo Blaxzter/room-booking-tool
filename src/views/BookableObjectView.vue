@@ -21,7 +21,11 @@ const bookableObject = ref()
 const bookableObjectId = route.params.id
 
 onMounted(async () => {
-  bookableObject.value = await getBookableObjectById({ id: bookableObjectId as string, isUniqueId: false })
+  bookableObject.value = await getBookableObjectById({
+    id: bookableObjectId as string,
+    isUniqueId: false,
+    select: true
+  })
   loading.value = false
 })
 </script>

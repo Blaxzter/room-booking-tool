@@ -1,9 +1,9 @@
 {
-  "collection": "Booking",
+  "collection": "booking",
   "field": "date_created",
   "type": "timestamp",
   "meta": {
-    "collection": "Booking",
+    "collection": "booking",
     "conditions": null,
     "display": "datetime",
     "display_options": {
@@ -28,7 +28,7 @@
   },
   "schema": {
     "name": "date_created",
-    "table": "Booking",
+    "table": "booking",
     "data_type": "timestamp with time zone",
     "default_value": null,
     "max_length": null,

@@ -515,7 +515,7 @@
   },
   {
     "role": "62a8abe7-e3ae-462e-b038-58ce5a2f5475",
-    "collection": "Booking",
+    "collection": "booking",
     "action": "create",
     "permissions": {},
     "validation": {},
@@ -527,7 +527,7 @@
   },
   {
     "role": "62a8abe7-e3ae-462e-b038-58ce5a2f5475",
-    "collection": "Booking",
+    "collection": "booking",
     "action": "read",
     "permissions": {
       "_and": [
@@ -568,7 +568,7 @@
   },
   {
     "role": "62a8abe7-e3ae-462e-b038-58ce5a2f5475",
-    "collection": "Booking",
+    "collection": "booking",
     "action": "update",
     "permissions": {
       "_and": [

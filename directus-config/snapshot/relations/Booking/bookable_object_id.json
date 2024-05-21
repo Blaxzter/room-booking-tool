@@ -1,10 +1,10 @@
 {
-  "collection": "Booking",
+  "collection": "booking",
   "field": "bookable_object_id",
   "related_collection": "bookable_object",
   "meta": {
     "junction_field": null,
-    "many_collection": "Booking",
+    "many_collection": "booking",
     "many_field": "bookable_object_id",
     "one_allowed_collections": null,
     "one_collection": "bookable_object",
@@ -14,7 +14,7 @@
     "sort_field": null
   },
   "schema": {
-    "table": "Booking",
+    "table": "booking",
     "column": "bookable_object_id",
     "foreign_key_table": "bookable_object",
     "foreign_key_column": "id",

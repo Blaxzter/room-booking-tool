@@ -42,6 +42,10 @@ export const useBookableObjects = defineStore('bookableObjects', () => {
         if (!groupBookableObjects.value[`${group_association}`]) {
           groupBookableObjects.value[`${group_association}`] = []
         }
+        // check if bookable object is in selected group
+        if (groupBookableObjects.value[`${group_association}`].includes(bookableObject)) {
+          return
+        }
         groupBookableObjects.value[`${group_association}`].push(bookableObject)
         if (`${group_association}` === selectedGroupId.value) {
           bookableObjects.value.push(bookableObject)
@@ -51,6 +55,9 @@ export const useBookableObjects = defineStore('bookableObjects', () => {
 
     if (!groupBookableObjects.value['-1']) {
       groupBookableObjects.value['-1'] = []
+    }
+    if (groupBookableObjects.value['-1'].includes(bookableObject)) {
+      return
     }
     groupBookableObjects.value['-1'].push(bookableObject)
     if (_.isNil(selectedGroupId) || selectedGroupId.value === '-1') {
@@ -144,10 +151,12 @@ export const useBookableObjects = defineStore('bookableObjects', () => {
 
   const getBookableObjectById = async ({
     id,
-    isUniqueId = false
+    isUniqueId = false,
+    select = false
   }: {
     id: string
-    isUniqueId: boolean
+    isUniqueId?: boolean
+    select?: boolean
   }): Promise<BookableObject | void> => {
     const localBookableObject = allLoadedBookableObjects.value.find(
       (bookableObject) => bookableObject.id === Number(id)
@@ -159,6 +168,13 @@ export const useBookableObjects = defineStore('bookableObjects', () => {
         .query<BookableObjectRequest>(qGetBookableObjectById({ id: id, isUniqueId: isUniqueId }))
         .then((res) => {
           loading.value = false
+          if (res.bookable_object.length === 0) {
+            return
+          }
+          if (select) {
+            selectBookableObject(res.bookable_object[0])
+          }
+          addBookableObject(res.bookable_object[0])
           return res.bookable_object[0]
         })
         .catch((error) => {

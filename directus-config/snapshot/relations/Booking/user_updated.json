@@ -1,10 +1,10 @@
 {
-  "collection": "Booking",
+  "collection": "booking",
   "field": "user_updated",
   "related_collection": "directus_users",
   "meta": {
     "junction_field": null,
-    "many_collection": "Booking",
+    "many_collection": "booking",
     "many_field": "user_updated",
     "one_allowed_collections": null,
     "one_collection": "directus_users",
@@ -14,7 +14,7 @@
     "sort_field": null
   },
   "schema": {
-    "table": "Booking",
+    "table": "booking",
     "column": "user_updated",
     "foreign_key_table": "directus_users",
     "foreign_key_column": "id",

@@ -1,9 +1,9 @@
 {
-  "collection": "Booking",
+  "collection": "booking",
   "field": "end_date",
   "type": "dateTime",
   "meta": {
-    "collection": "Booking",
+    "collection": "booking",
     "conditions": [
       {
         "name": "Show end date when not full day",
@@ -42,7 +42,7 @@
   },
   "schema": {
     "name": "end_date",
-    "table": "Booking",
+    "table": "booking",
     "data_type": "timestamp without time zone",
     "default_value": null,
     "max_length": null,

@@ -6558,10 +6558,10 @@
         ]
       }
     },
-    "/items/Booking": {
+    "/items/booking": {
       "post": {
         "summary": "Create an Item",
-        "description": "Create a new Booking item.",
+        "description": "Create a new booking item.",
         "tags": [
           "Items",
           "ItemsBooking"

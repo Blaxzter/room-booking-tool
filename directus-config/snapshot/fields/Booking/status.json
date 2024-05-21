@@ -1,9 +1,9 @@
 {
-  "collection": "Booking",
+  "collection": "booking",
   "field": "status",
   "type": "string",
   "meta": {
-    "collection": "Booking",
+    "collection": "booking",
     "conditions": null,
     "display": "labels",
     "display_options": {
@@ -67,7 +67,7 @@
   },
   "schema": {
     "name": "status",
-    "table": "Booking",
+    "table": "booking",
     "data_type": "character varying",
     "default_value": "draft",
     "max_length": 255,

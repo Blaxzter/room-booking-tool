@@ -49,6 +49,10 @@ export const useBooking = defineStore('bookings', () => {
 
   const createBookings = async (booking: CreateBookingRequest) => {
     booking.status = 'published'
+    if (!selectedBookableObject.value) {
+      throw new Error('No bookable object selected')
+    }
+    booking.bookable_object_id = `${selectedBookableObject.value.id}`
     const result = await client.request(createItem('booking', booking))
     console.log(result)
     // cast result to BookableObject
@@ -60,6 +64,10 @@ export const useBooking = defineStore('bookings', () => {
     const id = selectedBookableObject?.value?.id
     if (!id) {
       return []
+    }
+    const valueElement = bookingsPerBookableObjectId.value[id]
+    if (!valueElement) {
+      bookingsPerBookableObjectId.value[id] = []
     }
     return bookingsPerBookableObjectId.value[id]
   })

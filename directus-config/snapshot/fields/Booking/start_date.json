@@ -1,9 +1,9 @@
 {
-  "collection": "Booking",
+  "collection": "booking",
   "field": "start_date",
   "type": "dateTime",
   "meta": {
-    "collection": "Booking",
+    "collection": "booking",
     "conditions": null,
     "display": null,
     "display_options": null,
@@ -24,7 +24,7 @@
   },
   "schema": {
     "name": "start_date",
-    "table": "Booking",
+    "table": "booking",
     "data_type": "timestamp without time zone",
     "default_value": null,
     "max_length": null,

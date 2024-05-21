@@ -225,7 +225,7 @@ type Subscription {
   directus_dashboards_mutated(event: EventEnum): directus_dashboards_mutated
   directus_operations_mutated(event: EventEnum): directus_operations_mutated
   directus_translations_mutated(event: EventEnum): directus_translations_mutated
-  Booking_mutated(event: EventEnum): Booking_mutated
+  booking_mutated(event: EventEnum): booking_mutated
   directus_versions_mutated(event: EventEnum): directus_versions_mutated
   group_directus_users_mutated(event: EventEnum): group_directus_users_mutated
   bookable_object_group_mutated(event: EventEnum): bookable_object_group_mutated
@@ -360,7 +360,7 @@ type bookable_object_mutated {
   data: bookable_object
 }
 
-type Booking {
+type booking {
   id: ID!
   status: String
   user_created(filter: directus_users_filter, sort: [String], limit: Int, offset: Int, page: Int, search: String): directus_users
@@ -387,10 +387,10 @@ type Booking {
   confirmed: Boolean
 }
 
-type Booking_mutated {
+type booking_mutated {
   key: ID!
   event: EventEnum
-  data: Booking
+  data: booking
 }
 
 type count_functions {

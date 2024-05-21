@@ -10,7 +10,7 @@ import { useBooking } from '@/stores/useBooking'
 import type { CreateBookingRequest } from '@/assets/ts/queries/bookings'
 
 const activeStep = ref(0)
-const steps = ['Basic Info', 'Permissions', 'Additional', 'Details']
+const steps = ['Time', 'Contact', 'Event']
 
 const contactData = ref()
 const eventData = ref()
@@ -46,9 +46,26 @@ const handleClose = () => {
   emit('close')
 }
 
+function combineDateTime(date: string, time: string) {
+  // Extract the date part (ignoring the time part if present)
+  const datePart = date.split('T')[0]
+  // Combine date part with time, and add a 'Z' to indicate UTC if needed
+  return `${datePart}T${time}:00.000Z`
+}
+
 const createBooking = async () => {
+  const timeData = stepToValues.value[0]
+
+  // convert start date + time to ISO string
+  timeData.startDate = combineDateTime(timeData.startDate, timeData.startTime)
+  timeData.endDate = combineDateTime(timeData.endDate, timeData.endTime)
+
+  delete timeData.startTime
+  delete timeData.endTime
+  delete timeData.combineDateTime
+
   const createObject = {
-    ...stepToValues.value[0],
+    ...timeData,
     ...stepToValues.value[1],
     ...stepToValues.value[2]
   }
@@ -56,6 +73,8 @@ const createBooking = async () => {
   console.log('Creating object with values:', createObject)
   const { createBookings } = useBooking()
   await createBookings(createObject as CreateBookingRequest)
+  console.log('Booking created')
+  open.value = false
 }
 
 const nextStep = async () => {
@@ -79,7 +98,9 @@ watch(open, (val) => {
     stepToValues.value[0] = {
       startDate: props.startDate,
       startTime: props.startTime,
-      endTime: props.endTime
+      endTime: props.endTime,
+      isOnAnotherDate: false,
+      endDate: props.startDate
     }
   }
 })
@@ -106,7 +127,7 @@ watch(open, (val) => {
             <template v-slot:footer>
               <DialogFooter>
                 <Button @click="activeStep--" type="button">Back</Button>
-                <Button @click="nextStep" type="button">Create</Button>
+                <Button @click="nextStep" type="button">Next</Button>
               </DialogFooter>
             </template>
           </ContactData>
@@ -116,7 +137,7 @@ watch(open, (val) => {
             <template v-slot:footer>
               <DialogFooter>
                 <Button @click="activeStep--" type="button">Back</Button>
-                <Button @click="nextStep" type="button">Next</Button>
+                <Button @click="nextStep" type="button">Create</Button>
               </DialogFooter>
             </template>
           </EventData>

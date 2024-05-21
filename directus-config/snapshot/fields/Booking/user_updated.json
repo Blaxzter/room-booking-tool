@@ -1,9 +1,9 @@
 {
-  "collection": "Booking",
+  "collection": "booking",
   "field": "user_updated",
   "type": "uuid",
   "meta": {
-    "collection": "Booking",
+    "collection": "booking",
     "conditions": null,
     "display": "user",
     "display_options": null,
@@ -28,7 +28,7 @@
   },
   "schema": {
     "name": "user_updated",
-    "table": "Booking",
+    "table": "booking",
     "data_type": "uuid",
     "default_value": null,
     "max_length": null,
