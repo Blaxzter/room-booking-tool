@@ -1,4 +1,10 @@
-import type { BookableObject, Group } from '@/types'
+import type { BookableObject, Booking, Group } from '@/types'
+import {
+  bookableObjectByGroup,
+  bookableObjectById,
+  qGetBookableObjectByOwner
+} from '@/assets/ts/queries/bookable_objects'
+import { getBookingQObject } from '@/assets/ts/queries/bookings'
 
 export const getGroupQuery = (group_id: string) => `
 query Initial_Data {
@@ -15,28 +21,7 @@ query Initial_Data {
             id
         }
     }
-    bookable_object(filter: { group: { group_id: { id: { _eq: "${group_id}" } } } }) {
-        id
-        status
-        date_created
-        date_updated
-        location
-        name
-        description
-        tags
-        image {
-            id
-        }
-        is_internal
-        group {
-            id
-        }
-        uniqueId
-        type
-        confirm_booking_required
-        information_shared
-        confirm_role
-    }
+    ${bookableObjectByGroup(group_id)}
 }
 `
 
@@ -55,32 +40,46 @@ query Bookable_object {
             id
         }
     }
-    bookable_object(
-        filter: { owner: { id: { _eq: "${user_id}" } } }
-    ) {
-        id
-        status
-        date_created
-        date_updated
-        location
-        name
-        description
-        tags
-        image {
-            id
-        }
-        is_internal
-        group {
-            id
-        }
-        uniqueId
-        type
-        confirm_booking_required
-        information_shared
-        confirm_role
-    }
+    ${qGetBookableObjectByOwner(user_id)}
 }
 `
+
+export const objectView = ({
+  bookable_object_id,
+  isUniqueId = false,
+  publicView = false
+}: {
+  bookable_object_id: string
+  isUniqueId?: boolean
+  publicView?: boolean
+}): string => {
+  const groupQuery = `group {
+        id
+        status
+        sort
+        date_created
+        date_updated
+        name
+        description
+        emoji
+        avatar {
+            id
+        }
+    }`
+  return `
+    query Object_view {
+        ${publicView ? '' : groupQuery}
+        ${getBookingQObject({ bookable_object_id, isUniqueId })}   
+        ${bookableObjectById({ id: bookable_object_id, isUniqueId })}
+    }
+  `
+}
+
+export interface ObjectViewResponse {
+  group?: Group[]
+  booking: Booking[]
+  bookable_object: BookableObject[]
+}
 
 export interface GetGroupQueryResponse {
   group: Group[]
@@ -91,35 +90,6 @@ export interface GetInitialDataQueryResponse {
   group: Group[]
   bookable_object: BookableObject[]
 }
-
-export const userBookableObject = (user_id: string) => `
-query Bookable_object {
-    bookable_object(
-        filter: { owner: { id: { _eq: "${user_id}" } } }
-    ) {
-        id
-        status
-        date_created
-        date_updated
-        location
-        name
-        description
-        tags
-        image {
-            id
-        }
-        is_internal
-        group {
-            id
-        }
-        uniqueId
-        type
-        confirm_booking_required
-        information_shared
-        confirm_role
-    }
-}
-`
 
 export interface BookableObjectsRequest {
   bookable_object: BookableObject[]

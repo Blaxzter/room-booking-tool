@@ -2,7 +2,7 @@ import { defineStore, storeToRefs } from 'pinia'
 import { computed, ref } from 'vue'
 import type { BookableObject, CreateBookableObjectRequest } from '@/types'
 import { useAuth } from '@/stores/auth'
-import { type BookableObjectsRequest, userBookableObject } from '@/assets/ts/queries/initial_data'
+import { type BookableObjectsRequest } from '@/assets/ts/queries/initial_data'
 import { useToast } from '@/components/ui/toast'
 import { createItem } from '@directus/sdk'
 import { useGroups } from '@/stores/groups'
@@ -10,7 +10,8 @@ import _ from 'lodash'
 import {
   type BookableObjectRequest,
   getBookableObjectByGroup,
-  qGetBookableObjectById
+  qGetBookableObjectById,
+  userBookableObject
 } from '@/assets/ts/queries/bookable_objects'
 
 export const useBookableObjects = defineStore('bookableObjects', () => {

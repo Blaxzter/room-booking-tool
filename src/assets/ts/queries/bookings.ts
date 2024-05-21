@@ -1,6 +1,6 @@
 import type { Booking } from '@/types'
 
-export const getAllBookings = ({
+export const getBookingQObject = ({
   bookable_object_id,
   isUniqueId = false
 }: {
@@ -8,8 +8,7 @@ export const getAllBookings = ({
   isUniqueId?: boolean
 }): string => {
   return `
-query Booking {
-    Booking(filter: { bookable_object_id: { ${isUniqueId ? 'uniqueId' : 'id'}: { _eq: ${bookable_object_id} } } }) {
+  booking(filter: { bookable_object_id: { ${isUniqueId ? 'uniqueId' : 'id'}: { _eq: ${bookable_object_id} } } }) {
         id
         status
         date_created
@@ -21,7 +20,19 @@ query Booking {
         phone
         description
         confirmed
-    }
+    }`
+}
+
+export const getAllBookings = ({
+  bookable_object_id,
+  isUniqueId = false
+}: {
+  bookable_object_id: string
+  isUniqueId?: boolean
+}): string => {
+  return `
+query Booking {
+    ${getBookingQObject({ bookable_object_id, isUniqueId })}
 }`
 }
 

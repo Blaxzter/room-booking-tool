@@ -16,6 +16,10 @@ export const useBooking = defineStore('bookings', () => {
 
   const { selectedBookableObject } = storeToRefs(useBookableObjects())
 
+  const setBookings = (bookable_object_id: string, data: Booking[]) => {
+    bookingsPerBookableObjectId.value[bookable_object_id] = data
+  }
+
   const fetchBookableObjectsByGroupId = async ({
     bookable_object_id,
     isUniqueId = false
@@ -31,7 +35,7 @@ export const useBooking = defineStore('bookings', () => {
       await client
         .query<BookingRequest>(getAllBookings({ bookable_object_id, isUniqueId }))
         .then((res) => {
-          bookingsPerBookableObjectId.value[bookable_object_id] = res.booking
+          setBookings(bookable_object_id, res.booking)
           loading.value = false
           return res
         })
@@ -76,6 +80,7 @@ export const useBooking = defineStore('bookings', () => {
     bookingsPerBookableObjectId,
     currentBookings,
     fetchBookableObjectsByGroupId,
-    createBookings
+    createBookings,
+    setBookings
   }
 })
