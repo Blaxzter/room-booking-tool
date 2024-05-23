@@ -10,7 +10,7 @@ import { Checkbox } from '@/components/ui/checkbox'
 import { MailIcon, PhoneIcon } from 'lucide-vue-next'
 
 interface InitialValues {
-  name: string
+  display_name: string
   mail: string
   phone: string
   saveInfo: boolean
@@ -23,7 +23,7 @@ const props = defineProps<{
 // Define a custom validation for requiring either email or phone
 const contactSchema = z
   .object({
-    name: z.string().min(1, { message: 'Name is required' }),
+    display_name: z.string().min(1, { message: 'Name is required' }),
     mail: z.string().email().optional(),
     phone: z.string().optional(),
     saveInfo: z.boolean().optional()
@@ -36,7 +36,7 @@ const contactSchema = z
 const { values, validate } = useForm({
   validationSchema: toTypedSchema(contactSchema),
   initialValues: {
-    name: props.initialValues.name || '',
+    display_name: props.initialValues.name || '',
     mail: props.initialValues.mail || '',
     phone: props.initialValues.phone || '',
     saveInfo: props.initialValues.saveInfo || false
@@ -49,7 +49,7 @@ defineExpose({ getValues, validate })
 
 <template>
   <form class="grid gap-5 py-4">
-    <FormField name="name" v-slot="{ componentField }">
+    <FormField name="display_name" v-slot="{ componentField }">
       <FormItem>
         <FormLabel for="name"> Name </FormLabel>
         <FormControl>

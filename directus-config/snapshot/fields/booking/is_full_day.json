@@ -8,14 +8,14 @@
     "display": null,
     "display_options": null,
     "field": "is_full_day",
-    "group": null,
+    "group": "event_data",
     "hidden": false,
     "interface": "boolean",
     "note": "If the event is full day. The end date is ignored and the day of the start date is used.",
     "options": null,
     "readonly": false,
     "required": false,
-    "sort": 9,
+    "sort": 2,
     "special": [
       "cast-boolean"
     ],

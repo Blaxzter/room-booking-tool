@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { LottieAnimation } from 'lottie-web-vue'
 import loader from '@/assets/animations/loader.json'
+import { flatten } from 'lottie-colorify'
 
 const props = defineProps({
   height: { type: Number, default: 24 }
@@ -9,7 +10,7 @@ const props = defineProps({
 
 <template>
   <LottieAnimation
-    :animation-data="loader"
+    :animationData="flatten('#f8fafc', loader)"
     :auto-play="true"
     :loop="true"
     :speed="2"

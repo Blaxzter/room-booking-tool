@@ -12,10 +12,12 @@ export type Booking = {
   start_date: string
   end_date: string
   is_full_day: boolean
+  display_name?: string
   mail: string
   phone: string
   description: string
   confirmed: boolean
+  confirmed_by?: User
 }
 
 export const BookingImpl: Booking = {

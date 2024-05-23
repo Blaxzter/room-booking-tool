@@ -3,7 +3,7 @@
   "info": {
     "title": "Dynamic API Specification",
     "description": "This is a dynamically generated API specification for all endpoints existing on the current project.",
-    "version": "10.10.7"
+    "version": "10.11.1"
   },
   "servers": [
     {
@@ -6558,6 +6558,393 @@
         ]
       }
     },
+    "/items/booking": {
+      "post": {
+        "summary": "Create an Item",
+        "description": "Create a new booking item.",
+        "tags": [
+          "Items",
+          "ItemsBooking"
+        ],
+        "operationId": "createItemsBooking",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/Meta"
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "oneOf": [
+                  {
+                    "type": "array",
+                    "items": {
+                      "$ref": "#/components/schemas/ItemsBooking"
+                    }
+                  },
+                  {
+                    "$ref": "#/components/schemas/ItemsBooking"
+                  }
+                ]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "items": {
+                        "$ref": "#/components/schemas/ItemsBooking"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/UnauthorizedError"
+          }
+        }
+      },
+      "get": {
+        "summary": "List Items",
+        "description": "List the booking items.",
+        "tags": [
+          "Items",
+          "ItemsBooking"
+        ],
+        "operationId": "readItemsBooking",
+        "security": [
+          {
+            "Auth": []
+          }
+        ],
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/Fields"
+          },
+          {
+            "$ref": "#/components/parameters/Limit"
+          },
+          {
+            "$ref": "#/components/parameters/Meta"
+          },
+          {
+            "$ref": "#/components/parameters/Offset"
+          },
+          {
+            "$ref": "#/components/parameters/Sort"
+          },
+          {
+            "$ref": "#/components/parameters/Filter"
+          },
+          {
+            "$ref": "#/components/parameters/Search"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "$ref": "#/components/schemas/ItemsBooking"
+                      }
+                    },
+                    "meta": {
+                      "$ref": "#/components/schemas/x-metadata"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/UnauthorizedError"
+          }
+        }
+      },
+      "patch": {
+        "summary": "Update Multiple Items",
+        "description": "Update multiple booking items at the same time.",
+        "tags": [
+          "Items",
+          "ItemsBooking"
+        ],
+        "operationId": "updateItemsBooking",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/Fields"
+          },
+          {
+            "$ref": "#/components/parameters/Limit"
+          },
+          {
+            "$ref": "#/components/parameters/Meta"
+          },
+          {
+            "$ref": "#/components/parameters/Offset"
+          },
+          {
+            "$ref": "#/components/parameters/Sort"
+          },
+          {
+            "$ref": "#/components/parameters/Filter"
+          },
+          {
+            "$ref": "#/components/parameters/Search"
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "oneOf": [
+                  {
+                    "type": "array",
+                    "items": {
+                      "$ref": "#/components/schemas/ItemsBooking"
+                    }
+                  },
+                  {
+                    "$ref": "#/components/schemas/ItemsBooking"
+                  }
+                ]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "data": {
+                      "items": {
+                        "$ref": "#/components/schemas/ItemsBooking"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "summary": "Delete Multiple Items",
+        "description": "Delete multiple existing booking items.",
+        "tags": [
+          "Items",
+          "ItemsBooking"
+        ],
+        "operationId": "deleteItemsBooking",
+        "responses": {
+          "200": {
+            "description": "Successful request"
+          },
+          "401": {
+            "$ref": "#/components/responses/UnauthorizedError"
+          }
+        },
+        "parameters": []
+      }
+    },
+    "/items/booking/{id}": {
+      "get": {
+        "summary": "Retrieve an Item",
+        "description": "Retrieve a single booking item by unique identifier.",
+        "tags": [
+          "Items",
+          "ItemsBooking"
+        ],
+        "operationId": "readSingleItemsBooking",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/Fields"
+          },
+          {
+            "$ref": "#/components/parameters/Meta"
+          },
+          {
+            "$ref": "#/components/parameters/Version"
+          },
+          {
+            "name": "id",
+            "description": "Index of the item.",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "oneOf": [
+                {
+                  "type": "integer",
+                  "description": "Incremental index of the item.",
+                  "example": 1
+                },
+                {
+                  "type": "string",
+                  "description": "Unique identifier of the item.",
+                  "example": "8cbb43fe-4cdf-4991-8352-c461779cec02"
+                }
+              ]
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "type": "object",
+                      "$ref": "#/components/schemas/ItemsBooking"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/UnauthorizedError"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFoundError"
+          }
+        }
+      },
+      "patch": {
+        "summary": "Update an Item",
+        "description": "Update an existing booking item.",
+        "tags": [
+          "Items",
+          "ItemsBooking"
+        ],
+        "operationId": "updateSingleItemsBooking",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/Fields"
+          },
+          {
+            "$ref": "#/components/parameters/Meta"
+          },
+          {
+            "name": "id",
+            "description": "Index of the item.",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "oneOf": [
+                {
+                  "type": "integer",
+                  "description": "Incremental index of the item.",
+                  "example": 1
+                },
+                {
+                  "type": "string",
+                  "description": "Unique identifier of the item.",
+                  "example": "8cbb43fe-4cdf-4991-8352-c461779cec02"
+                }
+              ]
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "$ref": "#/components/schemas/ItemsBooking"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "type": "object",
+                      "$ref": "#/components/schemas/ItemsBooking"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/UnauthorizedError"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFoundError"
+          }
+        }
+      },
+      "delete": {
+        "summary": "Delete an Item",
+        "description": "Delete an existing booking item.",
+        "tags": [
+          "Items",
+          "ItemsBooking"
+        ],
+        "operationId": "deleteSingleItemsBooking",
+        "responses": {
+          "200": {
+            "description": "Successful request"
+          },
+          "401": {
+            "$ref": "#/components/responses/UnauthorizedError"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFoundError"
+          }
+        },
+        "parameters": [
+          {
+            "name": "id",
+            "description": "Index of the item.",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "oneOf": [
+                {
+                  "type": "integer",
+                  "description": "Incremental index of the item.",
+                  "example": 1
+                },
+                {
+                  "type": "string",
+                  "description": "Unique identifier of the item.",
+                  "example": "8cbb43fe-4cdf-4991-8352-c461779cec02"
+                }
+              ]
+            }
+          }
+        ]
+      }
+    },
     "/versions": {
       "get": {
         "summary": "List Content Versions",
@@ -7971,480 +8358,6 @@
         ]
       }
     },
-    "/items/booking": {
-      "post": {
-        "summary": "Create an Item",
-        "description": "Create a new booking item.",
-        "tags": [
-          "Items",
-          "ItemsBooking"
-        ],
-        "operationId": "createItemsBooking",
-        "parameters": [
-          {
-            "$ref": "#/components/parameters/Meta"
-          }
-        ],
-        "requestBody": {
-          "content": {
-            "application/json": {
-              "schema": {
-                "oneOf": [
-                  {
-                    "type": "array",
-                    "items": {
-                      "$ref": "#/components/schemas/ItemsBooking"
-                    }
-                  },
-                  {
-                    "$ref": "#/components/schemas/ItemsBooking"
-                  }
-                ]
-              }
-            }
-          }
-        },
-        "responses": {
-          "200": {
-            "description": "Successful request",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "properties": {
-                    "data": {
-                      "items": {
-                        "$ref": "#/components/schemas/ItemsBooking"
-                      }
-                    }
-                  }
-                }
-              }
-            }
-          },
-          "401": {
-            "$ref": "#/components/responses/UnauthorizedError"
-          }
-        }
-      },
-      "get": {
-        "summary": "List Items",
-        "description": "List the booking items.",
-        "tags": [
-          "Items",
-          "ItemsBooking"
-        ],
-        "operationId": "readItemsBooking",
-        "security": [
-          {
-            "Auth": []
-          }
-        ],
-        "parameters": [
-          {
-            "$ref": "#/components/parameters/Fields"
-          },
-          {
-            "$ref": "#/components/parameters/Limit"
-          },
-          {
-            "$ref": "#/components/parameters/Meta"
-          },
-          {
-            "$ref": "#/components/parameters/Offset"
-          },
-          {
-            "$ref": "#/components/parameters/Sort"
-          },
-          {
-            "$ref": "#/components/parameters/Filter"
-          },
-          {
-            "$ref": "#/components/parameters/Search"
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "Successful request",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "properties": {
-                    "data": {
-                      "type": "array",
-                      "items": {
-                        "type": "object",
-                        "$ref": "#/components/schemas/ItemsBooking"
-                      }
-                    },
-                    "meta": {
-                      "$ref": "#/components/schemas/x-metadata"
-                    }
-                  }
-                }
-              }
-            }
-          },
-          "401": {
-            "$ref": "#/components/responses/UnauthorizedError"
-          }
-        }
-      },
-      "patch": {
-        "summary": "Update Multiple Items",
-        "description": "Update multiple booking items at the same time.",
-        "tags": [
-          "Items",
-          "ItemsBooking"
-        ],
-        "operationId": "updateItemsBooking",
-        "parameters": [
-          {
-            "$ref": "#/components/parameters/Fields"
-          },
-          {
-            "$ref": "#/components/parameters/Limit"
-          },
-          {
-            "$ref": "#/components/parameters/Meta"
-          },
-          {
-            "$ref": "#/components/parameters/Offset"
-          },
-          {
-            "$ref": "#/components/parameters/Sort"
-          },
-          {
-            "$ref": "#/components/parameters/Filter"
-          },
-          {
-            "$ref": "#/components/parameters/Search"
-          }
-        ],
-        "requestBody": {
-          "content": {
-            "application/json": {
-              "schema": {
-                "oneOf": [
-                  {
-                    "type": "array",
-                    "items": {
-                      "$ref": "#/components/schemas/ItemsBooking"
-                    }
-                  },
-                  {
-                    "$ref": "#/components/schemas/ItemsBooking"
-                  }
-                ]
-              }
-            }
-          }
-        },
-        "responses": {
-          "200": {
-            "description": "Successful request",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "properties": {
-                    "data": {
-                      "items": {
-                        "$ref": "#/components/schemas/ItemsBooking"
-                      }
-                    }
-                  }
-                }
-              }
-            }
-          }
-        }
-      },
-      "delete": {
-        "summary": "Delete Multiple Items",
-        "description": "Delete multiple existing booking items.",
-        "tags": [
-          "Items",
-          "ItemsBooking"
-        ],
-        "operationId": "deleteItemsBooking",
-        "responses": {
-          "200": {
-            "description": "Successful request"
-          },
-          "401": {
-            "$ref": "#/components/responses/UnauthorizedError"
-          }
-        },
-        "parameters": []
-      }
-    },
-    "/items/booking/{id}": {
-      "get": {
-        "summary": "Retrieve an Item",
-        "description": "Retrieve a single booking item by unique identifier.",
-        "tags": [
-          "Items",
-          "ItemsBooking"
-        ],
-        "operationId": "readSingleItemsBooking",
-        "parameters": [
-          {
-            "$ref": "#/components/parameters/Fields"
-          },
-          {
-            "$ref": "#/components/parameters/Meta"
-          },
-          {
-            "$ref": "#/components/parameters/Version"
-          },
-          {
-            "name": "id",
-            "description": "Index of the item.",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "oneOf": [
-                {
-                  "type": "integer",
-                  "description": "Incremental index of the item.",
-                  "example": 1
-                },
-                {
-                  "type": "string",
-                  "description": "Unique identifier of the item.",
-                  "example": "8cbb43fe-4cdf-4991-8352-c461779cec02"
-                }
-              ]
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "Successful request",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "properties": {
-                    "data": {
-                      "type": "object",
-                      "$ref": "#/components/schemas/ItemsBooking"
-                    }
-                  }
-                }
-              }
-            }
-          },
-          "401": {
-            "$ref": "#/components/responses/UnauthorizedError"
-          },
-          "404": {
-            "$ref": "#/components/responses/NotFoundError"
-          }
-        }
-      },
-      "patch": {
-        "summary": "Update an Item",
-        "description": "Update an existing booking item.",
-        "tags": [
-          "Items",
-          "ItemsBooking"
-        ],
-        "operationId": "updateSingleItemsBooking",
-        "parameters": [
-          {
-            "$ref": "#/components/parameters/Fields"
-          },
-          {
-            "$ref": "#/components/parameters/Meta"
-          },
-          {
-            "name": "id",
-            "description": "Index of the item.",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "oneOf": [
-                {
-                  "type": "integer",
-                  "description": "Incremental index of the item.",
-                  "example": 1
-                },
-                {
-                  "type": "string",
-                  "description": "Unique identifier of the item.",
-                  "example": "8cbb43fe-4cdf-4991-8352-c461779cec02"
-                }
-              ]
-            }
-          }
-        ],
-        "requestBody": {
-          "content": {
-            "application/json": {
-              "schema": {
-                "type": "object",
-                "$ref": "#/components/schemas/ItemsBooking"
-              }
-            }
-          }
-        },
-        "responses": {
-          "200": {
-            "description": "Successful request",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "properties": {
-                    "data": {
-                      "type": "object",
-                      "$ref": "#/components/schemas/ItemsBooking"
-                    }
-                  }
-                }
-              }
-            }
-          },
-          "401": {
-            "$ref": "#/components/responses/UnauthorizedError"
-          },
-          "404": {
-            "$ref": "#/components/responses/NotFoundError"
-          }
-        }
-      },
-      "delete": {
-        "summary": "Delete an Item",
-        "description": "Delete an existing booking item.",
-        "tags": [
-          "Items",
-          "ItemsBooking"
-        ],
-        "operationId": "deleteSingleItemsBooking",
-        "responses": {
-          "200": {
-            "description": "Successful request"
-          },
-          "401": {
-            "$ref": "#/components/responses/UnauthorizedError"
-          },
-          "404": {
-            "$ref": "#/components/responses/NotFoundError"
-          }
-        },
-        "parameters": [
-          {
-            "name": "id",
-            "description": "Index of the item.",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "oneOf": [
-                {
-                  "type": "integer",
-                  "description": "Incremental index of the item.",
-                  "example": 1
-                },
-                {
-                  "type": "string",
-                  "description": "Unique identifier of the item.",
-                  "example": "8cbb43fe-4cdf-4991-8352-c461779cec02"
-                }
-              ]
-            }
-          }
-        ]
-      }
-    },
-    "/settings": {
-      "get": {
-        "summary": "Retrieve Settings",
-        "description": "List the settings.",
-        "operationId": "getSettings",
-        "parameters": [
-          {
-            "$ref": "#/components/parameters/Limit"
-          },
-          {
-            "$ref": "#/components/parameters/Offset"
-          },
-          {
-            "$ref": "#/components/parameters/Meta"
-          },
-          {
-            "$ref": "#/components/parameters/Page"
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "Successful request",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "properties": {
-                    "data": {
-                      "$ref": "#/components/schemas/Settings"
-                    }
-                  }
-                }
-              }
-            }
-          },
-          "401": {
-            "$ref": "#/components/responses/UnauthorizedError"
-          },
-          "404": {
-            "$ref": "#/components/responses/NotFoundError"
-          }
-        },
-        "tags": [
-          "Settings"
-        ]
-      },
-      "patch": {
-        "summary": "Update Settings",
-        "description": "Update the settings",
-        "operationId": "updateSetting",
-        "requestBody": {
-          "content": {
-            "application/json": {
-              "schema": {
-                "type": "object"
-              }
-            }
-          }
-        },
-        "responses": {
-          "200": {
-            "description": "Successful request",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "properties": {
-                    "data": {
-                      "$ref": "#/components/schemas/Settings"
-                    }
-                  }
-                }
-              }
-            }
-          },
-          "401": {
-            "$ref": "#/components/responses/UnauthorizedError"
-          },
-          "404": {
-            "$ref": "#/components/responses/NotFoundError"
-          }
-        },
-        "tags": [
-          "Settings"
-        ]
-      }
-    },
     "/items/directus_sync_id_map": {
       "post": {
         "summary": "Create an Item",
@@ -9605,6 +9518,93 @@
           }
         ]
       }
+    },
+    "/settings": {
+      "get": {
+        "summary": "Retrieve Settings",
+        "description": "List the settings.",
+        "operationId": "getSettings",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/Limit"
+          },
+          {
+            "$ref": "#/components/parameters/Offset"
+          },
+          {
+            "$ref": "#/components/parameters/Meta"
+          },
+          {
+            "$ref": "#/components/parameters/Page"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "$ref": "#/components/schemas/Settings"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/UnauthorizedError"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFoundError"
+          }
+        },
+        "tags": [
+          "Settings"
+        ]
+      },
+      "patch": {
+        "summary": "Update Settings",
+        "description": "Update the settings",
+        "operationId": "updateSetting",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "$ref": "#/components/schemas/Settings"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/UnauthorizedError"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFoundError"
+          }
+        },
+        "tags": [
+          "Settings"
+        ]
+      }
     }
   },
   "tags": [
@@ -9711,6 +9711,10 @@
       "x-collection": "directus_operations"
     },
     {
+      "name": "ItemsBooking",
+      "x-collection": "booking"
+    },
+    {
       "name": "Versions",
       "description": "Enables users to create unpublished copies of an item, modify them independently from the main version, and promote them to become the new main version when ready.",
       "x-collection": "directus_versions"
@@ -9730,15 +9734,6 @@
       "x-collection": "bookable_object_group"
     },
     {
-      "name": "ItemsBooking",
-      "x-collection": "booking"
-    },
-    {
-      "name": "Settings",
-      "description": "Settings control the way the platform works and acts.",
-      "x-collection": "directus_settings"
-    },
-    {
       "name": "ItemsDirectusSyncIDMap",
       "x-collection": "directus_sync_id_map"
     },
@@ -9749,6 +9744,11 @@
     {
       "name": "ItemsBookableObject",
       "x-collection": "bookable_object"
+    },
+    {
+      "name": "Settings",
+      "description": "Settings control the way the platform works and acts.",
+      "x-collection": "directus_settings"
     }
   ],
   "components": {
@@ -11171,6 +11171,113 @@
         },
         "x-collection": "directus_operations"
       },
+      "ItemsBooking": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "nullable": false,
+            "type": "integer"
+          },
+          "status": {
+            "nullable": false,
+            "type": "string"
+          },
+          "user_created": {
+            "nullable": true,
+            "oneOf": [
+              {
+                "type": "string",
+                "format": "uuid"
+              },
+              {
+                "$ref": "#/components/schemas/Users"
+              }
+            ]
+          },
+          "date_created": {
+            "nullable": true,
+            "type": "string",
+            "format": "timestamp"
+          },
+          "user_updated": {
+            "nullable": true,
+            "oneOf": [
+              {
+                "type": "string",
+                "format": "uuid"
+              },
+              {
+                "$ref": "#/components/schemas/Users"
+              }
+            ]
+          },
+          "date_updated": {
+            "nullable": true,
+            "type": "string",
+            "format": "timestamp"
+          },
+          "bookable_object_id": {
+            "nullable": false,
+            "oneOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "$ref": "#/components/schemas/ItemsBookableObject"
+              }
+            ]
+          },
+          "start_date": {
+            "nullable": true,
+            "type": "string",
+            "format": "date-time"
+          },
+          "end_date": {
+            "nullable": true,
+            "type": "string",
+            "format": "date-time"
+          },
+          "is_full_day": {
+            "nullable": true,
+            "description": "If the event is full day. The end date is ignored and the day of the start date is used.",
+            "type": "boolean"
+          },
+          "mail": {
+            "nullable": true,
+            "type": "string"
+          },
+          "phone": {
+            "nullable": true,
+            "type": "string"
+          },
+          "description": {
+            "nullable": true,
+            "type": "string"
+          },
+          "confirmed": {
+            "nullable": true,
+            "description": "True when the booking is confirmed through booking object admin.",
+            "type": "boolean"
+          },
+          "display_name": {
+            "nullable": true,
+            "type": "string"
+          },
+          "confirmed_by": {
+            "nullable": true,
+            "oneOf": [
+              {
+                "type": "string",
+                "format": "uuid"
+              },
+              {
+                "$ref": "#/components/schemas/Users"
+              }
+            ]
+          }
+        },
+        "x-collection": "booking"
+      },
       "Versions": {
         "type": "object",
         "properties": {
@@ -11349,7 +11456,34 @@
         },
         "x-collection": "bookable_object_group"
       },
-      "ItemsBooking": {
+      "ItemsDirectusSyncIDMap": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "nullable": false,
+            "type": "integer"
+          },
+          "table": {
+            "nullable": false,
+            "type": "string"
+          },
+          "sync_id": {
+            "nullable": false,
+            "type": "string"
+          },
+          "local_id": {
+            "nullable": false,
+            "type": "string"
+          },
+          "created_at": {
+            "nullable": true,
+            "type": "string",
+            "format": "timestamp"
+          }
+        },
+        "x-collection": "directus_sync_id_map"
+      },
+      "ItemsGroup": {
         "type": "object",
         "properties": {
           "id": {
@@ -11357,8 +11491,12 @@
             "type": "integer"
           },
           "status": {
-            "nullable": false,
+            "nullable": true,
             "type": "string"
+          },
+          "sort": {
+            "nullable": true,
+            "type": "integer"
           },
           "user_created": {
             "nullable": true,
@@ -11394,37 +11532,7 @@
             "type": "string",
             "format": "timestamp"
           },
-          "bookable_object_id": {
-            "nullable": false,
-            "oneOf": [
-              {
-                "type": "integer"
-              },
-              {
-                "$ref": "#/components/schemas/ItemsBookableObject"
-              }
-            ]
-          },
-          "start_date": {
-            "nullable": true,
-            "type": "string",
-            "format": "date-time"
-          },
-          "end_date": {
-            "nullable": true,
-            "type": "string",
-            "format": "date-time"
-          },
-          "is_full_day": {
-            "nullable": true,
-            "description": "If the event is full day. The end date is ignored and the day of the start date is used.",
-            "type": "boolean"
-          },
-          "mail": {
-            "nullable": true,
-            "type": "string"
-          },
-          "phone": {
+          "name": {
             "nullable": true,
             "type": "string"
           },
@@ -11432,13 +11540,152 @@
             "nullable": true,
             "type": "string"
           },
-          "confirmed": {
+          "avatar": {
             "nullable": true,
-            "description": "True when the booking is confirmed through booking object admin.",
-            "type": "boolean"
+            "oneOf": [
+              {
+                "type": "string",
+                "format": "uuid"
+              },
+              {
+                "$ref": "#/components/schemas/Files"
+              }
+            ]
+          },
+          "owner": {
+            "nullable": true,
+            "oneOf": [
+              {
+                "type": "string",
+                "format": "uuid"
+              },
+              {
+                "$ref": "#/components/schemas/Users"
+              }
+            ]
+          },
+          "emoji": {
+            "nullable": true,
+            "type": "string"
+          },
+          "users": {
+            "nullable": true,
+            "type": "array",
+            "items": {
+              "oneOf": [
+                {
+                  "type": "integer"
+                },
+                {
+                  "$ref": "#/components/schemas/ItemsGroupDirectusUsers"
+                }
+              ]
+            }
           }
         },
-        "x-collection": "booking"
+        "x-collection": "group"
+      },
+      "ItemsBookableObject": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "nullable": false,
+            "type": "integer"
+          },
+          "status": {
+            "nullable": false,
+            "type": "string"
+          },
+          "date_created": {
+            "nullable": true,
+            "type": "string",
+            "format": "timestamp"
+          },
+          "date_updated": {
+            "nullable": true,
+            "type": "string",
+            "format": "timestamp"
+          },
+          "location": {
+            "nullable": true,
+            "type": "object"
+          },
+          "name": {
+            "nullable": true,
+            "type": "string"
+          },
+          "description": {
+            "nullable": true,
+            "type": "string"
+          },
+          "tags": {
+            "nullable": true
+          },
+          "image": {
+            "nullable": true,
+            "oneOf": [
+              {
+                "type": "string",
+                "format": "uuid"
+              },
+              {
+                "$ref": "#/components/schemas/Files"
+              }
+            ]
+          },
+          "is_internal": {
+            "nullable": true,
+            "description": "If the bookable object requires login to see the booking page. ",
+            "type": "boolean"
+          },
+          "owner": {
+            "nullable": true,
+            "oneOf": [
+              {
+                "type": "string",
+                "format": "uuid"
+              },
+              {
+                "$ref": "#/components/schemas/Users"
+              }
+            ]
+          },
+          "uniqueId": {
+            "nullable": true,
+            "type": "string"
+          },
+          "type": {
+            "nullable": true,
+            "type": "string"
+          },
+          "confirm_booking_required": {
+            "nullable": true,
+            "type": "boolean"
+          },
+          "information_shared": {
+            "nullable": true,
+            "type": "boolean"
+          },
+          "confirm_role": {
+            "nullable": true,
+            "type": "string"
+          },
+          "group": {
+            "nullable": true,
+            "type": "array",
+            "items": {
+              "oneOf": [
+                {
+                  "type": "integer"
+                },
+                {
+                  "$ref": "#/components/schemas/ItemsBookableObjectGroup"
+                }
+              ]
+            }
+          }
+        },
+        "x-collection": "bookable_object"
       },
       "Settings": {
         "type": "object",
@@ -11684,240 +11931,36 @@
           "report_feature_url": {
             "nullable": true,
             "type": "string"
+          },
+          "public_registration": {
+            "nullable": false,
+            "description": "$t:fields.directus_settings.public_registration_note",
+            "type": "boolean"
+          },
+          "public_registration_verify_email": {
+            "nullable": false,
+            "description": "$t:fields.directus_settings.public_registration_verify_email_note",
+            "type": "boolean"
+          },
+          "public_registration_role": {
+            "nullable": true,
+            "description": "$t:fields.directus_settings.public_registration_role_note",
+            "oneOf": [
+              {
+                "type": "string",
+                "format": "uuid"
+              },
+              {
+                "$ref": "#/components/schemas/Roles"
+              }
+            ]
+          },
+          "public_registration_email_filter": {
+            "nullable": true,
+            "description": "$t:fields.directus_settings.public_registration_email_filter_note"
           }
         },
         "x-collection": "directus_settings"
-      },
-      "ItemsDirectusSyncIDMap": {
-        "type": "object",
-        "properties": {
-          "id": {
-            "nullable": false,
-            "type": "integer"
-          },
-          "table": {
-            "nullable": false,
-            "type": "string"
-          },
-          "sync_id": {
-            "nullable": false,
-            "type": "string"
-          },
-          "local_id": {
-            "nullable": false,
-            "type": "string"
-          },
-          "created_at": {
-            "nullable": true,
-            "type": "string",
-            "format": "timestamp"
-          }
-        },
-        "x-collection": "directus_sync_id_map"
-      },
-      "ItemsGroup": {
-        "type": "object",
-        "properties": {
-          "id": {
-            "nullable": false,
-            "type": "integer"
-          },
-          "status": {
-            "nullable": true,
-            "type": "string"
-          },
-          "sort": {
-            "nullable": true,
-            "type": "integer"
-          },
-          "user_created": {
-            "nullable": true,
-            "oneOf": [
-              {
-                "type": "string",
-                "format": "uuid"
-              },
-              {
-                "$ref": "#/components/schemas/Users"
-              }
-            ]
-          },
-          "date_created": {
-            "nullable": true,
-            "type": "string",
-            "format": "timestamp"
-          },
-          "user_updated": {
-            "nullable": true,
-            "oneOf": [
-              {
-                "type": "string",
-                "format": "uuid"
-              },
-              {
-                "$ref": "#/components/schemas/Users"
-              }
-            ]
-          },
-          "date_updated": {
-            "nullable": true,
-            "type": "string",
-            "format": "timestamp"
-          },
-          "name": {
-            "nullable": true,
-            "type": "string"
-          },
-          "description": {
-            "nullable": true,
-            "type": "string"
-          },
-          "avatar": {
-            "nullable": true,
-            "oneOf": [
-              {
-                "type": "string",
-                "format": "uuid"
-              },
-              {
-                "$ref": "#/components/schemas/Files"
-              }
-            ]
-          },
-          "owner": {
-            "nullable": true,
-            "oneOf": [
-              {
-                "type": "string",
-                "format": "uuid"
-              },
-              {
-                "$ref": "#/components/schemas/Users"
-              }
-            ]
-          },
-          "emoji": {
-            "nullable": true,
-            "type": "string"
-          },
-          "users": {
-            "nullable": true,
-            "type": "array",
-            "items": {
-              "oneOf": [
-                {
-                  "type": "integer"
-                },
-                {
-                  "$ref": "#/components/schemas/ItemsGroupDirectusUsers"
-                }
-              ]
-            }
-          }
-        },
-        "x-collection": "group"
-      },
-      "ItemsBookableObject": {
-        "type": "object",
-        "properties": {
-          "id": {
-            "nullable": false,
-            "type": "integer"
-          },
-          "status": {
-            "nullable": false,
-            "type": "string"
-          },
-          "date_created": {
-            "nullable": true,
-            "type": "string",
-            "format": "timestamp"
-          },
-          "date_updated": {
-            "nullable": true,
-            "type": "string",
-            "format": "timestamp"
-          },
-          "location": {
-            "nullable": true,
-            "type": "object"
-          },
-          "name": {
-            "nullable": true,
-            "type": "string"
-          },
-          "description": {
-            "nullable": true,
-            "type": "string"
-          },
-          "tags": {
-            "nullable": true
-          },
-          "image": {
-            "nullable": true,
-            "oneOf": [
-              {
-                "type": "string",
-                "format": "uuid"
-              },
-              {
-                "$ref": "#/components/schemas/Files"
-              }
-            ]
-          },
-          "is_internal": {
-            "nullable": true,
-            "description": "If the bookable object requires login to see the booking page. ",
-            "type": "boolean"
-          },
-          "owner": {
-            "nullable": true,
-            "oneOf": [
-              {
-                "type": "string",
-                "format": "uuid"
-              },
-              {
-                "$ref": "#/components/schemas/Users"
-              }
-            ]
-          },
-          "uniqueId": {
-            "nullable": true,
-            "type": "string"
-          },
-          "type": {
-            "nullable": true,
-            "type": "string"
-          },
-          "confirm_booking_required": {
-            "nullable": true,
-            "type": "boolean"
-          },
-          "information_shared": {
-            "nullable": true,
-            "type": "boolean"
-          },
-          "confirm_role": {
-            "nullable": true,
-            "type": "string"
-          },
-          "group": {
-            "nullable": true,
-            "type": "array",
-            "items": {
-              "oneOf": [
-                {
-                  "type": "integer"
-                },
-                {
-                  "$ref": "#/components/schemas/ItemsBookableObjectGroup"
-                }
-              ]
-            }
-          }
-        },
-        "x-collection": "bookable_object"
       }
     },
     "parameters": {

@@ -1,22 +1,27 @@
 <script setup lang="ts">
+import dayjs from 'dayjs'
+import { storeToRefs } from 'pinia'
 import { computed, defineProps, onMounted, ref } from 'vue'
+import { CalendarIcon } from 'lucide-vue-next'
 
 import FullCalendar from '@fullcalendar/vue3'
 import dayGridPlugin from '@fullcalendar/daygrid'
 import timeGridPlugin from '@fullcalendar/timeGrid'
-import interactionPlugin from '@fullcalendar/interaction'
-
 import listPlugin from '@fullcalendar/list'
-
-import { CalendarIcon } from 'lucide-vue-next'
-import { Button } from '@/components/ui/button'
-import { Card, CardContent, CardHeader } from '@/components/ui/card'
+import interactionPlugin from '@fullcalendar/interaction'
 import { type CalendarOptions } from '@fullcalendar/core'
-import CalenderTabs, { type CalendarViewType } from '@/components/booking-components/calender/CalenderTabs.vue'
-import CalenderRemote from '@/components/booking-components/calender/CalenderRemote.vue'
-import dayjs from 'dayjs'
-import BookingRequestWrapper from '@/components/booking-components/booking-request-dialog/BookingRequestWrapper.vue'
+
 import { EventImpl } from '@fullcalendar/core/internal'
+import { Button } from '@/components/ui/button'
+
+import { Card, CardContent, CardHeader } from '@/components/ui/card'
+import CalenderRemote from '@/components/booking-components/calender/CalenderRemote.vue'
+import CalenderTabs, { type CalendarViewType } from '@/components/booking-components/calender/CalenderTabs.vue'
+
+import BookingRequestWrapper from '@/components/booking-components/booking-request-dialog/BookingRequestWrapper.vue'
+import { useBooking } from '@/stores/useBooking'
+
+const { currentBookings } = storeToRefs(useBooking())
 
 const fullCalenderRef = ref<InstanceType<typeof FullCalendar>>()
 
@@ -38,6 +43,15 @@ const props = defineProps({
 const startDate = ref('')
 const startTime = ref('')
 const endTime = ref('')
+
+const fullCalenderInitialEvents = currentBookings.value.map((booking) => {
+  return {
+    id: booking.id,
+    title: booking.display_name,
+    start: booking.start_date,
+    end: booking.end_date
+  }
+})
 
 const calendarOptions = {
   timeZone: 'UTC',
@@ -78,7 +92,8 @@ const calendarOptions = {
     endTime.value = dayjs(arg.end).format('HH:mm')
     openEventDialog.value = true
     openEventProps.value = arg
-  }
+  },
+  initialEvents: fullCalenderInitialEvents
 } as CalendarOptions
 
 const switchTab = (tab: CalendarViewType) => {
@@ -126,6 +141,8 @@ const styleProps = computed(() => {
 onMounted(() => {
   currentDateString.value = fullCalenderData().viewTitle
   selectedDay.value = dayjs(fullCalenderData().currentDate)
+
+  console.log(currentBookings.value)
 })
 
 // setTimeout(() => window.dispatchEvent(new Event('resize')), 20)

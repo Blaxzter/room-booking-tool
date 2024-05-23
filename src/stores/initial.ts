@@ -1,3 +1,4 @@
+import { ref } from 'vue'
 import { defineStore } from 'pinia'
 import { useAuth } from '@/stores/auth'
 
@@ -23,7 +24,10 @@ export const useInitialDataStore = defineStore('initial', () => {
   const { getSelectedGroup } = useUser()
   const { setBookings } = useBooking()
 
+  const init_loading = ref(false)
+
   const fetchInitialData = async () => {
+    init_loading.value = true
     try {
       const selectedGroup = getSelectedGroup()
       let received_data = null
@@ -42,6 +46,7 @@ export const useInitialDataStore = defineStore('initial', () => {
     } catch (error) {
       console.error(error)
     }
+    init_loading.value = false
   }
 
   const fetchObjectViewData = async ({
@@ -55,6 +60,7 @@ export const useInitialDataStore = defineStore('initial', () => {
     publicView?: boolean
     select?: boolean
   }) => {
+    init_loading.value = true
     try {
       const objectViewQuery = objectView({ bookable_object_id, isUniqueId, publicView })
       const res = await client.query<ObjectViewResponse>(objectViewQuery)
@@ -69,7 +75,8 @@ export const useInitialDataStore = defineStore('initial', () => {
     } catch (error) {
       console.error(error)
     }
+    init_loading.value = false
   }
 
-  return { fetchInitialData, fetchObjectViewData }
+  return { init_loading, fetchInitialData, fetchObjectViewData }
 })

@@ -1,36 +1,38 @@
 {
   "collection": "booking",
-  "field": "phone",
-  "type": "string",
+  "field": "confirmed_by",
+  "type": "uuid",
   "meta": {
     "collection": "booking",
     "conditions": null,
     "display": null,
     "display_options": null,
-    "field": "phone",
-    "group": "contact_data",
+    "field": "confirmed_by",
+    "group": "confirmation_data",
     "hidden": false,
-    "interface": "input",
+    "interface": "select-dropdown-m2o",
     "note": null,
     "options": {
-      "iconLeft": "phone_enabled",
-      "placeholder": "Contact Phone number"
+      "enableCreate": false,
+      "template": "{{first_name}} {{last_name}} {{email}}"
     },
     "readonly": false,
     "required": false,
-    "sort": 3,
-    "special": null,
+    "sort": 2,
+    "special": [
+      "m2o"
+    ],
     "translations": null,
     "validation": null,
     "validation_message": null,
-    "width": "full"
+    "width": "half"
   },
   "schema": {
-    "name": "phone",
+    "name": "confirmed_by",
     "table": "booking",
-    "data_type": "character varying",
+    "data_type": "uuid",
     "default_value": null,
-    "max_length": 255,
+    "max_length": null,
     "numeric_precision": null,
     "numeric_scale": null,
     "is_nullable": true,
@@ -39,7 +41,7 @@
     "is_generated": false,
     "generation_expression": null,
     "has_auto_increment": false,
-    "foreign_key_table": null,
-    "foreign_key_column": null
+    "foreign_key_table": "directus_users",
+    "foreign_key_column": "id"
   }
 }

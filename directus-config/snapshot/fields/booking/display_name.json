@@ -1,24 +1,23 @@
 {
   "collection": "booking",
-  "field": "phone",
+  "field": "display_name",
   "type": "string",
   "meta": {
     "collection": "booking",
     "conditions": null,
     "display": null,
     "display_options": null,
-    "field": "phone",
+    "field": "display_name",
     "group": "contact_data",
     "hidden": false,
     "interface": "input",
     "note": null,
     "options": {
-      "iconLeft": "phone_enabled",
-      "placeholder": "Contact Phone number"
+      "placeholder": "The name of the user that requested the booking"
     },
     "readonly": false,
     "required": false,
-    "sort": 3,
+    "sort": 1,
     "special": null,
     "translations": null,
     "validation": null,
@@ -26,7 +25,7 @@
     "width": "full"
   },
   "schema": {
-    "name": "phone",
+    "name": "display_name",
     "table": "booking",
     "data_type": "character varying",
     "default_value": null,

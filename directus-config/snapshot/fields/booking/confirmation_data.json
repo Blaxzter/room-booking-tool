@@ -1,0 +1,29 @@
+{
+  "collection": "booking",
+  "field": "confirmation_data",
+  "type": "alias",
+  "meta": {
+    "collection": "booking",
+    "conditions": null,
+    "display": null,
+    "display_options": null,
+    "field": "confirmation_data",
+    "group": null,
+    "hidden": false,
+    "interface": "group-detail",
+    "note": null,
+    "options": null,
+    "readonly": false,
+    "required": false,
+    "sort": 10,
+    "special": [
+      "alias",
+      "group",
+      "no-data"
+    ],
+    "translations": null,
+    "validation": null,
+    "validation_message": null,
+    "width": "full"
+  }
+}

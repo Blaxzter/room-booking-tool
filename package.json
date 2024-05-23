@@ -32,6 +32,7 @@
     "dayjs": "^1.11.10",
     "emoji-mart-vue-fast": "^15.0.2",
     "lodash": "^4.17.21",
+    "lottie-colorify": "^0.8.0",
     "lottie-web-vue": "^2.0.7",
     "lucide-vue-next": "^0.364.0",
     "pinia": "^2.1.7",

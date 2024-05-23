@@ -84,6 +84,8 @@ type Mutation {
   utils_revert(revision: ID!): Boolean
   utils_cache_clear: Void
   users_invite_accept(token: String!, password: String!): Boolean
+  users_register(email: String!, password: String!, first_name: String, last_name: String): Boolean
+  users_register_verify(token: String!): Boolean
   create_collections_item(data: create_directus_collections_input!): directus_collections
   update_collections_item(collection: String!, data: update_directus_collections_input!): directus_collections
   delete_collections_item(collection: String!): delete_collection
@@ -225,14 +227,14 @@ type Subscription {
   directus_dashboards_mutated(event: EventEnum): directus_dashboards_mutated
   directus_operations_mutated(event: EventEnum): directus_operations_mutated
   directus_translations_mutated(event: EventEnum): directus_translations_mutated
+  booking_mutated(event: EventEnum): booking_mutated
   directus_versions_mutated(event: EventEnum): directus_versions_mutated
   group_directus_users_mutated(event: EventEnum): group_directus_users_mutated
   bookable_object_group_mutated(event: EventEnum): bookable_object_group_mutated
-  booking_mutated(event: EventEnum): booking_mutated
-  directus_settings_mutated(event: EventEnum): directus_settings_mutated
   directus_sync_id_map_mutated(event: EventEnum): directus_sync_id_map_mutated
   group_mutated(event: EventEnum): group_mutated
   bookable_object_mutated(event: EventEnum): bookable_object_mutated
+  directus_settings_mutated(event: EventEnum): directus_settings_mutated
 }
 
 """The `Boolean` scalar type represents `true` or `false`."""
@@ -385,6 +387,8 @@ type booking {
 
   """True when the booking is confirmed through booking object admin."""
   confirmed: Boolean
+  display_name: String
+  confirmed_by(filter: directus_users_filter, sort: [String], limit: Int, offset: Int, page: Int, search: String): directus_users
 }
 
 type booking_mutated {
@@ -1209,6 +1213,17 @@ type directus_settings {
   report_error_url: String
   report_bug_url: String
   report_feature_url: String
+
+  """$t:fields.directus_settings.public_registration_note"""
+  public_registration: Boolean!
+
+  """$t:fields.directus_settings.public_registration_verify_email_note"""
+  public_registration_verify_email: Boolean
+  public_registration_role(filter: directus_roles_filter, sort: [String], limit: Int, offset: Int, page: Int, search: String): directus_roles
+
+  """$t:fields.directus_settings.public_registration_email_filter_note"""
+  public_registration_email_filter: JSON
+  public_registration_email_filter_func: count_functions
 }
 
 type directus_settings_mutated {
@@ -1559,6 +1574,8 @@ type server_info_project {
   public_background: String
   public_note: String
   custom_css: String
+  public_registration: Boolean
+  public_registration_verify_email: Boolean
 }
 
 type server_info_query_limit {
@@ -2630,6 +2647,16 @@ input update_directus_settings_input {
   report_error_url: String
   report_bug_url: String
   report_feature_url: String
+
+  """$t:fields.directus_settings.public_registration_note"""
+  public_registration: Boolean
+
+  """$t:fields.directus_settings.public_registration_verify_email_note"""
+  public_registration_verify_email: Boolean
+  public_registration_role: update_directus_roles_input
+
+  """$t:fields.directus_settings.public_registration_email_filter_note"""
+  public_registration_email_filter: JSON
 }
 
 input update_directus_shares_input {

@@ -8,21 +8,21 @@
     "display": null,
     "display_options": null,
     "field": "confirmed",
-    "group": null,
+    "group": "confirmation_data",
     "hidden": false,
     "interface": "boolean",
     "note": "True when the booking is confirmed through booking object admin.",
     "options": null,
     "readonly": false,
     "required": false,
-    "sort": 14,
+    "sort": 1,
     "special": [
       "cast-boolean"
     ],
     "translations": null,
     "validation": null,
     "validation_message": null,
-    "width": "full"
+    "width": "half"
   },
   "schema": {
     "name": "confirmed",
