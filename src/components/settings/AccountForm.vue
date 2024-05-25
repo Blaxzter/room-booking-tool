@@ -50,6 +50,12 @@ const accountFormSchema = toTypedSchema(
       .max(30, {
         message: 'Name must not be longer than 30 characters.'
       }),
+    password: z
+      .string()
+      .min(6, {
+        message: 'Password must be at least 6 characters.'
+      })
+      .optional(),
     dob: z
       .string()
       .datetime()
@@ -74,11 +80,6 @@ async function onSubmit(values: any) {
 </script>
 
 <template>
-  <div>
-    <h3 class="text-lg font-medium">Account</h3>
-    <p class="text-sm text-muted-foreground">Update your account settings. Set your preferred language and timezone.</p>
-  </div>
-  <Separator />
   <Form v-slot="{ setValues }" :validation-schema="accountFormSchema" class="space-y-8" @submit="onSubmit">
     <FormField v-slot="{ componentField }" name="name">
       <FormItem>
