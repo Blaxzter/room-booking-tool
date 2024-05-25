@@ -1,19 +1,29 @@
 <script setup lang="ts">
-import { h } from 'vue'
+import { ref } from 'vue'
 import { useForm } from 'vee-validate'
 import { toTypedSchema } from '@vee-validate/zod'
 import * as z from 'zod'
 
+import { useUser } from '@/stores/user'
+
 import { Input } from '@/components/ui/input'
 import { FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form'
 import { Button } from '@/components/ui/button'
-import { toast } from '@/components/ui/toast'
 import { Label } from '@/components/ui/label'
+import { useToast } from '@/components/ui/toast/use-toast'
+
 import AvatarUploadComponent from '@/components/utils/AvatarUploadComponent.vue'
+import { storeToRefs } from 'pinia'
+import type { UpdateUserRequest } from '@/types'
+
+const { toast } = useToast()
+const { updateUserData } = useUser()
+const { user } = storeToRefs(useUser())
 
 const profileFormSchema = toTypedSchema(
   z.object({
-    username: z
+    avatar: z.string().optional(),
+    display_name: z
       .string()
       .min(2, {
         message: 'Username must be at least 2 characters.'
@@ -21,7 +31,7 @@ const profileFormSchema = toTypedSchema(
       .max(30, {
         message: 'Username must not be longer than 30 characters.'
       }),
-    firstname: z
+    first_name: z
       .string()
       .min(2, {
         message: 'Username must be at least 2 characters.'
@@ -29,7 +39,7 @@ const profileFormSchema = toTypedSchema(
       .max(30, {
         message: 'Username must not be longer than 30 characters.'
       }),
-    lastname: z
+    last_name: z
       .string()
       .min(2, {
         message: 'Username must be at least 2 characters.'
@@ -41,57 +51,68 @@ const profileFormSchema = toTypedSchema(
       .string({
         required_error: 'Please select an email to display.'
       })
-      .email(),
-    bio: z
-      .string()
-      .max(160, { message: 'Bio must not be longer than 160 characters.' })
-      .min(4, { message: 'Bio must be at least 2 characters.' }),
-    urls: z
-      .array(
-        z.object({
-          value: z.string().url({ message: 'Please enter a valid URL.' })
-        })
-      )
-      .optional()
+      .email()
   })
 )
 
 const { handleSubmit, resetForm } = useForm({
   validationSchema: profileFormSchema,
   initialValues: {
-    bio: 'I own a computer.',
-    urls: [{ value: 'https://shadcn.com' }, { value: 'https://twitter.com/shadcn' }]
+    avatar: user.value?.avatar ?? '',
+    email: user.value?.email ?? '',
+    first_name: user.value?.first_name ?? '',
+    last_name: user.value?.last_name ?? '',
+    display_name: user.value?.display_name ?? user.value?.first_name + ' ' + user.value?.last_name ?? ''
   }
 })
 
-const onSubmit = handleSubmit((values) => {
-  toast({
-    title: 'You submitted the following values:',
-    description: h(
-      'pre',
-      { class: 'mt-2 w-[340px] rounded-md bg-slate-950 p-4' },
-      h('code', { class: 'text-white' }, JSON.stringify(values, null, 2))
-    )
-  })
-})
+const avatarUpload = ref()
+const avatarChanged = ref(false)
 
-const toastTest = () => {
-  toast({
-    title: 'Toast Test',
-    description: 'This is a test toast message.'
-  })
-}
+const onSubmit = handleSubmit(async (values) => {
+  console.log(avatarUpload.value, avatarChanged)
+  if (avatarUpload.value && avatarChanged.value) {
+    const avatar = await avatarUpload.value.uploadImage()
+    if (avatar) {
+      values.avatar = avatar
+    }
+  }
+  await updateUserData(values as UpdateUserRequest).then(
+    () => {
+      toast({
+        title: 'Profile updated',
+        description: 'Your profile has been updated successfully.',
+        variant: 'success'
+      })
+    },
+    (error) => {
+      toast({
+        title: 'Profile update failed',
+        description: error.message,
+        variant: 'destructive'
+      })
+    }
+  )
+})
 </script>
 
 <template>
   <form class="space-y-8" @submit="onSubmit">
     <div class="grid gap-4">
       <Label>Display Image</Label>
-      <AvatarUploadComponent ref="avatarUpload" :height="6" alignment="left" class="ms-2" />
-      <div class="text-sm text-muted-foreground">Upload an splash image.</div>
+      <AvatarUploadComponent
+        ref="avatarUpload"
+        :height="6"
+        alignment="left"
+        class="ms-2"
+        folder="b9b3ad18-3da4-42e3-8cdc-dc749ce89041"
+        :initAvatar="user.avatar"
+        @avatar-updated="avatarChanged = true"
+      />
+      <div class="text-sm text-muted-foreground">Upload a new image to change your profile picture.</div>
     </div>
 
-    <FormField v-slot="{ componentField }" name="username">
+    <FormField v-slot="{ componentField }" name="display_name">
       <FormItem>
         <FormLabel>Displayname</FormLabel>
         <FormControl>
@@ -117,7 +138,7 @@ const toastTest = () => {
 
     <div class="flex gap-4">
       <div class="flex-grow">
-        <FormField v-slot="{ componentField }" name="firstname" class="flex-grow">
+        <FormField v-slot="{ componentField }" name="first_name" class="flex-grow">
           <FormItem>
             <FormLabel>Firstname</FormLabel>
             <FormControl>
@@ -129,7 +150,7 @@ const toastTest = () => {
         </FormField>
       </div>
       <div class="flex-grow">
-        <FormField v-slot="{ componentField }" name="lastname" class="flex-grow">
+        <FormField v-slot="{ componentField }" name="last_name" class="flex-grow">
           <FormItem>
             <FormLabel>Lastname</FormLabel>
             <FormControl>
@@ -144,10 +165,6 @@ const toastTest = () => {
 
     <div class="flex gap-2 justify-start">
       <Button type="submit"> Update profile </Button>
-
-      <Button type="button" variant="outline" @click="resetForm"> Reset form </Button>
     </div>
   </form>
-
-  <Button type="button" @click="toastTest"> Toast Test </Button>
 </template>

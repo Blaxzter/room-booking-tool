@@ -1,7 +1,7 @@
 import { defineStore, storeToRefs } from 'pinia'
 import { computed, ref } from 'vue'
 import type { BookableObject, CreateBookableObjectRequest } from '@/types'
-import { useAuth } from '@/stores/auth'
+import { useUser } from '@/stores/user'
 import { type BookableObjectsRequest } from '@/assets/ts/queries/initial_data'
 import { useToast } from '@/components/ui/toast'
 import { createItem } from '@directus/sdk'
@@ -15,7 +15,7 @@ import {
 } from '@/assets/ts/queries/bookable_objects'
 
 export const useBookableObjects = defineStore('bookableObjects', () => {
-  const { client, user } = useAuth()
+  const { client, user } = useUser()
   const { toast } = useToast()
   const { selectedGroupId } = storeToRefs(useGroups())
 
@@ -130,8 +130,8 @@ export const useBookableObjects = defineStore('bookableObjects', () => {
   })
 
   const createBookableObject = async (bookableObject: CreateBookableObjectRequest) => {
-    const { client } = useAuth()
-    const { user } = storeToRefs(useAuth())
+    const { client } = useUser()
+    const { user } = storeToRefs(useUser())
 
     bookableObject.owner = { id: user.value.id }
     if (!bookableObject.group || bookableObject.group?.length === 0) {

@@ -2,7 +2,7 @@ export type MySchema = {
   bookable_object: BookableObject[]
   booking: Booking[]
   group: Group[]
-  user: User[]
+  users: User[]
 }
 
 export type Booking = {
@@ -139,7 +139,7 @@ export type User = {
   title: string
   description: string | null
   tags: string[] | null
-  avatar: string | null
+  avatar: string | undefined
   language: string
   appearance: string
   tfa_secret: string | null
@@ -148,6 +148,15 @@ export type User = {
   token: string | null
   last_access: string
   last_page: string
+  display_name: string
+}
+
+export type UpdateUserRequest = {
+  first_name: string
+  last_name: string
+  email: string
+  avatar: string | null
+  display_name: string
 }
 
 export type LocalUserData = {

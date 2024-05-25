@@ -16,9 +16,9 @@ import {
 } from '@/components/ui/select'
 
 import { useGroups } from '@/stores/groups'
-import { useAuth } from '@/stores/auth'
+import { useUser } from '@/stores/user'
 
-const { name } = storeToRefs(useAuth())
+const { name } = storeToRefs(useUser())
 const attrs = useAttrs()
 const { selectedGroupId, groups } = storeToRefs(useGroups())
 

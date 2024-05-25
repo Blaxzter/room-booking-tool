@@ -1,13 +1,13 @@
 import { defineStore, storeToRefs } from 'pinia'
 import { computed, ref } from 'vue'
-import type { GroupDirectusUser, CreateGroupRequest, Group } from '@/types'
+import type { CreateGroupRequest, Group } from '@/types'
 import { useBookableObjects } from '@/stores/bookableObjects'
 import { useUser } from '@/stores/user'
-import { useAuth } from '@/stores/auth'
+import { useLocalUser } from '@/stores/localUser'
 import { createItem } from '@directus/sdk'
 
 export const useGroups = defineStore('group', () => {
-  const { setSelectedGroup, getSelectedGroup } = useUser()
+  const { setSelectedGroup, getSelectedGroup } = useLocalUser()
   const { fetchBookableObjectsByGroupId, fetchUserBookableObjects } = useBookableObjects()
 
   const groups = ref<Group[]>([])
@@ -39,8 +39,8 @@ export const useGroups = defineStore('group', () => {
   const selectedGroup = computed(() => groups.value.find((g) => g.id === selectedGroupId.value) as Group | undefined)
 
   const createGroup = async (group: CreateGroupRequest) => {
-    const { client } = useAuth()
-    const { user } = storeToRefs(useAuth())
+    const { client } = useUser()
+    const { user } = storeToRefs(useUser())
 
     group.owner = user.value.id
     group.users = [

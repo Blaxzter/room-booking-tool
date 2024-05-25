@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed, type ComputedRef, ref, watch } from 'vue'
+import { computed, type ComputedRef, ref } from 'vue'
 import _ from 'lodash'
 import { CaretSortIcon, CheckIcon, PlusCircledIcon } from '@radix-icons/vue'
 import { LoaderIcon } from 'lucide-vue-next'
@@ -21,15 +21,15 @@ import {
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover'
 import type { Group } from '@/types'
 import NewGroupDialog from '@/components/groups/NewGroupDialog.vue'
-import { useAuth } from '@/stores/auth'
+import { useUser } from '@/stores/user'
 import { useGroups } from '@/stores/groups'
 import { storeToRefs } from 'pinia'
 
 type GroupsDisplayData = { label: string; teams: Group[] }[]
 
 const groupStore = useGroups()
-const authStore = useAuth()
-const { user } = storeToRefs(authStore)
+const userStore = useUser()
+const { user, avatarId } = storeToRefs(userStore)
 const { selectGroup } = groupStore
 const { groups, selectedGroupId } = storeToRefs(groupStore)
 
@@ -62,6 +62,7 @@ const displayData: ComputedRef<GroupsDisplayData> = computed(() => {
         {
           id: '-1',
           name: userName(),
+          avatar: { id: avatarId.value },
           description: 'personal'
         }
       ]

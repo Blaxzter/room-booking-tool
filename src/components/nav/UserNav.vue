@@ -13,18 +13,17 @@ import {
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import { Button } from '@/components/ui/button'
 import { useDark, useToggle } from '@vueuse/core'
+import { onMounted, ref } from 'vue'
+import { storeToRefs } from 'pinia'
+import { useUser } from '@/stores/user'
+import router from '@/router'
+import DarkscreenToggle from '@/components/animations/DarkscreenToggle.vue'
 
 const isDark = useDark()
 const toggleDark = useToggle(isDark)
 
-import { computed, onMounted, ref } from 'vue'
-import { storeToRefs } from 'pinia'
-import { useAuth } from '@/stores/auth'
-import router from '@/router'
-import DarkscreenToggle from '@/components/animations/DarkscreenToggle.vue'
-
-const { logout } = useAuth()
-const { avatar, avatarFallback, name, hasName, email } = storeToRefs(useAuth())
+const { logout } = useUser()
+const { avatar, avatarFallback, name, hasName, email } = storeToRefs(useUser())
 
 const toggleDarkmodeAnimation = ref(false)
 

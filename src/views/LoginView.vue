@@ -3,13 +3,10 @@ import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
-import { ChevronRight, Eye, EyeOff } from 'lucide-vue-next'
-import { ref } from 'vue'
-
-import { Loader2 } from 'lucide-vue-next'
-import { useAuth } from '@/stores/auth'
+import { ChevronRight, Eye, EyeOff, Loader2 } from 'lucide-vue-next'
+import { onMounted, ref } from 'vue'
+import { useUser } from '@/stores/user'
 import router from '@/router'
-import { onMounted } from 'vue'
 import { Checkbox } from '@/components/ui/checkbox'
 
 const loading = ref(false)
@@ -24,7 +21,7 @@ const errorMessage = ref('')
 const keepLoggedIn = ref(false)
 const showPassword = ref(false)
 
-const { login, isAuthenticated, getRedirect } = useAuth()
+const { login, isAuthenticated, getRedirect } = useUser()
 
 const loginWrapper = async () => {
   loading.value = true

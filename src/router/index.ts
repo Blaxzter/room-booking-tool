@@ -1,5 +1,5 @@
 import { createRouter, createWebHistory } from 'vue-router'
-import { useAuth } from '@/stores/auth'
+import { useUser } from '@/stores/user'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -59,7 +59,7 @@ const router = createRouter({
 })
 
 router.beforeEach(async (to, from, next) => {
-  const { checkAuth, setRedirect } = useAuth()
+  const { checkAuth, setRedirect } = useUser()
 
   try {
     const isAuthenticated = await checkAuth()

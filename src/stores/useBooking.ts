@@ -1,7 +1,7 @@
 import { computed, ref } from 'vue'
 import { defineStore, storeToRefs } from 'pinia'
 import type { Booking } from '@/types'
-import { useAuth } from '@/stores/auth'
+import { useUser } from '@/stores/user'
 import { type BookingRequest, type CreateBookingRequest, getAllBookings } from '@/assets/ts/queries/bookings'
 import { useToast } from '@/components/ui/toast'
 import { useBookableObjects } from '@/stores/bookableObjects'
@@ -9,7 +9,7 @@ import { createItem } from '@directus/sdk'
 
 export const useBooking = defineStore('bookings', () => {
   const { toast } = useToast()
-  const { client } = useAuth()
+  const { client } = useUser()
 
   const loading = ref(false)
   const bookingsPerBookableObjectId = ref<{ [key: string]: Booking[] }>({})

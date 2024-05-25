@@ -2,6 +2,7 @@
 import { computed } from 'vue'
 import { RouterView } from 'vue-router'
 import { useDark } from '@vueuse/core'
+import Toaster from '@/components/ui/toast/Toaster.vue'
 
 const isDark = useDark()
 
@@ -15,6 +16,7 @@ const darkModeVar = computed(() => {
   <div :style="darkModeVar">
     <RouterView />
   </div>
+  <Toaster />
 </template>
 
 <style scoped></style>

@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed, ref } from 'vue'
+import { computed, onMounted, ref } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 
 import { Separator } from '@/components/ui/separator'
@@ -8,6 +8,10 @@ import SidebarNav from '@/components/settings/SettingsSidebarNav.vue'
 import ProfileForm from '@/components/settings/ProfileForm.vue'
 import AccountForm from '@/components/settings/AccountForm.vue'
 import NotificationsForm from '@/components/settings/NotificationsForm.vue'
+
+import { useInitialDataStore } from '@/stores/initial'
+
+const { fetchInitialData } = useInitialDataStore()
 
 const router = useRouter()
 const route = useRoute()
@@ -49,6 +53,10 @@ const description = computed(() => {
 })
 
 const PageComponent = computed(() => pages[selectedPage.value])
+
+onMounted(async () => {
+  await fetchInitialData()
+})
 </script>
 
 <template>

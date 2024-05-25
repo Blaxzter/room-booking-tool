@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, defineProps, computed } from 'vue'
+import { computed, defineProps, onMounted, ref } from 'vue'
 import { uploadFiles } from '@directus/sdk'
 
 import { UploadIcon, XIcon } from 'lucide-vue-next'
@@ -7,19 +7,24 @@ import { UploadIcon, XIcon } from 'lucide-vue-next'
 import AvatarCropper from 'vue-avatar-cropper'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 
-import { useAuth } from '@/stores/auth'
+import { useUser } from '@/stores/user'
 
-const { client } = useAuth()
+const { client } = useUser()
 
 const showCropper = ref(false)
 const avatar = ref<string>('')
 const toBeUploadedImage = ref<Blob | null>(null)
 
-const emits = defineEmits(['message'])
+const emits = defineEmits(['avatar-updated'])
 const props = defineProps({
   isSquare: {
     type: Boolean,
     default: false
+  },
+  initAvatar: {
+    type: String,
+    default: '',
+    required: false
   },
   height: {
     type: Number,
@@ -32,10 +37,14 @@ const props = defineProps({
   alignment: {
     type: String,
     default: 'center'
+  },
+  folder: {
+    type: String,
+    default: '76196db0-2d35-4646-ac32-8df8a9986615'
   }
 })
 
-const uploadHandler = (copperJsInstance: any) => {
+const selectImage = (copperJsInstance: any) => {
   copperJsInstance
     .getCroppedCanvas({
       width: props.isSquare ? props.imageHeight * 0.75 : props.imageHeight,
@@ -49,6 +58,7 @@ const uploadHandler = (copperJsInstance: any) => {
         // create local url from blob
         avatar.value = URL.createObjectURL(blob)
         toBeUploadedImage.value = blob
+        emits('avatar-updated', true)
       },
       'image/png, image/gif, image/jpeg, image/bmp, image/x-icon',
       0.9
@@ -58,6 +68,7 @@ const uploadHandler = (copperJsInstance: any) => {
 const clearImage = () => {
   avatar.value = ''
   toBeUploadedImage.value = null
+  emits('avatar-updated', true)
 }
 
 // random number between 1 and 500
@@ -69,7 +80,7 @@ const uploadImage = async (): Promise<string | undefined> => {
   }
 
   const formData = new FormData()
-  formData.append('folder', '76196db0-2d35-4646-ac32-8df8a9986615')
+  formData.append('folder', props.folder)
   formData.append('file', toBeUploadedImage.value, 'object-image.png')
 
   const result = await client.request(uploadFiles(formData))
@@ -82,12 +93,23 @@ const avatarCssVars = computed(() => {
   }
 })
 
+// on mouted set the avatar
+onMounted(() => {
+  avatar.value = `http://localhost:8055/assets/${props.initAvatar}`
+})
+
 defineExpose({ uploadImage })
 </script>
 
 <template>
-  <div class="relative rounded" :class="`text-${props.alignment}`">
-    <div v-if="toBeUploadedImage" class="absolute end-[-5px] top-[-5px]">
+  <div
+    class="relative rounded"
+    :class="`text-${props.alignment}`"
+    :style="{
+      width: `calc(${props.height * (isSquare ? 0.75 : 1)}rem + 25px)`
+    }"
+  >
+    <div v-if="toBeUploadedImage || avatar" class="absolute end-[-5px] top-[-5px]">
       <XIcon class="w-4 h-4 cursor-pointer hover:opacity-75" @click="clearImage" />
     </div>
     <Avatar
@@ -115,7 +137,7 @@ defineExpose({ uploadImage })
         zoomable: true
       }"
       v-model="showCropper"
-      :upload-handler="uploadHandler"
+      :upload-handler="selectImage"
     />
   </div>
 </template>

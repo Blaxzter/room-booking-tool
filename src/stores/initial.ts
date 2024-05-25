@@ -1,6 +1,5 @@
 import { ref } from 'vue'
 import { defineStore } from 'pinia'
-import { useAuth } from '@/stores/auth'
 
 import {
   getGroupQuery,
@@ -13,15 +12,16 @@ import {
 import { useGroups } from '@/stores/groups'
 import { useBookableObjects } from '@/stores/bookableObjects'
 import { useUser } from '@/stores/user'
+import { useLocalUser } from '@/stores/localUser'
 import { useBooking } from '@/stores/useBooking'
 import _ from 'lodash'
 
 export const useInitialDataStore = defineStore('initial', () => {
-  const { client, user } = useAuth()
+  const { client, user } = useUser()
 
   const { setGroups } = useGroups()
   const { setBookableObjects, selectBookableObject, addBookableObject } = useBookableObjects()
-  const { getSelectedGroup } = useUser()
+  const { getSelectedGroup } = useLocalUser()
   const { setBookings } = useBooking()
 
   const init_loading = ref(false)
