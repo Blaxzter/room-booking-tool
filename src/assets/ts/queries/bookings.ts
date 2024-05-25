@@ -16,10 +16,14 @@ export const getBookingQObject = ({
         start_date
         end_date
         is_full_day
+        display_name
         mail
         phone
         description
         confirmed
+        confirmed_by {
+          display_name
+        }
     }`
 }
 

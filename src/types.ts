@@ -17,7 +17,7 @@ export type Booking = {
   phone: string
   description: string
   confirmed: boolean
-  confirmed_by?: User
+  confirmed_by?: string
 }
 
 export const BookingImpl: Booking = {
