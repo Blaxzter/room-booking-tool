@@ -1,24 +1,35 @@
 <script setup lang="ts">
-import { h, ref } from 'vue'
-import { FieldArray, useForm } from 'vee-validate'
+import { h } from 'vue'
+import { useForm } from 'vee-validate'
 import { toTypedSchema } from '@vee-validate/zod'
 import * as z from 'zod'
-import { Cross1Icon } from '@radix-icons/vue'
-import { cn } from '@/lib/utils'
 
 import { Input } from '@/components/ui/input'
 import { FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form'
-import { Separator } from '@/components/ui/separator'
-import { Textarea } from '@/components/ui/textarea'
-import { Select, SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
 import { Button } from '@/components/ui/button'
 import { toast } from '@/components/ui/toast'
-
-const verifiedEmails = ref(['m@example.com', 'm@google.com', 'm@support.com'])
+import { Label } from '@/components/ui/label'
+import AvatarUploadComponent from '@/components/utils/AvatarUploadComponent.vue'
 
 const profileFormSchema = toTypedSchema(
   z.object({
     username: z
+      .string()
+      .min(2, {
+        message: 'Username must be at least 2 characters.'
+      })
+      .max(30, {
+        message: 'Username must not be longer than 30 characters.'
+      }),
+    firstname: z
+      .string()
+      .min(2, {
+        message: 'Username must be at least 2 characters.'
+      })
+      .max(30, {
+        message: 'Username must not be longer than 30 characters.'
+      }),
+    lastname: z
       .string()
       .min(2, {
         message: 'Username must be at least 2 characters.'
@@ -63,24 +74,31 @@ const onSubmit = handleSubmit((values) => {
     )
   })
 })
+
+const toastTest = () => {
+  toast({
+    title: 'Toast Test',
+    description: 'This is a test toast message.'
+  })
+}
 </script>
 
 <template>
-  <div>
-    <h3 class="text-lg font-medium">Profile</h3>
-    <p class="text-sm text-muted-foreground">This is how others will see you on the site.</p>
-  </div>
-  <Separator />
   <form class="space-y-8" @submit="onSubmit">
+    <div class="grid gap-4">
+      <Label>Display Image</Label>
+      <AvatarUploadComponent ref="avatarUpload" :height="6" alignment="left" class="ms-2" />
+      <div class="text-sm text-muted-foreground">Upload an splash image.</div>
+    </div>
+
     <FormField v-slot="{ componentField }" name="username">
       <FormItem>
-        <FormLabel>Username</FormLabel>
+        <FormLabel>Displayname</FormLabel>
         <FormControl>
-          <Input type="text" placeholder="shadcn" v-bind="componentField" />
+          <Input type="text" placeholder="Display Name" v-bind="componentField" />
         </FormControl>
         <FormDescription>
-          This is your public display name. It can be your real name or a pseudonym. You can only change this once every
-          30 days.
+          This is the name that will be displayed publicly when you approve a booking.
         </FormDescription>
         <FormMessage />
       </FormItem>
@@ -89,65 +107,39 @@ const onSubmit = handleSubmit((values) => {
     <FormField v-slot="{ componentField }" name="email">
       <FormItem>
         <FormLabel>Email</FormLabel>
-
-        <Select v-bind="componentField">
-          <FormControl>
-            <SelectTrigger>
-              <SelectValue placeholder="Select an email" />
-            </SelectTrigger>
-          </FormControl>
-          <SelectContent>
-            <SelectGroup>
-              <SelectItem v-for="email in verifiedEmails" :key="email" :value="email">
-                {{ email }}
-              </SelectItem>
-            </SelectGroup>
-          </SelectContent>
-        </Select>
-        <FormDescription> You can manage verified email addresses in your email settings. </FormDescription>
-        <FormMessage />
-      </FormItem>
-    </FormField>
-
-    <FormField v-slot="{ componentField }" name="bio">
-      <FormItem>
-        <FormLabel>Bio</FormLabel>
         <FormControl>
-          <Textarea placeholder="Tell us a little bit about yourself" v-bind="componentField" />
+          <Input type="text" placeholder="Your email address" v-bind="componentField" />
         </FormControl>
-        <FormDescription>
-          You can <span>@mention</span> other users and organizations to link to them.
-        </FormDescription>
+        <FormDescription> This is the email address that will be displayed on your profile. </FormDescription>
         <FormMessage />
       </FormItem>
     </FormField>
 
-    <div>
-      <FieldArray v-slot="{ fields, push, remove }" name="urls">
-        <div v-for="(field, index) in fields" :key="`urls-${field.key}`">
-          <FormField v-slot="{ componentField }" :name="`urls[${index}].value`">
-            <FormItem>
-              <FormLabel :class="cn(index !== 0 && 'sr-only')"> URLs </FormLabel>
-              <FormDescription :class="cn(index !== 0 && 'sr-only')">
-                Add links to your website, blog, or social media profiles.
-              </FormDescription>
-              <div class="relative flex items-center">
-                <FormControl>
-                  <Input type="url" v-bind="componentField" />
-                </FormControl>
-                <button type="button" class="absolute py-2 pe-3 end-0 text-muted-foreground" @click="remove(index)">
-                  <Cross1Icon class="w-3" />
-                </button>
-              </div>
-              <FormMessage />
-            </FormItem>
-          </FormField>
-        </div>
-
-        <Button type="button" variant="outline" size="sm" class="text-xs w-20 mt-2" @click="push({ value: '' })">
-          Add URL
-        </Button>
-      </FieldArray>
+    <div class="flex gap-4">
+      <div class="flex-grow">
+        <FormField v-slot="{ componentField }" name="firstname" class="flex-grow">
+          <FormItem>
+            <FormLabel>Firstname</FormLabel>
+            <FormControl>
+              <Input type="text" placeholder="Firstname" v-bind="componentField" />
+            </FormControl>
+            <FormDescription> Your first name. </FormDescription>
+            <FormMessage />
+          </FormItem>
+        </FormField>
+      </div>
+      <div class="flex-grow">
+        <FormField v-slot="{ componentField }" name="lastname" class="flex-grow">
+          <FormItem>
+            <FormLabel>Lastname</FormLabel>
+            <FormControl>
+              <Input type="text" placeholder="Lastname" v-bind="componentField" />
+            </FormControl>
+            <FormDescription> Your last name. </FormDescription>
+            <FormMessage />
+          </FormItem>
+        </FormField>
+      </div>
     </div>
 
     <div class="flex gap-2 justify-start">
@@ -156,4 +148,6 @@ const onSubmit = handleSubmit((values) => {
       <Button type="button" variant="outline" @click="resetForm"> Reset form </Button>
     </div>
   </form>
+
+  <Button type="button" @click="toastTest"> Toast Test </Button>
 </template>

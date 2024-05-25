@@ -28,6 +28,10 @@ const props = defineProps({
   imageHeight: {
     type: Number,
     default: 512
+  },
+  alignment: {
+    type: String,
+    default: 'center'
   }
 })
 
@@ -82,7 +86,7 @@ defineExpose({ uploadImage })
 </script>
 
 <template>
-  <div class="text-center relative rounded">
+  <div class="relative rounded" :class="`text-${props.alignment}`">
     <div v-if="toBeUploadedImage" class="absolute end-[-5px] top-[-5px]">
       <XIcon class="w-4 h-4 cursor-pointer hover:opacity-75" @click="clearImage" />
     </div>
