@@ -48,7 +48,7 @@ export const useBookableObjects = defineStore('bookableObjects', () => {
           return
         }
         groupBookableObjects.value[`${group_association}`].push(bookableObject)
-        if (`${group_association}` === selectedGroupId.value) {
+        if (selectedGroupId && `${group_association}` === selectedGroupId.value) {
           bookableObjects.value.push(bookableObject)
         }
       }

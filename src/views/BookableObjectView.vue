@@ -41,7 +41,7 @@ onMounted(async () => {
       class="px-1 py-1 h-full md:py-3 md:px-3 grid items-stretch gap-6 lg:grid-cols-[400px_minmax(0,1fr)]"
       v-if="selectedBookableObject"
     >
-      <BookableSideInfo :bookableObject="selectedBookableObject" />
+      <BookableSideInfo :bookableObject="selectedBookableObject" class="hidden lg:block" />
       <CalenderComponent :top-padding="57" />
     </div>
   </template>

@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed } from 'vue'
+import { computed, onMounted } from 'vue'
 import { useForm } from 'vee-validate'
 import * as z from 'zod'
 import { toTypedSchema } from '@vee-validate/zod'
@@ -33,17 +33,40 @@ const contactSchema = z
     path: ['mail']
   })
 
-const { values, validate } = useForm({
+const { values, validate, setFieldValue } = useForm({
   validationSchema: toTypedSchema(contactSchema),
   initialValues: {
-    display_name: props.initialValues.name || '',
+    display_name: props.initialValues.display_name || '',
     mail: props.initialValues.mail || '',
     phone: props.initialValues.phone || '',
     saveInfo: props.initialValues.saveInfo || false
   }
 })
 
-const getValues = computed(() => values)
+const getValues = computed(() => {
+  if (values.saveInfo) {
+    // store in local storage
+    localStorage.setItem('contactData', JSON.stringify(values))
+  }
+
+  return values
+})
+
+onMounted(() => {
+  // Load saved data from local storage
+  const savedData = localStorage.getItem('contactData')
+  if (savedData) {
+    const parsedData = JSON.parse(savedData)
+    const fields: Array<'display_name' | 'mail' | 'phone' | 'saveInfo'> = ['display_name', 'mail', 'phone', 'saveInfo']
+
+    fields.forEach((field) => {
+      if (parsedData[field] !== undefined && values[field] !== '') {
+        setFieldValue(field, parsedData[field])
+      }
+    })
+  }
+})
+
 defineExpose({ getValues, validate })
 </script>
 

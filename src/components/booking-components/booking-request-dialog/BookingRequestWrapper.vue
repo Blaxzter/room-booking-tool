@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, watch } from 'vue'
+import { ref, watch, defineEmits } from 'vue'
 import { Button } from '@/components/ui/button'
 import { Dialog, DialogContent, DialogFooter, DialogHeader, DialogTitle } from '@/components/ui/dialog'
 import StepperComponent from '@/components/utils/StepperComponent.vue'
@@ -16,6 +16,8 @@ const contactData = ref()
 const eventData = ref()
 const timeData = ref()
 const open = defineModel<boolean>()
+
+const emit = defineEmits(['dismiss', 'close', 'created'])
 
 const props = defineProps<{
   startDate: string
@@ -35,16 +37,13 @@ const stepToValues = ref<Record<number, any>>({
   2: {}
 })
 
-const emit = defineEmits(['dismiss', 'close'])
-
 const handleDismiss = () => {
   open.value = false
-  emit('dismiss')
+  emit('dismiss', true)
 }
 
 const handleClose = () => {
-  emit('dismiss')
-  emit('close')
+  emit('dismiss', true)
 }
 
 function combineDateTime(date: string, time: string) {
@@ -73,9 +72,10 @@ const createBooking = async () => {
 
   console.log('Creating object with values:', createObject)
   const { createBookings } = useBooking()
-  await createBookings(createObject as CreateBookingRequest)
+  const createdEvent = await createBookings(createObject as CreateBookingRequest)
   console.log('Booking created')
   open.value = false
+  emit('created', createdEvent)
 }
 
 const nextStep = async () => {

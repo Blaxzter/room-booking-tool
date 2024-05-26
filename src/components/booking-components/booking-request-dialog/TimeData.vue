@@ -1,12 +1,13 @@
 <script setup lang="ts">
-import { computed } from 'vue'
-import { useForm } from 'vee-validate'
+import { computed, ref, watch } from 'vue'
+import { useForm, useField } from 'vee-validate'
 import * as z from 'zod'
 import { toTypedSchema } from '@vee-validate/zod'
 import { FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form'
 import { Input } from '@/components/ui/input'
 import { Switch } from '@/components/ui/switch'
 import { CalendarIcon, Clock10Icon, ClockIcon } from 'lucide-vue-next'
+import { Collapsible, CollapsibleContent } from '@/components/ui/collapsible'
 
 interface InitialValues {
   startDate: string
@@ -24,8 +25,8 @@ const props = defineProps<{
 const bookingSchema = z.object({
   startDate: z.string().min(1, { message: 'Start date is required' }),
   isFullDay: z.boolean().optional(),
-  startTime: z.string().min(1, { message: 'Start time is required' }),
-  endTime: z.string().min(1, { message: 'End time is required' }),
+  startTime: z.string().min(1, { message: 'Start time is required' }).optional(),
+  endTime: z.string().min(1, { message: 'End time is required' }).optional(),
   isOnAnotherDate: z.boolean().optional(),
   endDate: z.string().optional()
 })
@@ -42,7 +43,48 @@ const { values, validate } = useForm({
   }
 })
 
-const getValues = computed(() => values)
+const invertedFullDay = computed(() => !values.isFullDay)
+
+const startTimeSave = ref(values.startTime)
+const endTimeSave = ref(values.endTime)
+const endDateeSave = ref(values.endDate)
+
+const { value: isFullDay } = useField('isFullDay')
+const { value: startTime } = useField('startTime')
+const { value: endTime } = useField('endTime')
+const { value: isOnAnotherDate } = useField('isOnAnotherDate')
+const { value: endDate } = useField('endDate')
+
+watch(isFullDay, (newValue) => {
+  if (newValue) {
+    startTimeSave.value = values.startTime
+    endTimeSave.value = values.endTime
+    startTime.value = ''
+    endTime.value = ''
+  } else {
+    startTime.value = startTimeSave.value
+    endTime.value = endTimeSave.value
+  }
+})
+
+watch(isOnAnotherDate, (newValue) => {
+  if (!newValue) {
+    endDateeSave.value = values.endDate
+    endDate.value = ''
+  } else {
+    endDate.value = endDateeSave.value
+  }
+})
+
+const getValues = computed(() => {
+  // change the values to the correct format
+  return {
+    ...values,
+    startTime: values.isFullDay ? '' : values.startTime,
+    endTime: values.isFullDay ? '' : values.endTime,
+    endDate: values.isOnAnotherDate ? values.endDate : values.startDate
+  }
+})
 defineExpose({ getValues, validate })
 </script>
 
@@ -75,35 +117,39 @@ defineExpose({ getValues, validate })
       </FormItem>
     </FormField>
 
-    <FormField v-slot="{ componentField }" name="startTime">
-      <FormItem>
-        <FormLabel for="start-time" class="text-right"> Start Time </FormLabel>
-        <FormControl>
-          <div class="relative">
-            <Input type="time" id="start-time" v-bind="componentField" class="pl-10" />
-            <div class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
-              <ClockIcon class="w-5 h-5 text-gray-400" />
-            </div>
-          </div>
-          <FormMessage />
-        </FormControl>
-      </FormItem>
-    </FormField>
+    <Collapsible :open="invertedFullDay">
+      <CollapsibleContent>
+        <FormField v-slot="{ componentField }" name="startTime">
+          <FormItem>
+            <FormLabel for="start-time" class="text-right"> Start Time </FormLabel>
+            <FormControl>
+              <div class="relative">
+                <Input type="time" id="start-time" v-bind="componentField" class="pl-10" />
+                <div class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
+                  <ClockIcon class="w-5 h-5 text-gray-400" />
+                </div>
+              </div>
+              <FormMessage />
+            </FormControl>
+          </FormItem>
+        </FormField>
 
-    <FormField v-slot="{ componentField }" name="endTime">
-      <FormItem>
-        <FormLabel for="end-time" class="text-right"> End Time </FormLabel>
-        <FormControl>
-          <div class="relative">
-            <Input type="time" id="end-time" v-bind="componentField" class="pl-10" />
-            <div class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
-              <Clock10Icon class="w-5 h-5 text-gray-400" />
-            </div>
-          </div>
-          <FormMessage />
-        </FormControl>
-      </FormItem>
-    </FormField>
+        <FormField v-slot="{ componentField }" name="endTime">
+          <FormItem>
+            <FormLabel for="end-time" class="text-right"> End Time </FormLabel>
+            <FormControl>
+              <div class="relative">
+                <Input type="time" id="end-time" v-bind="componentField" class="pl-10" />
+                <div class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
+                  <Clock10Icon class="w-5 h-5 text-gray-400" />
+                </div>
+              </div>
+              <FormMessage />
+            </FormControl>
+          </FormItem>
+        </FormField>
+      </CollapsibleContent>
+    </Collapsible>
 
     <FormField v-slot="{ value, handleChange }" name="isOnAnotherDate">
       <FormItem class="flex flex-row items-center gap-x-3 space-y-0 rounded-md" :horizontal="true">
@@ -117,20 +163,24 @@ defineExpose({ getValues, validate })
       </FormItem>
     </FormField>
 
-    <FormField v-slot="{ componentField }" name="endDate">
-      <FormItem>
-        <FormLabel for="end-date" class="text-right"> End Date </FormLabel>
-        <FormControl>
-          <div class="relative">
-            <Input type="date" id="end-date" v-bind="componentField" class="pl-10" />
-            <div class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
-              <CalendarIcon class="w-5 h-5 text-gray-400" />
-            </div>
-          </div>
-          <FormMessage />
-        </FormControl>
-      </FormItem>
-    </FormField>
+    <Collapsible v-model:open="values.isOnAnotherDate">
+      <CollapsibleContent>
+        <FormField v-slot="{ componentField }" name="endDate">
+          <FormItem>
+            <FormLabel for="end-date" class="text-right"> End Date </FormLabel>
+            <FormControl>
+              <div class="relative">
+                <Input type="date" id="end-date" v-bind="componentField" class="pl-10" />
+                <div class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
+                  <CalendarIcon class="w-5 h-5 text-gray-400" />
+                </div>
+              </div>
+              <FormMessage />
+            </FormControl>
+          </FormItem>
+        </FormField>
+      </CollapsibleContent>
+    </Collapsible>
 
     <slot name="footer"></slot>
   </form>

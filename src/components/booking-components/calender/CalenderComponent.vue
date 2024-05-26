@@ -56,7 +56,7 @@ const fullCalenderInitialEvents = currentBookings.value.map((booking) => {
 })
 
 const calendarOptions = {
-  timeZone: 'UTC',
+  timeZone: 'local',
   plugins: [dayGridPlugin, timeGridPlugin, interactionPlugin, listPlugin],
   headerToolbar: false,
   editable: true,
@@ -65,7 +65,6 @@ const calendarOptions = {
   dayMaxEvents: false,
   weekends: true,
   height: '100%',
-  width: '100%',
   initialView: 'dayGridFourWeek',
   firstDay: 1,
   views: {
@@ -87,7 +86,8 @@ const calendarOptions = {
       title: 'New Event',
       start: arg.start,
       end: arg.end,
-      allDay: arg.allDay
+      allDay: arg.allDay,
+      confirmed: false
     })
     startDate.value = dayjs(arg.start).format('YYYY-MM-DD')
     startTime.value = dayjs(arg.start).format('HH:mm')
@@ -161,37 +161,40 @@ onMounted(() => {
 
 <template>
   <Card class="calender-content" :style="styleProps">
-    <card-header class="flex flex-row items-center">
-      <CalendarIcon class="me-2" />
-      <h2 class="text-lg font-semibold" v-if="fullCalenderRef">
-        {{ currentDateString }}
-      </h2>
-      <div class="flex-grow" />
-      <Button @click="selectToday" class="me-3" :variant="isToday ? 'outline' : 'default'"> Today </Button>
-      <calender-remote class="me-3" @prev="togglePrev" @next="toggleNext" />
-      <calender-tabs v-model="selectedTab" @update:model-value="switchTab" />
+    <card-header class="flex flex-col sm:flex-row sm:items-center space-y-1 sm:space-y-0 sm:space-x-4">
+      <div class="flex items-center">
+        <CalendarIcon class="mr-2" />
+        <h2 class="text-lg font-semibold" v-if="fullCalenderRef">
+          {{ currentDateString }}
+        </h2>
+      </div>
+      <div class="flex-grow"></div>
+      <div class="flex items-center space-x-3">
+        <Button @click="selectToday" :variant="isToday ? 'outline' : 'default'">Today</Button>
+        <calender-remote @prev="togglePrev" @next="toggleNext" />
+        <calender-tabs v-model="selectedTab" @update:model-value="switchTab" />
+      </div>
     </card-header>
     <CardContent class="calender-wrapper">
       <full-calendar :options="calendarOptions" ref="fullCalenderRef">
-        <template v-slot:eventContent="arg">
-          <div class="flex">
-            <CheckIcon class="me-2" v-if="arg.extendedProps.extendedProps.confirmed" />
-
-            <b>{{ arg.event.title }}</b>
-          </div>
-        </template>
+        <!--        <template v-slot:eventContent="arg">-->
+        <!--          <div class="flex">-->
+        <!--            <CheckIcon class="me-2" v-if="arg.extendedProps.extendedProps.confirmed" />-->
+        <!--            {{ arg }}-->
+        <!--            <b>{{ arg.event.title }}</b>-->
+        <!--          </div>-->
+        <!--        </template>-->
       </full-calendar>
     </CardContent>
   </Card>
   <booking-request-wrapper
     v-model="openEventDialog"
-    :args="openEventProps"
-    @close="closeDialog"
-    @dismiss="dismissTempEvent"
-    @created="addEvent"
     :start-date="startDate"
     :start-time="startTime"
     :end-time="endTime"
+    @close="closeDialog"
+    @dismiss="dismissTempEvent"
+    @created="addEvent"
   />
 </template>
 
