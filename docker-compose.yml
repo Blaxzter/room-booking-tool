@@ -61,7 +61,7 @@ services:
       DB_USER: "${DB_USER}"
       DB_PASSWORD: "${DB_PASSWORD}"
 
-      CACHE_ENABLED: "true"
+      CACHE_ENABLED: "false"
       CACHE_STORE: "redis"
       REDIS: "redis://cache:6379"
       IMPORT_IP_DENY_LIST: ""

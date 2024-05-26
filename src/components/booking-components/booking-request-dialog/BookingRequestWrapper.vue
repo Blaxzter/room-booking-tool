@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, watch, defineEmits } from 'vue'
+import { defineEmits, ref, watch } from 'vue'
 import { Button } from '@/components/ui/button'
 import { Dialog, DialogContent, DialogFooter, DialogHeader, DialogTitle } from '@/components/ui/dialog'
 import StepperComponent from '@/components/utils/StepperComponent.vue'
@@ -20,9 +20,10 @@ const open = defineModel<boolean>()
 const emit = defineEmits(['dismiss', 'close', 'created'])
 
 const props = defineProps<{
-  startDate: string
-  startTime: string
-  endTime: string
+  startDate?: string
+  startTime?: string
+  endTime?: string
+  allDay?: boolean
 }>()
 
 const stepRefMap: Record<number, any> = {
@@ -57,8 +58,8 @@ const createBooking = async () => {
   const timeData = stepToValues.value[0]
 
   // convert start date + time to ISO string
-  timeData.startDate = combineDateTime(timeData.startDate, timeData.startTime)
-  timeData.endDate = combineDateTime(timeData.endDate, timeData.endTime)
+  timeData.start_date = combineDateTime(timeData.startDate, timeData.startTime)
+  timeData.end_date = combineDateTime(timeData.endDate, timeData.endTime)
 
   delete timeData.startTime
   delete timeData.endTime
@@ -100,9 +101,12 @@ watch(open, (val) => {
       startDate: props.startDate,
       startTime: props.startTime,
       endTime: props.endTime,
+      isFullDay: props.allDay,
       isOnAnotherDate: false,
       endDate: props.startDate
     }
+  } else {
+    emit('close')
   }
 })
 </script>

@@ -2,7 +2,7 @@
 import dayjs from 'dayjs'
 import { storeToRefs } from 'pinia'
 import { computed, defineProps, onMounted, ref } from 'vue'
-import { CalendarIcon, CheckIcon } from 'lucide-vue-next'
+import { CalendarIcon } from 'lucide-vue-next'
 
 import FullCalendar from '@fullcalendar/vue3'
 import dayGridPlugin from '@fullcalendar/daygrid'
@@ -44,8 +44,9 @@ const props = defineProps({
 const startDate = ref('')
 const startTime = ref('')
 const endTime = ref('')
+const allDay = ref(false)
 
-const fullCalenderInitialEvents = currentBookings.value.map((booking) => {
+const bookingToEvent = (booking: Booking) => {
   return {
     id: booking.id,
     title: booking.display_name,
@@ -53,6 +54,10 @@ const fullCalenderInitialEvents = currentBookings.value.map((booking) => {
     end: booking.end_date,
     confirmed: booking.confirmed
   }
+}
+
+const fullCalenderInitialEvents = currentBookings.value.map((booking) => {
+  return bookingToEvent(booking)
 })
 
 const calendarOptions = {
@@ -92,14 +97,11 @@ const calendarOptions = {
     startDate.value = dayjs(arg.start).format('YYYY-MM-DD')
     startTime.value = dayjs(arg.start).format('HH:mm')
     endTime.value = dayjs(arg.end).format('HH:mm')
+    allDay.value = arg.allDay
     openEventDialog.value = true
     openEventProps.value = arg
   },
-  initialEvents: fullCalenderInitialEvents,
-  eventDidMount: function (arg) {
-    // customize an event element here
-    console.log('Event mounted:', arg)
-  }
+  initialEvents: fullCalenderInitialEvents
 } as CalendarOptions
 
 const switchTab = (tab: CalendarViewType) => {
@@ -127,16 +129,20 @@ const selectToday = () => {
 }
 
 const addEvent = (event: Booking) => {
-  fullCalenderApi().addEvent(event)
+  console.log('Adding event', event)
+  fullCalenderApi().addEvent(bookingToEvent(event))
   openEventDialog.value = false
 }
 
 const dismissTempEvent = () => {
+  console.log('dismiss')
   createdTempEvent.value?.remove()
   openEventDialog.value = false
 }
 
 const closeDialog = () => {
+  console.log('Closing dialog')
+  createdTempEvent.value?.remove()
   openEventDialog.value = false
 }
 
@@ -192,6 +198,7 @@ onMounted(() => {
     :start-date="startDate"
     :start-time="startTime"
     :end-time="endTime"
+    :all-day="allDay"
     @close="closeDialog"
     @dismiss="dismissTempEvent"
     @created="addEvent"
