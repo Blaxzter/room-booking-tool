@@ -43,6 +43,7 @@ const handleDismiss = () => {
 }
 
 const handleClose = () => {
+  emit('dismiss')
   emit('close')
 }
 

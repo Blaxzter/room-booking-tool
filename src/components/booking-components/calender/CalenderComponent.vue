@@ -2,7 +2,7 @@
 import dayjs from 'dayjs'
 import { storeToRefs } from 'pinia'
 import { computed, defineProps, onMounted, ref } from 'vue'
-import { CalendarIcon } from 'lucide-vue-next'
+import { CalendarIcon, CheckIcon } from 'lucide-vue-next'
 
 import FullCalendar from '@fullcalendar/vue3'
 import dayGridPlugin from '@fullcalendar/daygrid'
@@ -20,6 +20,7 @@ import CalenderTabs, { type CalendarViewType } from '@/components/booking-compon
 
 import BookingRequestWrapper from '@/components/booking-components/booking-request-dialog/BookingRequestWrapper.vue'
 import { useBooking } from '@/stores/useBooking'
+import type { Booking } from '@/types'
 
 const { currentBookings } = storeToRefs(useBooking())
 
@@ -49,7 +50,8 @@ const fullCalenderInitialEvents = currentBookings.value.map((booking) => {
     id: booking.id,
     title: booking.display_name,
     start: booking.start_date,
-    end: booking.end_date
+    end: booking.end_date,
+    confirmed: booking.confirmed
   }
 })
 
@@ -93,7 +95,11 @@ const calendarOptions = {
     openEventDialog.value = true
     openEventProps.value = arg
   },
-  initialEvents: fullCalenderInitialEvents
+  initialEvents: fullCalenderInitialEvents,
+  eventDidMount: function (arg) {
+    // customize an event element here
+    console.log('Event mounted:', arg)
+  }
 } as CalendarOptions
 
 const switchTab = (tab: CalendarViewType) => {
@@ -118,6 +124,11 @@ const selectToday = () => {
   fullCalenderApi().today()
   currentDateString.value = fullCalenderData().viewTitle
   selectedDay.value = dayjs(fullCalenderData().currentDate)
+}
+
+const addEvent = (event: Booking) => {
+  fullCalenderApi().addEvent(event)
+  openEventDialog.value = false
 }
 
 const dismissTempEvent = () => {
@@ -161,7 +172,15 @@ onMounted(() => {
       <calender-tabs v-model="selectedTab" @update:model-value="switchTab" />
     </card-header>
     <CardContent class="calender-wrapper">
-      <full-calendar :options="calendarOptions" ref="fullCalenderRef" />
+      <full-calendar :options="calendarOptions" ref="fullCalenderRef">
+        <template v-slot:eventContent="arg">
+          <div class="flex">
+            <CheckIcon class="me-2" v-if="arg.extendedProps.extendedProps.confirmed" />
+
+            <b>{{ arg.event.title }}</b>
+          </div>
+        </template>
+      </full-calendar>
     </CardContent>
   </Card>
   <booking-request-wrapper
@@ -169,6 +188,7 @@ onMounted(() => {
     :args="openEventProps"
     @close="closeDialog"
     @dismiss="dismissTempEvent"
+    @created="addEvent"
     :start-date="startDate"
     :start-time="startTime"
     :end-time="endTime"
