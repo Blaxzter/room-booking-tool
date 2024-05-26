@@ -529,13 +529,40 @@
     "role": "62a8abe7-e3ae-462e-b038-58ce5a2f5475",
     "collection": "booking",
     "action": "read",
-    "permissions": {},
+    "permissions": {
+      "_and": [
+        {
+          "_or": [
+            {
+              "bookable_object_id": {
+                "owner": {
+                  "_eq": "$CURRENT_USER"
+                }
+              }
+            },
+            {
+              "bookable_object_id": {
+                "group": {
+                  "group_id": {
+                    "users": {
+                      "directus_users_id": {
+                        "_eq": "$CURRENT_USER"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          ]
+        }
+      ]
+    },
     "validation": {},
     "presets": null,
     "fields": [
       "*"
     ],
-    "_syncId": "6b23c60f-485f-419e-ba82-2815b7157f76"
+    "_syncId": "b3be8253-f807-473a-9f66-4b18b257187b"
   },
   {
     "role": "62a8abe7-e3ae-462e-b038-58ce5a2f5475",
@@ -672,6 +699,18 @@
       "first_name"
     ],
     "_syncId": "a712308f-bb96-4569-8f70-5142178a6129"
+  },
+  {
+    "role": "62a8abe7-e3ae-462e-b038-58ce5a2f5475",
+    "collection": "directus_users",
+    "action": "update",
+    "permissions": {},
+    "validation": {},
+    "presets": null,
+    "fields": [
+      "*"
+    ],
+    "_syncId": "3c6d8b7b-cbf3-4f4b-8e30-1ac582581332"
   },
   {
     "role": "62a8abe7-e3ae-462e-b038-58ce5a2f5475",
