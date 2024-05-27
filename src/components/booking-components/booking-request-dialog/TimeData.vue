@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { computed, ref, watch } from 'vue'
-import { useForm, useField } from 'vee-validate'
+import { useField, useForm } from 'vee-validate'
 import * as z from 'zod'
 import { toTypedSchema } from '@vee-validate/zod'
 import { FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form'
@@ -76,15 +76,13 @@ watch(isOnAnotherDate, (newValue) => {
   }
 })
 
-const getValues = computed(() => {
+const getValues = () => {
   // change the values to the correct format
   return {
     ...values,
-    startTime: values.isFullDay ? '' : values.startTime,
-    endTime: values.isFullDay ? '' : values.endTime,
-    endDate: values.isOnAnotherDate ? values.endDate : values.startDate
+    is_full_day: values.isFullDay
   }
-})
+}
 defineExpose({ getValues, validate })
 </script>
 

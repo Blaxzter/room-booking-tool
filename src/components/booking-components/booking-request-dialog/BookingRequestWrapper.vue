@@ -58,12 +58,18 @@ const createBooking = async () => {
   const timeData = stepToValues.value[0]
 
   // convert start date + time to ISO string
-  timeData.start_date = combineDateTime(timeData.startDate, timeData.startTime)
-  timeData.end_date = combineDateTime(timeData.endDate, timeData.endTime)
+  if (timeData.fullDate) {
+    timeData.startDate = timeData.startDate.split('T')[0]
+    timeData.endDate = timeData.endDate.split('T')[0]
+  } else {
+    timeData.start_date = combineDateTime(timeData.startDate, timeData.startTime)
+    timeData.end_date = combineDateTime(timeData.endDate, timeData.endTime)
+  }
 
   delete timeData.startTime
   delete timeData.endTime
   delete timeData.combineDateTime
+  delete timeData.isFullDay
 
   const createObject = {
     ...timeData,
@@ -80,10 +86,11 @@ const createBooking = async () => {
 }
 
 const nextStep = async () => {
-  const valRes = await stepRefMap[activeStep.value].value.validate()
+  const valid = await stepRefMap[activeStep.value].value.validate()
+  const valRes = stepRefMap[activeStep.value].value.getValues()
   console.log('Validation result:', valRes)
-  if (valRes.valid) {
-    stepToValues.value[activeStep.value] = valRes.values
+  if (valid.valid) {
+    stepToValues.value[activeStep.value] = valRes
     if (activeStep.value < steps.length - 1) activeStep.value++
     else {
       await createBooking()

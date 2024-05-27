@@ -47,11 +47,17 @@ const endTime = ref('')
 const allDay = ref(false)
 
 const bookingToEvent = (booking: Booking) => {
+  let start_date = booking.start_date
+  let end_date = booking.end_date
+  if (booking.is_full_day) {
+    start_date = booking.start_date.split('T')[0]
+    end_date = booking.end_date.split('T')[0]
+  }
   return {
     id: booking.id,
     title: booking.display_name,
-    start: booking.start_date,
-    end: booking.end_date,
+    start: start_date,
+    end: end_date,
     confirmed: booking.confirmed
   }
 }
@@ -62,6 +68,7 @@ const fullCalenderInitialEvents = currentBookings.value.map((booking) => {
 
 const calendarOptions = {
   timeZone: 'local',
+  locale: 'en',
   plugins: [dayGridPlugin, timeGridPlugin, interactionPlugin, listPlugin],
   headerToolbar: false,
   editable: true,
@@ -72,17 +79,30 @@ const calendarOptions = {
   height: '100%',
   initialView: 'dayGridFourWeek',
   firstDay: 1,
+  nowIndicator: true,
+  nowIndicatorClassNames: ['now-indicator'],
+  axisFormat: 'HH:mm',
+  minTime: 0,
+  maxTime: 24,
+  timeFormat: {
+    agenda: 'H:mm{ - h:mm}'
+  },
+  defaultEventMinutes: 120,
   views: {
     dayGridFourWeek: {
       type: 'dayGrid',
       duration: { weeks: 4 },
       selectable: false,
+      timeFormat: 'H(:mm)',
       dateClick(arg) {
         fullCalenderApi().gotoDate(arg.date)
         fullCalenderApi().changeView('timeGridDay')
         selectedTab.value = 'timeGridDay'
         currentDateString.value = fullCalenderData().viewTitle
         selectedDay.value = dayjs(fullCalenderData().currentDate)
+        const now = dayjs()
+        console.log('Scrolling to now', now.format('HH:mm:ss'))
+        fullCalenderApi().scrollToTime(now.format('HH:mm:ss'))
       }
     }
   },
@@ -108,6 +128,13 @@ const switchTab = (tab: CalendarViewType) => {
   fullCalenderApi().changeView(tab)
   currentDateString.value = fullCalenderData().viewTitle
   selectedDay.value = dayjs(fullCalenderData().currentDate)
+
+  console.log('Switching tab', tab)
+  if (tab === 'timeGridWeek' || tab === 'timeGridDay') {
+    const now = dayjs()
+    console.log('Scrolling to now', now.format('HH:mm:ss'))
+    fullCalenderApi().scrollToTime(now.format('HH:mm:ss'))
+  }
 }
 
 const togglePrev = () => {
@@ -154,6 +181,13 @@ const isToday = computed(() => {
 const styleProps = computed(() => {
   return `--top-padding: ${props.topPadding}px`
 })
+
+const scollNowIntoView = () => {
+  const nowIndicator = document.querySelector('.now-indicator')
+  if (nowIndicator) {
+    nowIndicator.scrollIntoView({ behavior: 'smooth', block: 'center' })
+  }
+}
 
 onMounted(() => {
   currentDateString.value = fullCalenderData().viewTitle

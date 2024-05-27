@@ -15,7 +15,6 @@
 </template>
 
 <script setup lang="ts">
-import { computed } from 'vue'
 import { useForm } from 'vee-validate'
 import * as z from 'zod'
 import { toTypedSchema } from '@vee-validate/zod'
@@ -41,6 +40,8 @@ const { values, validate } = useForm({
   }
 })
 
-const getValues = computed(() => values)
+const getValues = () => {
+  return { ...values }
+}
 defineExpose({ getValues, validate })
 </script>

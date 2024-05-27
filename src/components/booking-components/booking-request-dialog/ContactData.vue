@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed, onMounted } from 'vue'
+import { onMounted } from 'vue'
 import { useForm } from 'vee-validate'
 import * as z from 'zod'
 import { toTypedSchema } from '@vee-validate/zod'
@@ -33,7 +33,7 @@ const contactSchema = z
     path: ['mail']
   })
 
-const { values, validate, setFieldValue } = useForm({
+const { values, validate, setValues } = useForm({
   validationSchema: toTypedSchema(contactSchema),
   initialValues: {
     display_name: props.initialValues.display_name || '',
@@ -43,27 +43,23 @@ const { values, validate, setFieldValue } = useForm({
   }
 })
 
-const getValues = computed(() => {
+const getValues = () => {
   if (values.saveInfo) {
     // store in local storage
     localStorage.setItem('contactData', JSON.stringify(values))
+  } else {
+    // remove from local storage
+    localStorage.removeItem('contactData')
   }
-
-  return values
-})
+  return { ...values }
+}
 
 onMounted(() => {
   // Load saved data from local storage
   const savedData = localStorage.getItem('contactData')
   if (savedData) {
     const parsedData = JSON.parse(savedData)
-    const fields: Array<'display_name' | 'mail' | 'phone' | 'saveInfo'> = ['display_name', 'mail', 'phone', 'saveInfo']
-
-    fields.forEach((field) => {
-      if (parsedData[field] !== undefined && values[field] !== '') {
-        setFieldValue(field, parsedData[field])
-      }
-    })
+    setValues(parsedData)
   }
 })
 
@@ -79,7 +75,10 @@ defineExpose({ getValues, validate })
           <Input id="name" v-bind="componentField" />
           <FormMessage />
         </FormControl>
-        <FormDescription class="col-span-4"> Please enter your name. </FormDescription>
+        <FormDescription class="col-span-4">
+          Please enter the Name that is displayed in the event calender. <br />
+          This could be your full name or a nickname, or the name of the event.
+        </FormDescription>
       </FormItem>
     </FormField>
     <FormField name="mail" v-slot="{ componentField }">
