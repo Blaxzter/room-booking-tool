@@ -2,7 +2,7 @@
 import dayjs from 'dayjs'
 import { storeToRefs } from 'pinia'
 import { computed, defineProps, onMounted, ref } from 'vue'
-import { CalendarIcon, CheckIcon } from 'lucide-vue-next'
+import { CalendarIcon } from 'lucide-vue-next'
 
 import FullCalendar from '@fullcalendar/vue3'
 import dayGridPlugin from '@fullcalendar/daygrid'
@@ -16,11 +16,13 @@ import { Button } from '@/components/ui/button'
 
 import { Card, CardContent, CardHeader } from '@/components/ui/card'
 import CalenderRemote from '@/components/booking-components/calender/CalenderRemote.vue'
+
 import CalenderTabs, { type CalendarViewType } from '@/components/booking-components/calender/CalenderTabs.vue'
 
 import BookingRequestWrapper from '@/components/booking-components/booking-request-dialog/BookingRequestWrapper.vue'
 import { useBooking } from '@/stores/useBooking'
 import type { Booking } from '@/types'
+import CalenderEventSlot from '@/components/booking-components/calender/CalenderEventSlot.vue'
 
 const { currentBookings } = storeToRefs(useBooking())
 
@@ -219,46 +221,8 @@ onMounted(() => {
     <CardContent class="calender-wrapper">
       <full-calendar :options="calendarOptions" ref="fullCalenderRef">
         <template v-slot:eventContent="arg">
-          <div class="fc-daygrid-event-harness mt-0" v-if="arg.view.type == 'dayGridFourWeek' && arg.event.allDay">
-            <a
-              class="fc-event fc-event-draggable fc-event-resizable fc-event-start fc-event-end fc-event-past fc-daygrid-event fc-daygrid-block-event fc-h-event"
-            >
-              <div class="fc-event-main">
-                <div class="fc-event-main-frame">
-                  <div class="fc-event-title-container">
-                    <div class="fc-event-title fc-sticky">{{ arg.event.title }}</div>
-                  </div>
-                </div>
-              </div>
-              <div class="fc-event-resizer fc-event-resizer-end"></div
-            ></a>
-          </div>
-          <div class="fc-daygrid-event-harness mt-0" v-if="arg.view.type == 'dayGridFourWeek' && !arg.event.allDay">
-            <a
-              class="fc-event fc-event-draggable fc-event-resizable fc-event-start fc-event-end fc-event-past fc-daygrid-event fc-daygrid-dot-event flex"
-            >
-              <div class="fc-daygrid-event-dot"></div>
-              <div class="fc-event-time">{{ arg.timeText }}</div>
-              <div class="fc-event-title">{{ arg.event.title }}</div>
-              <div class="flex-grow" />
-              <CheckIcon :size="20" />
-            </a>
-          </div>
+          <CalenderEventSlot :arg="arg" />
         </template>
-
-        <!--        <template v-slot:eventContent="arg">-->
-        <!--          &lt;!&ndash;          {{ arg }}&ndash;&gt;-->
-        <!--&lt;!&ndash;          <div v-if="arg?.view?.dayGridFourWeek">&ndash;&gt;-->
-        <!--&lt;!&ndash;            <div class="flex">&ndash;&gt;-->
-        <!--&lt;!&ndash;              <CheckIcon class="me-2" v-if="arg.event.extendedProps.confirmed" />&ndash;&gt;-->
-        <!--&lt;!&ndash;              <b>{{ arg.event.title }}</b>&ndash;&gt;-->
-        <!--&lt;!&ndash;            </div>&ndash;&gt;-->
-        <!--&lt;!&ndash;          </div>&ndash;&gt;-->
-        <!--          &lt;!&ndash;          <div class="flex">&ndash;&gt;-->
-        <!--          &lt;!&ndash;            <CheckIcon class="me-2" v-if="arg.extendedProps.extendedProps.confirmed" />&ndash;&gt;-->
-        <!--          &lt;!&ndash;            <b>{{ arg.event.title }}</b>&ndash;&gt;-->
-        <!--          &lt;!&ndash;          </div>&ndash;&gt;-->
-        <!--        </template>-->
       </full-calendar>
     </CardContent>
   </Card>
@@ -301,16 +265,6 @@ onMounted(() => {
 
 .fc .fc-list-empty {
   background: hsl(var(--secondary));
-}
-
-/* Event colors */
-.fc-v-event {
-  background: hsl(var(--primary));
-  border: hsl(var(--primary-foreground)) solid 1px;
-  padding: 0.25rem;
-  .fc-event-main {
-    color: hsl(var(--primary-foreground)) !important;
-  }
 }
 
 .fc-daygrid-day {
