@@ -74,7 +74,7 @@ const calendarOptions = {
   locale: 'en',
   plugins: [dayGridPlugin, timeGridPlugin, interactionPlugin, listPlugin],
   headerToolbar: false,
-  editable: true,
+  editable: false,
   selectable: true,
   selectMirror: true,
   dayMaxEvents: false,
@@ -87,6 +87,8 @@ const calendarOptions = {
   axisFormat: 'HH:mm',
   minTime: 0,
   maxTime: 24,
+  eventStartEditable: false,
+  eventEndEditable: false,
   timeFormat: {
     agenda: 'H:mm{ - h:mm}'
   },

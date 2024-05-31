@@ -18,7 +18,8 @@ defineProps({
 
 <template>
   <div
-    class="w-full"
+    class="w-full h-full"
+    :class="cn(arg.event.extendedProps.confirmed && 'event-confirmed')"
     @click="
       toast({
         title: 'Clicked',
@@ -30,11 +31,7 @@ defineProps({
       <div class="relative" v-if="arg.event.allDay">
         <a
           :class="
-            cn(
-              'fc-event cursor-pointer mx-0.5 fc-daygrid-event fc-daygrid-block-event block',
-              arg.isPast && 'fc-event-past',
-              arg.event.extendedProps.confirmed && 'bg-primary text-primary-foreground'
-            )
+            cn('cursor-pointer mx-0.5 fc-daygrid-event fc-daygrid-block-event block', arg.isPast && 'fc-event-past')
           "
         >
           <div class="flex">
@@ -69,11 +66,7 @@ defineProps({
       <div class="relative" v-if="arg.event.allDay">
         <a
           :class="
-            cn(
-              'fc-event cursor-pointer mx-0.5 fc-daygrid-event fc-daygrid-block-event block',
-              arg.isPast && 'fc-event-past',
-              arg.event.extendedProps.confirmed && 'bg-primary text-primary-foreground'
-            )
+            cn('cursor-pointer mx-0.5 fc-daygrid-event fc-daygrid-block-event block', arg.isPast && 'fc-event-past')
           "
         >
           <div class="flex">
@@ -86,7 +79,12 @@ defineProps({
         </a>
       </div>
       <div v-else>
-        {{ arg }}
+        <div>
+          <div>
+            {{ arg.timeText }}
+          </div>
+          {{ arg.event.title }}
+        </div>
       </div>
       <!--      <div v-else>-->
       <!--        <div-->
@@ -108,7 +106,9 @@ defineProps({
   </div>
 </template>
 
-<style>
+<style lang="scss">
+@use 'sass:color';
+
 .fc-daygrid-event-dot {
   width: 0.5rem;
   height: 0.5rem;
@@ -118,18 +118,26 @@ defineProps({
   border: none;
 }
 
-.fc-daygrid-block-event {
-  background: hsl(var(--primary));
-  border: hsl(var(--primary)) solid 1px;
-  color: hsl(var(--primary-foreground)) !important;
+.fc-event {
+  &:hover {
+    cursor: pointer;
+  }
 }
 
-.fc-v-event {
-  background: hsl(var(--primary)) !important;
-  border: hsl(var(--primary)) solid 1px;
-  padding: 0.25rem;
-  .fc-event-main {
-    color: hsl(var(--primary-foreground)) !important;
+.fc-daygrid-block-event,
+.fc-timegrid-event {
+  background: var(--primary-rgb);
+  border: var(--primary-rgb) solid 0px;
+  padding: 1px;
+  color: hsl(var(--primary-foreground)) !important;
+
+  &:hover {
+    filter: brightness(95%);
   }
+}
+
+.fc-v-event .fc-event-main {
+  padding: 0.25rem;
+  color: hsl(var(--primary-foreground));
 }
 </style>
