@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, watch } from 'vue'
+import { ref } from 'vue'
 import { TabsContent, TabsList, TabsRoot, TabsTrigger } from 'radix-vue'
 import { CircleIcon, CircleDotIcon, CircleCheckBigIcon } from 'lucide-vue-next'
 

@@ -29,5 +29,6 @@ coverage
 
 *.tsbuildinfo
 .env
+.env.prod
 /uploads/
 /directus-uploads/

@@ -55,7 +55,7 @@ const profileFormSchema = toTypedSchema(
   })
 )
 
-const { handleSubmit, resetForm } = useForm({
+const { handleSubmit } = useForm({
   validationSchema: profileFormSchema,
   initialValues: {
     avatar: user.value?.avatar ?? '',

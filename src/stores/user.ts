@@ -124,7 +124,7 @@ export const useUser = defineStore('user', () => {
     localStorage.setItem('keep_logged_in', keep_logged_in ? 'true' : 'false')
     await client
       .login(email, password)
-      .then(async (res) => {
+      .then(async () => {
         authenticated.value = true
       })
       .catch((error) => {

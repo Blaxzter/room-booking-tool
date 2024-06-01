@@ -94,13 +94,17 @@ let selectedTeam = computed(() => {
   return displayData.value[0].teams[0]
 })
 
-const filterGroups = (val: Record<string, any>[], term: string): Record<string, any>[] => {
+const filterGroups = (
+  val: string[] | number[] | Record<string, any>[] | false[] | true[],
+  term: string
+): string[] | number[] | Record<string, any>[] | false[] | true[] => {
   return val.filter((group, index) => {
     if (index === val.length - 1) {
       return true
     }
+    console.log(group, term)
     return group.name.toLowerCase().includes(term.toLowerCase())
-  })
+  }) as Record<string, any>[]
 }
 
 const groupClicked = async (team: Group) => {

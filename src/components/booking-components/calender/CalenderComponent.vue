@@ -186,14 +186,6 @@ const isToday = computed(() => {
 const styleProps = computed(() => {
   return `--top-padding: ${props.topPadding}px`
 })
-
-const scollNowIntoView = () => {
-  const nowIndicator = document.querySelector('.now-indicator')
-  if (nowIndicator) {
-    nowIndicator.scrollIntoView({ behavior: 'smooth', block: 'center' })
-  }
-}
-
 onMounted(() => {
   currentDateString.value = fullCalenderData().viewTitle
   selectedDay.value = dayjs(fullCalenderData().currentDate)

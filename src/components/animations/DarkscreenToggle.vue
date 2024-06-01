@@ -2,7 +2,7 @@
 import { onMounted, ref, watch } from 'vue'
 import { LottieAnimation } from 'lottie-web-vue'
 import darkmode from '@/assets/animations/darkmode.json'
-import { useDark, useToggle } from '@vueuse/core'
+import { useDark } from '@vueuse/core'
 
 const isDark = useDark()
 

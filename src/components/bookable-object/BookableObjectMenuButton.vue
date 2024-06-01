@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import { defineProps, ref } from 'vue'
+import { defineProps } from 'vue'
 import { useRouter } from 'vue-router'
 
 import { EllipsisVertical, LinkIcon, EditIcon } from 'lucide-vue-next'

@@ -35,7 +35,7 @@ const { handleSubmit } = useForm({
   }
 })
 
-const onSubmit = handleSubmit((values, { resetForm }) => {
+const onSubmit = handleSubmit((values) => {
   toast({
     title: 'You submitted the following values:',
     description: h(
