@@ -1,34 +1,23 @@
 <script setup lang="ts">
-// import tasks from './data/tasks.json'
-// import DataTable from '@/components/DataTable.vue'
-// import UserNav from '@/components/UserNav.vue'
-// import { columns } from '@/components/columns'
+import { onMounted } from 'vue'
+import { storeToRefs } from 'pinia'
+
+import { columns } from '@/components/requests-components/column'
+import DataTable from '@/components/requests-components/DataTable.vue'
+
+import { useInitialDataStore } from '@/stores/initial'
+import { useRequests } from '@/stores/requests'
+
+const { fetchRequestViewData } = useInitialDataStore()
+const { requests } = storeToRefs(useRequests())
+
+onMounted(async () => {
+  await fetchRequestViewData()
+})
 </script>
 
 <template>
-  <!--  <div class="md:hidden">-->
-  <!--    <VPImage-->
-  <!--      alt="Tasks"-->
-  <!--      width="1280"-->
-  <!--      height="1214"-->
-  <!--      class="block"-->
-  <!--      :image="{-->
-  <!--        dark: '/examples/tasks-dark.png',-->
-  <!--        light: '/examples/tasks-light.png'-->
-  <!--      }"-->
-  <!--    />-->
-  <!--  </div>-->
-
-  <!--  <div class="hidden h-full flex-1 flex-col space-y-8 p-8 md:flex">-->
-  <!--    <div class="flex items-center justify-between space-y-2">-->
-  <!--      <div>-->
-  <!--        <h2 class="text-2xl font-bold tracking-tight">Welcome back!</h2>-->
-  <!--        <p class="text-muted-foreground">Here&apos;s a list of your tasks for this month!</p>-->
-  <!--      </div>-->
-  <!--      <div class="flex items-center space-x-2">-->
-  <!--        <UserNav />-->
-  <!--      </div>-->
-  <!--    </div>-->
-  <!--    <DataTable :data="tasks" :columns="columns" />-->
-  <!--  </div>-->
+  <div class="container py-10 mx-auto">
+    <DataTable :columns="columns" :data="requests" />
+  </div>
 </template>

@@ -6,7 +6,7 @@ import StepperComponent from '@/components/utils/StepperComponent.vue'
 import ContactData from '@/components/booking-components/booking-request-dialog/ContactData.vue'
 import EventData from '@/components/booking-components/booking-request-dialog/EventData.vue'
 import TimeData from '@/components/booking-components/booking-request-dialog/TimeData.vue'
-import { useBooking } from '@/stores/useBooking'
+import { useBookings } from '@/stores/booking'
 import type { CreateBookingRequest } from '@/assets/ts/queries/bookings'
 
 const activeStep = ref(0)
@@ -78,7 +78,7 @@ const createBooking = async () => {
   }
 
   console.log('Creating object with values:', createObject)
-  const { createBookings } = useBooking()
+  const { createBookings } = useBookings()
   const createdEvent = await createBookings(createObject as CreateBookingRequest)
   console.log('Booking created')
   open.value = false

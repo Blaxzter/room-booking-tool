@@ -20,11 +20,11 @@ import CalenderRemote from '@/components/booking-components/calender/CalenderRem
 import CalenderTabs, { type CalendarViewType } from '@/components/booking-components/calender/CalenderTabs.vue'
 
 import BookingRequestWrapper from '@/components/booking-components/booking-request-dialog/BookingRequestWrapper.vue'
-import { useBooking } from '@/stores/useBooking'
+import { useBookings } from '@/stores/booking'
 import type { Booking } from '@/types'
 import CalenderEventSlot from '@/components/booking-components/calender/CalenderEventSlot.vue'
 
-const { currentBookings } = storeToRefs(useBooking())
+const { currentBookings } = storeToRefs(useBookings())
 
 const fullCalenderRef = ref<InstanceType<typeof FullCalendar>>()
 

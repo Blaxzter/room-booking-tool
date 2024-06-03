@@ -7,7 +7,7 @@ import { useToast } from '@/components/ui/toast'
 import { useBookableObjects } from '@/stores/bookableObjects'
 import { createItem } from '@directus/sdk'
 
-export const useBooking = defineStore('bookings', () => {
+export const useBookings = defineStore('bookings', () => {
   const { toast } = useToast()
   const { client } = useUser()
 

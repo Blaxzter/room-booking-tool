@@ -17,7 +17,7 @@ export const useGroups = defineStore('group', () => {
     setSelectedGroup(group.id as string)
     selectedGroupId.value = `${group.id}`
     if (group.id !== '-1') await fetchBookableObjectsByGroupId(group.id as string)
-    else fetchUserBookableObjects()
+    else await fetchUserBookableObjects()
   }
 
   const setGroups = async (data: Group[]) => {

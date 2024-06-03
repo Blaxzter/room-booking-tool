@@ -1,43 +1,48 @@
 import { ref } from 'vue'
-import { defineStore } from 'pinia'
+import { defineStore, storeToRefs } from 'pinia'
 
 import {
-  getGroupQuery,
+  getDashboardByGroup,
   type GetGroupQueryResponse,
   getInitialDataQuery,
   type GetInitialDataQueryResponse,
   objectView,
-  type ObjectViewResponse
+  type ObjectViewResponse,
+  requestViewQuery,
+  type RequestViewResponse
 } from '@/assets/ts/queries/initial_data'
 import { useGroups } from '@/stores/groups'
 import { useBookableObjects } from '@/stores/bookableObjects'
 import { useUser } from '@/stores/user'
+import { useRequests } from '@/stores/requests'
 import { useLocalUser } from '@/stores/localUser'
-import { useBooking } from '@/stores/useBooking'
+import { useBookings } from '@/stores/booking'
 import _ from 'lodash'
 
 export const useInitialDataStore = defineStore('initial', () => {
-  const { client, user } = useUser()
+  const { client } = useUser()
+  const { user } = storeToRefs(useUser())
 
   const { setGroups } = useGroups()
   const { setBookableObjects, selectBookableObject, addBookableObject } = useBookableObjects()
   const { getSelectedGroup } = useLocalUser()
-  const { setBookings } = useBooking()
+  const { setBookings } = useBookings()
+  const { setRequests } = useRequests()
 
   const init_loading = ref(false)
 
-  const fetchInitialData = async () => {
+  const fetchDashboardViewData = async () => {
     init_loading.value = true
     try {
       const selectedGroup = getSelectedGroup()
       let received_data = null
       if (!_.isNil(selectedGroup) && selectedGroup !== '-1') {
-        const groupQuery = getGroupQuery(selectedGroup)
+        const groupQuery = getDashboardByGroup(selectedGroup)
         received_data = await client.query<GetGroupQueryResponse>(groupQuery)
 
         setBookableObjects({ data: received_data.bookable_object, groupId: selectedGroup })
       } else {
-        const initialDataQuery = getInitialDataQuery(user.id)
+        const initialDataQuery = getInitialDataQuery(user.value.id)
         received_data = await client.query<GetInitialDataQueryResponse>(initialDataQuery)
         setBookableObjects({ data: received_data.bookable_object })
       }
@@ -78,5 +83,18 @@ export const useInitialDataStore = defineStore('initial', () => {
     init_loading.value = false
   }
 
-  return { init_loading, fetchInitialData, fetchObjectViewData }
+  const fetchRequestViewData = async () => {
+    init_loading.value = true
+    try {
+      const query = requestViewQuery({ user_id: user.value.id })
+      const res = await client.query<RequestViewResponse>(query)
+      setRequests(res.booking)
+      await setGroups(res.group)
+    } catch (error) {
+      console.error(error)
+    }
+    init_loading.value = false
+  }
+
+  return { init_loading, fetchInitialData: fetchDashboardViewData, fetchObjectViewData, fetchRequestViewData }
 })

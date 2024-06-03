@@ -4,9 +4,10 @@ import {
   bookableObjectById,
   qGetBookableObjectByOwner
 } from '@/assets/ts/queries/bookable_objects'
-import { getBookingQObject } from '@/assets/ts/queries/bookings'
+import { getBookingByManagement, getBookingQObject } from '@/assets/ts/queries/bookings'
+import { getGroupQuery } from '@/assets/ts/queries/group'
 
-export const getGroupQuery = (group_id: string) => `
+export const getDashboardByGroup = (group_id: string) => `
 query Initial_Data {
     group {
         id
@@ -53,24 +54,20 @@ export const objectView = ({
   isUniqueId?: boolean
   publicView?: boolean
 }): string => {
-  const groupQuery = `group {
-        id
-        status
-        sort
-        date_created
-        date_updated
-        name
-        description
-        emoji
-        avatar {
-            id
-        }
-    }`
   return `
     query Object_view {
-        ${publicView ? '' : groupQuery}
+        ${publicView ? '' : getGroupQuery({ as_query: false })}
         ${getBookingQObject({ bookable_object_id, isUniqueId })}   
         ${bookableObjectById({ id: bookable_object_id, isUniqueId })}
+    }
+  `
+}
+
+export const requestViewQuery = ({ user_id }: { user_id: string }): string => {
+  return `
+    query Request_view {
+        ${getGroupQuery({ as_query: false })}
+        ${getBookingByManagement({ user_id, as_query: false, page: 1, limit: 10 })}   
     }
   `
 }
@@ -93,4 +90,9 @@ export interface GetInitialDataQueryResponse {
 
 export interface BookableObjectsRequest {
   bookable_object: BookableObject[]
+}
+
+export interface RequestViewResponse {
+  group: Group[]
+  booking: Booking[]
 }
