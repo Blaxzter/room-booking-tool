@@ -1,6 +1,7 @@
 import { h } from 'vue'
 import type { ColumnDef } from '@tanstack/vue-table'
 import type { Booking } from '@/types'
+import RequestAction from '@/components/requests-components/RequestAction.vue'
 
 export const columns: ColumnDef<Booking>[] = [
   {
@@ -62,5 +63,20 @@ export const columns: ColumnDef<Booking>[] = [
     accessorKey: 'confirmed_by',
     header: 'Confirmed By',
     cell: ({ row }) => h('div', {}, row.getValue('confirmed_by') || 'N/A')
+  },
+  {
+    id: 'actions',
+    enableHiding: false,
+    cell: ({ row }) => {
+      const payment = row.original
+
+      return h(
+        'div',
+        { class: 'relative' },
+        h(RequestAction, {
+          payment
+        })
+      )
+    }
   }
 ]
