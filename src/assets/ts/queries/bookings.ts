@@ -1,7 +1,8 @@
 import type { Booking } from '@/types'
+import { getBookableObjectFields } from '@/assets/ts/queries/bookable_objects'
 
-function bookingVariables() {
-  return `
+function bookingVariables({ include_bookable_object = false }: { include_bookable_object?: boolean }): string {
+  const booking_rows = `
     id
     status
     date_created
@@ -17,7 +18,16 @@ function bookingVariables() {
     confirmed_by {
       display_name
     }
-`
+  `
+  if (include_bookable_object) {
+    return `
+    bookable_object_id {
+      ${getBookableObjectFields()}
+    }
+    ${booking_rows}
+    `
+  }
+  return booking_rows
 }
 
 export const getBookingQObject = ({
@@ -29,18 +39,20 @@ export const getBookingQObject = ({
 }): string => {
   return `
   booking(filter: { bookable_object_id: { ${isUniqueId ? 'uniqueId' : 'id'}: { _eq: ${bookable_object_id} } } }) {
-      ${bookingVariables()}
+      ${bookingVariables({})}
     }`
 }
 
 export const getBookingByManagement = ({
   user_id,
   as_query,
+  include_bookable_object,
   page,
   limit
 }: {
   user_id: string
   as_query: boolean
+  include_bookable_object: boolean
   page: number
   limit: number
 }): string => {
@@ -72,7 +84,7 @@ export const getBookingByManagement = ({
         page: ${page}
         limit: ${limit}
     ) {
-      ${bookingVariables()}
+      ${bookingVariables({ include_bookable_object })}
     }`
 
   if (as_query) {

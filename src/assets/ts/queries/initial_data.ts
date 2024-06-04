@@ -67,7 +67,7 @@ export const requestViewQuery = ({ user_id }: { user_id: string }): string => {
   return `
     query Request_view {
         ${getGroupQuery({ as_query: false })}
-        ${getBookingByManagement({ user_id, as_query: false, page: 1, limit: 10 })}   
+        ${getBookingByManagement({ user_id, as_query: false, include_bookable_object: true, page: 1, limit: 10 })}   
     }
   `
 }

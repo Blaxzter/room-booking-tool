@@ -7,7 +7,7 @@ export type MySchema = {
 
 export type Booking = {
   id: string
-  bookable_object_id: string
+  bookable_object_id: BookableObject
   created_user_id: string
   start_date: string
   end_date: string
@@ -18,19 +18,6 @@ export type Booking = {
   description: string
   confirmed: boolean
   confirmed_by?: string
-}
-
-export const BookingImpl: Booking = {
-  id: '0',
-  bookable_object_id: '0',
-  created_user_id: '0',
-  start_date: '',
-  end_date: '',
-  is_full_day: false,
-  mail: '',
-  phone: '',
-  description: '',
-  confirmed: false
 }
 
 export type BookableObject = {

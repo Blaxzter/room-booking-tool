@@ -5,7 +5,7 @@ interface GetBookableObjectParams {
   isUniqueId?: boolean
 }
 
-function getBookableObjectFields() {
+export function getBookableObjectFields() {
   return `
     id
     status

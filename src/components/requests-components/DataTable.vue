@@ -1,15 +1,20 @@
 <script setup lang="ts" generic="TData, TValue">
-import type { ColumnDef } from '@tanstack/vue-table'
-import { FlexRender, getCoreRowModel, useVueTable, getPaginationRowModel } from '@tanstack/vue-table'
+import { ref } from 'vue'
+import type { ColumnDef, SortingState } from '@tanstack/vue-table'
+import { FlexRender, getCoreRowModel, useVueTable, getPaginationRowModel, getSortedRowModel } from '@tanstack/vue-table'
 
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table'
 import DataTablePagination from '@/components/requests-components/DataTablePagination.vue'
 import type { Booking } from '@/types'
 
+import { valueUpdater } from '@/lib/utils'
+
 const props = defineProps<{
   columns: ColumnDef<Booking, TValue>[]
   data: Booking[]
 }>()
+
+const sorting = ref<SortingState>([])
 
 const table = useVueTable<Booking>({
   get data() {
@@ -19,7 +24,14 @@ const table = useVueTable<Booking>({
     return props.columns
   },
   getCoreRowModel: getCoreRowModel(),
-  getPaginationRowModel: getPaginationRowModel()
+  getPaginationRowModel: getPaginationRowModel(),
+  getSortedRowModel: getSortedRowModel(),
+  onSortingChange: (updaterOrValue) => valueUpdater(updaterOrValue, sorting),
+  state: {
+    get sorting() {
+      return sorting.value
+    }
+  }
 })
 </script>
 
