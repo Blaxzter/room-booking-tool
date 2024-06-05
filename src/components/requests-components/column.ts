@@ -7,7 +7,7 @@ import { Button } from '@/components/ui/button'
 
 export const columns: ColumnDef<Booking>[] = [
   {
-    accessorKey: 'bookable_object_id.name',
+    accessorKey: 'bookable_object_id',
     header: ({ column }) => {
       return h(
         Button,
@@ -17,17 +17,26 @@ export const columns: ColumnDef<Booking>[] = [
         },
         () => ['Bookable Object', h(ArrowUpDown, { class: 'ml-2 h-4 w-4' })]
       )
-    }
+    },
+    cell: ({ row }) => h('div', { class: 'ms-3.5' }, (row.getValue('bookable_object_id') as BookableObject)?.name)
   },
   {
     accessorKey: 'start_date',
     header: 'Start Date',
-    cell: ({ row }) => h('div', {}, new Date(row.getValue('start_date')).toLocaleDateString())
+    cell: ({ row }) =>
+      h('div', {}, [
+        h('div', {}, new Date(row.getValue('end_date')).toLocaleDateString()),
+        h('div', {}, new Date(row.getValue('end_date')).toLocaleTimeString())
+      ])
   },
   {
     accessorKey: 'end_date',
     header: 'End Date',
-    cell: ({ row }) => h('div', {}, new Date(row.getValue('end_date')).toLocaleDateString())
+    cell: ({ row }) =>
+      h('div', {}, [
+        h('div', {}, new Date(row.getValue('end_date')).toLocaleDateString()),
+        h('div', {}, new Date(row.getValue('end_date')).toLocaleTimeString())
+      ])
   },
   {
     accessorKey: 'is_full_day',
@@ -50,29 +59,19 @@ export const columns: ColumnDef<Booking>[] = [
   {
     accessorKey: 'description',
     header: 'Description',
-    cell: ({ row }) => h('div', {}, row.getValue('description'))
-  },
-  {
-    accessorKey: 'confirmed',
-    header: 'Confirmed',
-    cell: ({ row }) => h('div', {}, row.getValue('confirmed') ? 'Yes' : 'No')
-  },
-  {
-    accessorKey: 'confirmed_by',
-    header: 'Confirmed By',
-    cell: ({ row }) => h('div', {}, row.getValue('confirmed_by') || 'N/A')
+    cell: ({ row }) => h('div', { class: 'min-w-[200px]' }, row.getValue('description'))
   },
   {
     id: 'actions',
     enableHiding: false,
     cell: ({ row }) => {
-      const payment = row.original
+      const booking = row.original
 
       return h(
         'div',
         { class: 'relative' },
         h(RequestAction, {
-          payment
+          booking
         })
       )
     }
