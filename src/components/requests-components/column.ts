@@ -18,7 +18,7 @@ export const columns: ColumnDef<Booking>[] = [
         () => ['Bookable Object', h(ArrowUpDown, { class: 'ml-2 h-4 w-4' })]
       )
     },
-    cell: ({ row }) => h('div', { class: 'ms-3.5' }, (row.getValue('bookable_object_id') as BookableObject)?.name)
+    cell: ({ row }) => h('div', { class: 'ms-4' }, (row.getValue('bookable_object_id') as BookableObject)?.name)
   },
   {
     accessorKey: 'start_date',

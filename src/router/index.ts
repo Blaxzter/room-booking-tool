@@ -12,7 +12,7 @@ const router = createRouter({
         {
           path: '/',
           name: 'home',
-          alias: ['/bookable-object/', '/room/', '/equipment/', '/home'],
+          alias: ['/home'],
           component: () => import('@/views/HomeView.vue')
         },
         {
