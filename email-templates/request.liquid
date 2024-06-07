@@ -10,12 +10,27 @@
         .header h1 { margin: 0; }
         .content { margin-bottom: 20px; }
         .footer { text-align: center; font-size: 12px; color: #888; }
+        .centered { display: flex; justify-content: center; }
+        .button {
+            display: inline-block;
+            padding: 10px 20px;
+            font-size: 16px;
+            color: #fff;
+            background-color: #007bff;
+            text-decoration: none;
+            border-radius: 5px;
+            margin-top: 20px;
+        }
+        .ii a[href] { color: #ffffff; }
+        .button:hover {
+            background-color: #0056b3;
+        }
     </style>
 </head>
 <body>
 <div class="container">
     <div class="header">
-        <h1>New Booking Request</h1>
+        <h1>New Booking Request for {{ bookable_object_name }}</h1>
     </div>
     <div class="content">
         <p>A new booking request has been made.</p>
@@ -33,7 +48,14 @@
             <li><strong>End Date:</strong> {{ end_date }}</li>
             <li><strong>Full Day Event:</strong> {{ is_full_day | default: "No" }}</li>
         </ul>
+        <div class="centered">
+            <a href="{{ host }}/requests" class="button">View Booking Requests</a>
+        </div>
+        <p>If you cannot see the button, please visit the following link: <br>
+            <a href="{{ host }}/requests">{{ host }}/requests</a>
+        </p>
     </div>
+
     <div class="footer">
         <p>Thank you for using our service!</p>
     </div>

@@ -1,6 +1,6 @@
 [
   {
-    "project_name": "Directus",
+    "project_name": "BookiTool",
     "project_color": "#6644FF",
     "public_note": null,
     "auth_login_attempts": 25,
@@ -11,7 +11,34 @@
     "storage_default_folder": null,
     "basemaps": null,
     "mapbox_key": null,
-    "module_bar": null,
+    "module_bar": [
+      {
+        "type": "module",
+        "id": "content",
+        "enabled": true
+      },
+      {
+        "type": "module",
+        "id": "users",
+        "enabled": true
+      },
+      {
+        "type": "module",
+        "id": "files",
+        "enabled": true
+      },
+      {
+        "type": "module",
+        "id": "insights",
+        "enabled": true
+      },
+      {
+        "type": "module",
+        "id": "settings",
+        "enabled": true,
+        "locked": true
+      }
+    ],
     "project_descriptor": null,
     "default_language": "en-US",
     "custom_aspect_ratios": null,

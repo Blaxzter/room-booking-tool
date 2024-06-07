@@ -56,6 +56,111 @@
     "_syncId": "3d2f81d7-1471-4feb-81a4-23bcc94580bb"
   },
   {
+    "name": "Run Script",
+    "key": "exec_4ubnx",
+    "type": "exec",
+    "position_x": 39,
+    "position_y": 36,
+    "options": {
+      "code": "module.exports = async function(data) {\n    const res = [];\n    if (data?.get_user_data.length > 0) {\n        data?.get_user_data.map(item => {\n            if (item && !res.some(e => e.id === item.id)) { \n                res.push(item);\n            }\n        })\n    }\n    if (data?.read_owner) {\n       if (!res.some(e => e.id === data?.read_owner.id)) { \n       \t\tres.push(data?.read_owner);\n       }\n    }\n    return res;\n} "
+    },
+    "resolve": null,
+    "reject": null,
+    "flow": "77f42aee-c6f7-4b12-9dc5-fb62b9f17bfb",
+    "_syncId": "03585334-3b4b-4cbf-9c6d-be0d9ca6a83b"
+  },
+  {
+    "name": "Run Script",
+    "key": "exec_av0v5",
+    "type": "exec",
+    "position_x": 3,
+    "position_y": 36,
+    "options": {
+      "code": "module.exports = async function(data) {\n    if (data?.final_user_data.length > 0) {\n        const res = [];\n        data?.final_user_data.map(item => {\n            if (item.directus_users_id) { \n                res.push(item.directus_users_id);\n            }\n        })\n        return res;\n    }\n    return [];\n} "
+    },
+    "resolve": "ab3b8eb9-44be-4d15-a55c-69cb523e1658",
+    "reject": null,
+    "flow": "77f42aee-c6f7-4b12-9dc5-fb62b9f17bfb",
+    "_syncId": "f71ffe29-1ae3-4157-b005-7f1f65152dc1"
+  },
+  {
+    "name": "Run Script",
+    "key": "exec_o7jjs",
+    "type": "exec",
+    "position_x": 3,
+    "position_y": 19,
+    "options": {
+      "code": "module.exports = async function(data) {\n    if (data?.group_data.length > 0) {\n        const res = [];\n        data?.group_data.map(item => {\n            if (item.group_id) { \n                res.push(item.group_id);\n            }\n        })\n        return res;\n    }\n    return [];\n} "
+    },
+    "resolve": "fb5c2c3b-fdab-47ee-9595-17e530daf121",
+    "reject": null,
+    "flow": "77f42aee-c6f7-4b12-9dc5-fb62b9f17bfb",
+    "_syncId": "ed793401-d85b-40d6-80ee-641233f9dcdd"
+  },
+  {
+    "name": "Run Script",
+    "key": "exec_v4k95",
+    "type": "exec",
+    "position_x": 39,
+    "position_y": 19,
+    "options": {
+      "code": "module.exports = async function(data) {\n    if (data?.user_group_data.length > 0) {\n        const res = [];\n        data?.user_group_data.map(item => {\n            item?.users.map(item => {\n                if (item) { \n                    res.push(item);\n                }\n            })\n        })\n        return res;\n    }\n    return [];\n} "
+    },
+    "resolve": "ecf0880f-713d-4092-b087-df90d9bef8a2",
+    "reject": null,
+    "flow": "77f42aee-c6f7-4b12-9dc5-fb62b9f17bfb",
+    "_syncId": "993a6770-d74b-4a43-8aa0-8cce5302c10e"
+  },
+  {
+    "name": "final_user_data",
+    "key": "final_user_data",
+    "type": "item-read",
+    "position_x": 57,
+    "position_y": 19,
+    "options": {
+      "collection": "group_directus_users",
+      "key": "{{$last}}",
+      "permissions": "$full"
+    },
+    "resolve": "f71ffe29-1ae3-4157-b005-7f1f65152dc1",
+    "reject": null,
+    "flow": "77f42aee-c6f7-4b12-9dc5-fb62b9f17bfb",
+    "_syncId": "ecf0880f-713d-4092-b087-df90d9bef8a2"
+  },
+  {
+    "name": "Get User Data",
+    "key": "get_user_data",
+    "type": "item-read",
+    "position_x": 21,
+    "position_y": 36,
+    "options": {
+      "collection": "directus_users",
+      "permissions": "$full",
+      "key": "{{$last}}"
+    },
+    "resolve": "03585334-3b4b-4cbf-9c6d-be0d9ca6a83b",
+    "reject": null,
+    "flow": "77f42aee-c6f7-4b12-9dc5-fb62b9f17bfb",
+    "_syncId": "ab3b8eb9-44be-4d15-a55c-69cb523e1658"
+  },
+  {
+    "name": "group_data",
+    "key": "group_data",
+    "type": "item-read",
+    "position_x": 55,
+    "position_y": 1,
+    "options": {
+      "collection": "bookable_object_group",
+      "query": null,
+      "permissions": "$full",
+      "key": "{{ read_bookable_object.group }}"
+    },
+    "resolve": "ed793401-d85b-40d6-80ee-641233f9dcdd",
+    "reject": null,
+    "flow": "77f42aee-c6f7-4b12-9dc5-fb62b9f17bfb",
+    "_syncId": "f4e7df39-6dde-49ef-b2c3-ed06ae2d0afc"
+  },
+  {
     "name": "Read Data",
     "key": "item_read_5bq5t",
     "type": "item-read",
@@ -117,6 +222,119 @@
     "_syncId": "d3b708dd-9828-4410-aacd-bd99541c33b2"
   },
   {
+    "name": "Log to Console",
+    "key": "log_m1ntt",
+    "type": "log",
+    "position_x": 19,
+    "position_y": 1,
+    "options": {
+      "message": "{{$env}}"
+    },
+    "resolve": null,
+    "reject": null,
+    "flow": "de136b6b-2acb-4419-8838-cc9c068c9e97",
+    "_syncId": "9191399f-ac0f-4352-9c76-d687b0738188"
+  },
+  {
+    "name": "Send Email New",
+    "key": "mail_1h0q6",
+    "type": "mail",
+    "position_x": 39,
+    "position_y": 20,
+    "options": {
+      "subject": "New Booking Request",
+      "to": "{{ prep_email }}",
+      "type": "template",
+      "template": "request",
+      "data": "{{ $last }}"
+    },
+    "resolve": null,
+    "reject": null,
+    "flow": "a52be475-3045-450e-b763-0acb11b45451",
+    "_syncId": "20582fac-197e-4445-b0bf-1a6b57458e28"
+  },
+  {
+    "name": "Run Script",
+    "key": "prep_email",
+    "type": "exec",
+    "position_x": 3,
+    "position_y": 20,
+    "options": {
+      "code": "module.exports = async function(data) {\n    if (data?.relevant_user_data.length > 0) {\n        const res = [];\n        data?.relevant_user_data.map(item => {\n            if (item.email) { \n                res.push(item.email);\n            }\n        })\n        return res;\n    }\n    return [];\n} "
+    },
+    "resolve": "a740a075-9415-4e30-8fea-ceb72f742253",
+    "reject": null,
+    "flow": "a52be475-3045-450e-b763-0acb11b45451",
+    "_syncId": "6dd1e9d7-3fc0-4f26-b369-25cddc3f3125"
+  },
+  {
+    "name": "read_bookable_object",
+    "key": "read_bookable_object",
+    "type": "item-read",
+    "position_x": 19,
+    "position_y": 1,
+    "options": {
+      "query": null,
+      "collection": "bookable_object",
+      "permissions": "$full",
+      "key": "{{ $trigger.bookable_object_id }}"
+    },
+    "resolve": "4827550b-d420-485b-a841-05b6061ca79c",
+    "reject": null,
+    "flow": "77f42aee-c6f7-4b12-9dc5-fb62b9f17bfb",
+    "_syncId": "a0685fd9-2ce9-4e24-9142-f5836f5279cc"
+  },
+  {
+    "name": "Read Bookable Object",
+    "key": "read_bookable_object",
+    "type": "item-read",
+    "position_x": 37,
+    "position_y": 1,
+    "options": {
+      "permissions": "$full",
+      "collection": "bookable_object",
+      "key": "{{ $trigger.payload.bookable_object_id }}"
+    },
+    "resolve": "6dd1e9d7-3fc0-4f26-b369-25cddc3f3125",
+    "reject": null,
+    "flow": "a52be475-3045-450e-b763-0acb11b45451",
+    "_syncId": "5ee2bb20-bcc0-4033-8728-a61d4bdc188e"
+  },
+  {
+    "name": "read owner",
+    "key": "read_owner",
+    "type": "item-read",
+    "position_x": 37,
+    "position_y": 1,
+    "options": {
+      "collection": "directus_users",
+      "key": "{{ read_bookable_object.owner }}",
+      "permissions": "$full"
+    },
+    "resolve": "f4e7df39-6dde-49ef-b2c3-ed06ae2d0afc",
+    "reject": null,
+    "flow": "77f42aee-c6f7-4b12-9dc5-fb62b9f17bfb",
+    "_syncId": "4827550b-d420-485b-a841-05b6061ca79c"
+  },
+  {
+    "name": "Trigger Flow",
+    "key": "relevant_user_data",
+    "type": "trigger",
+    "position_x": 19,
+    "position_y": 1,
+    "options": {
+      "flow": "77f42aee-c6f7-4b12-9dc5-fb62b9f17bfb",
+      "payload": {
+        "user": "{{ $accountability.user }}",
+        "bookable_object_id": "{{ $trigger.payload.bookable_object_id }}"
+      }
+    },
+    "resolve": "5ee2bb20-bcc0-4033-8728-a61d4bdc188e",
+    "reject": null,
+    "flow": "a52be475-3045-450e-b763-0acb11b45451",
+    "_syncId": "bba0af9d-0da9-4f6e-8bd0-88ec6785d5b9"
+  },
+  {
     "name": "Webhook / Request URL",
     "key": "request_c4vti",
     "type": "request",
@@ -137,5 +355,87 @@
     "reject": null,
     "flow": "7f53dd18-b651-4f92-84c9-3af16cfae9ec",
     "_syncId": "f2814457-4acd-4727-a4fb-f4a817b8eadf"
+  },
+  {
+    "name": "Send Email New",
+    "key": "Send_Email_New",
+    "type": "mail",
+    "position_x": 35,
+    "position_y": 54,
+    "options": {
+      "to": "{{ read_owner.email }}",
+      "subject": "Request Email Test",
+      "type": "template",
+      "template": "request",
+      "data": "{{ $last }}"
+    },
+    "resolve": null,
+    "reject": null,
+    "flow": "77f42aee-c6f7-4b12-9dc5-fb62b9f17bfb",
+    "_syncId": "58ece394-c094-49b9-88d7-8963c85a3204"
+  },
+  {
+    "name": "Transform Payload",
+    "key": "transform_nmhhq",
+    "type": "transform",
+    "position_x": 20,
+    "position_y": 20,
+    "options": {
+      "json": {
+        "display_name": "{{ $trigger.payload.display_name }}",
+        "mail": "{{ $trigger.payload.mail }}",
+        "phone": "{{ $trigger.payload.phone }}",
+        "description": "{{ $trigger.payload.description }}",
+        "start_date": "{{ $trigger.payload.start_date }}",
+        "end_date": "{{ $trigger.payload.end_date }}",
+        "is_full_day": "{{ $trigger.payload.is_full_day }}",
+        "bookable_object_name": "{{ read_bookable_object.name }}",
+        "host": "{{ $env.FRONTEND_URL }}"
+      }
+    },
+    "resolve": "20582fac-197e-4445-b0bf-1a6b57458e28",
+    "reject": null,
+    "flow": "a52be475-3045-450e-b763-0acb11b45451",
+    "_syncId": "a740a075-9415-4e30-8fea-ceb72f742253"
+  },
+  {
+    "name": "Transform Payload",
+    "key": "transform_ruw42",
+    "type": "transform",
+    "position_x": 8,
+    "position_y": 54,
+    "options": {
+      "json": {
+        "display_name": "{{ $trigger.payload.display_name }}",
+        "mail": "{{ $trigger.payload.mail }}",
+        "phone": "{{ $trigger.payload.phone }}",
+        "description": "{{ $trigger.payload.description }}",
+        "start_date": "{{ $trigger.payload.start_date }}",
+        "end_date": "{{ $trigger.payload.end_date }}",
+        "is_full_day": "{{ $trigger.payload.is_full_day }}",
+        "bookable_object_name": "{{ read_bookable_object.name }}",
+        "host": "{{ $env.FRONTEND_URL }}"
+      }
+    },
+    "resolve": null,
+    "reject": null,
+    "flow": "77f42aee-c6f7-4b12-9dc5-fb62b9f17bfb",
+    "_syncId": "533f1858-1704-45e8-9311-5a7c6907637b"
+  },
+  {
+    "name": "user_group_data",
+    "key": "user_group_data",
+    "type": "item-read",
+    "position_x": 21,
+    "position_y": 19,
+    "options": {
+      "permissions": "$full",
+      "collection": "group",
+      "key": "{{$last}}"
+    },
+    "resolve": "993a6770-d74b-4a43-8aa0-8cce5302c10e",
+    "reject": null,
+    "flow": "77f42aee-c6f7-4b12-9dc5-fb62b9f17bfb",
+    "_syncId": "fb5c2c3b-fdab-47ee-9595-17e530daf121"
   }
 ]

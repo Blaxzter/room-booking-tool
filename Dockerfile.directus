@@ -7,7 +7,7 @@ USER node
 RUN pnpm install directus-extension-sync
 
 # copy all files in email-templates to /templates/
-COPY ./email-templates/ /templates/
+COPY ./email-templates/ /directus/email-templates/
 
 # RUN pnpm install directus-extension-schema-sync
 # This is for when building for production

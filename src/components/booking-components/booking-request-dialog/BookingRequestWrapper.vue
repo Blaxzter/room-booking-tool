@@ -57,6 +57,7 @@ function combineDateTime(date: string, time: string) {
 const createBooking = async () => {
   const timeData = stepToValues.value[0]
 
+  console.log('Creating booking with values:', timeData)
   // convert start date + time to ISO string
   if (timeData.fullDate) {
     timeData.startDate = timeData.startDate.split('T')[0]

@@ -18,6 +18,20 @@
     "_syncId": "0c5d8064-2bf3-4284-b88b-23eeac843879"
   },
   {
+    "name": "Get Relevant User Data",
+    "icon": "bolt",
+    "color": null,
+    "description": null,
+    "status": "active",
+    "trigger": "operation",
+    "accountability": "all",
+    "options": {
+      "return": "$last"
+    },
+    "operation": "a0685fd9-2ce9-4e24-9142-f5836f5279cc",
+    "_syncId": "77f42aee-c6f7-4b12-9dc5-fb62b9f17bfb"
+  },
+  {
     "name": "Delete Avatar Image on Delete",
     "icon": "bolt",
     "color": null,
@@ -58,5 +72,56 @@
     },
     "operation": "0198296a-ab56-4c8a-b38f-b89003ccb803",
     "_syncId": "926fe0af-3868-43dc-8962-6b17426e51f6"
+  },
+  {
+    "name": "request_email",
+    "icon": "mark_email_read",
+    "color": null,
+    "description": null,
+    "status": "active",
+    "trigger": "event",
+    "accountability": "all",
+    "options": {
+      "type": "action",
+      "scope": [
+        "items.create"
+      ],
+      "collections": [
+        "booking"
+      ]
+    },
+    "operation": "bba0af9d-0da9-4f6e-8bd0-88ec6785d5b9",
+    "_syncId": "a52be475-3045-450e-b763-0acb11b45451"
+  },
+  {
+    "name": "send_mail",
+    "icon": "bolt",
+    "color": null,
+    "description": "This should only be triggered by a new flow",
+    "status": "active",
+    "trigger": "operation",
+    "accountability": "all",
+    "options": {
+      "return": "$last"
+    },
+    "operation": null,
+    "_syncId": "c839f261-5b75-4242-9410-d18ec39be9cf"
+  },
+  {
+    "name": "env-test",
+    "icon": "bolt",
+    "color": null,
+    "description": null,
+    "status": "active",
+    "trigger": "manual",
+    "accountability": "all",
+    "options": {
+      "collections": [
+        "bookable_object"
+      ],
+      "requireSelection": false
+    },
+    "operation": "9191399f-ac0f-4352-9c76-d687b0738188",
+    "_syncId": "de136b6b-2acb-4419-8838-cc9c068c9e97"
   }
 ]
