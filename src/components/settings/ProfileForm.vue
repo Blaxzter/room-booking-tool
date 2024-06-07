@@ -131,7 +131,9 @@ const onSubmit = handleSubmit(async (values) => {
         <FormControl>
           <Input type="text" placeholder="Your email address" v-bind="componentField" />
         </FormControl>
-        <FormDescription> This is the email address that will be displayed on your profile. </FormDescription>
+        <FormDescription>
+          This is the email address that will be displayed and to which we are sending emails to.
+        </FormDescription>
         <FormMessage />
       </FormItem>
     </FormField>

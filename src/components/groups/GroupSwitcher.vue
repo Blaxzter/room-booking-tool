@@ -102,8 +102,7 @@ const filterGroups = (
     if (index === val.length - 1) {
       return true
     }
-    console.log(group, term)
-    return group.name.toLowerCase().includes(term.toLowerCase())
+    return (group as Group).name.toLowerCase().includes(term.toLowerCase())
   }) as Record<string, any>[]
 }
 

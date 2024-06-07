@@ -16,6 +16,7 @@ import { Button } from '@/components/ui/button'
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover'
 import { Calendar } from '@/components/ui/calendar'
 import { toast } from '@/components/ui/toast'
+import InDevelopment from '@/components/utils/InDevelopment.vue'
 
 const open = ref(false)
 const dateValue = ref()
@@ -79,7 +80,8 @@ async function onSubmit(values: any) {
 </script>
 
 <template>
-  <Form v-slot="{ setValues }" :validation-schema="accountFormSchema" class="space-y-8" @submit="onSubmit">
+  <Form v-slot="{ setValues }" :validation-schema="accountFormSchema" class="space-y-8 relative" @submit="onSubmit">
+    <InDevelopment />
     <FormField v-slot="{ componentField }" name="name">
       <FormItem>
         <FormLabel>Name</FormLabel>

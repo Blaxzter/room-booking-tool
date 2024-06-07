@@ -11,6 +11,7 @@ import { Switch } from '@/components/ui/switch'
 import { Checkbox } from '@/components/ui/checkbox'
 import { Button } from '@/components/ui/button'
 import { toast } from '@/components/ui/toast'
+import InDevelopment from '@/components/utils/InDevelopment.vue'
 
 const notificationsFormSchema = toTypedSchema(
   z.object({
@@ -53,7 +54,8 @@ const onSubmit = handleSubmit((values) => {
     <p class="text-sm text-muted-foreground">Configure how you receive notifications.</p>
   </div>
   <Separator />
-  <form class="space-y-8" @submit="onSubmit">
+  <form class="space-y-8 relative" @submit="onSubmit">
+    <InDevelopment />
     <FormField v-slot="{ componentField }" type="radio" name="type">
       <FormItem class="space-y-3">
         <FormLabel>Notify me about...</FormLabel>

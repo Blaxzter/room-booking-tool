@@ -7,7 +7,7 @@ export type MySchema = {
 
 export type Booking = {
   id: string
-  bookable_object_id: BookableObject
+  bookable_object_id: BookableObject | string
   created_user_id: string
   start_date: string
   end_date: string
