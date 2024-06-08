@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed, type ComputedRef, ref } from 'vue'
+import { computed, type ComputedRef, ref, inject } from 'vue'
 import _ from 'lodash'
 import { CaretSortIcon, CheckIcon, PlusCircledIcon } from '@radix-icons/vue'
 import { LoaderIcon } from 'lucide-vue-next'
@@ -32,6 +32,8 @@ const userStore = useUser()
 const { user, avatarId } = storeToRefs(userStore)
 const { selectGroup } = groupStore
 const { groups, selectedGroupId } = storeToRefs(groupStore)
+
+const backendUrl = inject('backendUrl')
 
 const userName = () => {
   if (user.value) {
@@ -126,7 +128,7 @@ const groupClicked = async (team: Group) => {
           v-if="selectedTeam"
         >
           <Avatar class="mr-2 h-5 w-5" v-if="!selectedTeam.emoji || selectedTeam?.avatar?.id">
-            <AvatarImage :src="`http://localhost:8055/assets/${selectedTeam?.avatar?.id}`" :alt="selectedTeam.name" />
+            <AvatarImage :src="`${backendUrl}/assets/${selectedTeam?.avatar?.id}`" :alt="selectedTeam.name" />
             <AvatarFallback>
               {{ nameInitials(selectedTeam.name) }}
             </AvatarFallback>
@@ -155,7 +157,7 @@ const groupClicked = async (team: Group) => {
                 @select="groupClicked(team)"
               >
                 <Avatar class="mr-2 h-5 w-5" v-if="!team.emoji || team?.avatar?.id">
-                  <AvatarImage :src="`http://localhost:8055/assets/${team?.avatar?.id}`" :alt="team.name" />
+                  <AvatarImage :src="`${backendUrl}/assets/${team?.avatar?.id}`" :alt="team.name" />
                   <AvatarFallback>
                     {{ nameInitials(team.name) }}
                   </AvatarFallback>

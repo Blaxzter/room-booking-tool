@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed, defineProps, onMounted, ref } from 'vue'
+import { computed, inject, onMounted, ref } from 'vue'
 import { uploadFiles } from '@directus/sdk'
 
 import { UploadIcon, XIcon } from 'lucide-vue-next'
@@ -95,10 +95,12 @@ const avatarCssVars = computed(() => {
 
 // on mouted set the avatar
 onMounted(() => {
-  avatar.value = `http://localhost:8055/assets/${props.initAvatar}`
+  avatar.value = `${backendUrl}/assets/${props.initAvatar}`
 })
 
 defineExpose({ uploadImage })
+
+const backendUrl = inject('backendUrl')
 </script>
 
 <template>

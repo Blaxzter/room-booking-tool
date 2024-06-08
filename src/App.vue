@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed } from 'vue'
+import { computed, provide } from 'vue'
 import { RouterView } from 'vue-router'
 import { useDark } from '@vueuse/core'
 import Toaster from '@/components/ui/toast/Toaster.vue'
@@ -10,6 +10,8 @@ const isDark = useDark()
 const darkModeVar = computed(() => {
   return `--dark-mode: ${isDark.value ? 'true' : 'false'}`
 })
+// provide import.meta.env.VITE_BACKEND_URL to all components as backendUrl
+provide('backendUrl', import.meta.env.VITE_BACKEND_URL)
 </script>
 
 <template>

@@ -197,7 +197,7 @@ export const useUser = defineStore('user', () => {
   const email = computed(() => user.value?.email)
   const hasName = computed(() => userName.value.trim() !== '')
   const name = computed(() => (hasName.value ? userName.value : email.value))
-  const avatar = computed(() => `http://localhost:8055/assets/${user.value?.avatar}` ?? '')
+  const avatar = computed(() => `${import.meta.env.VITE_BACKEND_URL}/assets/${user.value?.avatar}` ?? '')
   const avatarId = computed(() => user.value?.avatar ?? '')
   const avatarFallback = computed(() => user.value?.first_name?.charAt(0) + user.value?.last_name?.charAt(0))
 

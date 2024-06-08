@@ -37,7 +37,7 @@ services:
       dockerfile: Dockerfile.directus
     restart: always
     ports:
-      - 8055:8055
+      - ${BACKEND_PUBLIC_PORT}:8055
     volumes:
       - ./directus-uploads:/directus/uploads
       # If you want to load extensions from the host
@@ -95,26 +95,29 @@ services:
       EMAIL_SMTP_IGNORE_TLS: "${EMAIL_SMTP_IGNORE_TLS}"
       EMAIL_SMTP_NAME: "${EMAIL_SMTP_NAME}"
 
+      VIRTUAL_HOST: "${PUBLIC_URL}"
+      LETSENCRYPT_HOST: "${PUBLIC_URL}"
+      LETSENCRYPT_EMAIL: "${LETSENCRYPT_EMAIL}"
 
-#  frontend:
-#    depends_on:
-#      - directus
-#    restart: "unless-stopped"
-##    networks:
-##      - nginx-net
-#    build:
-#      context: ./
-#      dockerfile: Dockerfile.frontend
-#    env_file:
-#      - .env
-#    environment:
-#      # Only required when running behind a reverse proxy like nginx-proxy
-#      VIRTUAL_HOST: "${VIRTUAL_HOST}"
-#      VIRTUAL_PORT: "${VIRTUAL_PORT}"
-#      LETSENCRYPT_HOST: "${LETSENCRYPT_HOST}"
-#      LETSENCRYPT_EMAIL: "${LETSENCRYPT_EMAIL}"
-#    ports:
-#      - 8001:80
+  frontend:
+    depends_on:
+      - directus
+    restart: "unless-stopped"
+    networks:
+      - directus-net
+#      - nginx-net
+    build:
+      context: ./
+      dockerfile: Dockerfile.frontend
+    env_file:
+      - .env
+    environment:
+      # Only required when running behind a reverse proxy like nginx-proxy
+      VIRTUAL_HOST: "${VIRTUAL_HOST}"
+      LETSENCRYPT_HOST: "${LETSENCRYPT_HOST}"
+      LETSENCRYPT_EMAIL: "${LETSENCRYPT_EMAIL}"
+    ports:
+      - 8001:80
 
 
 volumes:

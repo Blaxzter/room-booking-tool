@@ -1,24 +1,23 @@
 <template>
   <div class="parent" @click="handleClick">
     <div class="background absolute"></div>
-    <div class="banner">In Development</div>
+    <div class="banner" ref="shakeElement">In Development</div>
   </div>
 </template>
 
-<script>
-export default {
-  name: 'InDevelopment',
-  methods: {
-    handleClick(event) {
-      // Prevent clicking on the content
-      event.stopPropagation()
-      // Add the shake animation
-      this.$el.querySelector('.banner').classList.add('shake')
-      setTimeout(() => {
-        this.$el.querySelector('.banner').classList.remove('shake')
-      }, 500)
-    }
-  }
+<script setup lang="ts">
+import { ref } from 'vue'
+
+const shakeElement = ref<HTMLElement | null>(null)
+
+const handleClick = (event: MouseEvent) => {
+  // Prevent clicking on the content
+  event.stopPropagation()
+  // Add the shake animation
+  shakeElement.value?.classList.add('shake')
+  setTimeout(() => {
+    shakeElement.value?.classList.remove('shake')
+  }, 500)
 }
 </script>
 

@@ -6,7 +6,7 @@ import { CalendarIcon } from 'lucide-vue-next'
 
 import FullCalendar from '@fullcalendar/vue3'
 import dayGridPlugin from '@fullcalendar/daygrid'
-import timeGridPlugin from '@fullcalendar/timeGrid'
+import timeGridPlugin from '@fullcalendar/timegrid'
 import listPlugin from '@fullcalendar/list'
 import interactionPlugin from '@fullcalendar/interaction'
 import { type CalendarOptions } from '@fullcalendar/core'

@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed, defineProps } from 'vue'
+import { computed, inject } from 'vue'
 import { cn } from '@/lib/utils'
 
 const props = defineProps<{
@@ -32,11 +32,13 @@ const aspectClass = computed(() => {
   if (props.aspectRatio === 'landscape') return 'aspect-[4/3]'
   return 'aspect-square'
 })
+
+const backendUrl = inject('backendUrl')
 </script>
 
 <template>
   <img
-    :src="`http://localhost:8055/assets/${image_id}`"
+    :src="`${backendUrl}/assets/${image_id}`"
     :alt="alt_name ?? 'Splash Image'"
     :width="computedWidth"
     :height="computedHeight"
