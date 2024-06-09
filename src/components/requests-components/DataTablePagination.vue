@@ -26,7 +26,7 @@ defineProps<DataTablePaginationProps>()
             <SelectValue :placeholder="`${table.getState().pagination.pageSize}`" />
           </SelectTrigger>
           <SelectContent side="top">
-            <SelectItem v-for="pageSize in [10, 20, 30, 40, 50]" :key="pageSize" :value="`${pageSize}`">
+            <SelectItem v-for="pageSize in [5, 10, 20, 30, 40, 50]" :key="pageSize" :value="`${pageSize}`">
               {{ pageSize }}
             </SelectItem>
           </SelectContent>
@@ -44,7 +44,7 @@ defineProps<DataTablePaginationProps>()
           @click="table.setPageIndex(0)"
         >
           <span class="sr-only">Go to first page</span>
-          <ChevronsRightIcon class="w-4 h-4" />
+          <ChevronsLeftIcon class="w-4 h-4" />
         </Button>
         <Button
           variant="outline"
@@ -66,7 +66,7 @@ defineProps<DataTablePaginationProps>()
           @click="table.setPageIndex(table.getPageCount() - 1)"
         >
           <span class="sr-only">Go to last page</span>
-          <ChevronsLeftIcon class="w-4 h-4" />
+          <ChevronsRightIcon class="w-4 h-4" />
         </Button>
       </div>
     </div>

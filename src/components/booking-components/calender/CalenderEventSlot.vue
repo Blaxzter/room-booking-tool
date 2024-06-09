@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import { defineProps } from 'vue'
 import { cn } from '@/lib/utils'
 
 import { useToast } from '@/components/ui/toast'

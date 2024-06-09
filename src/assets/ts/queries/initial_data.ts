@@ -63,11 +63,16 @@ export const objectView = ({
   `
 }
 
-export const requestViewQuery = ({ user_id }: { user_id: string }): string => {
+export const requestViewQuery = ({ user_id, pagination = false }: { user_id: string; pagination: boolean }): string => {
+  const query_params = { user_id, as_query: false, include_bookable_object: true, page: 1, limit: 1000 }
+  if (pagination) {
+    query_params.page = 1
+    query_params.limit = 10
+  }
   return `
     query Request_view {
         ${getGroupQuery({ as_query: false })}
-        ${getBookingByManagement({ user_id, as_query: false, include_bookable_object: true, page: 1, limit: 10 })}   
+        ${getBookingByManagement(query_params)}   
     }
   `
 }

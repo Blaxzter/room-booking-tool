@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import dayjs from 'dayjs'
 import { storeToRefs } from 'pinia'
-import { computed, defineProps, onMounted, ref } from 'vue'
+import { computed, onMounted, ref } from 'vue'
 import { CalendarIcon } from 'lucide-vue-next'
 
 import FullCalendar from '@fullcalendar/vue3'
@@ -40,7 +40,8 @@ const openEventProps = ref({})
 const createdTempEvent = ref<EventImpl | null>(null)
 
 const props = defineProps({
-  topPadding: { type: Number, default: 0 }
+  topPadding: { type: Number, default: 0 },
+  date: { type: String, default: '' }
 })
 
 const startDate = ref('')
@@ -190,6 +191,18 @@ onMounted(() => {
   currentDateString.value = fullCalenderData().viewTitle
   selectedDay.value = dayjs(fullCalenderData().currentDate)
 
+  // if date is passed, go to that date
+  if (props.date) {
+    fullCalenderApi().gotoDate(props.date)
+    // get data-date="2024-07-18" from the dom and add class for highlighting
+    // get date without time of props.date
+    const date = dayjs(props.date).format('YYYY-MM-DD')
+    const dayElement = document.querySelector(`[data-date="${date}"]`)
+    if (dayElement) {
+      dayElement.classList.add('fc-day-highlight')
+    }
+  }
+
   console.log(currentBookings.value)
 })
 
@@ -255,6 +268,12 @@ onMounted(() => {
 .fc-day-today {
   background: hsl(var(--secondary)) !important;
   border: none !important;
+}
+
+.fc-day-highlight {
+  background: hsl(var(--secondary)) !important;
+  // create a inset border
+  box-shadow: inset 0 0 0 2px var(--primary-color-rgb);
 }
 
 .fc .fc-list-empty {

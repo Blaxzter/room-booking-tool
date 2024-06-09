@@ -4,6 +4,9 @@ import { Primitive, type PrimitiveProps } from 'radix-vue'
 import { type ButtonVariants, buttonVariants } from '.'
 import { cn } from '@/lib/utils'
 
+import { LoaderIcon } from 'lucide-vue-next'
+
+
 interface Props extends PrimitiveProps {
   variant?: ButtonVariants['variant']
   size?: ButtonVariants['size']
@@ -11,12 +14,14 @@ interface Props extends PrimitiveProps {
 }
 
 const props = withDefaults(defineProps<Props>(), {
-  as: 'button'
+  as: 'button',
+  loading: false
 })
 </script>
 
 <template>
-  <Primitive :as="as" :as-child="asChild" :class="cn(buttonVariants({ variant, size }), props.class)">
-    <slot />
+  <Primitive :as="as" :as-child="asChild" :class="cn(buttonVariants({ variant, size }), props.class)" :disabled="loading">
+    <LoaderIcon class="w-4 h-4" v-if="loading" />
+    <slot v-else />
   </Primitive>
 </template>

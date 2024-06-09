@@ -18,8 +18,11 @@ import { useRequests } from '@/stores/requests'
 import { useLocalUser } from '@/stores/localUser'
 import { useBookings } from '@/stores/booking'
 import _ from 'lodash'
+import { useToast } from '@/components/ui/toast/use-toast'
 
 export const useInitialDataStore = defineStore('initial', () => {
+  const { toast } = useToast()
+
   const { client } = useUser()
   const { user } = storeToRefs(useUser())
 
@@ -66,20 +69,31 @@ export const useInitialDataStore = defineStore('initial', () => {
     select?: boolean
   }) => {
     init_loading.value = true
-    try {
-      const objectViewQuery = objectView({ bookable_object_id, isUniqueId, publicView })
-      const res = await client.query<ObjectViewResponse>(objectViewQuery)
+
+    const objectViewQuery = objectView({ bookable_object_id, isUniqueId, publicView })
+    await client.query<ObjectViewResponse>(objectViewQuery).then(async (res) => {
+      if (res.group) {
+        await setGroups(res.group)
+      }
+
+      if (res.bookable_object.length === 0) {
+        if (publicView) {
+          throw new Error('No bookable object found')
+        }
+        toast({
+          title: 'Error',
+          description: 'No bookable object found'
+        })
+        throw new Error('No bookable object found')
+      }
+
       if (select) {
         selectBookableObject(res.bookable_object[0])
       }
       addBookableObject(res.bookable_object[0])
       setBookings(bookable_object_id, res.booking)
-      if (res.group) {
-        await setGroups(res.group)
-      }
-    } catch (error) {
-      console.error(error)
-    }
+    })
+
     init_loading.value = false
   }
 

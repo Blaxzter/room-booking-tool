@@ -1,7 +1,7 @@
 <script setup lang="ts">
 // get the bookable object id from the route
 import { onMounted } from 'vue'
-import { useRoute } from 'vue-router'
+import { useRoute, useRouter } from 'vue-router'
 import { storeToRefs } from 'pinia'
 
 import CalenderComponent from '@/components/booking-components/calender/CalenderComponent.vue'
@@ -12,20 +12,26 @@ import { useInitialDataStore } from '@/stores/initial'
 import CalenderLoader from '@/components/animations/CalenderLoader.vue'
 
 // store refs
-const route = useRoute()
+const router = useRouter()
 const { fetchObjectViewData } = useInitialDataStore()
 const { selectedBookableObject } = storeToRefs(useBookableObjects())
 const { init_loading } = storeToRefs(useInitialDataStore())
 
 // thats gonna be the private internal route -> Get more information, requires login -> auth check and so on
-const bookableObjectId = route.params.id
+const props = defineProps<{
+  id: string
+  date: string
+}>()
 
 onMounted(async () => {
   await fetchObjectViewData({
-    bookable_object_id: bookableObjectId as string,
+    bookable_object_id: props.id as string,
     isUniqueId: false,
     select: true,
     publicView: false
+  }).catch(() => {
+    console.log('error')
+    router.push({ name: 'home' })
   })
 })
 </script>
@@ -42,7 +48,7 @@ onMounted(async () => {
       v-if="selectedBookableObject"
     >
       <BookableSideInfo :bookableObject="selectedBookableObject" class="hidden sm:flex" />
-      <CalenderComponent :top-padding="57" />
+      <CalenderComponent :top-padding="57" :date="date" />
     </div>
   </template>
 </template>

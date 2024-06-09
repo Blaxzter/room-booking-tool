@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import _ from 'lodash'
-import { computed, defineProps, onBeforeMount, ref, useAttrs } from 'vue'
+import { computed, onBeforeMount, ref, useAttrs } from 'vue'
 import { storeToRefs } from 'pinia'
 
 import { FormControl } from '@/components/ui/form'

@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { defineProps, type PropType, ref } from 'vue'
+import { type PropType, ref } from 'vue'
 import { PlusCircledIcon } from '@radix-icons/vue'
 
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'

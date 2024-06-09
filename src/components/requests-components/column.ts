@@ -1,9 +1,11 @@
 import { h } from 'vue'
 import type { ColumnDef } from '@tanstack/vue-table'
-import type { BookableObject, Booking } from '@/types'
-import RequestAction from '@/components/requests-components/RequestAction.vue'
 import { ArrowUpDown, PhoneIcon, MailIcon } from 'lucide-vue-next'
+
+import RequestAction from '@/components/requests-components/RequestAction.vue'
 import { Button } from '@/components/ui/button'
+
+import type { BookableObject, Booking } from '@/types'
 
 export const columns: ColumnDef<Booking>[] = [
   {
@@ -25,23 +27,32 @@ export const columns: ColumnDef<Booking>[] = [
     header: 'Start Date',
     cell: ({ row }) =>
       h('div', {}, [
-        h('div', {}, new Date(row.getValue('end_date')).toLocaleDateString()),
-        h('div', {}, new Date(row.getValue('end_date')).toLocaleTimeString())
+        h('div', {}, new Date(row.getValue('start_date')).toLocaleDateString()),
+        h('div', {}, new Date(row.getValue('start_date')).toLocaleTimeString())
       ])
   },
   {
     accessorKey: 'end_date',
-    header: 'End Date',
-    cell: ({ row }) =>
-      h('div', {}, [
+    header: 'Duration',
+    cell: ({ row }) => {
+      const booking = row.original
+      const duration = new Date(booking.end_date).getTime() - new Date(booking.start_date).getTime()
+      if (booking.is_full_day) {
+        return h('div', {}, 'Full Day')
+      }
+      // check if start and end date is on the same day
+      if (new Date(booking.start_date).getDate() === new Date(booking.end_date).getDate()) {
+        // display the duration in hours and minutes
+        const hours = Math.floor(duration / 1000 / 60 / 60)
+        const minutes = Math.floor((duration / 1000 / 60) % 60)
+        return h('div', {}, `${hours}h ${minutes}m`)
+      }
+
+      return h('div', {}, [
         h('div', {}, new Date(row.getValue('end_date')).toLocaleDateString()),
         h('div', {}, new Date(row.getValue('end_date')).toLocaleTimeString())
       ])
-  },
-  {
-    accessorKey: 'is_full_day',
-    header: 'Full Day',
-    cell: ({ row }) => h('div', {}, row.getValue('is_full_day') ? 'Yes' : 'No')
+    }
   },
   // make a custom column for display_name, mail, phone as a single column
   {

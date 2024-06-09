@@ -31,6 +31,11 @@ const table = useVueTable<Booking>({
     get sorting() {
       return sorting.value
     }
+  },
+  initialState: {
+    pagination: {
+      pageSize: 5
+    }
   }
 })
 </script>

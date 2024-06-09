@@ -40,7 +40,11 @@ const router = createRouter({
           path: '/my-bookable-object/:id',
           alias: ['/my-room/:id', '/my-equipment/:id'],
           name: 'my-bookable-object',
-          component: () => import('@/views/BookableObjectView.vue')
+          component: () => import('@/views/BookableObjectView.vue'),
+          props: (route) => ({
+            id: route.params.id,
+            date: route.query.date
+          })
         }
       ]
     },
@@ -54,6 +58,11 @@ const router = createRouter({
       alias: ['/room/:id', '/equipment/:id'],
       name: 'bookable-object',
       component: () => import('@/views/BookableObjectViewPublic.vue')
+    },
+    {
+      path: '/:pathMatch(.*)*',
+      name: 'not-found',
+      component: () => import('@/views/NotFoundView.vue')
     }
   ]
 })
