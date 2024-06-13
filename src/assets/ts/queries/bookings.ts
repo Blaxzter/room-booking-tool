@@ -125,4 +125,5 @@ export type CreateBookingRequest = {
   description: string
   confirmed: boolean
   status: string
+  secret_edit_key?: string
 }

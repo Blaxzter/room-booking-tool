@@ -49,25 +49,31 @@ const startTime = ref('')
 const endTime = ref('')
 const allDay = ref(false)
 
-const bookingToEvent = (booking: Booking) => {
+const bookingToEvent = ({ booking, editable = false }: { booking: Booking; editable?: boolean }) => {
   let start_date = booking.start_date
   let end_date = booking.end_date
   if (booking.is_full_day) {
     start_date = booking.start_date.split('T')[0]
     end_date = booking.end_date.split('T')[0]
   }
+
   return {
     ...booking,
     id: booking.id,
     title: booking.display_name,
     start: start_date,
     end: end_date,
-    confirmed: booking.confirmed
+    confirmed: booking.confirmed,
+    // editable stuff,
+    editable: editable,
+    startEditable: editable,
+    resourceEditable: editable,
+    durationEditable: editable
   }
 }
 
 const fullCalenderInitialEvents = currentBookings.value.map((booking) => {
-  return bookingToEvent(booking)
+  return bookingToEvent({ booking })
 })
 
 const calendarOptions = {
@@ -163,7 +169,7 @@ const selectToday = () => {
 
 const addEvent = (event: Booking) => {
   console.log('Adding event', event)
-  fullCalenderApi().addEvent(bookingToEvent(event))
+  fullCalenderApi().addEvent(bookingToEvent({ booking: event, editable: true }))
   openEventDialog.value = false
 }
 

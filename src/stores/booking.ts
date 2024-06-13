@@ -1,11 +1,14 @@
 import { computed, ref } from 'vue'
-import { defineStore, storeToRefs } from 'pinia'
-import type { Booking } from '@/types'
-import { useUser } from '@/stores/user'
-import { type BookingRequest, type CreateBookingRequest, getAllBookings } from '@/assets/ts/queries/bookings'
-import { useToast } from '@/components/ui/toast'
-import { useBookableObjects } from '@/stores/bookableObjects'
 import { createItem } from '@directus/sdk'
+import { v4 as uuidv4 } from 'uuid'
+import { defineStore, storeToRefs } from 'pinia'
+
+import { useToast } from '@/components/ui/toast'
+import { useUser } from '@/stores/user'
+import { useBookableObjects } from '@/stores/bookableObjects'
+
+import { type BookingRequest, type CreateBookingRequest, getAllBookings } from '@/assets/ts/queries/bookings'
+import type { Booking } from '@/types'
 
 export const useBookings = defineStore('bookings', () => {
   const { toast } = useToast()
@@ -51,12 +54,13 @@ export const useBookings = defineStore('bookings', () => {
     return
   }
 
-  const createBookings = async (booking: CreateBookingRequest) => {
+  const createBooking = async (booking: CreateBookingRequest) => {
     booking.status = 'published'
     if (!selectedBookableObject.value) {
       throw new Error('No bookable object selected')
     }
     booking.bookable_object_id = `${selectedBookableObject.value.id}`
+    booking.secret_edit_key = uuidv4()
     const result = await client.request(createItem('booking', booking))
     console.log(result)
     // cast result to BookableObject
@@ -80,7 +84,7 @@ export const useBookings = defineStore('bookings', () => {
     bookingsPerBookableObjectId,
     currentBookings,
     fetchBookableObjectsByGroupId,
-    createBookings,
+    createBooking,
     setBookings
   }
 })

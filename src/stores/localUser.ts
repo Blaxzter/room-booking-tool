@@ -33,5 +33,38 @@ export const useLocalUser = defineStore('localUser', () => {
     return localUserData.value?.selected_group
   }
 
-  return { getSelectedGroup, setSelectedGroup, storeLocalUserData, getLocalUserData }
+  const addCreatedBooking = (secret_edit_key: string) => {
+    if (!localUserData.value) {
+      localUserData.value = {}
+    }
+    if (!localUserData.value.created_bookings) {
+      localUserData.value.created_bookings = []
+    }
+    localUserData.value.created_bookings.push(secret_edit_key)
+    storeLocalUserData()
+  }
+
+  const getCreatedBookings = () => {
+    if (!localUserData.value) {
+      getLocalUserData()
+    }
+    return localUserData.value?.created_bookings
+  }
+
+  const userHasCreatedBooking = (secret_edit_key: string) => {
+    if (!localUserData.value) {
+      getLocalUserData()
+    }
+    return localUserData.value?.created_bookings?.includes(secret_edit_key)
+  }
+
+  return {
+    getSelectedGroup,
+    setSelectedGroup,
+    storeLocalUserData,
+    getLocalUserData,
+    addCreatedBooking,
+    getCreatedBookings,
+    userHasCreatedBooking
+  }
 })

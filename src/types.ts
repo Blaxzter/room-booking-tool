@@ -18,6 +18,7 @@ export type Booking = {
   description: string
   confirmed: boolean
   confirmed_by?: string
+  secret_edit_key?: string
 }
 
 export type BookableObject = {
@@ -148,6 +149,7 @@ export type UpdateUserRequest = {
 
 export type LocalUserData = {
   selected_group?: string
+  created_bookings?: string[]
 }
 
 export interface Payment {

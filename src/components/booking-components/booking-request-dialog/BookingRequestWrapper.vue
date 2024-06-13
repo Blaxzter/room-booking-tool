@@ -79,8 +79,8 @@ const createBooking = async () => {
   }
 
   console.log('Creating object with values:', createObject)
-  const { createBookings } = useBookings()
-  const createdEvent = await createBookings(createObject as CreateBookingRequest)
+  const { createBooking } = useBookings()
+  const createdEvent = await createBooking(createObject as CreateBookingRequest)
   console.log('Booking created')
   open.value = false
   emit('created', createdEvent)
