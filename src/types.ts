@@ -3,6 +3,7 @@ export type MySchema = {
   booking: Booking[]
   group: Group[]
   users: User[]
+  notification_setting: NotificationSetting[]
 }
 
 export type Booking = {
@@ -139,6 +140,17 @@ export type User = {
   display_name: string
 }
 
+export type NotificationSetting = {
+  id: string | undefined
+  // references
+  user_id?: string | User
+  bookable_object_id?: string | BookableObject
+  group_id?: string | Group
+  // settings
+  email_notification: boolean
+  telegram: boolean
+}
+
 export type UpdateUserRequest = {
   first_name: string
   last_name: string
@@ -150,11 +162,4 @@ export type UpdateUserRequest = {
 export type LocalUserData = {
   selected_group?: string
   created_bookings?: string[]
-}
-
-export interface Payment {
-  id: string
-  amount: number
-  status: 'pending' | 'processing' | 'success' | 'failed'
-  email: string
 }

@@ -18,6 +18,28 @@
     "_syncId": "0c5d8064-2bf3-4284-b88b-23eeac843879"
   },
   {
+    "name": "Test Get Data",
+    "icon": "bolt",
+    "color": null,
+    "description": null,
+    "status": "active",
+    "trigger": "manual",
+    "accountability": "all",
+    "options": {
+      "collections": [
+        "bookable_object",
+        "bookable_object_group",
+        "directus_sync_id_map",
+        "group",
+        "group_directus_users",
+        "booking"
+      ],
+      "requireSelection": false
+    },
+    "operation": "8d6aaefb-076d-4f9f-b4f0-29d44e4ca9ea",
+    "_syncId": "6cf2633a-b5df-4d08-9a1c-e28b631aff31"
+  },
+  {
     "name": "Get Relevant User Data",
     "icon": "bolt",
     "color": null,
@@ -35,7 +57,7 @@
     "name": "Delete Avatar Image on Delete",
     "icon": "bolt",
     "color": null,
-    "description": null,
+    "description": "Delete Images if object is deleted",
     "status": "active",
     "trigger": "event",
     "accountability": "all",
@@ -45,7 +67,8 @@
         "items.delete"
       ],
       "collections": [
-        "group"
+        "group",
+        "bookable_object"
       ],
       "return": "$all"
     },
@@ -78,7 +101,7 @@
     "icon": "mark_email_read",
     "color": null,
     "description": null,
-    "status": "active",
+    "status": "inactive",
     "trigger": "event",
     "accountability": "all",
     "options": {
@@ -106,22 +129,5 @@
     },
     "operation": null,
     "_syncId": "c839f261-5b75-4242-9410-d18ec39be9cf"
-  },
-  {
-    "name": "env-test",
-    "icon": "bolt",
-    "color": null,
-    "description": null,
-    "status": "active",
-    "trigger": "manual",
-    "accountability": "all",
-    "options": {
-      "collections": [
-        "bookable_object"
-      ],
-      "requireSelection": false
-    },
-    "operation": "9191399f-ac0f-4352-9c76-d687b0738188",
-    "_syncId": "de136b6b-2acb-4419-8838-cc9c068c9e97"
   }
 ]

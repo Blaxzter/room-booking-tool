@@ -14,13 +14,31 @@
     "_syncId": "2656a256-78dd-40f6-9c90-1719cf7fc81f"
   },
   {
+    "name": "Transform Payload",
+    "key": "data",
+    "type": "transform",
+    "position_x": 19,
+    "position_y": 1,
+    "options": {
+      "json": {
+        "user_data": [
+          "8ee0d821-b106-466e-bc24-e3822b28c180"
+        ]
+      }
+    },
+    "resolve": "d16bba94-54a5-4216-af2a-5009ae411eb5",
+    "reject": null,
+    "flow": "6cf2633a-b5df-4d08-9a1c-e28b631aff31",
+    "_syncId": "8d6aaefb-076d-4f9f-b4f0-29d44e4ca9ea"
+  },
+  {
     "name": "Run Script",
     "key": "exec_26dao",
     "type": "exec",
     "position_x": 37,
     "position_y": 1,
     "options": {
-      "code": "module.exports = async function(data) {\n    if (data?.$last.length > 0) { // check if payload from $last operation is not empty\n        const ids = [];\n        data?.$last.map(item => {\n             // add file-field (asset) id to array of ids\n             if (item?.avatar)\n             \tids.push(item?.avatar); \n\n             // it can be another additional file field in your data model\n             // e.g. ids.push(item?.my_image_field);\n             //        ids.push(item?.my_whatever_file_field); \n        })\n        return ids; // This will be the ready-to-go-array of file ids for the DELETE request body\n    }\n    return {};\n}"
+      "code": "module.exports = async function(data) {\n    if (data?.$last.length > 0) {\n        const ids = [];\n        data?.$last.map(item => {\n             if (item?.avatar)\n             \tids.push(item?.avatar); \n            \n             if (item?.image)\n             \tids.push(item?.image); \n        })\n        return ids;\n    }\n    return {};\n}"
     },
     "resolve": "f2814457-4acd-4727-a4fb-f4a817b8eadf",
     "reject": null,
@@ -82,6 +100,20 @@
     "reject": null,
     "flow": "77f42aee-c6f7-4b12-9dc5-fb62b9f17bfb",
     "_syncId": "f71ffe29-1ae3-4157-b005-7f1f65152dc1"
+  },
+  {
+    "name": "Check if Data is empty",
+    "key": "exec_mth2y",
+    "type": "exec",
+    "position_x": 37,
+    "position_y": 1,
+    "options": {
+      "code": "module.exports = async function(data) {\n\tif (data?.data?.user_data?.length > 0) {\n        return data?.data?.user_data;\n    }\n\tthrow Error(\"Empty Array\")\n}"
+    },
+    "resolve": "6835ffdd-e974-4e99-ba77-4346e7cc43f9",
+    "reject": "0a85ab5d-9a17-42ff-bb7c-1a71c5eae56b",
+    "flow": "6cf2633a-b5df-4d08-9a1c-e28b631aff31",
+    "_syncId": "d16bba94-54a5-4216-af2a-5009ae411eb5"
   },
   {
     "name": "Run Script",
@@ -162,6 +194,22 @@
   },
   {
     "name": "Read Data",
+    "key": "item_read_02occ",
+    "type": "item-read",
+    "position_x": 55,
+    "position_y": 1,
+    "options": {
+      "permissions": "$full",
+      "collection": "directus_users",
+      "key": "{{$last}}"
+    },
+    "resolve": null,
+    "reject": null,
+    "flow": "6cf2633a-b5df-4d08-9a1c-e28b631aff31",
+    "_syncId": "6835ffdd-e974-4e99-ba77-4346e7cc43f9"
+  },
+  {
+    "name": "Read Data",
     "key": "item_read_5bq5t",
     "type": "item-read",
     "position_x": 19,
@@ -223,17 +271,17 @@
   },
   {
     "name": "Log to Console",
-    "key": "log_m1ntt",
+    "key": "log_rdwnt",
     "type": "log",
     "position_x": 19,
-    "position_y": 1,
+    "position_y": 17,
     "options": {
-      "message": "{{$env}}"
+      "message": "Blubl"
     },
     "resolve": null,
     "reject": null,
-    "flow": "de136b6b-2acb-4419-8838-cc9c068c9e97",
-    "_syncId": "9191399f-ac0f-4352-9c76-d687b0738188"
+    "flow": "6cf2633a-b5df-4d08-9a1c-e28b631aff31",
+    "_syncId": "0a85ab5d-9a17-42ff-bb7c-1a71c5eae56b"
   },
   {
     "name": "Send Email New",

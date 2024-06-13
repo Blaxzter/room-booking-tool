@@ -227,14 +227,15 @@ type Subscription {
   directus_dashboards_mutated(event: EventEnum): directus_dashboards_mutated
   directus_operations_mutated(event: EventEnum): directus_operations_mutated
   directus_translations_mutated(event: EventEnum): directus_translations_mutated
-  booking_mutated(event: EventEnum): booking_mutated
   directus_versions_mutated(event: EventEnum): directus_versions_mutated
   group_directus_users_mutated(event: EventEnum): group_directus_users_mutated
   bookable_object_group_mutated(event: EventEnum): bookable_object_group_mutated
+  booking_mutated(event: EventEnum): booking_mutated
   directus_sync_id_map_mutated(event: EventEnum): directus_sync_id_map_mutated
   group_mutated(event: EventEnum): group_mutated
   bookable_object_mutated(event: EventEnum): bookable_object_mutated
   directus_settings_mutated(event: EventEnum): directus_settings_mutated
+  notification_setting_mutated(event: EventEnum): notification_setting_mutated
 }
 
 """The `Boolean` scalar type represents `true` or `false`."""
@@ -389,6 +390,7 @@ type booking {
   confirmed: Boolean
   display_name: String
   confirmed_by(filter: directus_users_filter, sort: [String], limit: Int, offset: Int, page: Int, search: String): directus_users
+  secret_edit_key: String
 }
 
 type booking_mutated {
@@ -1556,6 +1558,21 @@ type group_mutated {
   key: ID!
   event: EventEnum
   data: group
+}
+
+type notification_setting {
+  id: ID!
+  email_notification: Boolean
+  user_id(filter: directus_users_filter, sort: [String], limit: Int, offset: Int, page: Int, search: String): directus_users
+  bookable_object_id(filter: bookable_object_filter, sort: [String], limit: Int, offset: Int, page: Int, search: String): bookable_object
+  group_id(filter: group_filter, sort: [String], limit: Int, offset: Int, page: Int, search: String): group
+  telegram: Boolean
+}
+
+type notification_setting_mutated {
+  key: ID!
+  event: EventEnum
+  data: notification_setting
 }
 
 type server_info {

@@ -1,23 +1,24 @@
 {
-  "collection": "booking",
-  "field": "bookable_object_id",
+  "collection": "notification_setting",
+  "field": "group_id",
   "type": "integer",
   "meta": {
-    "collection": "booking",
+    "collection": "notification_setting",
     "conditions": null,
     "display": null,
     "display_options": null,
-    "field": "bookable_object_id",
-    "group": null,
+    "field": "group_id",
+    "group": "Specification",
     "hidden": false,
     "interface": "select-dropdown-m2o",
     "note": null,
     "options": {
-      "template": "{{name}}- Group:{{group.group_id.name}}"
+      "enableCreate": false,
+      "template": "{{name}}"
     },
     "readonly": false,
     "required": false,
-    "sort": 7,
+    "sort": 2,
     "special": [
       "m2o"
     ],
@@ -27,20 +28,20 @@
     "width": "half"
   },
   "schema": {
-    "name": "bookable_object_id",
-    "table": "booking",
+    "name": "group_id",
+    "table": "notification_setting",
     "data_type": "integer",
     "default_value": null,
     "max_length": null,
     "numeric_precision": 32,
     "numeric_scale": 0,
-    "is_nullable": false,
+    "is_nullable": true,
     "is_unique": false,
     "is_primary_key": false,
     "is_generated": false,
     "generation_expression": null,
     "has_auto_increment": false,
-    "foreign_key_table": "bookable_object",
+    "foreign_key_table": "group",
     "foreign_key_column": "id"
   }
 }

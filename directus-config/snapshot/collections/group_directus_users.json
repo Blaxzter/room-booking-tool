@@ -16,7 +16,7 @@
     "note": "User Group Relation - (User Role in group)",
     "preview_url": null,
     "singleton": false,
-    "sort": null,
+    "sort": 5,
     "sort_field": null,
     "translations": null,
     "unarchive_value": null,
