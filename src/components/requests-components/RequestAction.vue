@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { storeToRefs } from 'pinia'
-import { CheckIcon, CalendarIcon, XIcon, LoaderIcon } from 'lucide-vue-next'
+import { CheckIcon, CalendarIcon, XIcon } from 'lucide-vue-next'
 
 import { Button } from '@/components/ui/button'
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip'

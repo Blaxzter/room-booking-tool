@@ -159,9 +159,7 @@ export const useBookableObjects = defineStore('bookableObjects', () => {
     isUniqueId?: boolean
     select?: boolean
   }): Promise<BookableObject | void> => {
-    const localBookableObject = allLoadedBookableObjects.value.find(
-      (bookableObject) => bookableObject.id === Number(id)
-    )
+    const localBookableObject = allLoadedBookableObjects.value.find((bookableObject) => bookableObject.id === id)
 
     if (!localBookableObject) {
       loading.value = true

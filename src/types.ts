@@ -124,9 +124,9 @@ export type User = {
 export type NotificationSetting = {
   id: string | undefined
   // references
-  user_id?: User
-  bookable_object_id?: BookableObject
-  group_id?: Group
+  user_id?: User | string | null
+  bookable_object_id?: BookableObject | string | null
+  group_id?: Group | string | null
   // settings
   email_notification: boolean
   telegram: boolean

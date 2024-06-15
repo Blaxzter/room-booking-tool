@@ -1,7 +1,7 @@
 <script setup lang="ts">
 // get the bookable object id from the route
 import { onMounted } from 'vue'
-import { useRoute, useRouter } from 'vue-router'
+import { useRouter } from 'vue-router'
 import { storeToRefs } from 'pinia'
 
 import CalenderComponent from '@/components/booking-components/calender/CalenderComponent.vue'

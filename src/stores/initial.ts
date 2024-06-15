@@ -119,8 +119,9 @@ export const useInitialDataStore = defineStore('initial', () => {
     try {
       const query = settingsViewQuery()
       const res = await client.query<SettingsViewResponse>(query)
+      console.log(res)
       await setGroups(res.group)
-      setNotificationSettingsExtended(res.notification_settings, res.group, res.bookable_object)
+      setNotificationSettingsExtended(res.notification_setting, res.group, res.bookable_object)
     } catch (error) {
       console.error(error)
     }

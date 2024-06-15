@@ -1,7 +1,7 @@
 <template>
-  <div class="parent" @click="handleClick">
+  <div class="parent" @click="handleClick" :style="{ width: `${width}` }">
     <div class="background absolute"></div>
-    <div class="banner" ref="shakeElement">In Development</div>
+    <div class="banner" ref="shakeElement" :style="{ fontSize: fontSize }">In Development</div>
   </div>
 </template>
 
@@ -9,6 +9,17 @@
 import { ref } from 'vue'
 
 const shakeElement = ref<HTMLElement | null>(null)
+
+defineProps({
+  width: {
+    type: String,
+    default: '100%'
+  },
+  fontSize: {
+    type: String,
+    default: '3rem'
+  }
+})
 
 const handleClick = (event: MouseEvent) => {
   // Prevent clicking on the content

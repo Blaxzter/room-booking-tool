@@ -976,7 +976,16 @@
     },
     "validation": null,
     "presets": null,
-    "fields": null,
+    "fields": [
+      "id",
+      "user_id",
+      "bookable_object_id",
+      "Specification",
+      "group_id",
+      "Settings",
+      "telegram",
+      "email_notification"
+    ],
     "_syncId": "8c3b4304-a75a-40c3-b22a-b87004c372ec"
   }
 ]

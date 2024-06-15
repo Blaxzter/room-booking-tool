@@ -123,5 +123,5 @@ export interface RequestViewResponse {
 export interface SettingsViewResponse {
   group: Group[]
   bookable_object: BookableObject[]
-  notification_settings: NotificationSetting[]
+  notification_setting: NotificationSetting[]
 }

@@ -1,13 +1,17 @@
 <script setup lang="ts">
-import { ref, onMounted } from 'vue'
+import { ref } from 'vue'
 import { storeToRefs } from 'pinia'
+import { MailIcon, SendIcon } from 'lucide-vue-next'
 
 import { Separator } from '@/components/ui/separator'
 import { Checkbox } from '@/components/ui/checkbox'
 
 import { useUser } from '@/stores/user'
 import { useNotificationSetting } from '@/stores/notificationSettings'
+import { useToast } from '@/components/ui/toast'
+
 import type { NotificationSetting } from '@/types'
+import InDevelopment from '@/components/utils/InDevelopment.vue'
 
 const {
   notificationSettingsLoading,
@@ -15,33 +19,33 @@ const {
   notificationSettingsByGroup,
   notificationSettingsByBookableObject
 } = storeToRefs(useNotificationSetting())
-
 const { userName } = storeToRefs(useUser())
+const { updateNotificationSetting } = useNotificationSetting()
+type NotificationType = 'email_notification' | 'telegram'
 
-const { fetchUserNotificationSettings, updateNotificationSetting } = useNotificationSetting()
+const typeToOrigin: { [key in NotificationType]: string } = {
+  email_notification: 'Email',
+  telegram: 'Telegram'
+}
 
-const toggleNotification = (setting: NotificationSetting, type: string) => {
+const toggleNotification = async (setting: NotificationSetting, type: NotificationType, origin: string) => {
   // Toggle the notification setting based on type (email or telegram)
   if (type === 'email_notification') {
     setting.email_notification = !setting.email_notification
   } else if (type === 'telegram') {
     setting.telegram = !setting.telegram
   }
-  updateNotificationSetting(setting)
+  await updateNotificationSetting({
+    notificationSetting: setting
+  }).then(() => {
+    const { toast } = useToast()
+    toast({
+      variant: 'success',
+      title: 'Settings Updated',
+      description: `${origin} notification (${typeToOrigin[type]}) settings updated.`
+    })
+  })
 }
-
-const currentUserNotificationSetting = ref<NotificationSetting>({
-  id: undefined,
-  email_notification: false,
-  telegram: false
-})
-
-onMounted(async () => {
-  await fetchUserNotificationSettings()
-  if (userNotificationSetting.value) {
-    currentUserNotificationSetting.value = userNotificationSetting.value
-  }
-})
 </script>
 
 <template>
@@ -51,28 +55,48 @@ onMounted(async () => {
   </div>
   <Separator />
   <div class="space-y-8 relative">
+    <InDevelopment width="55px" font-size="0.7rem" class="end-[21px]" />
     <div class="space-y-4 relative">
       <template v-if="!notificationSettingsLoading">
         <!-- Column Indicators -->
-        <div class="grid gap-4 grid-cols-[1fr_100px_100px] place-items-center">
+        <div class="grid gap-4 grid-cols-[1fr_50px_50px] md:grid-cols-[1fr_100px_100px] place-items-center">
           <div></div>
-          <div class="font-semibold">Email</div>
-          <div class="font-semibold">Telegram</div>
+          <div class="font-semibold">
+            <div class="flex flex-col items-center space-x-1">
+              <MailIcon class="h-4 w-4" />
+              <span class="hidden md:inline"> Email </span>
+            </div>
+          </div>
+          <div class="font-semibold">
+            <div class="flex flex-col items-center space-x-1">
+              <SendIcon class="h-4 w-4" />
+              <span class="hidden md:inline"> Telegram </span>
+            </div>
+          </div>
         </div>
         <Separator />
 
         <!-- User Notification Settings -->
-        <div class="grid grid-cols-[1fr_100px_100px] gap-4 items-center place-items-center">
-          <div class="font-semibold place-self-start">{{ userName }}</div>
-          <Checkbox
-            :checked="currentUserNotificationSetting.email_notification"
-            @update:checked="toggleNotification(currentUserNotificationSetting, 'email_notification')"
-          />
-          <Checkbox
-            :checked="currentUserNotificationSetting.telegram"
-            @update:checked="toggleNotification(currentUserNotificationSetting, 'telegram')"
-          />
+        <div
+          class="grid grid-cols-[1fr_50px_50px] md:grid-cols-[1fr_100px_100px] gap-4 items-center place-items-center"
+        >
+          <template v-if="userNotificationSetting">
+            <div class="font-semibold place-self-start">{{ userName }}</div>
+            <Checkbox
+              :checked="userNotificationSetting.email_notification"
+              @update:checked="toggleNotification(userNotificationSetting, 'email_notification', 'User')"
+            />
+            <Checkbox
+              :checked="userNotificationSetting.telegram"
+              @update:checked="toggleNotification(userNotificationSetting, 'telegram', 'User')"
+            />
+          </template>
         </div>
+        <div class="text-muted-foreground">
+          This setting will override all other settings. <br />
+          If disabled, you will not receive any notifications.
+        </div>
+
         <Separator />
 
         <!-- Group Notification Settings -->
@@ -81,17 +105,22 @@ onMounted(async () => {
           <div
             v-for="group in notificationSettingsByGroup"
             :key="group.id"
-            class="grid grid-cols-[1fr_100px_100px] gap-4 items-center place-items-center"
+            class="grid grid-cols-[1fr_50px_50px] md:grid-cols-[1fr_100px_100px] gap-4 items-center place-items-center"
           >
-            <template v-if="group.group_id">
+            <template v-if="group.group_id && typeof group.group_id !== 'string'">
               <div class="place-self-start">{{ group.group_id.name }}</div>
               <Checkbox
                 :checked="group.email_notification"
-                @update:checked="toggleNotification(group, 'email_notification')"
+                @update:checked="toggleNotification(group, 'email_notification', `Group ${group.group_id.name}`)"
               />
-              <Checkbox :checked="group.telegram" @update:checked="toggleNotification(group, 'telegram')" />
+              <Checkbox :checked="group.telegram" @update:checked="toggleNotification(group, 'telegram', 'User')" />
             </template>
           </div>
+        </div>
+        <div class="text-muted-foreground max-w-[600px]">
+          Setting group notifications will disable all notifications if you are receiving a notification because you are
+          part of the group. If you are owner of a bookable object, you will still receive notifications for that object
+          if not disabled below.
         </div>
         <Separator />
 
@@ -101,17 +130,27 @@ onMounted(async () => {
           <div
             v-for="object in notificationSettingsByBookableObject"
             :key="object.id"
-            class="grid grid-cols-[1fr_100px_100px] gap-4 items-center place-items-center"
+            class="grid grid-cols-[1fr_50px_50px] md:grid-cols-[1fr_100px_100px] gap-4 items-center place-items-center"
           >
-            <template v-if="object.bookable_object_id">
+            <template v-if="object.bookable_object_id && typeof object.bookable_object_id !== 'string'">
               <div class="place-self-start">{{ object.bookable_object_id.name }}</div>
               <Checkbox
                 :checked="object.email_notification"
-                @update:checked="toggleNotification(object, 'email_notification')"
+                @update:checked="
+                  toggleNotification(object, 'email_notification', `Bookable Object ${object.bookable_object_id.name}`)
+                "
               />
-              <Checkbox :checked="object.telegram" @update:checked="toggleNotification(object, 'telegram')" />
+              <Checkbox
+                :checked="object.telegram"
+                @update:checked="
+                  toggleNotification(object, 'telegram', `Bookable Object ${object.bookable_object_id.name}`)
+                "
+              />
             </template>
           </div>
+        </div>
+        <div class="text-muted-foreground max-w-[500px]">
+          Setting bookable object notifications will disable all notifications coming from the bookable object.
         </div>
       </template>
     </div>

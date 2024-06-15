@@ -147,6 +147,7 @@ const backendUrl = inject('backendUrl')
 <style lang="scss">
 @import '@/assets/css/colors.scss';
 
+//noinspection CssUnusedSymbol
 .vue-avatar-cropper-demo {
   max-width: 18em;
   margin: 0 auto;
@@ -157,6 +158,7 @@ const backendUrl = inject('backendUrl')
   display: block;
   margin: 20px auto;
 }
+
 .card-img-overlay {
   display: none;
   transition: all 0.5s;

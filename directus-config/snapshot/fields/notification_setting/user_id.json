@@ -5,7 +5,7 @@
   "meta": {
     "collection": "notification_setting",
     "conditions": null,
-    "display": null,
+    "display": "user",
     "display_options": null,
     "field": "user_id",
     "group": null,

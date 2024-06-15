@@ -1,9 +1,8 @@
-import { computed, ref } from 'vue'
+import { ref } from 'vue'
 import { defineStore, storeToRefs } from 'pinia'
 import type { Booking } from '@/types'
 import { useUser } from '@/stores/user'
 import { useToast } from '@/components/ui/toast'
-import { useBookableObjects } from '@/stores/bookableObjects'
 import { deleteItem, updateItem } from '@directus/sdk'
 
 export const useRequests = defineStore('requests', () => {

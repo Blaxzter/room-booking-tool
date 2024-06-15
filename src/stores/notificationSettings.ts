@@ -47,12 +47,16 @@ export const useNotificationSetting = defineStore('notificationSetting', () => {
     notificationSettings.forEach((notificationSetting) => {
       notificationSetting.user_id = user.value
       if (notificationSetting.group_id) {
-        setNotificationSettingsByGroup(notificationSetting.group_id.id as string, notificationSetting)
+        if (typeof notificationSetting.group_id !== 'string') {
+          setNotificationSettingsByGroup(notificationSetting.group_id.id as string, notificationSetting)
+        }
       } else if (notificationSetting.bookable_object_id) {
-        setNotificationSettingsByBookableObject(
-          notificationSetting.bookable_object_id.id as string,
-          notificationSetting
-        )
+        if (typeof notificationSetting.bookable_object_id !== 'string') {
+          setNotificationSettingsByBookableObject(
+            notificationSetting.bookable_object_id.id as string,
+            notificationSetting
+          )
+        }
       } else {
         setUserNotificationSettings(notificationSetting)
       }
@@ -64,10 +68,11 @@ export const useNotificationSetting = defineStore('notificationSetting', () => {
     groups: Group[],
     bookableObjects: BookableObject[]
   ) => {
+    console.log(notificationSettings)
     groups.forEach((group) => {
-      const notificationSettingsByGroupElement = _.find(notificationSettings, { group_id: group.id })
-      if (notificationSettingsByGroupElement) {
-        setNotificationSettingsByGroup(group.id, notificationSettingsByGroupElement)
+      const groupSetting = _.find(notificationSettings, (item) => _.get(item, 'group_id.id') === group.id)
+      if (groupSetting) {
+        setNotificationSettingsByGroup(group.id, groupSetting as NotificationSetting)
       } else {
         const copyOfDefaultNotification = { ...defaultNotificationSetting }
         copyOfDefaultNotification.group_id = group
@@ -76,11 +81,12 @@ export const useNotificationSetting = defineStore('notificationSetting', () => {
     })
 
     bookableObjects.forEach((bookableObject) => {
-      const notificationSettingsByBookableObjectElement = _.find(notificationSettings, {
-        bookable_object_id: bookableObject.id
-      })
-      if (notificationSettingsByBookableObjectElement) {
-        setNotificationSettingsByBookableObject(bookableObject.id, notificationSettingsByBookableObjectElement)
+      const objectSetting = _.find(
+        notificationSettings,
+        (item) => _.get(item, 'bookable_object_id.id') === bookableObject.id
+      )
+      if (objectSetting) {
+        setNotificationSettingsByBookableObject(bookableObject.id, objectSetting as NotificationSetting)
       } else {
         const copyOfDefaultNotification = { ...defaultNotificationSetting }
         copyOfDefaultNotification.bookable_object_id = bookableObject
@@ -89,7 +95,11 @@ export const useNotificationSetting = defineStore('notificationSetting', () => {
     })
 
     // find the user notification setting (group_id and bookable_object_id are undefined)
-    const userNotificationSetting = _.find(notificationSettings, { group_id: undefined, bookable_object_id: undefined })
+    const userNotificationSetting = _.find(
+      notificationSettings,
+      (item) => item.bookable_object_id === null && item.group_id === null
+    )
+    console.log(userNotificationSetting)
     if (userNotificationSetting) {
       setUserNotificationSettings(userNotificationSetting)
     } else {
@@ -115,16 +125,30 @@ export const useNotificationSetting = defineStore('notificationSetting', () => {
       })
   }
 
-  const updateNotificationSetting = async (notificationSetting: NotificationSetting) => {
-    if (notificationSetting.id === undefined) {
-      await client.request(createItem('notification_setting', notificationSetting)).then(() => {
-        toast({ variant: 'success', title: 'Notification setting created' })
-      })
-      return
+  const updateNotificationSetting = async ({ notificationSetting }: { notificationSetting: NotificationSetting }) => {
+    notificationSetting = { ...notificationSetting }
+    // replace group and bookable_object with their ids
+    if (notificationSetting.group_id && typeof notificationSetting.group_id !== 'string') {
+      notificationSetting.group_id = notificationSetting.group_id.id as string
     }
-    await client.request(updateItem('notification_setting', notificationSetting.id, notificationSetting)).then(() => {
-      toast({ variant: 'success', title: 'Notification setting updated' })
-    })
+    if (notificationSetting.bookable_object_id && typeof notificationSetting.bookable_object_id !== 'string') {
+      notificationSetting.bookable_object_id = notificationSetting.bookable_object_id.id as string
+    }
+    if (notificationSetting.user_id && typeof notificationSetting.user_id !== 'string') {
+      notificationSetting.user_id = notificationSetting.user_id.id as string
+    }
+
+    if (notificationSetting.id === undefined) {
+      notificationSetting.user_id = user.value.id
+      return await client.request(createItem('notification_setting', notificationSetting)).then(() => {
+        return true
+      })
+    }
+    return await client
+      .request(updateItem('notification_setting', notificationSetting.id, notificationSetting))
+      .then(() => {
+        return true
+      })
   }
 
   const deleteNotificationSetting = async (notificationSetting: NotificationSetting) => {
