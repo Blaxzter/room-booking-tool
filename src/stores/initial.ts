@@ -9,7 +9,9 @@ import {
   objectView,
   type ObjectViewResponse,
   requestViewQuery,
-  type RequestViewResponse
+  type RequestViewResponse,
+  settingsViewQuery,
+  type SettingsViewResponse
 } from '@/assets/ts/queries/initial_data'
 import { useGroups } from '@/stores/groups'
 import { useBookableObjects } from '@/stores/bookableObjects'
@@ -19,6 +21,7 @@ import { useLocalUser } from '@/stores/localUser'
 import { useBookings } from '@/stores/booking'
 import _ from 'lodash'
 import { useToast } from '@/components/ui/toast/use-toast'
+import { useNotificationSetting } from '@/stores/notificationSettings'
 
 export const useInitialDataStore = defineStore('initial', () => {
   const { toast } = useToast()
@@ -31,6 +34,7 @@ export const useInitialDataStore = defineStore('initial', () => {
   const { getSelectedGroup } = useLocalUser()
   const { setBookings } = useBookings()
   const { setRequests } = useRequests()
+  const { setNotificationSettingsExtended } = useNotificationSetting()
 
   const init_loading = ref(false)
 
@@ -110,5 +114,18 @@ export const useInitialDataStore = defineStore('initial', () => {
     init_loading.value = false
   }
 
-  return { init_loading, fetchInitialData: fetchDashboardViewData, fetchObjectViewData, fetchRequestViewData }
+  const fetchSettingsViewData = async () => {
+    init_loading.value = true
+    try {
+      const query = settingsViewQuery()
+      const res = await client.query<SettingsViewResponse>(query)
+      await setGroups(res.group)
+      setNotificationSettingsExtended(res.notification_settings, res.group, res.bookable_object)
+    } catch (error) {
+      console.error(error)
+    }
+    init_loading.value = false
+  }
+
+  return { init_loading, fetchSettingsViewData, fetchDashboardViewData, fetchObjectViewData, fetchRequestViewData }
 })

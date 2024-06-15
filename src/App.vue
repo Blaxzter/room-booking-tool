@@ -1,8 +1,14 @@
 <script setup lang="ts">
+import Toaster from '@/components/ui/toast/Toaster.vue'
+
 import { computed, provide } from 'vue'
 import { RouterView } from 'vue-router'
 import { useDark } from '@vueuse/core'
-import Toaster from '@/components/ui/toast/Toaster.vue'
+import { storeToRefs } from 'pinia'
+
+import { useInitialDataStore } from '@/stores/initial'
+
+const { init_loading } = storeToRefs(useInitialDataStore())
 
 const isDark = useDark()
 
@@ -16,7 +22,10 @@ provide('backendUrl', import.meta.env.VITE_BACKEND_URL)
 
 <template>
   <div :style="darkModeVar">
-    <RouterView />
+    <div v-if="init_loading" class="loading">
+      <div class="loading__spinner"></div>
+    </div>
+    <RouterView v-show="!init_loading" />
   </div>
   <Toaster />
 </template>

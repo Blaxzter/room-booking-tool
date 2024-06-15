@@ -5,14 +5,18 @@ interface GetBookableObjectParams {
   isUniqueId?: boolean
 }
 
-export function getBookableObjectFields() {
-  return `
+export function getBookableObjectFields({ minimal }: { minimal: boolean } = { minimal: false }): string {
+  const retFields = `
     id
+    name
+  `
+  if (!minimal) {
+    return `
+    ${retFields}
     status
     date_created
     date_updated
     location
-    name
     description
     tags
     image {
@@ -27,7 +31,9 @@ export function getBookableObjectFields() {
     confirm_booking_required
     information_shared
     confirm_role
-`
+    `
+  }
+  return retFields
 }
 
 export const bookableObjectByGroup = (group_id: string) => `
@@ -61,6 +67,18 @@ bookable_object(
 ) {
     ${getBookableObjectFields()}
 }`
+
+export const getAllBookableObjects = ({ minimal }: { minimal: boolean }) => `
+bookable_object{
+  ${getBookableObjectFields({ minimal })}
+}
+`
+
+export const qGetAllBookableObjects = ({ minimal }: { minimal: boolean }) => `
+query Bookable_object {
+  ${getAllBookableObjects({ minimal })}
+}
+`
 
 export type BookableObjectRequest = {
   bookable_object: BookableObject[]

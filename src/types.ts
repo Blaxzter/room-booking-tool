@@ -23,11 +23,11 @@ export type Booking = {
 }
 
 export type BookableObject = {
-  id: number
-  status: string
-  owner: { id: string }
-  date_created: string
-  date_updated: string
+  id: string
+  status?: string
+  owner?: { id: string }
+  date_created?: string
+  date_updated?: string
   name: string
   location?: {
     type: string
@@ -36,8 +36,8 @@ export type BookableObject = {
   description?: string
   tags?: string[] | null
   image?: { id: string } | null
-  is_internal: boolean
-  uniqueId: string
+  is_internal?: boolean
+  uniqueId?: string
   group?: { group_id: Group }[] | number[]
   type?: string
   confirm_booking_required?: boolean
@@ -60,25 +60,6 @@ export type CreateBookableObjectRequest = {
   type?: string
   confirm_booking_required?: boolean
   information_shared?: boolean
-}
-
-export const BookableObjectImpl: BookableObject = {
-  id: 0,
-  status: '',
-  date_created: '',
-  date_updated: '',
-  location: {
-    type: '',
-    coordinates: []
-  },
-  name: '',
-  description: '',
-  tags: null,
-  image: null,
-  is_internal: false,
-  owner: { id: '' },
-  uniqueId: '',
-  group: []
 }
 
 export type Group = {
@@ -143,9 +124,9 @@ export type User = {
 export type NotificationSetting = {
   id: string | undefined
   // references
-  user_id?: string | User
-  bookable_object_id?: string | BookableObject
-  group_id?: string | Group
+  user_id?: User
+  bookable_object_id?: BookableObject
+  group_id?: Group
   // settings
   email_notification: boolean
   telegram: boolean

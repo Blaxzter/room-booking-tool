@@ -23,7 +23,7 @@ const router = useRouter()
 
 const bookableObjectStore = useBookableObjects()
 
-const { fetchInitialData } = useInitialDataStore()
+const { fetchDashboardViewData } = useInitialDataStore()
 const { searchString } = storeToRefs(useGlobal())
 
 const { loading, bookableObjects } = storeToRefs(bookableObjectStore)
@@ -36,7 +36,7 @@ const filteredBookableObjectList = computed(() => {
 })
 
 onMounted(async () => {
-  await fetchInitialData()
+  await fetchDashboardViewData()
 })
 </script>
 

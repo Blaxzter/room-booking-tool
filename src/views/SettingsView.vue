@@ -11,7 +11,7 @@ import NotificationsForm from '@/components/settings/NotificationsForm.vue'
 
 import { useInitialDataStore } from '@/stores/initial'
 
-const { fetchInitialData } = useInitialDataStore()
+const { fetchSettingsViewData } = useInitialDataStore()
 
 const router = useRouter()
 const route = useRoute()
@@ -55,7 +55,7 @@ const description = computed(() => {
 const PageComponent = computed(() => pages[selectedPage.value])
 
 onMounted(async () => {
-  await fetchInitialData()
+  await fetchSettingsViewData()
 })
 </script>
 

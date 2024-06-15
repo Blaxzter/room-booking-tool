@@ -1,11 +1,13 @@
-import type { BookableObject, Booking, Group } from '@/types'
+import type { BookableObject, Booking, Group, NotificationSetting } from '@/types'
 import {
   bookableObjectByGroup,
   bookableObjectById,
+  getAllBookableObjects,
   qGetBookableObjectByOwner
 } from '@/assets/ts/queries/bookable_objects'
 import { getBookingByManagement, getBookingQObject } from '@/assets/ts/queries/bookings'
 import { getGroupQuery } from '@/assets/ts/queries/group'
+import { getNotificationSettings } from '@/assets/ts/queries/notificationSettings'
 
 export const getDashboardByGroup = (group_id: string) => `
 query Initial_Data {
@@ -63,7 +65,13 @@ export const objectView = ({
   `
 }
 
-export const requestViewQuery = ({ user_id, pagination = false }: { user_id: string; pagination: boolean }): string => {
+export const requestViewQuery = ({
+  user_id,
+  pagination = false
+}: {
+  user_id: string
+  pagination?: boolean
+}): string => {
   const query_params = { user_id, as_query: false, include_bookable_object: true, page: 1, limit: 1000 }
   if (pagination) {
     query_params.page = 1
@@ -73,6 +81,16 @@ export const requestViewQuery = ({ user_id, pagination = false }: { user_id: str
     query Request_view {
         ${getGroupQuery({ as_query: false })}
         ${getBookingByManagement(query_params)}   
+    }
+  `
+}
+
+export const settingsViewQuery = (): string => {
+  return `
+    query Request_view {
+        ${getGroupQuery({ as_query: false })}
+        ${getAllBookableObjects({ minimal: true })}
+        ${getNotificationSettings()}
     }
   `
 }
@@ -100,4 +118,10 @@ export interface BookableObjectsRequest {
 export interface RequestViewResponse {
   group: Group[]
   booking: Booking[]
+}
+
+export interface SettingsViewResponse {
+  group: Group[]
+  bookable_object: BookableObject[]
+  notification_settings: NotificationSetting[]
 }
