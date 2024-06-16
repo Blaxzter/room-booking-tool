@@ -1,5 +1,21 @@
 [
   {
+    "name": "Bookable Object Notification Settings",
+    "key": "bookable_object_notification_setting",
+    "type": "item-read",
+    "position_x": 37,
+    "position_y": 1,
+    "options": {
+      "permissions": "$full",
+      "collection": "notification_setting",
+      "query": "{\n    \"filter\": {\n        \"bookable_object_id\": {\n            \"_eq\": {{ read_bookable_object.id }}\n        },\n        \"group_id\": {\n            \"_null\": true\n        }\n    }\n}\n"
+    },
+    "resolve": "4827550b-d420-485b-a841-05b6061ca79c",
+    "reject": null,
+    "flow": "77f42aee-c6f7-4b12-9dc5-fb62b9f17bfb",
+    "_syncId": "bf2da71b-a3d6-4ddd-b45d-d46247efb4fd"
+  },
+  {
     "name": "create random string",
     "key": "create_random_string",
     "type": "exec",
@@ -30,6 +46,30 @@
     "reject": null,
     "flow": "6cf2633a-b5df-4d08-9a1c-e28b631aff31",
     "_syncId": "8d6aaefb-076d-4f9f-b4f0-29d44e4ca9ea"
+  },
+  {
+    "name": "Prepare Email Data",
+    "key": "email_data",
+    "type": "transform",
+    "position_x": 3,
+    "position_y": 20,
+    "options": {
+      "json": {
+        "display_name": "{{ $trigger.payload.display_name }}",
+        "mail": "{{ $trigger.payload.mail }}",
+        "phone": "{{ $trigger.payload.phone }}",
+        "description": "{{ $trigger.payload.description }}",
+        "start_date": "{{ $trigger.payload.start_date }}",
+        "end_date": "{{ $trigger.payload.end_date }}",
+        "is_full_day": "{{ $trigger.payload.is_full_day }}",
+        "bookable_object_name": "{{ read_bookable_object.name }}",
+        "host": "{{ $env.FRONTEND_URL }}"
+      }
+    },
+    "resolve": "9c75f79e-d8d2-4b05-ac24-38f234e33872",
+    "reject": null,
+    "flow": "a52be475-3045-450e-b763-0acb11b45451",
+    "_syncId": "a740a075-9415-4e30-8fea-ceb72f742253"
   },
   {
     "name": "Run Script",
@@ -74,13 +114,13 @@
     "_syncId": "3d2f81d7-1471-4feb-81a4-23bcc94580bb"
   },
   {
-    "name": "Run Script",
+    "name": "Create final return user list",
     "key": "exec_4ubnx",
     "type": "exec",
     "position_x": 39,
-    "position_y": 36,
+    "position_y": 55,
     "options": {
-      "code": "module.exports = async function(data) {\n    const res = [];\n    if (data?.get_user_data.length > 0) {\n        data?.get_user_data.map(item => {\n            if (item && !res.some(e => e.id === item.id)) { \n                res.push(item);\n            }\n        })\n    }\n    if (data?.read_owner) {\n       if (!res.some(e => e.id === data?.read_owner.id)) { \n       \t\tres.push(data?.read_owner);\n       }\n    }\n    return res;\n} "
+      "code": "module.exports = async function(data) {\n  const res = [];\n  if (data?.get_user_data.length > 0) {\n    data?.get_user_data.map(item => {\n      if (item && !res.some(e => e.id === item.id)) {\n        res.push(item);\n      }\n    })\n  }\n  if (data?.read_owner) {\n    // check if owner has disabled email notification for this bookable object\n    const relevant_settings = data?.bookable_object_notification_setting.filter(setting => setting.user_id === data?.read_owner.id);\n    if (relevant_settings.length > 0 && !relevant_settings[0].email_notification) {\n      return res;\n    }\n    \n    if (!res.some(e => e.id === data?.read_owner.id)) {\n      res.push(data?.read_owner);\n    }\n  }\n  return res;\n} "
     },
     "resolve": null,
     "reject": null,
@@ -89,17 +129,45 @@
   },
   {
     "name": "Run Script",
+    "key": "exec_804y2",
+    "type": "exec",
+    "position_x": 21,
+    "position_y": 20,
+    "options": {
+      "code": "module.exports = async function(data) {\n  const ret_array = []\n  data?.relevant_user_data?.map(user => {\n    ret_array.push({\n      subject: \"New Booking Request\",\n      target: user.email,\n      owner_id: user.id,\n      template: 'request',\n      data: data.email_data\n    })\n  })\n\n  // if ret_array is empty throw error\n  if (ret_array.length === 0) {\n    throw new Error('No email address found to send email')\n  }\n\n  return ret_array;\n}\n"
+    },
+    "resolve": "a6812360-0075-40e6-bb25-1846add1833e",
+    "reject": null,
+    "flow": "a52be475-3045-450e-b763-0acb11b45451",
+    "_syncId": "9c75f79e-d8d2-4b05-ac24-38f234e33872"
+  },
+  {
+    "name": "Filter Data On Notification Settings",
     "key": "exec_av0v5",
     "type": "exec",
     "position_x": 3,
-    "position_y": 36,
+    "position_y": 55,
     "options": {
-      "code": "module.exports = async function(data) {\n    if (data?.final_user_data.length > 0) {\n        const res = [];\n        data?.final_user_data.map(item => {\n            if (item.directus_users_id) { \n                res.push(item.directus_users_id);\n            }\n        })\n        return res;\n    }\n    return [];\n} "
+      "code": "module.exports = async function(data) {\n  if (data?.final_user_data.length > 0) {\n    const res = [];\n    data?.final_user_data.map(item => {\n      if (item.directus_users_id) {\n        // check for bookable object setting\n        const bs = data?.bookable_object_notification_setting.filter(setting => setting.user_id === item.directus_users_id);\n        if (bs.length > 0 && !bs[0].email_notification) {\n          return;\n        }\n        \n        // check for group setting\n        const gs = data?.group_notification_settings.filter(setting => setting.user_id === item.directus_users_id && setting.bookable_object_id === null && setting.group_id === item.group_id);\n        if (gs.length > 0 && !gs[0].email_notification) {\n          return;\n        }\n\n        res.push(item.directus_users_id);\n      }\n    })\n    return res;\n  }\n  return [];\n}\n"
     },
     "resolve": "ab3b8eb9-44be-4d15-a55c-69cb523e1658",
     "reject": null,
     "flow": "77f42aee-c6f7-4b12-9dc5-fb62b9f17bfb",
     "_syncId": "f71ffe29-1ae3-4157-b005-7f1f65152dc1"
+  },
+  {
+    "name": "Filter for personal email notification",
+    "key": "exec_m7q4f",
+    "type": "exec",
+    "position_x": 38,
+    "position_y": 1,
+    "options": {
+      "code": "module.exports = async function(data) {\n\tif(data.notification_data.length > 0) {\n        if (data.notification_data[0].email_notification) {\n            return true\n        } else {\n            throw new Error('Email notification disabled')\n        }\n    }\n    // default for email is true atm\n    \n\treturn true;\n}"
+    },
+    "resolve": "09b9778f-5972-4444-9bf9-da89e25c813c",
+    "reject": null,
+    "flow": "c839f261-5b75-4242-9410-d18ec39be9cf",
+    "_syncId": "64ae3c1c-4604-4a27-a660-60f65785b538"
   },
   {
     "name": "Check if Data is empty",
@@ -116,39 +184,11 @@
     "_syncId": "d16bba94-54a5-4216-af2a-5009ae411eb5"
   },
   {
-    "name": "Run Script",
-    "key": "exec_o7jjs",
-    "type": "exec",
-    "position_x": 3,
-    "position_y": 19,
-    "options": {
-      "code": "module.exports = async function(data) {\n    if (data?.group_data.length > 0) {\n        const res = [];\n        data?.group_data.map(item => {\n            if (item.group_id) { \n                res.push(item.group_id);\n            }\n        })\n        return res;\n    }\n    return [];\n} "
-    },
-    "resolve": "fb5c2c3b-fdab-47ee-9595-17e530daf121",
-    "reject": null,
-    "flow": "77f42aee-c6f7-4b12-9dc5-fb62b9f17bfb",
-    "_syncId": "ed793401-d85b-40d6-80ee-641233f9dcdd"
-  },
-  {
-    "name": "Run Script",
-    "key": "exec_v4k95",
-    "type": "exec",
-    "position_x": 39,
-    "position_y": 19,
-    "options": {
-      "code": "module.exports = async function(data) {\n    if (data?.user_group_data.length > 0) {\n        const res = [];\n        data?.user_group_data.map(item => {\n            item?.users.map(item => {\n                if (item) { \n                    res.push(item);\n                }\n            })\n        })\n        return res;\n    }\n    return [];\n} "
-    },
-    "resolve": "ecf0880f-713d-4092-b087-df90d9bef8a2",
-    "reject": null,
-    "flow": "77f42aee-c6f7-4b12-9dc5-fb62b9f17bfb",
-    "_syncId": "993a6770-d74b-4a43-8aa0-8cce5302c10e"
-  },
-  {
     "name": "final_user_data",
     "key": "final_user_data",
     "type": "item-read",
-    "position_x": 57,
-    "position_y": 19,
+    "position_x": 39,
+    "position_y": 37,
     "options": {
       "collection": "group_directus_users",
       "key": "{{$last}}",
@@ -164,11 +204,12 @@
     "key": "get_user_data",
     "type": "item-read",
     "position_x": 21,
-    "position_y": 36,
+    "position_y": 55,
     "options": {
       "collection": "directus_users",
       "permissions": "$full",
-      "key": "{{$last}}"
+      "key": "",
+      "query": "{\n    \"filter\": {\n        \"id\": {\n            \"_in\": {{ $last }}\n        }\n    }\n}"
     },
     "resolve": "03585334-3b4b-4cbf-9c6d-be0d9ca6a83b",
     "reject": null,
@@ -179,8 +220,8 @@
     "name": "group_data",
     "key": "group_data",
     "type": "item-read",
-    "position_x": 55,
-    "position_y": 1,
+    "position_x": 3,
+    "position_y": 20,
     "options": {
       "collection": "bookable_object_group",
       "query": null,
@@ -191,6 +232,36 @@
     "reject": null,
     "flow": "77f42aee-c6f7-4b12-9dc5-fb62b9f17bfb",
     "_syncId": "f4e7df39-6dde-49ef-b2c3-ed06ae2d0afc"
+  },
+  {
+    "name": "List Group IDs",
+    "key": "group_ids",
+    "type": "exec",
+    "position_x": 21,
+    "position_y": 20,
+    "options": {
+      "code": "module.exports = async function(data) {\n    if (data?.group_data.length > 0) {\n        const res = [];\n        data?.group_data.map(item => {\n            if (item.group_id) { \n                res.push(item.group_id);\n            }\n        })\n        return res;\n    }\n    return [];\n} "
+    },
+    "resolve": "95909f9c-3986-457e-8798-734f87112ead",
+    "reject": null,
+    "flow": "77f42aee-c6f7-4b12-9dc5-fb62b9f17bfb",
+    "_syncId": "ed793401-d85b-40d6-80ee-641233f9dcdd"
+  },
+  {
+    "name": "Group Notification Settings",
+    "key": "group_notification_settings",
+    "type": "item-read",
+    "position_x": 39,
+    "position_y": 21,
+    "options": {
+      "permissions": "$full",
+      "collection": "notification_setting",
+      "query": "{\n    \"filter\": {\n        \"bookable_object_id\": {\n            \"_null\": true\n        },\n        \"group_id\": {\n            \"_in\": {{ group_ids }}\n    \t}\n\t}\n}"
+    },
+    "resolve": "fb5c2c3b-fdab-47ee-9595-17e530daf121",
+    "reject": null,
+    "flow": "77f42aee-c6f7-4b12-9dc5-fb62b9f17bfb",
+    "_syncId": "95909f9c-3986-457e-8798-734f87112ead"
   },
   {
     "name": "Read Data",
@@ -284,36 +355,50 @@
     "_syncId": "0a85ab5d-9a17-42ff-bb7c-1a71c5eae56b"
   },
   {
-    "name": "Send Email New",
-    "key": "mail_1h0q6",
+    "name": "Send Email",
+    "key": "mail_26xre",
     "type": "mail",
-    "position_x": 39,
-    "position_y": 20,
+    "position_x": 21,
+    "position_y": 18,
     "options": {
-      "subject": "New Booking Request",
-      "to": "{{ prep_email }}",
+      "to": "{{ $trigger.target }}",
+      "subject": "{{ $trigger.subject }}",
       "type": "template",
-      "template": "request",
-      "data": "{{ $last }}"
+      "template": "{{ $trigger.template }}",
+      "data": "{{ $trigger.data }}"
     },
     "resolve": null,
     "reject": null,
-    "flow": "a52be475-3045-450e-b763-0acb11b45451",
-    "_syncId": "20582fac-197e-4445-b0bf-1a6b57458e28"
+    "flow": "c839f261-5b75-4242-9410-d18ec39be9cf",
+    "_syncId": "09b9778f-5972-4444-9bf9-da89e25c813c"
   },
   {
-    "name": "Run Script",
-    "key": "prep_email",
-    "type": "exec",
-    "position_x": 3,
-    "position_y": 20,
+    "name": "Get Notification Data",
+    "key": "notification_data",
+    "type": "item-read",
+    "position_x": 21,
+    "position_y": 1,
     "options": {
-      "code": "module.exports = async function(data) {\n    if (data?.relevant_user_data.length > 0) {\n        const res = [];\n        data?.relevant_user_data.map(item => {\n            if (item.email) { \n                res.push(item.email);\n            }\n        })\n        return res;\n    }\n    return [];\n} "
+      "query": {
+        "filter": {
+          "user_id": {
+            "_eq": "{{ $trigger.owner_id }}"
+          },
+          "bookable_object_id": {
+            "_null": true
+          },
+          "group_id": {
+            "_null": true
+          }
+        }
+      },
+      "collection": "notification_setting",
+      "permissions": "$full"
     },
-    "resolve": "a740a075-9415-4e30-8fea-ceb72f742253",
+    "resolve": "64ae3c1c-4604-4a27-a660-60f65785b538",
     "reject": null,
-    "flow": "a52be475-3045-450e-b763-0acb11b45451",
-    "_syncId": "6dd1e9d7-3fc0-4f26-b369-25cddc3f3125"
+    "flow": "c839f261-5b75-4242-9410-d18ec39be9cf",
+    "_syncId": "e870eeeb-4cde-46b4-8feb-3227ae19fe74"
   },
   {
     "name": "read_bookable_object",
@@ -327,7 +412,7 @@
       "permissions": "$full",
       "key": "{{ $trigger.bookable_object_id }}"
     },
-    "resolve": "4827550b-d420-485b-a841-05b6061ca79c",
+    "resolve": "bf2da71b-a3d6-4ddd-b45d-d46247efb4fd",
     "reject": null,
     "flow": "77f42aee-c6f7-4b12-9dc5-fb62b9f17bfb",
     "_syncId": "a0685fd9-2ce9-4e24-9142-f5836f5279cc"
@@ -343,7 +428,7 @@
       "collection": "bookable_object",
       "key": "{{ $trigger.payload.bookable_object_id }}"
     },
-    "resolve": "6dd1e9d7-3fc0-4f26-b369-25cddc3f3125",
+    "resolve": "a740a075-9415-4e30-8fea-ceb72f742253",
     "reject": null,
     "flow": "a52be475-3045-450e-b763-0acb11b45451",
     "_syncId": "5ee2bb20-bcc0-4033-8728-a61d4bdc188e"
@@ -352,7 +437,7 @@
     "name": "read owner",
     "key": "read_owner",
     "type": "item-read",
-    "position_x": 37,
+    "position_x": 55,
     "position_y": 1,
     "options": {
       "collection": "directus_users",
@@ -408,8 +493,8 @@
     "name": "Send Email New",
     "key": "Send_Email_New",
     "type": "mail",
-    "position_x": 35,
-    "position_y": 54,
+    "position_x": 24,
+    "position_y": 73,
     "options": {
       "to": "{{ read_owner.email }}",
       "subject": "Request Email Test",
@@ -423,35 +508,26 @@
     "_syncId": "58ece394-c094-49b9-88d7-8963c85a3204"
   },
   {
-    "name": "Transform Payload",
-    "key": "transform_nmhhq",
-    "type": "transform",
-    "position_x": 20,
+    "name": "Send emails",
+    "key": "send_emails",
+    "type": "trigger",
+    "position_x": 39,
     "position_y": 20,
     "options": {
-      "json": {
-        "display_name": "{{ $trigger.payload.display_name }}",
-        "mail": "{{ $trigger.payload.mail }}",
-        "phone": "{{ $trigger.payload.phone }}",
-        "description": "{{ $trigger.payload.description }}",
-        "start_date": "{{ $trigger.payload.start_date }}",
-        "end_date": "{{ $trigger.payload.end_date }}",
-        "is_full_day": "{{ $trigger.payload.is_full_day }}",
-        "bookable_object_name": "{{ read_bookable_object.name }}",
-        "host": "{{ $env.FRONTEND_URL }}"
-      }
+      "flow": "c839f261-5b75-4242-9410-d18ec39be9cf",
+      "payload": "{{ $last }}"
     },
-    "resolve": "20582fac-197e-4445-b0bf-1a6b57458e28",
+    "resolve": null,
     "reject": null,
     "flow": "a52be475-3045-450e-b763-0acb11b45451",
-    "_syncId": "a740a075-9415-4e30-8fea-ceb72f742253"
+    "_syncId": "a6812360-0075-40e6-bb25-1846add1833e"
   },
   {
     "name": "Transform Payload",
     "key": "transform_ruw42",
     "type": "transform",
-    "position_x": 8,
-    "position_y": 54,
+    "position_x": 3,
+    "position_y": 72,
     "options": {
       "json": {
         "display_name": "{{ $trigger.payload.display_name }}",
@@ -474,16 +550,30 @@
     "name": "user_group_data",
     "key": "user_group_data",
     "type": "item-read",
-    "position_x": 21,
-    "position_y": 19,
+    "position_x": 3,
+    "position_y": 37,
     "options": {
       "permissions": "$full",
       "collection": "group",
-      "key": "{{$last}}"
+      "key": "{{ group_ids }}"
     },
     "resolve": "993a6770-d74b-4a43-8aa0-8cce5302c10e",
     "reject": null,
     "flow": "77f42aee-c6f7-4b12-9dc5-fb62b9f17bfb",
     "_syncId": "fb5c2c3b-fdab-47ee-9595-17e530daf121"
+  },
+  {
+    "name": "Get Users From Group",
+    "key": "users_from_group",
+    "type": "exec",
+    "position_x": 21,
+    "position_y": 37,
+    "options": {
+      "code": "module.exports = async function(data) {\n    if (data?.user_group_data.length > 0) {\n        const res = [];\n        data?.user_group_data.map(item => {\n            item?.users.map(item => {\n                if (item) { \n                    res.push(item);\n                }\n            })\n        })\n        return res;\n    }\n    return [];\n} "
+    },
+    "resolve": "ecf0880f-713d-4092-b087-df90d9bef8a2",
+    "reject": null,
+    "flow": "77f42aee-c6f7-4b12-9dc5-fb62b9f17bfb",
+    "_syncId": "993a6770-d74b-4a43-8aa0-8cce5302c10e"
   }
 ]

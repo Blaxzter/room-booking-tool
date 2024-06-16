@@ -96,6 +96,7 @@ const calendarOptions = {
   maxTime: 24,
   eventStartEditable: false,
   eventEndEditable: false,
+  dayMaxEventRows: 4,
   timeFormat: {
     agenda: 'H:mm{ - h:mm}'
   },
@@ -287,7 +288,7 @@ onMounted(() => {
 }
 
 .fc-daygrid-day {
-  //height: calc((100vh - 15rem) / 4);
+  height: calc((100vh - 15rem) / 4);
   &:hover {
     background: hsl(var(--secondary));
     cursor: pointer;

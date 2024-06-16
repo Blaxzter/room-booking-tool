@@ -987,5 +987,17 @@
       "email_notification"
     ],
     "_syncId": "8c3b4304-a75a-40c3-b22a-b87004c372ec"
+  },
+  {
+    "role": null,
+    "collection": "directus_files",
+    "action": "read",
+    "permissions": {},
+    "validation": {},
+    "presets": null,
+    "fields": [
+      "*"
+    ],
+    "_syncId": "93b0266b-59b4-47d7-8973-8fe6e08730c7"
   }
 ]

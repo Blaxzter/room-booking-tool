@@ -8,6 +8,7 @@ import { onMounted, ref } from 'vue'
 import { useUser } from '@/stores/user'
 import router from '@/router'
 import { Checkbox } from '@/components/ui/checkbox'
+import { randomEmail } from '@/assets/ts/constants'
 
 const loading = ref(false)
 const showCheckmark = ref(false)
@@ -81,7 +82,7 @@ onMounted(async () => {
         <CardContent class="grid gap-4">
           <div class="grid gap-2">
             <Label for="email">Email</Label>
-            <Input id="email" type="email" placeholder="m@example.com" required v-model="email" />
+            <Input id="email" type="email" :placeholder="randomEmail()" required v-model="email" />
           </div>
           <div class="grid gap-2">
             <Label for="password">Password</Label>
@@ -145,7 +146,7 @@ onMounted(async () => {
 
 .background-image {
   z-index: -1000;
-  background-image: url('https://source.unsplash.com/random/?Nature&Landscape&horizontal&hd');
+  background-image: url('http://localhost:8055/assets/6b264936-4945-4b60-90e1-5e6ba64d62e6');
   filter: blur(2px) opacity(0.9);
   background-size: cover;
   background-position: center;

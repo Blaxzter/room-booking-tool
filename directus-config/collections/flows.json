@@ -101,7 +101,7 @@
     "icon": "mark_email_read",
     "color": null,
     "description": null,
-    "status": "inactive",
+    "status": "active",
     "trigger": "event",
     "accountability": "all",
     "options": {
@@ -127,7 +127,7 @@
     "options": {
       "return": "$last"
     },
-    "operation": null,
+    "operation": "e870eeeb-4cde-46b4-8feb-3227ae19fe74",
     "_syncId": "c839f261-5b75-4242-9410-d18ec39be9cf"
   }
 ]

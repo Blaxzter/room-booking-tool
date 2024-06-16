@@ -1,5 +1,10 @@
 [
   {
+    "name": "public",
+    "parent": null,
+    "_syncId": "4a155874-5919-449e-931a-ecb2e9e97b42"
+  },
+  {
     "name": "object-splash-images",
     "parent": null,
     "_syncId": "76196db0-2d35-4646-ac32-8df8a9986615"

@@ -15,7 +15,8 @@ import {
 } from '@/assets/ts/queries/bookable_objects'
 
 export const useBookableObjects = defineStore('bookableObjects', () => {
-  const { client, user } = useUser()
+  const { client } = useUser()
+  const { user } = storeToRefs(useUser())
   const { toast } = useToast()
   const { selectedGroupId } = storeToRefs(useGroups())
 
@@ -98,7 +99,7 @@ export const useBookableObjects = defineStore('bookableObjects', () => {
     } else {
       loading.value = true
       await client
-        .query<BookableObjectsRequest>(userBookableObject(user.id))
+        .query<BookableObjectsRequest>(userBookableObject(user.value.id))
         .then((res) => {
           setBookableObjects({ data: res.bookable_object, groupId: '-1' })
           loading.value = false
@@ -130,9 +131,6 @@ export const useBookableObjects = defineStore('bookableObjects', () => {
   })
 
   const createBookableObject = async (bookableObject: CreateBookableObjectRequest) => {
-    const { client } = useUser()
-    const { user } = storeToRefs(useUser())
-
     bookableObject.owner = { id: user.value.id }
     if (!bookableObject.group || bookableObject.group?.length === 0) {
       bookableObject.group = []
