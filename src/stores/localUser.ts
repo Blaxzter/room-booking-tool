@@ -1,9 +1,11 @@
-import { defineStore } from 'pinia'
+import { defineStore, storeToRefs } from 'pinia'
 import { ref } from 'vue'
 import type { LocalUserData } from '@/types'
+import { useUser } from './user'
 
 export const useLocalUser = defineStore('localUser', () => {
   const localUserData = ref<LocalUserData | null>(null)
+  const { user } = storeToRefs(useUser())
 
   const getLocalUserData = () => {
     const localUserDataString = localStorage.getItem('user_data')
@@ -33,14 +35,19 @@ export const useLocalUser = defineStore('localUser', () => {
     return localUserData.value?.selected_group
   }
 
-  const addCreatedBooking = (secret_edit_key: string) => {
+  const addCreatedBooking = (id: string, secret_edit_key: string) => {
     if (!localUserData.value) {
       localUserData.value = {}
     }
     if (!localUserData.value.created_bookings) {
-      localUserData.value.created_bookings = []
+      localUserData.value.created_bookings = {}
     }
-    localUserData.value.created_bookings.push(secret_edit_key)
+
+    if (!localUserData.value.created_bookings[user.value.id]) {
+      localUserData.value.created_bookings[user.value.id] = {}
+    }
+
+    localUserData.value.created_bookings[user.value.id][id] = secret_edit_key
     storeLocalUserData()
   }
 
@@ -51,11 +58,11 @@ export const useLocalUser = defineStore('localUser', () => {
     return localUserData.value?.created_bookings
   }
 
-  const userHasCreatedBooking = (secret_edit_key: string) => {
+  const userHasCreatedBooking = (id: string) => {
     if (!localUserData.value) {
       getLocalUserData()
     }
-    return localUserData.value?.created_bookings?.includes(secret_edit_key)
+    return localUserData.value?.created_bookings?.[user.value.id]?.[id] !== undefined
   }
 
   return {

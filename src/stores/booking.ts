@@ -9,6 +9,7 @@ import { useBookableObjects } from '@/stores/bookableObjects'
 
 import { type BookingRequest, type CreateBookingRequest, getAllBookings } from '@/assets/ts/queries/bookings'
 import type { Booking } from '@/types'
+import { useLocalUser } from '@/stores/localUser'
 
 export const useBookings = defineStore('bookings', () => {
   const { toast } = useToast()
@@ -62,7 +63,12 @@ export const useBookings = defineStore('bookings', () => {
     booking.bookable_object_id = `${selectedBookableObject.value.id}`
     booking.secret_edit_key = uuidv4()
     const result = await client.request(createItem('booking', booking))
-    console.log(result)
+
+    // Add the secret edit key to the local user store to allow editing of unlogged in users
+    if (result.secret_edit_key) {
+      const { addCreatedBooking } = useLocalUser()
+      addCreatedBooking(result.id, result.secret_edit_key)
+    }
     // cast result to BookableObject
     currentBookings.value.push(result)
     return result

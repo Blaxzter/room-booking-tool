@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { computed, ref, watch } from 'vue'
+import dayjs from 'dayjs'
 import { useField, useForm } from 'vee-validate'
 import * as z from 'zod'
 import { toTypedSchema } from '@vee-validate/zod'
@@ -22,24 +23,61 @@ const props = defineProps<{
   initialValues: InitialValues
 }>()
 
-const bookingSchema = z.object({
-  startDate: z.string().min(1, { message: 'Start date is required' }),
-  isFullDay: z.boolean().optional(),
-  startTime: z.string().min(1, { message: 'Start time is required' }).optional(),
-  endTime: z.string().min(1, { message: 'End time is required' }).optional(),
-  isOnAnotherDate: z.boolean().optional(),
-  endDate: z.string().optional()
-})
+const bookingSchema = z
+  .object({
+    startDate: z.string().min(1, { message: 'Start date is required' }),
+    isFullDay: z.boolean().optional(),
+    startTime: z.string().min(1, { message: 'Start time is required' }).optional(),
+    endTime: z.string().min(1, { message: 'End time is required' }).optional(),
+    isOnAnotherDate: z.boolean().optional(),
+    endDate: z.string().optional()
+  })
+  .refine(
+    (data) => {
+      const { startDate, startTime } = data
+      const startDateTime = new Date(`${startDate}T${startTime}`)
+      return startDateTime > new Date()
+    },
+    {
+      message: 'Start date and time must be in the future',
+      path: ['startDate', 'startTime']
+    }
+  )
+  .refine(
+    // make sure end time is after start time
+    (data) => {
+      const { startDate, startTime, endTime } = data
+      if (!endTime) return true
+      const startDateTime = new Date(`${startDate}T${startTime}`)
+      const endDateTime = new Date(`${startDate}T${endTime}`)
+      return endDateTime > startDateTime
+    },
+    {
+      message: 'End time must be after start time',
+      path: ['endTime']
+    }
+  ) // make sure if isOnAnotherDate is true, endDate is set and is after startDate
+  .refine(
+    (data) => {
+      const { isOnAnotherDate, startDate, endDate } = data
+      if (!isOnAnotherDate) return true
+      return new Date(startDate) < new Date(endDate)
+    },
+    {
+      message: 'End date must be after start date',
+      path: ['endDate']
+    }
+  )
 
 const { values, validate } = useForm({
   validationSchema: toTypedSchema(bookingSchema),
   initialValues: {
-    startDate: props.initialValues.startDate || '',
+    startDate: props.initialValues.startDate || dayjs().format('YYYY-MM-DD'),
     isFullDay: props.initialValues.isFullDay || false,
-    startTime: props.initialValues.startTime || '',
-    endTime: props.initialValues.endTime || '',
+    startTime: props.initialValues.startTime || dayjs().add(2, 'minutes').format('HH:mm'),
+    endTime: props.initialValues.endTime || dayjs().add(1, 'hour').format('HH:mm'),
     isOnAnotherDate: props.initialValues.isOnAnotherDate || false,
-    endDate: props.initialValues.endDate || ''
+    endDate: props.initialValues.endDate || dayjs().add(1, 'day').format('YYYY-MM-DD')
   }
 })
 

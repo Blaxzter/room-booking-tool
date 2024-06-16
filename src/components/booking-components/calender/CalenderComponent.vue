@@ -3,6 +3,7 @@ import dayjs from 'dayjs'
 import { storeToRefs } from 'pinia'
 import { computed, onMounted, ref } from 'vue'
 import { CalendarIcon } from 'lucide-vue-next'
+import { useToast } from '@/components/ui/toast'
 
 import FullCalendar from '@fullcalendar/vue3'
 import dayGridPlugin from '@fullcalendar/daygrid'
@@ -59,7 +60,7 @@ const bookingToEvent = ({ booking, editable = false }: { booking: Booking; edita
 
   return {
     ...booking,
-    id: booking.id,
+    booking_id: booking.id,
     title: booking.display_name,
     start: start_date,
     end: end_date,
@@ -120,6 +121,17 @@ const calendarOptions = {
     }
   },
   select(arg) {
+    const { toast } = useToast()
+    // check if arg.start is in the past
+    if (dayjs(arg.start).isBefore(dayjs())) {
+      toast({
+        title: 'Error',
+        description: 'You cannot create an event in the past',
+        variant: 'destructive'
+      })
+      return
+    }
+
     createdTempEvent.value = fullCalenderApi().addEvent({
       title: 'New Event',
       start: arg.start,

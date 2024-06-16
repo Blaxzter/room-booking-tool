@@ -142,5 +142,5 @@ export type UpdateUserRequest = {
 
 export type LocalUserData = {
   selected_group?: string
-  created_bookings?: string[]
+  created_bookings?: { [id: string]: { [id: string]: string } }
 }

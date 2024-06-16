@@ -180,8 +180,10 @@ export const useUser = defineStore('user', () => {
       .catch(console.error)
       .finally(async () => {
         authenticated.value = false
-        localStorage.removeItem('user_data')
-        await router.push({ name: 'login' })
+        localStorage.removeItem('access_token')
+        localStorage.removeItem('refresh_token')
+        localStorage.removeItem('user')
+        router.push({ name: 'login' })
       })
   }
 
