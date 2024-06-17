@@ -20,8 +20,8 @@ const open = defineModel({
 })
 
 defineProps<{
-  bookableObjectId: number
-  bookableObjectUniqueId: string
+  bookableObjectId: string
+  bookableObjectUniqueId: string | undefined
   bookableObjectType: string | undefined
 }>()
 </script>

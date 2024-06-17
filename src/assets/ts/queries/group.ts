@@ -12,6 +12,41 @@ export const groupFields = `
         }
 `
 
+export const getGroupsWithUserQuery = ({ as_query }: { as_query: boolean }): string => {
+  const groups_query = `
+    group {
+        date_created
+        date_updated
+        description
+        emoji
+        id
+        name
+        sort
+        status
+        users {
+            id
+            role
+            directus_users_id {
+                id
+                first_name
+                last_name
+            }
+        }
+    }`
+
+  if (as_query) {
+    return `
+      query Groups
+      {
+          ${groups_query}
+      }
+    `
+  }
+  return `
+    ${groups_query}
+  `
+}
+
 export const getGroupQuery = ({ as_query }: { as_query: boolean }): string => {
   const group_query = `group {
       ${groupFields}

@@ -1,8 +1,8 @@
 <script setup lang="ts">
-import { computed, type ComputedRef, ref, inject } from 'vue'
+import { computed, type ComputedRef, inject, ref } from 'vue'
 import _ from 'lodash'
 import { CaretSortIcon, CheckIcon, PlusCircledIcon } from '@radix-icons/vue'
-import { LoaderIcon } from 'lucide-vue-next'
+import { LoaderIcon, Edit2Icon } from 'lucide-vue-next'
 
 import { cn } from '@/lib/utils'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
@@ -24,6 +24,7 @@ import NewGroupDialog from '@/components/groups/NewGroupDialog.vue'
 import { useUser } from '@/stores/user'
 import { useGroups } from '@/stores/groups'
 import { storeToRefs } from 'pinia'
+import GroupMembers from '@/components/groups/GroupMembers.vue'
 
 type GroupsDisplayData = { label: string; teams: Group[] }[]
 
@@ -86,12 +87,13 @@ const displayData: ComputedRef<GroupsDisplayData> = computed(() => {
 })
 
 const open = ref(false)
-const showNewTeamDialog = ref(false)
+const showDialog = ref(false)
+const dialogType = ref('create-group')
+const editGroupId = ref('')
 
 let selectedTeam = computed(() => {
   if (selectedGroupId.value != null && selectedGroupId.value !== '-1') {
-    const foundGroup = _.find(groups.value, { id: `${selectedGroupId.value}` })
-    return foundGroup
+    return _.find(groups.value, { id: `${selectedGroupId.value}` })
   }
   return displayData.value[0].teams[0]
 })
@@ -113,10 +115,15 @@ const groupClicked = async (team: Group) => {
   await selectGroup(team)
   open.value = false
 }
+
+// Edit dialog stuff
+const openEditDialog = (teamId: string) => {
+  console.log('Edit dialog opened')
+}
 </script>
 
 <template>
-  <Dialog v-model:open="showNewTeamDialog">
+  <Dialog v-model:open="showDialog">
     <Popover v-model:open="open">
       <PopoverTrigger as-child>
         <Button
@@ -169,6 +176,18 @@ const groupClicked = async (team: Group) => {
                   {{ team.name }}
                 </div>
                 <CheckIcon :class="cn('ml-auto h-4 w-4', selectedTeam?.id === team.id ? 'opacity-100' : 'opacity-0')" />
+                <!-- on hover show the edit icon -->
+                <Edit2Icon
+                  class="ml-2 h-4 w-4 text-muted-foreground"
+                  @click.stop="
+                    () => {
+                      open = false
+                      showDialog = true
+                      dialogType = 'edit-group'
+                      editGroupId = team.id
+                    }
+                  "
+                />
               </CommandItem>
             </CommandGroup>
           </CommandList>
@@ -181,7 +200,8 @@ const groupClicked = async (team: Group) => {
                   @select="
                     () => {
                       open = false
-                      showNewTeamDialog = true
+                      showDialog = true
+                      dialogType = 'create-group'
                     }
                   "
                 >
@@ -194,6 +214,7 @@ const groupClicked = async (team: Group) => {
         </Command>
       </PopoverContent>
     </Popover>
-    <NewGroupDialog @close="showNewTeamDialog = false" />
+    <NewGroupDialog @close="showDialog = false" v-if="dialogType === 'create-group'" />
+    <GroupMembers @close="showDialog = false" v-if="dialogType === 'edit-group'" />
   </Dialog>
 </template>
