@@ -9,14 +9,16 @@ import { cn } from '@/lib/utils'
 
 import { CalendarIcon } from 'lucide-vue-next'
 
-import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form'
 import { Input } from '@/components/ui/input'
-import { Command, CommandEmpty, CommandGroup, CommandInput, CommandItem, CommandList } from '@/components/ui/command'
 import { Button } from '@/components/ui/button'
-import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover'
 import { Calendar } from '@/components/ui/calendar'
 import { toast } from '@/components/ui/toast'
 import InDevelopment from '@/components/utils/InDevelopment.vue'
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
+import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form'
+import { Command, CommandEmpty, CommandGroup, CommandInput, CommandItem, CommandList } from '@/components/ui/command'
+import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover'
+import DeleteAccountDialog from '@/components/settings/DeleteAccountDialog.vue'
 
 const open = ref(false)
 const dateValue = ref()
@@ -80,7 +82,7 @@ async function onSubmit(values: any) {
 </script>
 
 <template>
-  <Form v-slot="{ setValues }" :validation-schema="accountFormSchema" class="space-y-8 relative" @submit="onSubmit">
+  <Form v-slot="{ setValues }" :validation-schema="accountFormSchema" class="mt-8 relative" @submit="onSubmit">
     <InDevelopment />
     <FormField v-slot="{ componentField }" name="name">
       <FormItem>
@@ -205,4 +207,6 @@ async function onSubmit(values: any) {
       <Button type="submit"> Update account </Button>
     </div>
   </Form>
+
+  <DeleteAccountDialog />
 </template>

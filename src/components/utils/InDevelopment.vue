@@ -44,7 +44,7 @@ const handleClick = (event: MouseEvent) => {
 
 .background {
   background-color: lightgray;
-  z-index: 1000;
+  z-index: 1;
   opacity: 0.1;
   transform: scale(1.05);
   pointer-events: none;

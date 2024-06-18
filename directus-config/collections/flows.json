@@ -117,6 +117,26 @@
     "_syncId": "a52be475-3045-450e-b763-0acb11b45451"
   },
   {
+    "name": "Delete Files of User",
+    "icon": "bolt",
+    "color": null,
+    "description": null,
+    "status": "active",
+    "trigger": "event",
+    "accountability": "all",
+    "options": {
+      "type": "filter",
+      "scope": [
+        "items.delete"
+      ],
+      "collections": [
+        "directus_users"
+      ]
+    },
+    "operation": "1aeab0d8-47cc-448a-aaef-b4a539e6ca72",
+    "_syncId": "c0bc198a-e0a5-410d-8581-db3040ef89ef"
+  },
+  {
     "name": "send_mail",
     "icon": "bolt",
     "color": null,

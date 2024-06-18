@@ -17,7 +17,8 @@ import {
   rest,
   type RestClient,
   updateUser,
-  registerUser
+  registerUser,
+  deleteUser
 } from '@directus/sdk'
 import type { CreateUserRequest, MySchema, UpdateUserRequest, User } from '@/types'
 import router from '@/router'
@@ -207,6 +208,15 @@ export const useUser = defineStore('user', () => {
     )
   }
 
+  const deleteUserRequest = async () => {
+    await client.request(deleteUser(user.value.id)).then(() => {
+      localStorage.removeItem('access_token')
+      localStorage.removeItem('refresh_token')
+      localStorage.removeItem('user')
+      router.push({ name: 'login' })
+    })
+  }
+
   const userName = computed(() => user.value?.first_name + ' ' + user.value?.last_name)
   const email = computed(() => user.value?.email)
   const hasName = computed(() => userName.value.trim() !== '')
@@ -227,6 +237,7 @@ export const useUser = defineStore('user', () => {
     getRedirect,
     updateUserData,
     createUserRequest,
+    deleteUserRequest,
     userName,
     email,
     hasName,

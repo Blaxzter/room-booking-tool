@@ -70,7 +70,7 @@ defineExpose({ getValues, validate, upload })
     </div>
     <FormField v-slot="{ componentField }" name="object_type">
       <FormItem>
-        <FormLabel>Choose <NameFade :messages="bookableObjectRandoms" /></FormLabel>
+        <FormLabel>Choose type of <NameFade :messages="bookableObjectRandoms" /></FormLabel>
         <Select v-bind="componentField">
           <FormControl>
             <SelectTrigger>

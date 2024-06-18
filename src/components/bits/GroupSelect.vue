@@ -73,14 +73,16 @@ onBeforeMount(() => {
           <div class="text-muted-foreground text-xs">Personal - {{ name }}</div>
         </SelectItem>
       </SelectGroup>
-      <SelectSeparator />
-      <SelectGroup>
-        <SelectItem v-for="group in groups" :key="group.id" :value="group.id">
-          <SelectItemText>
-            {{ group.name }}
-          </SelectItemText>
-        </SelectItem>
-      </SelectGroup>
+      <template v-if="groups.length">
+        <SelectSeparator />
+        <SelectGroup>
+          <SelectItem v-for="group in groups" :key="group.id" :value="group.id">
+            <SelectItemText>
+              {{ group.name }}
+            </SelectItemText>
+          </SelectItem>
+        </SelectGroup>
+      </template>
     </SelectContent>
   </Select>
 </template>
