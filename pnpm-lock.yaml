@@ -6,26 +6,26 @@ settings:
 
 dependencies:
   '@directus/sdk':
-    specifier: ^15.1.0
-    version: 15.1.0
+    specifier: ^16.1.0
+    version: 16.1.0
   '@fullcalendar/core':
-    specifier: ^6.1.11
-    version: 6.1.11
+    specifier: ^6.1.14
+    version: 6.1.14
   '@fullcalendar/daygrid':
-    specifier: ^6.1.11
-    version: 6.1.11(@fullcalendar/core@6.1.11)
+    specifier: ^6.1.14
+    version: 6.1.14(@fullcalendar/core@6.1.14)
   '@fullcalendar/interaction':
-    specifier: ^6.1.11
-    version: 6.1.11(@fullcalendar/core@6.1.11)
+    specifier: ^6.1.14
+    version: 6.1.14(@fullcalendar/core@6.1.14)
   '@fullcalendar/list':
-    specifier: ^6.1.11
-    version: 6.1.11(@fullcalendar/core@6.1.11)
+    specifier: ^6.1.14
+    version: 6.1.14(@fullcalendar/core@6.1.14)
   '@fullcalendar/timegrid':
-    specifier: ^6.1.11
-    version: 6.1.11(@fullcalendar/core@6.1.11)
+    specifier: ^6.1.14
+    version: 6.1.14(@fullcalendar/core@6.1.14)
   '@fullcalendar/vue3':
-    specifier: ^6.1.11
-    version: 6.1.11(@fullcalendar/core@6.1.11)(vue@3.4.24)
+    specifier: ^6.1.14
+    version: 6.1.14(@fullcalendar/core@6.1.14)(vue@3.4.24)
   '@internationalized/date':
     specifier: ^3.5.2
     version: 3.5.2
@@ -535,15 +535,15 @@ packages:
       '@babel/helper-validator-identifier': 7.22.20
       to-fast-properties: 2.0.0
 
-  /@directus/sdk@15.1.0:
-    resolution: {integrity: sha512-M2+Z1WmU8Q5KlR22K5ugmBHq10a6tcGl3QuvGKnN+jNwDnRyN5brJxt7FvgtWrY3Q1ToGLxmL37GHAH9s12dlQ==}
+  /@directus/sdk@16.1.0:
+    resolution: {integrity: sha512-vqgG2Fn2uVAZkKz8UdXIrWd0GH+cYGsDUH0ojsGgjmUlaS1Ef5L89ZV4jynILPE+/+PPrNQsZHjHSkVoqFyFoQ==}
     engines: {node: '>=18.0.0'}
     dependencies:
-      '@directus/system-data': 1.0.2
+      '@directus/system-data': 1.0.4
     dev: false
 
-  /@directus/system-data@1.0.2:
-    resolution: {integrity: sha512-PweDAwTz4zImEGJnhoaX8apOCvcAfE0aGQrCSk+3cf1sLso0ShNlcDvUymtVfrqOXy0qT9sLa833bpJVaXF5ng==}
+  /@directus/system-data@1.0.4:
+    resolution: {integrity: sha512-9qDfL/fSy1K01SMMXc7XiTbfAqA/1G9RBEO3nafHDN6SKJfE15YRlnELQA0LeWDKKiyIlWtKzpUBLrq7r6sN2Q==}
     dev: false
 
   /@esbuild/aix-ppc64@0.20.2:
@@ -818,52 +818,52 @@ packages:
       - vue
     dev: false
 
-  /@fullcalendar/core@6.1.11:
-    resolution: {integrity: sha512-TjG7c8sUz+Vkui2FyCNJ+xqyu0nq653Ibe99A66LoW95oBo6tVhhKIaG1Wh0GVKymYiqAQN/OEdYTuj4ay27kA==}
+  /@fullcalendar/core@6.1.14:
+    resolution: {integrity: sha512-hIPRBevm0aMc2aHy1hRIJgXmI1QTvQM1neQa9oxtuqUmF1+ApYC3oAdwcQMTuI7lHHw3pKJDyJFkKLPPnL6HXA==}
     dependencies:
       preact: 10.12.1
     dev: false
 
-  /@fullcalendar/daygrid@6.1.11(@fullcalendar/core@6.1.11):
-    resolution: {integrity: sha512-hF5jJB7cgUIxWD5MVjj8IU407HISyLu7BWXcEIuTytkfr8oolOXeCazqnnjmRbnFOncoJQVstTtq6SIhaT32Xg==}
+  /@fullcalendar/daygrid@6.1.14(@fullcalendar/core@6.1.14):
+    resolution: {integrity: sha512-DSyjiA1dEM8k3bOCrZpZOmAOZu71KGtH02ze+4QKuhxkmn/zQghmmLRdfzpOrcyJg6xGKkoB4pBcO+2lXar8XQ==}
     peerDependencies:
-      '@fullcalendar/core': ~6.1.11
+      '@fullcalendar/core': ~6.1.14
     dependencies:
-      '@fullcalendar/core': 6.1.11
+      '@fullcalendar/core': 6.1.14
     dev: false
 
-  /@fullcalendar/interaction@6.1.11(@fullcalendar/core@6.1.11):
-    resolution: {integrity: sha512-ynOKjzuPwEAMgTQ6R/Z2zvzIIqG4p8/Qmnhi1q0vzPZZxSIYx3rlZuvpEK2WGBZZ1XEafDOP/LGfbWoNZe+qdg==}
+  /@fullcalendar/interaction@6.1.14(@fullcalendar/core@6.1.14):
+    resolution: {integrity: sha512-rXum5XCjq+WEPNctFeYL/JKZGeU2rlxrElygocdMegcrIBJQW5hnWWVE+i4/1dOmUKF80CbGVlXUyYXoqK2eFg==}
     peerDependencies:
-      '@fullcalendar/core': ~6.1.11
+      '@fullcalendar/core': ~6.1.14
     dependencies:
-      '@fullcalendar/core': 6.1.11
+      '@fullcalendar/core': 6.1.14
     dev: false
 
-  /@fullcalendar/list@6.1.11(@fullcalendar/core@6.1.11):
-    resolution: {integrity: sha512-9Qx8uvik9pXD12u50FiHwNzlHv4wkhfsr+r03ycahW7vEeIAKCsIZGTkUfFP+96I5wHihrfLazu1cFQG4MPiuw==}
+  /@fullcalendar/list@6.1.14(@fullcalendar/core@6.1.14):
+    resolution: {integrity: sha512-eV0/6iCumYfvlPzIUTAONWH17/JlQCyCChUz8m06L4E/sOiNjkHGz8vlVTmZKqXzx9oWOOyV/Nm3pCtHmVZh+Q==}
     peerDependencies:
-      '@fullcalendar/core': ~6.1.11
+      '@fullcalendar/core': ~6.1.14
     dependencies:
-      '@fullcalendar/core': 6.1.11
+      '@fullcalendar/core': 6.1.14
     dev: false
 
-  /@fullcalendar/timegrid@6.1.11(@fullcalendar/core@6.1.11):
-    resolution: {integrity: sha512-0seUHK/ferH89IeuCvV4Bib0zWjgK0nsptNdmAc9wDBxD/d9hm5Mdti0URJX6bDoRtsSfRDu5XsRcrzwoc+AUQ==}
+  /@fullcalendar/timegrid@6.1.14(@fullcalendar/core@6.1.14):
+    resolution: {integrity: sha512-ZByc3BVAtxWSVfyaNedROLlg/Tb2NQ43+MZZAfBSrVwVm2xyfQ+Bsx3pJyCXsRsUh2TFFTO07q7nMWe0jet3KQ==}
     peerDependencies:
-      '@fullcalendar/core': ~6.1.11
+      '@fullcalendar/core': ~6.1.14
     dependencies:
-      '@fullcalendar/core': 6.1.11
-      '@fullcalendar/daygrid': 6.1.11(@fullcalendar/core@6.1.11)
+      '@fullcalendar/core': 6.1.14
+      '@fullcalendar/daygrid': 6.1.14(@fullcalendar/core@6.1.14)
     dev: false
 
-  /@fullcalendar/vue3@6.1.11(@fullcalendar/core@6.1.11)(vue@3.4.24):
-    resolution: {integrity: sha512-jBoDS0WSpuOM9ZgjL3lNh6o385u/LthFZDaMUACjVVJZh3JuBbuA7ghdUvIelcTNXa5VRCkSZOpivTJWOnLfcg==}
+  /@fullcalendar/vue3@6.1.14(@fullcalendar/core@6.1.14)(vue@3.4.24):
+    resolution: {integrity: sha512-cD4tGlXOoIfRn5sz/+uT+50rAuCtPEgXfG3O5LJXI4xRWztAXqkmZetcuTEDb3OOy/D03IdtpjvoayCHib7rZg==}
     peerDependencies:
-      '@fullcalendar/core': ~6.1.11
+      '@fullcalendar/core': ~6.1.14
       vue: ^3.0.11
     dependencies:
-      '@fullcalendar/core': 6.1.11
+      '@fullcalendar/core': 6.1.14
       vue: 3.4.24(typescript@5.4.5)
     dev: false
 

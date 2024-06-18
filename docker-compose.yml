@@ -99,25 +99,25 @@ services:
       LETSENCRYPT_HOST: "${PUBLIC_URL}"
       LETSENCRYPT_EMAIL: "${LETSENCRYPT_EMAIL}"
 
-  frontend:
-    depends_on:
-      - directus
-    restart: "unless-stopped"
-    networks:
-      - directus-net
-#      - nginx-net
-    build:
-      context: ./
-      dockerfile: Dockerfile.frontend
-    env_file:
-      - .env
-    environment:
-      # Only required when running behind a reverse proxy like nginx-proxy
-      VIRTUAL_HOST: "${VIRTUAL_HOST}"
-      LETSENCRYPT_HOST: "${LETSENCRYPT_HOST}"
-      LETSENCRYPT_EMAIL: "${LETSENCRYPT_EMAIL}"
-    ports:
-      - 8001:80
+#  frontend:
+#    depends_on:
+#      - directus
+#    restart: "unless-stopped"
+#    networks:
+#      - directus-net
+##      - nginx-net
+#    build:
+#      context: ./
+#      dockerfile: Dockerfile.frontend
+#    env_file:
+#      - .env
+#    environment:
+#      # Only required when running behind a reverse proxy like nginx-proxy
+#      VIRTUAL_HOST: "${VIRTUAL_HOST}"
+#      LETSENCRYPT_HOST: "${LETSENCRYPT_HOST}"
+#      LETSENCRYPT_EMAIL: "${LETSENCRYPT_EMAIL}"
+#    ports:
+#      - 8001:80
 
 
 volumes:

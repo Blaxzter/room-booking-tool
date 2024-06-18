@@ -84,7 +84,7 @@ type Mutation {
   utils_revert(revision: ID!): Boolean
   utils_cache_clear: Void
   users_invite_accept(token: String!, password: String!): Boolean
-  users_register(email: String!, password: String!, first_name: String, last_name: String): Boolean
+  users_register(email: String!, password: String!, verification_url: String, first_name: String, last_name: String): Boolean
   users_register_verify(token: String!): Boolean
   create_collections_item(data: create_directus_collections_input!): directus_collections
   update_collections_item(collection: String!, data: update_directus_collections_input!): directus_collections

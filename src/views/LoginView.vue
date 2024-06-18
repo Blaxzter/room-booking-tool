@@ -9,6 +9,8 @@ import { useUser } from '@/stores/user'
 import router from '@/router'
 import { Checkbox } from '@/components/ui/checkbox'
 import { randomEmail } from '@/assets/ts/constants'
+import AutoLoginCard from '@/components/login/AutoLoginCard.vue'
+import BackgroundImage from '@/components/bits/BackgroundImage.vue'
 
 const loading = ref(false)
 const showCheckmark = ref(false)
@@ -71,7 +73,7 @@ onMounted(async () => {
 </script>
 
 <template>
-  <div class="background-image fixed inset-0 z-0"></div>
+  <BackgroundImage />
   <main>
     <div class="flex justify-center items-center h-screen">
       <Card class="w-full max-w-sm" v-if="!isAuthenticated && !loading">
@@ -115,7 +117,7 @@ onMounted(async () => {
             {{ errorMessage }}
           </div>
         </CardContent>
-        <CardFooter>
+        <CardFooter class="flex-col">
           <Button class="w-full" type="submit" @click="loginWrapper">
             <template v-if="loading">
               <Loader2 class="w-4 h-4 mr-2 animate-spin" />
@@ -123,19 +125,18 @@ onMounted(async () => {
             </template>
             <template v-else> Sign in </template>
           </Button>
+          <div class="mt-4 text-center text-sm">
+            Don't have an account?
+            <router-link to="/register" class="underline"> Sign up </router-link>
+          </div>
         </CardFooter>
       </Card>
-      <Card class="w-full max-w-sm h-full max-h-[200px]" v-else :class="{ 'login-screen-grower': showScreenGrower }">
-        <CardContent class="grid place-items-center pt-6" :class="{ 'fade-out': showScreenGrower }">
-          <div class="circle-loader mb-2 h-[200px]" :class="{ 'load-complete': showCheckmark, error: showCross }">
-            <div class="checkmark draw" :style="{ display: !showCheckmark ? 'none' : 'block' }"></div>
-            <div class="cross draw" :style="{ display: !showCross ? 'none' : 'block' }"></div>
-          </div>
-          <CardTitle v-if="showCheckmark"> Authenticated </CardTitle>
-          <CardTitle v-else-if="showCross"> Invalid email or password </CardTitle>
-          <CardTitle v-else> Logging in </CardTitle>
-        </CardContent>
-      </Card>
+      <AutoLoginCard
+        v-else
+        :showCheckmark="showCheckmark"
+        :showCross="showCross"
+        :showScreenGrower="showScreenGrower"
+      />
     </div>
   </main>
 </template>

@@ -16,9 +16,10 @@ import {
   readMe,
   rest,
   type RestClient,
-  updateUser
+  updateUser,
+  registerUser
 } from '@directus/sdk'
-import type { MySchema, UpdateUserRequest, User } from '@/types'
+import type { CreateUserRequest, MySchema, UpdateUserRequest, User } from '@/types'
 import router from '@/router'
 
 export type MyDirectusClient = DirectusClient<MySchema> &
@@ -195,6 +196,17 @@ export const useUser = defineStore('user', () => {
     user.value = result as unknown as User
   }
 
+  const createUserRequest = async (data: CreateUserRequest) => {
+    const registerClient = createDirectus(backendUrl).with(rest())
+    await registerClient.request(
+      registerUser(data.email, data.password, {
+        first_name: data.first_name,
+        last_name: data.last_name,
+        verification_url: `${import.meta.env.VITE_FRONTEND_URL}/verify-email`
+      })
+    )
+  }
+
   const userName = computed(() => user.value?.first_name + ' ' + user.value?.last_name)
   const email = computed(() => user.value?.email)
   const hasName = computed(() => userName.value.trim() !== '')
@@ -214,6 +226,7 @@ export const useUser = defineStore('user', () => {
     setRedirect,
     getRedirect,
     updateUserData,
+    createUserRequest,
     userName,
     email,
     hasName,

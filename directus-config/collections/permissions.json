@@ -732,6 +732,18 @@
   {
     "role": "62a8abe7-e3ae-462e-b038-58ce5a2f5475",
     "collection": "directus_users",
+    "action": "create",
+    "permissions": {},
+    "validation": {},
+    "presets": null,
+    "fields": [
+      "*"
+    ],
+    "_syncId": "43ed35eb-5fc7-4c59-aeea-e9e9c15ac13c"
+  },
+  {
+    "role": "62a8abe7-e3ae-462e-b038-58ce5a2f5475",
+    "collection": "directus_users",
     "action": "read",
     "permissions": {
       "_and": [

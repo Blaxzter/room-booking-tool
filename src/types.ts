@@ -140,6 +140,13 @@ export type UpdateUserRequest = {
   display_name: string
 }
 
+export type CreateUserRequest = {
+  first_name: string
+  last_name: string
+  email: string
+  password: string
+}
+
 export type LocalUserData = {
   selected_group?: string
   created_bookings?: { [id: string]: { [id: string]: string } }
