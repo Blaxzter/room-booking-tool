@@ -103,7 +103,7 @@ export interface ObjectViewResponse {
 
 export interface GetGroupQueryResponse {
   group: Group[]
-  bookable_object: BookableObject[]
+  bookable_object?: BookableObject[]
 }
 
 export interface GetInitialDataQueryResponse {

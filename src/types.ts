@@ -94,7 +94,7 @@ export type GroupUser = {
 
 export type GroupDirectusUser = {
   id?: string
-  directus_users_id: string
+  directus_users_id: string | User
   group_id?: string
   role: string
 }

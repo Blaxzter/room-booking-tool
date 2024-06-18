@@ -5,6 +5,8 @@ import { useBookableObjects } from '@/stores/bookableObjects'
 import { useUser } from '@/stores/user'
 import { useLocalUser } from '@/stores/localUser'
 import { createItem } from '@directus/sdk'
+import { getGroupsWithUserQuery } from '@/assets/ts/queries/group'
+import type { GetGroupQueryResponse } from '@/assets/ts/queries/initial_data'
 
 export const useGroups = defineStore('group', () => {
   const { setSelectedGroup, getSelectedGroup } = useLocalUser()
@@ -55,5 +57,11 @@ export const useGroups = defineStore('group', () => {
     return result
   }
 
-  return { groups, selectedGroupId, selectedGroup, setGroups, addGroup, selectGroup, createGroup }
+  const fetchGroupsWithUser = async () => {
+    const { client } = useUser()
+    const result = await client.query<GetGroupQueryResponse>(getGroupsWithUserQuery({ as_query: false }))
+    setGroups(result.group as Group[])
+  }
+
+  return { groups, selectedGroupId, selectedGroup, fetchGroupsWithUser, setGroups, addGroup, selectGroup, createGroup }
 })
