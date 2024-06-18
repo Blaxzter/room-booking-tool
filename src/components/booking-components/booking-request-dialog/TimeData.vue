@@ -61,7 +61,7 @@ const bookingSchema = z
     (data) => {
       const { isOnAnotherDate, startDate, endDate } = data
       if (!isOnAnotherDate) return true
-      return new Date(startDate) < new Date(endDate)
+      return new Date(`${startDate}`) < new Date(`${endDate}`)
     },
     {
       message: 'End date must be after start date',

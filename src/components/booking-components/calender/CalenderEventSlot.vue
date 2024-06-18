@@ -11,7 +11,7 @@ import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/comp
 const { userHasCreatedBooking } = useLocalUser()
 const { toast } = useToast()
 
-const eventClick = (arg) => {
+const eventClick = (arg: any) => {
   console.log(arg.event)
   const canPossiblyEdit = userHasCreatedBooking(arg.event.booking_id)
   toast({
