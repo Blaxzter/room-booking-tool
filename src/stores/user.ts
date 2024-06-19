@@ -18,10 +18,20 @@ import {
   type RestClient,
   updateUser,
   registerUser,
-  deleteUser
+  deleteUser,
+  registerUserVerify
 } from '@directus/sdk'
 import type { CreateUserRequest, MySchema, UpdateUserRequest, User } from '@/types'
 import router from '@/router'
+import { useRequests } from '@/stores/requests'
+import { useNotificationSetting } from '@/stores/notificationSettings'
+import { useLocalUser } from '@/stores/localUser'
+import { useInitialDataStore } from '@/stores/initial'
+import { useGlobal } from '@/stores/global'
+import { useGroups } from '@/stores/groups'
+import { useBookings } from '@/stores/booking'
+import { useBookableObjects } from '@/stores/bookableObjects'
+import { toast } from '@/components/ui/toast'
 
 export type MyDirectusClient = DirectusClient<MySchema> &
   AuthenticationClient<MySchema> &
@@ -29,12 +39,21 @@ export type MyDirectusClient = DirectusClient<MySchema> &
   GraphqlClient<MySchema>
 
 export const useUser = defineStore('user', () => {
+  const authenticated = ref(false)
+
   const _keep_logged_in = ref(localStorage.getItem('keep_logged_in') === 'true')
   const auth_data = ref({} as AuthenticationData)
   const user = ref<User>({} as any)
 
   const defaultRedirect: string = '/'
   const redirect = ref(defaultRedirect)
+
+  const reset = () => {
+    auth_data.value = {} as AuthenticationData
+    user.value = {} as User
+    redirect.value = defaultRedirect
+    authenticated.value = false
+  }
 
   const setRedirect = (path: string) => {
     // check if path is not login
@@ -101,7 +120,6 @@ export const useUser = defineStore('user', () => {
     .with(rest())
     .with(graphql())
 
-  const authenticated = ref(false)
   const isAuthenticated = computed(() => {
     return authenticated.value
   })
@@ -176,15 +194,37 @@ export const useUser = defineStore('user', () => {
     }
   }
 
+  const resetState = () => {
+    localStorage.removeItem('access_token')
+    localStorage.removeItem('refresh_token')
+    localStorage.removeItem('user')
+
+    const stores = [
+      useRequests,
+      useNotificationSetting,
+      useLocalUser,
+      useInitialDataStore,
+      useGlobal,
+      useGroups,
+      useBookings,
+      useBookableObjects
+    ]
+
+    stores.forEach((store) => {
+      const { reset } = store()
+      reset()
+    })
+
+    reset()
+    authenticated.value = false
+  }
+
   const logout = async () => {
     await client
       .logout()
       .catch(console.error)
       .finally(async () => {
-        authenticated.value = false
-        localStorage.removeItem('access_token')
-        localStorage.removeItem('refresh_token')
-        localStorage.removeItem('user')
+        resetState()
         router.push({ name: 'login' })
       })
   }
@@ -210,11 +250,20 @@ export const useUser = defineStore('user', () => {
 
   const deleteUserRequest = async () => {
     await client.request(deleteUser(user.value.id)).then(() => {
-      localStorage.removeItem('access_token')
-      localStorage.removeItem('refresh_token')
-      localStorage.removeItem('user')
+      resetState()
+      toast({
+        title: 'User deleted',
+        variant: 'destructive',
+        description: 'Your account has been deleted.'
+      })
       router.push({ name: 'login' })
     })
+  }
+
+  const verifyEmail = async (emailed_token: string) => {
+    const noAuthClient = createDirectus(backendUrl).with(rest())
+
+    await noAuthClient.request(registerUserVerify(emailed_token))
   }
 
   const userName = computed(() => user.value?.first_name + ' ' + user.value?.last_name)
@@ -238,12 +287,14 @@ export const useUser = defineStore('user', () => {
     updateUserData,
     createUserRequest,
     deleteUserRequest,
+    verifyEmail,
     userName,
     email,
     hasName,
     name,
     avatar,
     avatarId,
-    avatarFallback
+    avatarFallback,
+    reset
   }
 })

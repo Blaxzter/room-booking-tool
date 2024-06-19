@@ -19,6 +19,13 @@ export const useNotificationSetting = defineStore('notificationSetting', () => {
   const notificationSettingsByGroup = ref<{ [key: string]: NotificationSetting }>({})
   const notificationSettingsByBookableObject = ref<{ [key: string]: NotificationSetting }>({})
 
+  const reset = () => {
+    notificationSettingsLoading.value = false
+    userNotificationSetting.value = undefined
+    notificationSettingsByGroup.value = {}
+    notificationSettingsByBookableObject.value = {}
+  }
+
   const defaultNotificationSetting: NotificationSetting = {
     id: undefined,
     user_id: user.value,
@@ -172,6 +179,7 @@ export const useNotificationSetting = defineStore('notificationSetting', () => {
     setNotificationSettings,
     fetchUserNotificationSettings,
     updateNotificationSetting,
-    deleteNotificationSetting
+    deleteNotificationSetting,
+    reset
   }
 })

@@ -84,12 +84,25 @@ onMounted(async () => {
         <CardContent class="grid gap-4">
           <div class="grid gap-2">
             <Label for="email">Email</Label>
-            <Input id="email" type="email" :placeholder="randomEmail()" required v-model="email" />
+            <Input
+              id="email"
+              type="email"
+              :placeholder="randomEmail()"
+              required
+              v-model="email"
+              @keyup.enter="loginWrapper"
+            />
           </div>
           <div class="grid gap-2">
             <Label for="password">Password</Label>
             <div class="relative w-full max-w-sm items-center">
-              <Input id="password" :type="showPassword ? 'text' : 'password'" required v-model="password" />
+              <Input
+                id="password"
+                :type="showPassword ? 'text' : 'password'"
+                required
+                v-model="password"
+                @keyup.enter="loginWrapper"
+              />
               <Button
                 @click="showPassword = !showPassword"
                 className="absolute end-1 inset-y-0 flex items-center justify-center px-2"

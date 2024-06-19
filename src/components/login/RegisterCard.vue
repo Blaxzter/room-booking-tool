@@ -9,6 +9,7 @@ import { Input } from '@/components/ui/input'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form'
 import type { CreateUserRequest } from '@/types'
+import { ref } from 'vue'
 
 const signupSchema = z.object({
   first_name: z.string().min(1, { message: 'First name is required' }),
@@ -35,11 +36,19 @@ const { values, validate } = useForm({
 const getValues = () => {
   return { ...values }
 }
+
+const emit = defineEmits(['email-send'])
+const loading = ref(false)
+
 const onSubmit = async () => {
   const isValid = await validate()
   if (isValid.valid) {
+    loading.value = true
     const { createUserRequest } = useUser()
-    createUserRequest(getValues() as CreateUserRequest)
+    createUserRequest(getValues() as CreateUserRequest).then(() => {
+      loading.value = false
+      emit('email-send')
+    })
   }
 }
 </script>
@@ -90,7 +99,7 @@ const onSubmit = async () => {
             </FormControl>
           </FormItem>
         </FormField>
-        <Button type="submit" class="w-full mt-3"> Create an account </Button>
+        <Button type="submit" class="w-full mt-3" :loading="loading"> Create an account </Button>
       </form>
       <div class="mt-4 text-center text-sm">
         Already have an account?

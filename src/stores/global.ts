@@ -4,6 +4,10 @@ import { defineStore } from 'pinia'
 export const useGlobal = defineStore('global', () => {
   const searchString: Ref<string> = ref('')
 
+  const reset = () => {
+    searchString.value = ''
+  }
+
   const setSearchString = (newSearchString: string): void => {
     searchString.value = newSearchString
   }
@@ -15,6 +19,7 @@ export const useGlobal = defineStore('global', () => {
   return {
     searchString,
     setSearchString,
-    getSearchString
+    getSearchString,
+    reset
   }
 })

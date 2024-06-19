@@ -27,6 +27,13 @@ export const useBookableObjects = defineStore('bookableObjects', () => {
 
   const groupBookableObjects = ref<{ [key: string]: BookableObject[] }>({})
 
+  const reset = () => {
+    bookableObjects.value = []
+    selectedBookableObject.value = null
+    groupBookableObjects.value = {}
+    loading.value = false
+  }
+
   const selectBookableObject = (bookableObject: BookableObject) => {
     selectedBookableObject.value = bookableObject
   }
@@ -196,6 +203,7 @@ export const useBookableObjects = defineStore('bookableObjects', () => {
     selectBookableObject,
     getBookableObjectBySelectedGroup,
     createBookableObject,
-    getBookableObjectById
+    getBookableObjectById,
+    reset
   }
 })

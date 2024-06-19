@@ -190,7 +190,7 @@
     "position_x": 37,
     "position_y": 1,
     "options": {
-      "code": "module.exports = async function(data) {\n    if (data?.$last.length > 0) { // check if payload from $last operation is not empty\n        const ids = [];\n        data?.$last.map(item => {\n             // add file-field (asset) id to array of ids\n             ids.push(item?.id); \n\n             // it can be another additional file field in your data model\n             // e.g. ids.push(item?.my_image_field);\n             //        ids.push(item?.my_whatever_file_field); \n        })\n        return ids; // This will be the ready-to-go-array of file ids for the DELETE request body\n    }\n    return {};\n}"
+      "code": "module.exports = async function(data) {\n    if (data?.$last.length > 0) {\n        const ids = [];\n        data?.$last.map(item => {\n             ids.push(item?.id); \n        })\n        return ids;\n    }\n    return []\n}"
     },
     "resolve": "e5922ab3-0a8b-4851-b04c-1dbe94e39046",
     "reject": null,

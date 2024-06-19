@@ -14,6 +14,11 @@ export const useRequests = defineStore('requests', () => {
 
   const requests = ref<Booking[]>([])
 
+  const reset = () => {
+    requestLoading.value = false
+    requests.value = []
+  }
+
   const setRequests = (data: Booking[]) => {
     requests.value = data
   }
@@ -38,5 +43,5 @@ export const useRequests = defineStore('requests', () => {
     requestLoading.value = false
   }
 
-  return { requestLoading, requests, setRequests, approveRequest, rejectRequest }
+  return { requestLoading, requests, setRequests, approveRequest, rejectRequest, reset }
 })

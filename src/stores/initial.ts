@@ -38,6 +38,10 @@ export const useInitialDataStore = defineStore('initial', () => {
 
   const init_loading = ref(false)
 
+  const reset = () => {
+    init_loading.value = false
+  }
+
   const fetchDashboardViewData = async () => {
     init_loading.value = true
     try {
@@ -130,5 +134,12 @@ export const useInitialDataStore = defineStore('initial', () => {
     init_loading.value = false
   }
 
-  return { init_loading, fetchSettingsViewData, fetchDashboardViewData, fetchObjectViewData, fetchRequestViewData }
+  return {
+    init_loading,
+    fetchSettingsViewData,
+    fetchDashboardViewData,
+    fetchObjectViewData,
+    fetchRequestViewData,
+    reset
+  }
 })

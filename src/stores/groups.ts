@@ -15,6 +15,11 @@ export const useGroups = defineStore('group', () => {
   const groups = ref<Group[]>([])
   const selectedGroupId = ref<string | undefined>(getSelectedGroup() || undefined)
 
+  const reset = () => {
+    groups.value = []
+    selectedGroupId.value = undefined
+  }
+
   const selectGroup = async (group: Group) => {
     setSelectedGroup(group.id as string)
     selectedGroupId.value = `${group.id}`
@@ -63,5 +68,15 @@ export const useGroups = defineStore('group', () => {
     setGroups(result.group as Group[])
   }
 
-  return { groups, selectedGroupId, selectedGroup, fetchGroupsWithUser, setGroups, addGroup, selectGroup, createGroup }
+  return {
+    groups,
+    selectedGroupId,
+    selectedGroup,
+    fetchGroupsWithUser,
+    setGroups,
+    addGroup,
+    selectGroup,
+    createGroup,
+    reset
+  }
 })

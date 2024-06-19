@@ -7,6 +7,10 @@ export const useLocalUser = defineStore('localUser', () => {
   const localUserData = ref<LocalUserData | null>(null)
   const { user } = storeToRefs(useUser())
 
+  const reset = () => {
+    localUserData.value = null
+  }
+
   const getLocalUserData = () => {
     const localUserDataString = localStorage.getItem('user_data')
     if (!localUserDataString) {
@@ -72,6 +76,7 @@ export const useLocalUser = defineStore('localUser', () => {
     getLocalUserData,
     addCreatedBooking,
     getCreatedBookings,
-    userHasCreatedBooking
+    userHasCreatedBooking,
+    reset
   }
 })

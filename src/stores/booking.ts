@@ -20,6 +20,11 @@ export const useBookings = defineStore('bookings', () => {
 
   const { selectedBookableObject } = storeToRefs(useBookableObjects())
 
+  const reset = () => {
+    bookingsPerBookableObjectId.value = {}
+    loading.value = false
+  }
+
   const setBookings = (bookable_object_id: string, data: Booking[]) => {
     bookingsPerBookableObjectId.value[bookable_object_id] = data
   }
@@ -91,6 +96,7 @@ export const useBookings = defineStore('bookings', () => {
     currentBookings,
     fetchBookableObjectsByGroupId,
     createBooking,
-    setBookings
+    setBookings,
+    reset
   }
 })
