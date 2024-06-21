@@ -12,8 +12,8 @@ import type { CreateUserRequest } from '@/types'
 import { ref } from 'vue'
 
 const signupSchema = z.object({
-  first_name: z.string().min(1, { message: 'First name is required' }),
-  last_name: z.string().min(1, { message: 'Last name is required' }),
+  first_name: z.string().optional(),
+  last_name: z.string().optional(),
   email: z.string().email('Email must be valid').min(1, { message: 'Email is required' }),
   password: z
     .string()
@@ -64,7 +64,7 @@ const onSubmit = async () => {
         <div class="grid grid-cols-2 gap-4">
           <FormField name="first_name" v-slot="{ componentField }">
             <FormItem>
-              <FormLabel for="first-name">First name</FormLabel>
+              <FormLabel for="first-name">First name*</FormLabel>
               <FormControl class="col-span-3">
                 <Input id="first-name" v-bind="componentField" />
                 <FormMessage />
@@ -73,7 +73,7 @@ const onSubmit = async () => {
           </FormField>
           <FormField name="last_name" v-slot="{ componentField }">
             <FormItem>
-              <FormLabel for="last-name">Last name</FormLabel>
+              <FormLabel for="last-name">Last name*</FormLabel>
               <FormControl class="col-span-3">
                 <Input id="last-name" v-bind="componentField" />
                 <FormMessage />

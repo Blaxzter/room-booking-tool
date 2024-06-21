@@ -29,7 +29,7 @@ watchEffect(() => {
   <div class="border-b">
     <div class="flex h-16 items-center px-4">
       <MainNav />
-      <div class="block md:hidden ms-3" v-show="width > 640 || !showSearch">
+      <div class="hidden sm:block ms-3" v-show="width > 640 || !showSearch">
         <GroupSwitcher />
       </div>
       <div class="ml-auto flex items-center justify-end space-x-4 flex-grow">
