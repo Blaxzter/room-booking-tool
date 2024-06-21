@@ -157,12 +157,4 @@ onMounted(async () => {
 <style lang="scss">
 // import checkmark from '@/assets/css/login.scss'
 @import '@/assets/css/login';
-
-.background-image {
-  z-index: -1000;
-  background-image: url('http://localhost:8055/assets/6b264936-4945-4b60-90e1-5e6ba64d62e6');
-  filter: blur(2px) opacity(0.9);
-  background-size: cover;
-  background-position: center;
-}
 </style>
