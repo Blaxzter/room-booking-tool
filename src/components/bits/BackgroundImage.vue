@@ -2,7 +2,7 @@
 
 <template>
   <div class="background-image"></div>
-  <p class="image-credit">
+  <p class="image-credit hidden sm:block">
     Photo by <a href="https://unsplash.com/de/fotos/foto-aus-dem-weltraum-Q1p7bh3SHj8">Nasa</a> on
     <a href="https://unsplash.com/">Unsplash</a>
   </p>

@@ -11,6 +11,7 @@ import { Checkbox } from '@/components/ui/checkbox'
 import { randomEmail } from '@/assets/ts/constants'
 import AutoLoginCard from '@/components/login/AutoLoginCard.vue'
 import BackgroundImage from '@/components/bits/BackgroundImage.vue'
+import LogoImage from '@/components/bits/LogoImage.vue'
 
 const loading = ref(false)
 const showCheckmark = ref(false)
@@ -76,12 +77,23 @@ onMounted(async () => {
   <BackgroundImage />
   <main>
     <div class="flex justify-center items-center h-screen">
-      <Card class="w-full max-w-sm" v-if="!isAuthenticated && !loading">
-        <CardHeader>
-          <CardTitle class="text-2xl"> Login </CardTitle>
+      <Card
+        class="rounded-none h-full w-full sm:max-w-sm sm:h-auto sm:rounded-xl place-content-center"
+        v-if="!isAuthenticated && !loading"
+      >
+        <CardHeader class="max-w-sm m-auto">
+          <CardTitle>
+            <div class="flex items-center gap-4 mb-3">
+              <LogoImage />
+              <div class="text-3xl font-bold">
+                <div>BookiTool</div>
+                <div class="text-2xl font-normal text-muted-foreground">Login</div>
+              </div>
+            </div>
+          </CardTitle>
           <CardDescription> Enter your email below to login to your account. </CardDescription>
         </CardHeader>
-        <CardContent class="grid gap-4">
+        <CardContent class="grid gap-4 max-w-sm m-auto m-auto">
           <div class="grid gap-2">
             <Label for="email">Email</Label>
             <Input
@@ -130,7 +142,7 @@ onMounted(async () => {
             {{ errorMessage }}
           </div>
         </CardContent>
-        <CardFooter class="flex-col">
+        <CardFooter class="flex-col max-w-sm m-auto m-auto">
           <Button class="w-full" type="submit" @click="loginWrapper">
             <template v-if="loading">
               <Loader2 class="w-4 h-4 mr-2 animate-spin" />
@@ -145,6 +157,7 @@ onMounted(async () => {
         </CardFooter>
       </Card>
       <AutoLoginCard
+        class="max-w-sm m-auto"
         v-else
         :showCheckmark="showCheckmark"
         :showCross="showCross"

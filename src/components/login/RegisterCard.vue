@@ -10,6 +10,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form'
 import type { CreateUserRequest } from '@/types'
 import { ref } from 'vue'
+import LogoImage from '@/components/bits/LogoImage.vue'
 
 const signupSchema = z.object({
   first_name: z.string().optional(),
@@ -54,12 +55,20 @@ const onSubmit = async () => {
 </script>
 
 <template>
-  <Card class="mx-auto max-w-sm">
-    <CardHeader>
-      <CardTitle class="text-xl"> Sign Up </CardTitle>
+  <Card class="rounded-none h-full w-full sm:max-w-sm sm:h-auto sm:rounded-xl place-content-center">
+    <CardHeader class="max-w-sm m-auto">
+      <CardTitle>
+        <div class="flex items-center gap-4 mb-3">
+          <LogoImage />
+          <div class="text-3xl font-bold">
+            <div>BookiTool</div>
+            <div class="text-2xl font-normal text-muted-foreground">Sign Up</div>
+          </div>
+        </div>
+      </CardTitle>
       <CardDescription> Enter your information to create an account </CardDescription>
     </CardHeader>
-    <CardContent>
+    <CardContent class="max-w-sm m-auto">
       <form @submit.prevent="onSubmit" class="grid gap-4">
         <div class="grid grid-cols-2 gap-4">
           <FormField name="first_name" v-slot="{ componentField }">
@@ -101,7 +110,7 @@ const onSubmit = async () => {
         </FormField>
         <Button type="submit" class="w-full mt-3" :loading="loading"> Create an account </Button>
       </form>
-      <div class="mt-4 text-center text-sm">
+      <div class="mt-4 text-center text-sm max-w-sm m-auto">
         Already have an account?
         <router-link to="/login" class="underline"> Sign in </router-link>
       </div>

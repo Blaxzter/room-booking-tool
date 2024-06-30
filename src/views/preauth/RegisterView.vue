@@ -18,20 +18,27 @@ const setEmailVerified = () => {
 
 <template>
   <BackgroundImage />
+  <div class="rocket-wrapper" v-if="visibleView === 'emailSend' && !hideRocket">
+    <RocketStartAnimation class="rocket" />
+  </div>
   <main>
     <div class="flex justify-center items-center h-screen">
       <RegisterCard @email-send="setEmailVerified" v-if="visibleView === 'register'" />
       <EmailSendCard v-else-if="visibleView === 'emailSend'" />
     </div>
   </main>
-  <RocketStartAnimation class="rocket" v-if="visibleView === 'emailSend' && !hideRocket" />
 </template>
 
 <style lang="scss">
-.rocket {
+.rocket-wrapper {
   position: fixed;
-  bottom: 0px;
-  left: 50%;
-  transform: translateX(-50%);
+  height: 100%;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: flex-end;
+  .rocket {
+    min-width: 444px;
+  }
 }
 </style>

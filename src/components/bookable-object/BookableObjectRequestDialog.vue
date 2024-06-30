@@ -78,11 +78,11 @@ const nextStep = async () => {
 <template>
   <Dialog v-model:open="open">
     <DialogTrigger>
-      <Button class="hidden sm:block">
+      <Button class="hidden sm:flex">
         <PlusCircledIcon class="mr-2 h-4 w-4" />
         Add new
       </Button>
-      <Button class="fixed sm:hidden bottom-0 right-0 m-3 h-14 w-14 rounded-2xl" variant="default">
+      <Button class="fixed sm:hidden bottom-0 right-0 m-3 h-14 w-14 rounded-2xl z-10" variant="default">
         <PlusCircledIcon class="w-6 h-6" />
       </Button>
     </DialogTrigger>

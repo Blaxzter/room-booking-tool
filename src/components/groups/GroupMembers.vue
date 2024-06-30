@@ -2,12 +2,18 @@
 import { ref } from 'vue'
 import { ChevronDownIcon } from 'lucide-vue-next'
 
+import type { Group } from '@/types'
+
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import { Button } from '@/components/ui/button'
 import { Command, CommandEmpty, CommandGroup, CommandInput, CommandItem, CommandList } from '@/components/ui/command'
 
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover'
-import { DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from '@/components/ui/dialog'
+import { DialogContent, DialogDescription, DialogHeader, DialogTitle } from '@/components/ui/dialog'
+
+defineProps<{
+  group: Group | undefined
+}>()
 
 const sofiaRole = ref('Owner')
 const jacksonRole = ref('Member')

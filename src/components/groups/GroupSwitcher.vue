@@ -57,6 +57,21 @@ const nameInitials = (name: string) => {
   return name.charAt(0) + name.charAt(1)
 }
 
+const nameShort = (name: string) => {
+  if (!name) {
+    return ''
+  }
+  const [firstName, lastName] = name.split(' ')
+  if (firstName && lastName) {
+    let shortendFirstName = firstName
+    if (firstName.length > 8) {
+      shortendFirstName = firstName.slice(0, 8) + '.'
+    }
+    return `${shortendFirstName} ${lastName.charAt(0)}.`
+  }
+  return name
+}
+
 const displayData: ComputedRef<GroupsDisplayData> = computed(() => {
   return [
     {
@@ -89,7 +104,6 @@ const displayData: ComputedRef<GroupsDisplayData> = computed(() => {
 const open = ref(false)
 const showDialog = ref(false)
 const dialogType = ref('create-group')
-const editGroupId = ref('')
 
 let selectedTeam = computed(() => {
   if (selectedGroupId.value != null && selectedGroupId.value !== '-1') {
@@ -116,9 +130,14 @@ const groupClicked = async (team: Group) => {
   open.value = false
 }
 
-// Edit dialog stuff
-const openEditDialog = (teamId: string) => {
-  console.log('Edit dialog opened')
+const editGroupId = ref('')
+const selectedEditGroup = computed(() => {
+  return _.find(groups.value, { id: editGroupId.value })
+})
+
+const created = (group: Group) => {
+  dialogType.value = 'edit-group'
+  editGroupId.value = group.id
 }
 </script>
 
@@ -131,7 +150,7 @@ const openEditDialog = (teamId: string) => {
           role="combobox"
           aria-expanded="true"
           aria-label="Select a team"
-          :class="cn('w-[200px] justify-between', $attrs.class ?? '')"
+          :class="cn('sm:w-[200px] justify-between', $attrs.class ?? '')"
           v-if="selectedTeam"
         >
           <Avatar class="mr-2 h-5 w-5" v-if="!selectedTeam.emoji || selectedTeam?.avatar?.id">
@@ -143,8 +162,11 @@ const openEditDialog = (teamId: string) => {
           <div v-else class="me-2 w-[20px] h-[20px]">
             {{ selectedTeam.emoji }}
           </div>
-          <div class="whitespace-nowrap overflow-ellipsis overflow-hidden w-[150px]">
+          <div class="whitespace-nowrap overflow-ellipsis overflow-hidden hidden sm:block sm:w-[150px]">
             {{ selectedTeam.name }}
+          </div>
+          <div class="whitespace-nowrap overflow-ellipsis overflow-hidden sm:hidden">
+            {{ nameShort(selectedTeam.name) }}
           </div>
           <CaretSortIcon class="ml-auto h-4 w-4 shrink-0 opacity-50" />
         </Button>
@@ -178,7 +200,8 @@ const openEditDialog = (teamId: string) => {
                 <CheckIcon :class="cn('ml-auto h-4 w-4', selectedTeam?.id === team.id ? 'opacity-100' : 'opacity-0')" />
                 <!-- on hover show the edit icon -->
                 <Edit2Icon
-                  class="ml-2 h-4 w-4 text-muted-foreground"
+                  class="ml-2 h-4 w-4 text-muted-foreground cursor-pointer hover:text-foreground"
+                  v-if="team.id !== '-1'"
                   @click.stop="
                     () => {
                       open = false
@@ -214,7 +237,7 @@ const openEditDialog = (teamId: string) => {
         </Command>
       </PopoverContent>
     </Popover>
-    <NewGroupDialog @close="showDialog = false" v-if="dialogType === 'create-group'" />
-    <GroupMembers @close="showDialog = false" v-if="dialogType === 'edit-group'" />
+    <NewGroupDialog @close="showDialog = false" v-if="dialogType === 'create-group'" @created="created" />
+    <GroupMembers @close="showDialog = false" v-if="dialogType === 'edit-group'" :group="selectedEditGroup" />
   </Dialog>
 </template>

@@ -19,9 +19,8 @@ import AvatarUploadComponent from '@/components/utils/AvatarUploadComponent.vue'
 import EmojiPicker from '@/components/utils/EmojiPicker.vue'
 
 const { toast } = useToast()
-const { createGroup } = useGroups()
 
-const emit = defineEmits(['close'])
+const emit = defineEmits(['close', 'created'])
 
 const selectedEmoji = ref<string | undefined>(undefined)
 const avatarUpload = ref()
@@ -55,13 +54,19 @@ const { handleSubmit } = useForm({
 })
 
 const onSubmit = handleSubmit(async (values) => {
+  const { createGroup } = useGroups()
+
   values.avatar = { id: await avatarUpload.value.uploadImage() }
+  if (!values.avatar.id) {
+    delete values.avatar
+  }
   values.emoji = selectedEmoji.value
   const newGroup = await createGroup(values)
   toast({
     title: 'Group created',
     description: `The group ${newGroup.name} has been created.`
   })
+  emit('created', newGroup)
 })
 </script>
 
@@ -80,7 +85,7 @@ const onSubmit = handleSubmit(async (values) => {
             <div class="text-sm text-gray-500 mt-3">Upload an Image</div>
           </div>
 
-          <div class="mx-5 mb-7">or</div>
+          <div class="mx-1 sm:mx-5 mb-7">or</div>
 
           <div class="flex flex-col items-center w-[120px]">
             <EmojiPicker v-model="selectedEmoji" />
@@ -110,7 +115,7 @@ const onSubmit = handleSubmit(async (values) => {
       </FormField>
       <DialogFooter>
         <Button variant="outline" @click="emit('close')"> Cancel </Button>
-        <Button type="submit"> Continue </Button>
+        <Button type="submit" class="mb-2 sm:mb-0"> Continue </Button>
       </DialogFooter>
     </form>
   </DialogContent>

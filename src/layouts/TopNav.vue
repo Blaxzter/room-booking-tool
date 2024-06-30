@@ -27,16 +27,16 @@ watchEffect(() => {
 
 <template>
   <div class="border-b">
-    <div class="flex h-16 items-center px-4">
+    <div class="flex h-16 items-center px-2 md:px-4">
       <MainNav />
-      <div class="hidden sm:block ms-3" v-show="width > 640 || !showSearch">
+      <div class="sm:block md:hidden ms-2 sm:ms-3" v-show="width > 640 || !showSearch">
         <GroupSwitcher />
       </div>
-      <div class="ml-auto flex items-center justify-end space-x-4 flex-grow">
+      <div class="ml-auto flex items-center justify-end space-x-2 md:space-x-4 flex-grow">
         <Input
           type="search"
           placeholder="Search..."
-          class="ms-3 hidden sm:block lg:w-[300px]"
+          class="ms-2 sm:ms-3 hidden sm:block lg:w-[300px]"
           :style="{ display: showSearch ? 'block' : 'none' }"
           v-model="searchString"
         />
