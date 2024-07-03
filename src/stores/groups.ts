@@ -68,6 +68,10 @@ export const useGroups = defineStore('group', () => {
     setGroups(result.group as Group[])
   }
 
+  const addInvite = async (group_id: string, email: string, role: 'member' | 'admin' | 'viewer') => {
+    // This is a patch request on http://localhost:8055/items/group/1
+  }
+
   return {
     groups,
     selectedGroupId,
