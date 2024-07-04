@@ -151,3 +151,12 @@ export type LocalUserData = {
   selected_group?: string
   created_bookings?: { [id: string]: { [id: string]: string } }
 }
+
+interface Invite {
+  email: string
+  role: 'member' | 'admin' | 'viewer'
+}
+
+export type InviteRequest = {
+  invites: Invite[]
+}

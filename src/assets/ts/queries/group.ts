@@ -64,14 +64,3 @@ export const getGroupQuery = ({ as_query }: { as_query: boolean }): string => {
     ${group_query}
   `
 }
-
-// requests
-
-interface Invite {
-  email: string
-  role: 'member' | 'admin' | 'viewer'
-}
-
-interface InviteRequest {
-  invites: Invite[]
-}

@@ -1,10 +1,10 @@
 import { defineStore, storeToRefs } from 'pinia'
 import { computed, ref } from 'vue'
-import type { CreateGroupRequest, Group } from '@/types'
+import type { CreateGroupRequest, Group, InviteRequest } from '@/types'
 import { useBookableObjects } from '@/stores/bookableObjects'
 import { useUser } from '@/stores/user'
 import { useLocalUser } from '@/stores/localUser'
-import { createItem } from '@directus/sdk'
+import { createItem, updateItem } from '@directus/sdk'
 import { getGroupsWithUserQuery } from '@/assets/ts/queries/group'
 import type { GetGroupQueryResponse } from '@/assets/ts/queries/initial_data'
 
@@ -68,8 +68,10 @@ export const useGroups = defineStore('group', () => {
     setGroups(result.group as Group[])
   }
 
-  const addInvite = async (group_id: string, email: string, role: 'member' | 'admin' | 'viewer') => {
+  const addInvite = async (group_id: string, inviteRequest: InviteRequest) => {
     // This is a patch request on http://localhost:8055/items/group/1
+    const { client } = useUser()
+    return await client.request(updateItem('group', group_id, inviteRequest))
   }
 
   return {
@@ -81,6 +83,7 @@ export const useGroups = defineStore('group', () => {
     addGroup,
     selectGroup,
     createGroup,
-    reset
+    reset,
+    addInvite
   }
 })
