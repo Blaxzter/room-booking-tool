@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Group Invitation</title>
+    <style>
+        body { font-family: Arial, sans-serif; }
+        .container { max-width: 600px; margin: auto; padding: 20px; border: 1px solid #ddd; border-radius: 10px; }
+        .header { text-align: center; margin-bottom: 20px; }
+        .header h1 { margin: 0; }
+        .content { margin-bottom: 20px; }
+        .footer { text-align: center; font-size: 12px; color: #888; }
+        .centered { display: flex; justify-content: center; }
+        .button {
+            display: inline-block;
+            padding: 10px 20px;
+            font-size: 16px;
+            color: #fff;
+            background-color: #007bff;
+            text-decoration: none;
+            border-radius: 5px;
+            margin-top: 20px;
+        }
+        .ii a[href] { color: #ffffff; }
+        .button:hover {
+            background-color: #0056b3;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <div class="header">
+        <h1>You are invited to join "{{ group_name }}"</h1>
+    </div>
+    <div class="content">
+        <p>{{ inviter }} has invited you to join the group "{{ group_name }}" as a {{ role }}.</p>
+        <p>If you do not have an account, you can create one by clicking the button below.</p>
+        <div class="centered">
+            <a href="{{ host }}/groups" class="button">View your invitations</a>
+        </div>
+        <p>If you cannot see the button, please visit the following link: <br>
+            <a href="{{ host }}/groups">{{ host }}/join</a>
+        </p>
+    </div>
+</div>
+</body>
+</html>
