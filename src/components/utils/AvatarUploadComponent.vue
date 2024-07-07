@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed, inject, onMounted, ref } from 'vue'
+import { computed, inject, onMounted, ref, watch } from 'vue'
 import { uploadFiles } from '@directus/sdk'
 
 import { UploadIcon, XIcon } from 'lucide-vue-next'
@@ -97,6 +97,13 @@ const avatarCssVars = computed(() => {
 onMounted(() => {
   avatar.value = `${backendUrl}/assets/${props.initAvatar}`
 })
+
+watch(
+  () => props.initAvatar,
+  (newAvatar) => {
+    avatar.value = `${backendUrl}/assets/${newAvatar}`
+  }
+)
 
 defineExpose({ uploadImage })
 

@@ -20,11 +20,11 @@ import {
 } from '@/components/ui/command'
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover'
 import type { Group } from '@/types'
-import NewGroupDialog from '@/components/groups/NewGroupDialog.vue'
+import NewGroupDialog from '@/components/groups/dialogs/NewGroupDialog.vue'
 import { useUser } from '@/stores/user'
 import { useGroups } from '@/stores/groups'
 import { storeToRefs } from 'pinia'
-import GroupMembers from '@/components/groups/GroupEditDialog.vue'
+import GroupMembers from '@/components/groups/dialogs/GroupEditDialog.vue'
 import router from '@/router'
 
 type GroupsDisplayData = { label: string; teams: Group[] }[]

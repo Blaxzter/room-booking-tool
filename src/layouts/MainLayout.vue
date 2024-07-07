@@ -3,8 +3,18 @@ import TopNav from '@/layouts/TopNav.vue'
 </script>
 
 <template>
-  <TopNav />
-  <router-view />
+  <div class="max-h-screen overflow-hidden h-screen">
+    <TopNav />
+    <main class="main-content border border-blue-500">
+      <router-view />
+    </main>
+  </div>
 </template>
 
-<style scoped></style>
+<style>
+.main-content {
+  height: calc(100vh - 65px);
+  max-height: calc(100vh - 65px);
+  overflow-y: hidden;
+}
+</style>
