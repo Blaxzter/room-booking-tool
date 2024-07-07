@@ -12,7 +12,13 @@ export const groupFields = `
         }
 `
 
-export const getGroupsWithUserQuery = ({ as_query }: { as_query: boolean }): string => {
+export const getGroupsWithUserQuery = ({
+  as_query,
+  with_bookable_objects = false
+}: {
+  as_query: boolean
+  with_bookable_objects?: boolean
+}): string => {
   const groups_query = `
     group {
         date_created
@@ -32,7 +38,24 @@ export const getGroupsWithUserQuery = ({ as_query }: { as_query: boolean }): str
                 last_name
             }
         }
+        avatar {
+            id
+        }
+    }
+    ${
+      with_bookable_objects
+        ? `
+        bookable_object {
+        name
+        group {
+            group_id {
+                id
+            }
+        }
     }`
+        : ''
+    }
+    `
 
   if (as_query) {
     return `

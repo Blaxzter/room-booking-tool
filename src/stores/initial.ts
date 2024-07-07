@@ -134,12 +134,20 @@ export const useInitialDataStore = defineStore('initial', () => {
     init_loading.value = false
   }
 
+  const fetchGroupData = async () => {
+    const { fetchGroupsWithData } = useGroups()
+    init_loading.value = true
+    await fetchGroupsWithData()
+    init_loading.value = false
+  }
+
   return {
     init_loading,
     fetchSettingsViewData,
     fetchDashboardViewData,
     fetchObjectViewData,
     fetchRequestViewData,
+    fetchGroupData,
     reset
   }
 })

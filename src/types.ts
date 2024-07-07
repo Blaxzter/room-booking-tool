@@ -38,7 +38,7 @@ export type BookableObject = {
   image?: { id: string } | null
   is_internal?: boolean
   uniqueId?: string
-  group?: { group_id: Group }[] | number[]
+  group?: { group_id: Group }[] | string[]
   type?: string
   confirm_booking_required?: boolean
   information_shared?: boolean
@@ -72,6 +72,7 @@ export type Group = {
   }
   emoji?: string
   users?: GroupDirectusUser[]
+  objects?: BookableObject[]
 }
 
 export type CreateGroupRequest = {

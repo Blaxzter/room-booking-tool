@@ -24,7 +24,8 @@ import NewGroupDialog from '@/components/groups/NewGroupDialog.vue'
 import { useUser } from '@/stores/user'
 import { useGroups } from '@/stores/groups'
 import { storeToRefs } from 'pinia'
-import GroupMembers from '@/components/groups/GroupMembers.vue'
+import GroupMembers from '@/components/groups/GroupEditDialog.vue'
+import router from '@/router'
 
 type GroupsDisplayData = { label: string; teams: Group[] }[]
 
@@ -116,8 +117,9 @@ const filterGroups = (
   val: string[] | number[] | Record<string, any>[] | false[] | true[],
   term: string
 ): string[] | number[] | Record<string, any>[] | false[] | true[] => {
+  console.log(val)
   return val.filter((group, index) => {
-    if (index === val.length - 1) {
+    if (index === val.length - 2) {
       return true
     }
     return (group as Group).name.toLowerCase().includes(term.toLowerCase())
@@ -182,7 +184,7 @@ const created = (group: Group) => {
                 v-for="team in group.teams"
                 :key="team.name"
                 :value="team"
-                class="text-sm"
+                class="text-sm cursor-pointer"
                 @select="groupClicked(team)"
               >
                 <Avatar class="mr-2 h-5 w-5" v-if="!team.emoji || team?.avatar?.id">
@@ -198,19 +200,6 @@ const created = (group: Group) => {
                   {{ team.name }}
                 </div>
                 <CheckIcon :class="cn('ml-auto h-4 w-4', selectedTeam?.id === team.id ? 'opacity-100' : 'opacity-0')" />
-                <!-- on hover show the edit icon -->
-                <Edit2Icon
-                  class="ml-2 h-4 w-4 text-muted-foreground cursor-pointer hover:text-foreground"
-                  v-if="team.id !== '-1'"
-                  @click.stop="
-                    () => {
-                      open = false
-                      showDialog = true
-                      dialogType = 'edit-group'
-                      editGroupId = team.id
-                    }
-                  "
-                />
               </CommandItem>
             </CommandGroup>
           </CommandList>
@@ -220,6 +209,7 @@ const created = (group: Group) => {
               <DialogTrigger as-child>
                 <CommandItem
                   value="create-group"
+                  class="cursor-pointer"
                   @select="
                     () => {
                       open = false
@@ -232,6 +222,18 @@ const created = (group: Group) => {
                   Create Group
                 </CommandItem>
               </DialogTrigger>
+              <CommandItem
+                class="cursor-pointer"
+                value="edit-group"
+                @select.stop="
+                  () => {
+                    router.push({ name: 'groups' })
+                  }
+                "
+              >
+                <Edit2Icon class="mr-2 h-5 w-5" />
+                Manage Groups
+              </CommandItem>
             </CommandGroup>
           </CommandList>
         </Command>
