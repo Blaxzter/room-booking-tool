@@ -14,13 +14,15 @@ export const groupFields = `
 
 export const getGroupsWithUserQuery = ({
   as_query,
-  with_bookable_objects = false
+  with_bookable_objects = false,
+  group_id = undefined
 }: {
   as_query: boolean
   with_bookable_objects?: boolean
+  group_id?: string
 }): string => {
   const groups_query = `
-    group {
+    group${group_id ? `(filter: { id: { _eq: "${group_id}" } })` : ''} {
         date_created
         date_updated
         description
@@ -29,6 +31,9 @@ export const getGroupsWithUserQuery = ({
         name
         sort
         status
+        owner {
+            id
+        }
         users {
             id
             role
@@ -36,6 +41,10 @@ export const getGroupsWithUserQuery = ({
                 id
                 first_name
                 last_name
+                email
+                avatar {
+                    id
+                }
             }
         }
         avatar {

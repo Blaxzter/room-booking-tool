@@ -6,9 +6,9 @@ import type { CreateGroupRequest, Group, InviteRequest } from '@/types'
 import { useBookableObjects } from '@/stores/bookableObjects'
 import { useUser } from '@/stores/user'
 import { useLocalUser } from '@/stores/localUser'
-import { createItem, updateItem } from '@directus/sdk'
+import { createItem, updateItem, deleteItem } from '@directus/sdk'
 import { getGroupsWithUserQuery } from '@/assets/ts/queries/group'
-import type { GetGroupQueryResponse } from '@/assets/ts/queries/initial_data'
+import type { GetGroupQueryResponse, GetGroupsQueryResponse } from '@/assets/ts/queries/initial_data'
 
 export const useGroups = defineStore('group', () => {
   const { setSelectedGroup, getSelectedGroup } = useLocalUser()
@@ -62,13 +62,29 @@ export const useGroups = defineStore('group', () => {
     ]
     const result = await client.request(createItem('group', group))
     // cast result to Group
-    addGroup(result as Group)
+    addGroup(await fetchGroupWithData(result.id))
     return result
+  }
+
+  const fetchGroupWithData = async (group_id: string, with_bookable_objects = true) => {
+    const { client } = useUser()
+    const result = await client.query<GetGroupQueryResponse>(
+      getGroupsWithUserQuery({ as_query: true, with_bookable_objects, group_id })
+    )
+    const group = result.group as Group
+    if (!_.isNil(result.bookable_object))
+      for (const bookable_object of result.bookable_object) {
+        if (!group.objects) {
+          group.objects = []
+        }
+        group.objects.push(bookable_object)
+      }
+    return group
   }
 
   const fetchGroupsWithData = async (with_bookable_objects = true) => {
     const { client } = useUser()
-    const result = await client.query<GetGroupQueryResponse>(
+    const result = await client.query<GetGroupsQueryResponse>(
       getGroupsWithUserQuery({ as_query: true, with_bookable_objects })
     )
     const groups = result.group as Group[]
@@ -96,16 +112,29 @@ export const useGroups = defineStore('group', () => {
     return await client.request(updateItem('group', group_id, inviteRequest))
   }
 
+  const deleteGroup = async (group_id: string) => {
+    const { client } = useUser()
+    return await client.request(deleteItem('group', group_id))
+  }
+
+  const updateGroupUser = async (id: string, role: string) => {
+    const { client } = useUser()
+    return await client.request(updateItem('group_directus_users', id, { role }))
+  }
+
   return {
     groups,
     selectedGroupId,
     selectedGroup,
+    fetchGroupWithData,
     fetchGroupsWithData,
     setGroups,
     addGroup,
     selectGroup,
     createGroup,
     reset,
-    addInvite
+    addInvite,
+    deleteGroup,
+    updateGroupUser
   }
 })

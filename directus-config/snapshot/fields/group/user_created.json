@@ -9,7 +9,7 @@
     "display_options": null,
     "field": "user_created",
     "group": null,
-    "hidden": true,
+    "hidden": false,
     "interface": "select-dropdown-m2o",
     "note": null,
     "options": {

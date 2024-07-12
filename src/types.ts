@@ -4,6 +4,7 @@ export type MySchema = {
   group: Group[]
   users: User[]
   notification_setting: NotificationSetting[]
+  group_directus_users: GroupDirectusUser[]
 }
 
 export type Booking = {
@@ -66,7 +67,7 @@ export type Group = {
   id: string
   name: string
   description?: string
-  owner?: string
+  owner?: { id: string }
   avatar?: {
     id: string
   }
@@ -110,7 +111,7 @@ export type User = {
   title: string
   description: string | null
   tags: string[] | null
-  avatar: string | undefined
+  avatar: string | undefined | { id: string }
   language: string
   appearance: string
   tfa_secret: string | null

@@ -14,6 +14,7 @@ const props = defineProps<{
 const emit = defineEmits(['update:role', 'deleteUser'])
 
 const localRole = ref(props.role)
+const open = ref(false)
 
 watch(localRole, (newRole) => {
   emit('update:role', newRole)
@@ -27,10 +28,10 @@ const roles = [
 </script>
 
 <template>
-  <Popover>
+  <Popover v-model="open" class="relative">
     <PopoverTrigger as-child>
       <Button variant="outline" class="ml-auto">
-        {{ localRole }}
+        {{ localRole.charAt(0).toUpperCase() + localRole.slice(1) }}
         <ChevronDownIcon class="ml-2 h-4 w-4 text-muted-foreground" />
       </Button>
     </PopoverTrigger>
@@ -43,33 +44,18 @@ const roles = [
             <CommandItem
               :value="r.value"
               :key="r.value"
-              class="teamaspace-y-1 flex flex-col items-start px-4 py-2 cursor-pointer"
+              class="space-y-1 flex flex-col items-start px-4 py-2 cursor-pointer"
               v-for="r in roles"
-              @select="localRole = r.name"
+              @select="
+                () => {
+                  localRole = r.value
+                  open = false
+                }
+              "
             >
               <p>{{ r.name }}</p>
               <p class="text-sm text-muted-foreground">{{ r.description }}</p>
             </CommandItem>
-          </CommandGroup>
-          <Separator />
-          <CommandGroup>
-            <DialogTrigger as-child>
-              <CommandItem
-                value="delete"
-                class="teamaspace-y-1 flex px-4 cursor-pointer"
-                @select="
-                  () => {
-                    emit('deleteUser')
-                  }
-                "
-              >
-                <div class="flex flex-col items-start py-2">
-                  <p>Delete</p>
-                  <p class="text-sm text-muted-foreground">Remove this user from the group.</p>
-                </div>
-                <TrashIcon class="h-4 w-4 ms-4 text-red-500" />
-              </CommandItem>
-            </DialogTrigger>
           </CommandGroup>
         </CommandList>
       </Command>

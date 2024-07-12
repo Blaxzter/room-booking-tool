@@ -101,8 +101,13 @@ export interface ObjectViewResponse {
   bookable_object: BookableObject[]
 }
 
-export interface GetGroupQueryResponse {
+export interface GetGroupsQueryResponse {
   group: Group[]
+  bookable_object?: BookableObject[]
+}
+
+export interface GetGroupQueryResponse {
+  group: Group
   bookable_object?: BookableObject[]
 }
 

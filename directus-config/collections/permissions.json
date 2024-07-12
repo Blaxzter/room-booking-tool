@@ -415,20 +415,33 @@
     "permissions": {
       "_and": [
         {
-          "group_id": {
-            "users": {
-              "directus_users_id": {
-                "_eq": "$CURRENT_USER"
+          "_and": [
+            {
+              "group_id": {
+                "users": {
+                  "directus_users_id": {
+                    "_eq": "$CURRENT_USER"
+                  }
+                }
+              }
+            },
+            {
+              "group_id": {
+                "users": {
+                  "role": {
+                    "_eq": "admin"
+                  }
+                }
               }
             }
-          }
+          ]
         }
       ]
     },
     "validation": null,
     "presets": null,
     "fields": null,
-    "_syncId": "d7d06a75-796d-49d1-856b-9c13e9a25f44"
+    "_syncId": "c68d1d7c-43ce-4a06-af28-1a603845c5bd"
   },
   {
     "role": "62a8abe7-e3ae-462e-b038-58ce5a2f5475",
@@ -779,9 +792,24 @@
     "permissions": {
       "_and": [
         {
-          "id": {
-            "_eq": "$CURRENT_USER"
-          }
+          "_or": [
+            {
+              "id": {
+                "_eq": "$CURRENT_USER"
+              }
+            },
+            {
+              "Groups": {
+                "group_id": {
+                  "users": {
+                    "directus_users_id": {
+                      "_eq": "$CURRENT_USER"
+                    }
+                  }
+                }
+              }
+            }
+          ]
         }
       ]
     },
@@ -855,8 +883,51 @@
   {
     "role": "62a8abe7-e3ae-462e-b038-58ce5a2f5475",
     "collection": "group_directus_users",
+    "action": "delete",
+    "permissions": {
+      "_and": [
+        {
+          "group_id": {
+            "users": {
+              "directus_users_id": {
+                "_eq": "$CURRENT_USER"
+              }
+            }
+          }
+        },
+        {
+          "group_id": {
+            "users": {
+              "role": {
+                "_eq": "admin"
+              }
+            }
+          }
+        }
+      ]
+    },
+    "validation": null,
+    "presets": null,
+    "fields": null,
+    "_syncId": "ac009ba4-bb3e-4b13-b902-d34850016669"
+  },
+  {
+    "role": "62a8abe7-e3ae-462e-b038-58ce5a2f5475",
+    "collection": "group_directus_users",
     "action": "read",
-    "permissions": null,
+    "permissions": {
+      "_and": [
+        {
+          "group_id": {
+            "users": {
+              "directus_users_id": {
+                "_eq": "$CURRENT_USER"
+              }
+            }
+          }
+        }
+      ]
+    },
     "validation": {},
     "presets": null,
     "fields": [
@@ -871,13 +942,21 @@
     "permissions": {
       "_and": [
         {
-          "directus_users_id": {
-            "_eq": "$CURRENT_USER"
+          "group_id": {
+            "users": {
+              "directus_users_id": {
+                "_eq": "$CURRENT_USER"
+              }
+            }
           }
         },
         {
-          "role": {
-            "_eq": "admin"
+          "group_id": {
+            "users": {
+              "role": {
+                "_eq": "admin"
+              }
+            }
           }
         }
       ]
@@ -908,7 +987,7 @@
     "permissions": {
       "_and": [
         {
-          "user_created": {
+          "owner": {
             "_eq": "$CURRENT_USER"
           }
         }

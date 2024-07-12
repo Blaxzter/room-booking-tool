@@ -22,6 +22,7 @@ import { useBookings } from '@/stores/booking'
 import _ from 'lodash'
 import { useToast } from '@/components/ui/toast/use-toast'
 import { useNotificationSetting } from '@/stores/notificationSettings'
+import type { Group } from '@/types'
 
 export const useInitialDataStore = defineStore('initial', () => {
   const { toast } = useToast()
@@ -60,7 +61,7 @@ export const useInitialDataStore = defineStore('initial', () => {
         setBookableObjects({ data: received_data.bookable_object })
       }
 
-      await setGroups(received_data.group)
+      await setGroups(received_data.group as Group[])
     } catch (error) {
       console.error(error)
     }

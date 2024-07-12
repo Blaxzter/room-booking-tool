@@ -86,10 +86,10 @@ type Subscription {
   directus_presets_mutated(event: EventEnum): directus_presets_mutated
   directus_revisions_mutated(event: EventEnum): directus_revisions_mutated
   directus_folders_mutated(event: EventEnum): directus_folders_mutated
-  directus_files_mutated(event: EventEnum): directus_files_mutated
   directus_permissions_mutated(event: EventEnum): directus_permissions_mutated
   directus_users_mutated(event: EventEnum): directus_users_mutated
   directus_activity_mutated(event: EventEnum): directus_activity_mutated
+  directus_files_mutated(event: EventEnum): directus_files_mutated
   directus_webhooks_mutated(event: EventEnum): directus_webhooks_mutated
   directus_panels_mutated(event: EventEnum): directus_panels_mutated
   directus_notifications_mutated(event: EventEnum): directus_notifications_mutated
@@ -813,6 +813,8 @@ type directus_users {
   theme_dark_overrides: JSON
   theme_dark_overrides_func: count_functions
   display_name: String
+  Groups(filter: group_directus_users_filter, sort: [String], limit: Int, offset: Int, page: Int, search: String): [group_directus_users]
+  Groups_func: count_functions
 }
 
 type directus_users_mutated {
@@ -1328,6 +1330,7 @@ input create_directus_users_input {
   theme_light_overrides: JSON
   theme_dark_overrides: JSON
   display_name: String
+  Groups: [create_group_directus_users_input]
 }
 
 input create_group_directus_users_input {
@@ -1598,6 +1601,8 @@ input directus_users_filter {
   theme_dark_overrides: string_filter_operators
   theme_dark_overrides_func: count_function_filter_operators
   display_name: string_filter_operators
+  Groups: group_directus_users_filter
+  Groups_func: count_function_filter_operators
   _and: [directus_users_filter]
   _or: [directus_users_filter]
 }
@@ -1851,6 +1856,7 @@ input update_directus_users_input {
   theme_light_overrides: JSON
   theme_dark_overrides: JSON
   display_name: String
+  Groups: [update_group_directus_users_input]
 }
 
 input update_group_directus_users_input {

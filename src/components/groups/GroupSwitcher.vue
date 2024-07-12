@@ -1,13 +1,15 @@
 <script setup lang="ts">
 import { computed, type ComputedRef, inject, ref } from 'vue'
+import { storeToRefs } from 'pinia'
 import _ from 'lodash'
-import { CaretSortIcon, CheckIcon, PlusCircledIcon } from '@radix-icons/vue'
+
 import { LoaderIcon, Edit2Icon } from 'lucide-vue-next'
+import { CaretSortIcon, CheckIcon, PlusCircledIcon } from '@radix-icons/vue'
+import router from '@/router'
 
 import { cn } from '@/lib/utils'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import { Button } from '@/components/ui/button'
-
 import { Dialog, DialogTrigger } from '@/components/ui/dialog'
 import {
   Command,
@@ -19,13 +21,13 @@ import {
   CommandSeparator
 } from '@/components/ui/command'
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover'
+
 import type { Group } from '@/types'
-import NewGroupDialog from '@/components/groups/dialogs/NewGroupDialog.vue'
 import { useUser } from '@/stores/user'
 import { useGroups } from '@/stores/groups'
-import { storeToRefs } from 'pinia'
-import GroupMembers from '@/components/groups/dialogs/GroupEditDialog.vue'
-import router from '@/router'
+
+import NewGroupDialog from '@/components/groups/dialogs/NewGroupDialog.vue'
+import GroupEditDialog from '@/components/groups/dialogs/GroupEditDialog.vue'
 
 type GroupsDisplayData = { label: string; teams: Group[] }[]
 
@@ -227,6 +229,7 @@ const created = (group: Group) => {
                 value="edit-group"
                 @select.stop="
                   () => {
+                    open = false
                     router.push({ name: 'groups' })
                   }
                 "
@@ -240,6 +243,6 @@ const created = (group: Group) => {
       </PopoverContent>
     </Popover>
     <NewGroupDialog @close="showDialog = false" v-if="dialogType === 'create-group'" @created="created" />
-    <GroupMembers @close="showDialog = false" v-if="dialogType === 'edit-group'" :group="selectedEditGroup" />
+    <GroupEditDialog @close="showDialog = false" v-if="dialogType === 'edit-group'" :group="selectedEditGroup" />
   </Dialog>
 </template>

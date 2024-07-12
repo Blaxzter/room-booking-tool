@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import Toaster from '@/components/ui/toast/Toaster.vue'
+import { showAlertDialog } from '@/plugins/alert-dialog-plugin'
 
 import { computed, provide } from 'vue'
 import { RouterView } from 'vue-router'
@@ -18,6 +19,7 @@ const darkModeVar = computed(() => {
 })
 // provide import.meta.env.VITE_BACKEND_URL to all components as backendUrl
 provide('backendUrl', import.meta.env.VITE_BACKEND_URL)
+provide('showAlertDialog', showAlertDialog)
 </script>
 
 <template>

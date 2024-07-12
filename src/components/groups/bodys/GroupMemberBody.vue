@@ -1,20 +1,36 @@
 <script setup lang="ts">
-import { ref } from 'vue'
-import { Input } from '@/components/ui/input'
-
+import { ref, computed, inject } from 'vue'
+import { storeToRefs } from 'pinia'
 import { SendIcon } from 'lucide-vue-next'
+import _ from 'lodash'
+
+import type { Group, GroupDirectusUser, User } from '@/types'
+
+import { Input } from '@/components/ui/input'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
-import GroupRoleDropDown from '@/components/groups/utils/GroupRoleDropDown.vue'
 import { Button } from '@/components/ui/button'
-import type { Group } from '@/types'
+import { useToast } from '@/components/ui/toast'
+
+import GroupRoleDropDown from '@/components/groups/utils/GroupRoleDropDown.vue'
+
 import { useGroups } from '@/stores/groups'
+import { useUser } from '@/stores/user'
+
+const { user } = storeToRefs(useUser())
+
+const backendUrl = inject('backendUrl')
 
 const props = defineProps<{
   group: Group | undefined
 }>()
 
-const sofiaRole = ref('Owner')
-const jacksonRole = ref('Member')
+const users = computed(() => {
+  if (!props.group) {
+    return []
+  }
+  // filter out the owner of the group
+  return _.filter(props.group.users, (u) => (u.directus_users_id as User).id !== props.group?.owner?.id)
+})
 
 const inviteRole = ref<'member' | 'admin' | 'viewer'>('member')
 const inviteEmail = ref('')
@@ -34,45 +50,81 @@ const sendInvite = () => {
     ]
   })
 }
+
+const getUser = (user: GroupDirectusUser) => {
+  return user.directus_users_id as User
+}
+
+const getUserAvatar = (user: GroupDirectusUser) => {
+  const avatar = getUser(user)?.avatar
+  if (!avatar) {
+    return ''
+  }
+  // check if avatar is string or object -> if object, get id
+  if (typeof avatar === 'object') {
+    return avatar.id
+  }
+  return avatar
+}
+
+const getUserInitials = (user: GroupDirectusUser) => {
+  const u = getUser(user)
+  if (!u) {
+    return ''
+  }
+  if (!u.first_name || !u.last_name) {
+    return u.email?.charAt(0) + u.email?.charAt(1)
+  }
+  return u.first_name?.charAt(0) + u.last_name?.charAt(0)
+}
+
+const updateUserRole = async (user: GroupDirectusUser, role: string) => {
+  if (!props.group || !user.id) {
+    return
+  }
+
+  const { updateGroupUser } = useGroups()
+  await updateGroupUser(user.id, role).then(() => {
+    const { toast } = useToast()
+    toast({
+      title: 'User role updated',
+      description: `The role has been updated to ${role}.`,
+      variant: 'success'
+    })
+  })
+}
 </script>
 
 <template>
   <div class="grid gap-6">
     <div class="flex items-center justify-between space-x-4">
-      <Input type="email" placeholder="Email" v-model="inviteEmail" />
+      <Input type="email" placeholder="Enter email to invite" v-model="inviteEmail" />
       <GroupRoleDropDown v-model:role="inviteRole" />
       <Button variant="secondary" size="icon" class="flex-shrink-0" @click="sendInvite">
         <SendIcon class="h-5 w-5" />
       </Button>
     </div>
-    <div>
+    <div v-if="users.length !== 0">
       <p class="text-sm text-muted-foreground">Team members</p>
     </div>
-    <div class="flex items-center justify-between space-x-4">
+    <div class="flex items-center justify-between space-x-4" v-for="c_user in users" :key="c_user.id">
       <div class="flex items-center space-x-4">
         <Avatar>
-          <AvatarImage src="/avatars/01.png" />
-          <AvatarFallback>OM</AvatarFallback>
+          <AvatarImage
+            :src="`${backendUrl}/assets/${getUserAvatar(c_user)}`"
+            :alt="`${getUser(c_user)?.first_name} Avatar`"
+          />
+          <AvatarFallback>{{ getUserInitials(c_user) }}</AvatarFallback>
         </Avatar>
         <div>
-          <p class="text-sm font-medium leading-none">Sofia Davis</p>
-          <p class="text-sm text-muted-foreground">m@example.com</p>
+          <p class="text-sm font-medium leading-none">
+            {{ getUser(c_user)?.first_name }} {{ getUser(c_user)?.last_name
+            }}{{ getUser(c_user).id === user.id ? ' (You)' : '' }}
+          </p>
+          <p class="text-sm text-muted-foreground">{{ getUser(c_user)?.email }}</p>
         </div>
       </div>
-      <GroupRoleDropDown :role="sofiaRole" />
-    </div>
-    <div class="flex items-center justify-between space-x-4">
-      <div class="flex items-center space-x-4">
-        <Avatar>
-          <AvatarImage src="/avatars/02.png" />
-          <AvatarFallback>JL</AvatarFallback>
-        </Avatar>
-        <div>
-          <p class="text-sm font-medium leading-none">Jackson Lee</p>
-          <p class="text-sm text-muted-foreground">p@example.com</p>
-        </div>
-      </div>
-      <GroupRoleDropDown :role="jacksonRole" />
+      <GroupRoleDropDown :role="c_user?.role" @update:role="($event) => updateUserRole(c_user, $event)" />
     </div>
   </div>
 </template>

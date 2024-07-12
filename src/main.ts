@@ -19,6 +19,7 @@ import router from './router'
 const app = createApp(App)
 
 app.provide('dayjs', dayjs)
+app.provide(/* key */ 'message', /* value */ 'hello!')
 
 app.use(createPinia())
 app.use(router)

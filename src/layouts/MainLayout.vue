@@ -5,7 +5,7 @@ import TopNav from '@/layouts/TopNav.vue'
 <template>
   <div class="max-h-screen overflow-hidden h-screen">
     <TopNav />
-    <main class="main-content border border-blue-500">
+    <main class="main-content">
       <router-view />
     </main>
   </div>
