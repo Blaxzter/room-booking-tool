@@ -1,0 +1,25 @@
+{
+  "collection": "group_invites",
+  "field": "group_id",
+  "related_collection": "group",
+  "meta": {
+    "junction_field": "user_id",
+    "many_collection": "group_invites",
+    "many_field": "group_id",
+    "one_allowed_collections": null,
+    "one_collection": "group",
+    "one_collection_field": null,
+    "one_deselect_action": "nullify",
+    "one_field": "invites",
+    "sort_field": null
+  },
+  "schema": {
+    "table": "group_invites",
+    "column": "group_id",
+    "foreign_key_table": "group",
+    "foreign_key_column": "id",
+    "constraint_name": "group_invites_group_id_foreign",
+    "on_update": "NO ACTION",
+    "on_delete": "NO ACTION"
+  }
+}

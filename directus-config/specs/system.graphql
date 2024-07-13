@@ -234,6 +234,7 @@ type Subscription {
   directus_sync_id_map_mutated(event: EventEnum): directus_sync_id_map_mutated
   bookable_object_mutated(event: EventEnum): bookable_object_mutated
   directus_settings_mutated(event: EventEnum): directus_settings_mutated
+  group_invites_mutated(event: EventEnum): group_invites_mutated
   notification_setting_mutated(event: EventEnum): notification_setting_mutated
   group_mutated(event: EventEnum): group_mutated
 }
@@ -1540,10 +1541,10 @@ type group {
   avatar(filter: directus_files_filter, sort: [String], limit: Int, offset: Int, page: Int, search: String): directus_files
   owner(filter: directus_users_filter, sort: [String], limit: Int, offset: Int, page: Int, search: String): directus_users
   emoji: String
-  invites: JSON
-  invites_func: count_functions
   users(filter: group_directus_users_filter, sort: [String], limit: Int, offset: Int, page: Int, search: String): [group_directus_users]
   users_func: count_functions
+  invites(filter: group_invites_filter, sort: [String], limit: Int, offset: Int, page: Int, search: String): [group_invites]
+  invites_func: count_functions
 }
 
 type group_directus_users {
@@ -1557,6 +1558,20 @@ type group_directus_users_mutated {
   key: ID!
   event: EventEnum
   data: group_directus_users
+}
+
+type group_invites {
+  id: ID!
+  group_id(filter: group_filter, sort: [String], limit: Int, offset: Int, page: Int, search: String): group
+  user_id(filter: directus_users_filter, sort: [String], limit: Int, offset: Int, page: Int, search: String): directus_users
+  email: String
+  role: String
+}
+
+type group_invites_mutated {
+  key: ID!
+  event: EventEnum
+  data: group_invites
 }
 
 type group_mutated {
@@ -1970,8 +1985,16 @@ input create_group_input {
   avatar: create_directus_files_input
   owner: create_directus_users_input
   emoji: String
-  invites: JSON
   users: [create_group_directus_users_input]
+  invites: [create_group_invites_input]
+}
+
+input create_group_invites_input {
+  id: ID
+  group_id: create_group_input
+  user_id: create_directus_users_input
+  email: String
+  role: String
 }
 
 input date_filter_operators {
@@ -2444,12 +2467,22 @@ input group_filter {
   avatar: directus_files_filter
   owner: directus_users_filter
   emoji: string_filter_operators
-  invites: string_filter_operators
-  invites_func: count_function_filter_operators
   users: group_directus_users_filter
   users_func: count_function_filter_operators
+  invites: group_invites_filter
+  invites_func: count_function_filter_operators
   _and: [group_filter]
   _or: [group_filter]
+}
+
+input group_invites_filter {
+  id: number_filter_operators
+  group_id: group_filter
+  user_id: directus_users_filter
+  email: string_filter_operators
+  role: string_filter_operators
+  _and: [group_invites_filter]
+  _or: [group_invites_filter]
 }
 
 input hash_filter_operators {
@@ -2822,6 +2855,14 @@ input update_group_input {
   avatar: update_directus_files_input
   owner: update_directus_users_input
   emoji: String
-  invites: JSON
   users: [update_group_directus_users_input]
+  invites: [update_group_invites_input]
+}
+
+input update_group_invites_input {
+  id: ID
+  group_id: update_group_input
+  user_id: update_directus_users_input
+  email: String
+  role: String
 }

@@ -19,6 +19,10 @@ type Query {
   bookable_object_by_id(id: ID!, version: String): bookable_object
   bookable_object_aggregated(groupBy: [String], filter: bookable_object_filter, limit: Int, offset: Int, page: Int, search: String, sort: [String]): [bookable_object_aggregated!]!
   bookable_object_by_version(version: String!, id: ID!): version_bookable_object
+  group_invites(filter: group_invites_filter, sort: [String], limit: Int, offset: Int, page: Int, search: String): [group_invites!]!
+  group_invites_by_id(id: ID!, version: String): group_invites
+  group_invites_aggregated(groupBy: [String], filter: group_invites_filter, limit: Int, offset: Int, page: Int, search: String, sort: [String]): [group_invites_aggregated!]!
+  group_invites_by_version(version: String!, id: ID!): version_group_invites
   notification_setting(filter: notification_setting_filter, sort: [String], limit: Int, offset: Int, page: Int, search: String): [notification_setting!]!
   notification_setting_by_id(id: ID!, version: String): notification_setting
   notification_setting_aggregated(groupBy: [String], filter: notification_setting_filter, limit: Int, offset: Int, page: Int, search: String, sort: [String]): [notification_setting_aggregated!]!
@@ -40,6 +44,8 @@ type Mutation {
   create_directus_sync_id_map_item(data: create_directus_sync_id_map_input!): directus_sync_id_map
   create_bookable_object_items(filter: bookable_object_filter, sort: [String], limit: Int, offset: Int, page: Int, search: String, data: [create_bookable_object_input!]): [bookable_object!]!
   create_bookable_object_item(data: create_bookable_object_input!): bookable_object
+  create_group_invites_items(filter: group_invites_filter, sort: [String], limit: Int, offset: Int, page: Int, search: String, data: [create_group_invites_input!]): [group_invites!]!
+  create_group_invites_item(data: create_group_invites_input!): group_invites
   create_notification_setting_items(filter: notification_setting_filter, sort: [String], limit: Int, offset: Int, page: Int, search: String, data: [create_notification_setting_input!]): [notification_setting!]!
   create_notification_setting_item(data: create_notification_setting_input!): notification_setting
   create_group_items(filter: group_filter, sort: [String], limit: Int, offset: Int, page: Int, search: String, data: [create_group_input!]): [group!]!
@@ -59,6 +65,9 @@ type Mutation {
   update_bookable_object_items(filter: bookable_object_filter, sort: [String], limit: Int, offset: Int, page: Int, search: String, ids: [ID]!, data: update_bookable_object_input!): [bookable_object!]!
   update_bookable_object_batch(filter: bookable_object_filter, sort: [String], limit: Int, offset: Int, page: Int, search: String, data: [update_bookable_object_input!]): [bookable_object!]!
   update_bookable_object_item(id: ID!, data: update_bookable_object_input!): bookable_object
+  update_group_invites_items(filter: group_invites_filter, sort: [String], limit: Int, offset: Int, page: Int, search: String, ids: [ID]!, data: update_group_invites_input!): [group_invites!]!
+  update_group_invites_batch(filter: group_invites_filter, sort: [String], limit: Int, offset: Int, page: Int, search: String, data: [update_group_invites_input!]): [group_invites!]!
+  update_group_invites_item(id: ID!, data: update_group_invites_input!): group_invites
   update_notification_setting_items(filter: notification_setting_filter, sort: [String], limit: Int, offset: Int, page: Int, search: String, ids: [ID]!, data: update_notification_setting_input!): [notification_setting!]!
   update_notification_setting_batch(filter: notification_setting_filter, sort: [String], limit: Int, offset: Int, page: Int, search: String, data: [update_notification_setting_input!]): [notification_setting!]!
   update_notification_setting_item(id: ID!, data: update_notification_setting_input!): notification_setting
@@ -75,6 +84,8 @@ type Mutation {
   delete_directus_sync_id_map_item(id: ID!): delete_one
   delete_bookable_object_items(ids: [ID]!): delete_many
   delete_bookable_object_item(id: ID!): delete_one
+  delete_group_invites_items(ids: [ID]!): delete_many
+  delete_group_invites_item(id: ID!): delete_one
   delete_notification_setting_items(ids: [ID]!): delete_many
   delete_notification_setting_item(id: ID!): delete_one
   delete_group_items(ids: [ID]!): delete_many
@@ -105,6 +116,7 @@ type Subscription {
   directus_sync_id_map_mutated(event: EventEnum): directus_sync_id_map_mutated
   bookable_object_mutated(event: EventEnum): bookable_object_mutated
   directus_settings_mutated(event: EventEnum): directus_settings_mutated
+  group_invites_mutated(event: EventEnum): group_invites_mutated
   notification_setting_mutated(event: EventEnum): notification_setting_mutated
   group_mutated(event: EventEnum): group_mutated
 }
@@ -880,10 +892,10 @@ type group {
   avatar(filter: directus_files_filter, sort: [String], limit: Int, offset: Int, page: Int, search: String): directus_files
   owner(filter: directus_users_filter, sort: [String], limit: Int, offset: Int, page: Int, search: String): directus_users
   emoji: String
-  invites: JSON
-  invites_func: count_functions
   users(filter: group_directus_users_filter, sort: [String], limit: Int, offset: Int, page: Int, search: String): [group_directus_users]
   users_func: count_functions
+  invites(filter: group_invites_filter, sort: [String], limit: Int, offset: Int, page: Int, search: String): [group_invites]
+  invites_func: count_functions
 }
 
 type group_aggregated {
@@ -912,8 +924,8 @@ type group_aggregated_count {
   avatar: Int
   owner: Int
   emoji: Int
-  invites: Int
   users: Int
+  invites: Int
 }
 
 type group_aggregated_fields {
@@ -957,6 +969,46 @@ type group_directus_users_mutated {
   key: ID!
   event: EventEnum
   data: group_directus_users
+}
+
+type group_invites {
+  id: ID!
+  group_id(filter: group_filter, sort: [String], limit: Int, offset: Int, page: Int, search: String): group
+  user_id(filter: directus_users_filter, sort: [String], limit: Int, offset: Int, page: Int, search: String): directus_users
+  email: String
+  role: String
+}
+
+type group_invites_aggregated {
+  group: JSON
+  countAll: Int
+  count: group_invites_aggregated_count
+  countDistinct: group_invites_aggregated_count
+  avg: group_invites_aggregated_fields
+  sum: group_invites_aggregated_fields
+  avgDistinct: group_invites_aggregated_fields
+  sumDistinct: group_invites_aggregated_fields
+  min: group_invites_aggregated_fields
+  max: group_invites_aggregated_fields
+}
+
+type group_invites_aggregated_count {
+  id: Int
+  group_id: Int
+  user_id: Int
+  email: Int
+  role: Int
+}
+
+type group_invites_aggregated_fields {
+  id: Float
+  group_id: Float
+}
+
+type group_invites_mutated {
+  key: ID!
+  event: EventEnum
+  data: group_invites
 }
 
 type group_mutated {
@@ -1088,8 +1140,8 @@ type version_group {
   avatar: JSON
   owner: JSON
   emoji: String
-  invites: JSON
   users: JSON
+  invites: JSON
 }
 
 """"""
@@ -1097,6 +1149,15 @@ type version_group_directus_users {
   id: ID
   group_id: JSON
   directus_users_id: JSON
+  role: String
+}
+
+""""""
+type version_group_invites {
+  id: ID
+  group_id: JSON
+  user_id: JSON
+  email: String
   role: String
 }
 
@@ -1353,8 +1414,16 @@ input create_group_input {
   avatar: create_directus_files_input
   owner: create_directus_users_input
   emoji: String
-  invites: JSON
   users: [create_group_directus_users_input]
+  invites: [create_group_invites_input]
+}
+
+input create_group_invites_input {
+  id: ID
+  group_id: create_group_input
+  user_id: create_directus_users_input
+  email: String
+  role: String
 }
 
 input create_notification_setting_input {
@@ -1659,12 +1728,22 @@ input group_filter {
   avatar: directus_files_filter
   owner: directus_users_filter
   emoji: string_filter_operators
-  invites: string_filter_operators
-  invites_func: count_function_filter_operators
   users: group_directus_users_filter
   users_func: count_function_filter_operators
+  invites: group_invites_filter
+  invites_func: count_function_filter_operators
   _and: [group_filter]
   _or: [group_filter]
+}
+
+input group_invites_filter {
+  id: number_filter_operators
+  group_id: group_filter
+  user_id: directus_users_filter
+  email: string_filter_operators
+  role: string_filter_operators
+  _and: [group_invites_filter]
+  _or: [group_invites_filter]
 }
 
 input hash_filter_operators {
@@ -1879,8 +1958,16 @@ input update_group_input {
   avatar: update_directus_files_input
   owner: update_directus_users_input
   emoji: String
-  invites: JSON
   users: [update_group_directus_users_input]
+  invites: [update_group_invites_input]
+}
+
+input update_group_invites_input {
+  id: ID
+  group_id: update_group_input
+  user_id: update_directus_users_input
+  email: String
+  role: String
 }
 
 input update_notification_setting_input {

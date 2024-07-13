@@ -156,6 +156,20 @@
     "_syncId": "f71ffe29-1ae3-4157-b005-7f1f65152dc1"
   },
   {
+    "name": "Run Script",
+    "key": "exec_dehk6",
+    "type": "exec",
+    "position_x": 37,
+    "position_y": 1,
+    "options": {
+      "code": "module.exports = async function(data) {\n    if (data.get_user_by_id.length > 0) {\n        const user = data.get_user_by_id[0];\n        if (user.first_name || user.last_name) {\n            return { \"user_name\": user.first_name || user.last_name };\n        } else {\n            return { \"user_name\": user.email };\n        }\n    }\n    return {};\n}\n"
+    },
+    "resolve": null,
+    "reject": null,
+    "flow": "02e58232-c941-4098-b1dc-ca303a3856e6",
+    "_syncId": "af7553b6-824a-4b1e-bbad-b3ef56fd976b"
+  },
+  {
     "name": "Filter for personal email notification",
     "key": "exec_m7q4f",
     "type": "exec",
@@ -182,6 +196,20 @@
     "reject": "0a85ab5d-9a17-42ff-bb7c-1a71c5eae56b",
     "flow": "6cf2633a-b5df-4d08-9a1c-e28b631aff31",
     "_syncId": "d16bba94-54a5-4216-af2a-5009ae411eb5"
+  },
+  {
+    "name": "Run Script",
+    "key": "exec_ohys1",
+    "type": "exec",
+    "position_x": 41,
+    "position_y": 41,
+    "options": {
+      "code": "module.exports = async function(data) {\n    let retData = {\n    \t\"group_id\": data.$last.group_id,\n        \"role\": data.$last.role,\n        \"email\": data.$last.email\n    }\n    if (data.get_invited_user.length > 0) {\n    \tretData[\"user_id\"] = data.get_invited_user[0].id\n    }\n    \n\treturn retData;\n}"
+    },
+    "resolve": null,
+    "reject": null,
+    "flow": "3b4c29ec-b066-4b3a-a1e2-4c3bde99a0a5",
+    "_syncId": "238c6b49-bfea-4447-8a9a-dd0291457ef3"
   },
   {
     "name": "Run Script",
@@ -212,6 +240,89 @@
     "reject": null,
     "flow": "77f42aee-c6f7-4b12-9dc5-fb62b9f17bfb",
     "_syncId": "ecf0880f-713d-4092-b087-df90d9bef8a2"
+  },
+  {
+    "name": "Read Data",
+    "key": "get_group",
+    "type": "item-read",
+    "position_x": 39,
+    "position_y": 1,
+    "options": {
+      "permissions": "$full",
+      "collection": "group",
+      "key": "{{$trigger.payload.group_id}}"
+    },
+    "resolve": "7c4a4da5-84c8-4aab-aebb-e87c522b9246",
+    "reject": null,
+    "flow": "3b4c29ec-b066-4b3a-a1e2-4c3bde99a0a5",
+    "_syncId": "f25510b0-57cc-45c3-8274-d39b7f6c17e1"
+  },
+  {
+    "name": "Read Data",
+    "key": "get_invited_user",
+    "type": "item-read",
+    "position_x": 21,
+    "position_y": 1,
+    "options": {
+      "permissions": "$full",
+      "collection": "directus_users",
+      "query": {
+        "filter": {
+          "email": {
+            "_eq": "{{ $trigger.payload.email }}"
+          }
+        }
+      }
+    },
+    "resolve": "f25510b0-57cc-45c3-8274-d39b7f6c17e1",
+    "reject": null,
+    "flow": "3b4c29ec-b066-4b3a-a1e2-4c3bde99a0a5",
+    "_syncId": "aeb0ea66-4a50-48a2-ad2f-ac825d487b17"
+  },
+  {
+    "name": "Get Inviter",
+    "key": "get_inviter",
+    "type": "item-read",
+    "position_x": 5,
+    "position_y": 22,
+    "options": {
+      "permissions": "$full",
+      "collection": "directus_users",
+      "query": {
+        "filter": {
+          "id": {
+            "_eq": "{{ $accountability.user }}"
+          }
+        }
+      }
+    },
+    "resolve": "e95781fe-6426-4a78-b89e-d323872f0331",
+    "reject": null,
+    "flow": "3b4c29ec-b066-4b3a-a1e2-4c3bde99a0a5",
+    "_syncId": "7c4a4da5-84c8-4aab-aebb-e87c522b9246"
+  },
+  {
+    "name": "Get User By Id",
+    "key": "get_user_by_id",
+    "type": "item-read",
+    "position_x": 19,
+    "position_y": 1,
+    "options": {
+      "permissions": "$full",
+      "collection": "directus_users",
+      "key": null,
+      "query": {
+        "filter": {
+          "id": {
+            "_eq": "{{ $trigger.payload.user }}"
+          }
+        }
+      }
+    },
+    "resolve": "af7553b6-824a-4b1e-bbad-b3ef56fd976b",
+    "reject": null,
+    "flow": "02e58232-c941-4098-b1dc-ca303a3856e6",
+    "_syncId": "8ce93c59-fd25-49dd-b4b9-3b6adcae3a44"
   },
   {
     "name": "Get User Data",
@@ -430,6 +541,20 @@
     "_syncId": "e870eeeb-4cde-46b4-8feb-3227ae19fe74"
   },
   {
+    "name": "Parse Inviter_name",
+    "key": "parse_inviter_name",
+    "type": "exec",
+    "position_x": 28,
+    "position_y": 22,
+    "options": {
+      "code": "module.exports = async function(data) {\n    if (data.get_inviter.length > 0) {\n        const user = data.get_inviter[0];\n        if (user.first_name && user.last_name) {\n            return { \"user_name\": `${user.first_name} ${user.last_name}` };\n        } else if (user.first_name || user.last_name) {\n            return { \"user_name\": user.first_name || user.last_name };\n        } else {\n            return { \"user_name\": user.email };\n        }\n    }\n    return {};\n}\n"
+    },
+    "resolve": "56905575-ebb4-4bda-b831-8aaf2a6867f4",
+    "reject": null,
+    "flow": "3b4c29ec-b066-4b3a-a1e2-4c3bde99a0a5",
+    "_syncId": "e95781fe-6426-4a78-b89e-d323872f0331"
+  },
+  {
     "name": "read_bookable_object",
     "key": "read_bookable_object",
     "type": "item-read",
@@ -574,6 +699,29 @@
     "_syncId": "a6812360-0075-40e6-bb25-1846add1833e"
   },
   {
+    "name": "Send Invite",
+    "key": "send_invite",
+    "type": "mail",
+    "position_x": 5,
+    "position_y": 41,
+    "options": {
+      "to": "{{ $trigger.payload.email }}",
+      "subject": "Group Invite",
+      "type": "template",
+      "template": "group_invite",
+      "data": {
+        "group_name": "{{ get_group.name }}",
+        "inviter": "{{ parse_inviter_name.user_name }}",
+        "role": "{{ $trigger.payload.role }}",
+        "host": "{{ $env.FRONTEND_URL }}"
+      }
+    },
+    "resolve": "55059a7b-3f06-4ba3-97b1-8441e96b6f87",
+    "reject": null,
+    "flow": "3b4c29ec-b066-4b3a-a1e2-4c3bde99a0a5",
+    "_syncId": "56905575-ebb4-4bda-b831-8aaf2a6867f4"
+  },
+  {
     "name": "Transform Payload",
     "key": "transform_ruw42",
     "type": "transform",
@@ -596,6 +744,24 @@
     "reject": null,
     "flow": "77f42aee-c6f7-4b12-9dc5-fb62b9f17bfb",
     "_syncId": "533f1858-1704-45e8-9311-5a7c6907637b"
+  },
+  {
+    "name": "Transform Payload",
+    "key": "transform_s094t",
+    "type": "transform",
+    "position_x": 23,
+    "position_y": 41,
+    "options": {
+      "json": {
+        "group_id": "{{ $trigger.payload.group_id }}",
+        "role": "{{ $trigger.payload.role }}",
+        "email": "{{ $trigger.payload.email }}"
+      }
+    },
+    "resolve": "238c6b49-bfea-4447-8a9a-dd0291457ef3",
+    "reject": null,
+    "flow": "3b4c29ec-b066-4b3a-a1e2-4c3bde99a0a5",
+    "_syncId": "55059a7b-3f06-4ba3-97b1-8441e96b6f87"
   },
   {
     "name": "user_group_data",

@@ -1,0 +1,28 @@
+{
+  "collection": "group_invites",
+  "meta": {
+    "accountability": "all",
+    "archive_app_filter": true,
+    "archive_field": null,
+    "archive_value": null,
+    "collapse": "open",
+    "collection": "group_invites",
+    "color": null,
+    "display_template": "{{group_id.name}}: {{email}} as {{role}}",
+    "group": null,
+    "hidden": false,
+    "icon": "import_export",
+    "item_duplication_fields": null,
+    "note": null,
+    "preview_url": null,
+    "singleton": false,
+    "sort": null,
+    "sort_field": null,
+    "translations": null,
+    "unarchive_value": null,
+    "versioning": false
+  },
+  "schema": {
+    "name": "group_invites"
+  }
+}

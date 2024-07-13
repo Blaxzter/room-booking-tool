@@ -42,12 +42,8 @@ const sendInvite = () => {
 
   const { addInvite } = useGroups()
   addInvite(props.group.id, {
-    invites: [
-      {
-        email: inviteEmail.value,
-        role: inviteRole.value
-      }
-    ]
+    email: inviteEmail.value,
+    role: inviteRole.value
   })
 }
 

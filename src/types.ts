@@ -5,6 +5,7 @@ export type MySchema = {
   users: User[]
   notification_setting: NotificationSetting[]
   group_directus_users: GroupDirectusUser[]
+  group_invites: GroupInvite[]
 }
 
 export type Booking = {
@@ -67,7 +68,7 @@ export type Group = {
   id: string
   name: string
   description?: string
-  owner?: { id: string }
+  owner?: { id: string } | string
   avatar?: {
     id: string
   }
@@ -76,10 +77,18 @@ export type Group = {
   objects?: BookableObject[]
 }
 
+export type GroupInvite = {
+  id: string
+  group_id: string
+  user_id?: string
+  email: string
+  role: string
+}
+
 export type CreateGroupRequest = {
   name: string
   description?: string
-  owner?: string
+  owner?: string | { id: string }
   emoji?: string
   avatar?: {
     id: string
@@ -154,11 +163,7 @@ export type LocalUserData = {
   created_bookings?: { [id: string]: { [id: string]: string } }
 }
 
-interface Invite {
+export interface InviteCreateRequest {
   email: string
   role: 'member' | 'admin' | 'viewer'
-}
-
-export type InviteRequest = {
-  invites: Invite[]
 }

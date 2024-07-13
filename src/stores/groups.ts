@@ -2,7 +2,7 @@ import { computed, ref } from 'vue'
 import { defineStore, storeToRefs } from 'pinia'
 import _ from 'lodash'
 
-import type { CreateGroupRequest, Group, InviteRequest } from '@/types'
+import type { CreateGroupRequest, Group, InviteCreateRequest } from '@/types'
 import { useBookableObjects } from '@/stores/bookableObjects'
 import { useUser } from '@/stores/user'
 import { useLocalUser } from '@/stores/localUser'
@@ -106,10 +106,9 @@ export const useGroups = defineStore('group', () => {
     return groups
   }
 
-  const addInvite = async (group_id: string, inviteRequest: InviteRequest) => {
-    // This is a patch request on http://localhost:8055/items/group/1
+  const addInvite = async (group_id: string, inviteRequest: InviteCreateRequest) => {
     const { client } = useUser()
-    return await client.request(updateItem('group', group_id, inviteRequest))
+    return await client.request(createItem('group_invites', { group_id, ...inviteRequest }))
   }
 
   const deleteGroup = async (group_id: string) => {

@@ -1,7 +1,7 @@
 {
   "collection": "group",
   "field": "invites",
-  "type": "json",
+  "type": "alias",
   "meta": {
     "collection": "group",
     "conditions": null,
@@ -10,89 +10,18 @@
     "field": "invites",
     "group": null,
     "hidden": false,
-    "interface": "list",
+    "interface": "list-m2m",
     "note": null,
-    "options": {
-      "fields": [
-        {
-          "field": "email",
-          "name": "email",
-          "type": "string",
-          "meta": {
-            "field": "email",
-            "width": "half",
-            "type": "string",
-            "required": true,
-            "note": "Invite E-Mail Address ",
-            "interface": "input",
-            "options": {
-              "placeholder": "Invite E-Mail",
-              "iconLeft": "mark_email_unread",
-              "softLength": 500,
-              "trim": true
-            }
-          }
-        },
-        {
-          "field": "role",
-          "name": "role",
-          "type": "string",
-          "meta": {
-            "field": "role",
-            "width": "half",
-            "type": "string",
-            "required": true,
-            "interface": "select-dropdown",
-            "options": {
-              "choices": [
-                {
-                  "text": "Member",
-                  "value": "member",
-                  "color": "#3399FF"
-                },
-                {
-                  "text": "Viewer",
-                  "value": "viewer",
-                  "color": "#FFC23B"
-                },
-                {
-                  "text": "Admin",
-                  "value": "admin",
-                  "color": "#E35169"
-                }
-              ],
-              "icon": "verified_user"
-            }
-          }
-        }
-      ]
-    },
+    "options": null,
     "readonly": false,
     "required": false,
     "sort": 14,
     "special": [
-      "cast-json"
+      "m2m"
     ],
     "translations": null,
     "validation": null,
     "validation_message": null,
     "width": "full"
-  },
-  "schema": {
-    "name": "invites",
-    "table": "group",
-    "data_type": "json",
-    "default_value": null,
-    "max_length": null,
-    "numeric_precision": null,
-    "numeric_scale": null,
-    "is_nullable": true,
-    "is_unique": false,
-    "is_primary_key": false,
-    "is_generated": false,
-    "generation_expression": null,
-    "has_auto_increment": false,
-    "foreign_key_table": null,
-    "foreign_key_column": null
   }
 }

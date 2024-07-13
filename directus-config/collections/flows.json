@@ -1,5 +1,19 @@
 [
   {
+    "name": "Get Name Of User by ID",
+    "icon": "person_search",
+    "color": "#2ECDA7",
+    "description": null,
+    "status": "active",
+    "trigger": "operation",
+    "accountability": "all",
+    "options": {
+      "return": "$last"
+    },
+    "operation": "8ce93c59-fd25-49dd-b4b9-3b6adcae3a44",
+    "_syncId": "02e58232-c941-4098-b1dc-ca303a3856e6"
+  },
+  {
     "name": "Button Create Unique ID",
     "icon": "stylus_laser_pointer",
     "color": null,
@@ -16,6 +30,27 @@
     },
     "operation": "2656a256-78dd-40f6-9c90-1719cf7fc81f",
     "_syncId": "0c5d8064-2bf3-4284-b88b-23eeac843879"
+  },
+  {
+    "name": "Group Invite",
+    "icon": "physical_therapy",
+    "color": null,
+    "description": "Intercepts group invites, adds user_id if exists to email and sends email.",
+    "status": "active",
+    "trigger": "event",
+    "accountability": "all",
+    "options": {
+      "type": "filter",
+      "scope": [
+        "items.create"
+      ],
+      "collections": [
+        "group_invites"
+      ],
+      "return": "$last"
+    },
+    "operation": "aeb0ea66-4a50-48a2-ad2f-ac825d487b17",
+    "_syncId": "3b4c29ec-b066-4b3a-a1e2-4c3bde99a0a5"
   },
   {
     "name": "Test Get Data",
@@ -97,10 +132,10 @@
     "_syncId": "926fe0af-3868-43dc-8962-6b17426e51f6"
   },
   {
-    "name": "request_email",
+    "name": "Send Booking Notification",
     "icon": "mark_email_read",
-    "color": null,
-    "description": null,
+    "color": "#E35169",
+    "description": "Sends a booking notifcation to all relevant users",
     "status": "active",
     "trigger": "event",
     "accountability": "all",
@@ -137,9 +172,9 @@
     "_syncId": "c0bc198a-e0a5-410d-8581-db3040ef89ef"
   },
   {
-    "name": "send_mail",
+    "name": "Send Email Flow",
     "icon": "bolt",
-    "color": null,
+    "color": "#2ECDA7",
     "description": "This should only be triggered by a new flow",
     "status": "active",
     "trigger": "operation",

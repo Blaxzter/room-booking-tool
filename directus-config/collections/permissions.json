@@ -970,6 +970,119 @@
   },
   {
     "role": "62a8abe7-e3ae-462e-b038-58ce5a2f5475",
+    "collection": "group_invites",
+    "action": "create",
+    "permissions": {},
+    "validation": {},
+    "presets": null,
+    "fields": [
+      "*"
+    ],
+    "_syncId": "0c945cc3-ad55-4a8f-b9b5-dd63e5a45af0"
+  },
+  {
+    "role": "62a8abe7-e3ae-462e-b038-58ce5a2f5475",
+    "collection": "group_invites",
+    "action": "delete",
+    "permissions": {
+      "_and": [
+        {
+          "_and": [
+            {
+              "group_id": {
+                "users": {
+                  "directus_users_id": {
+                    "_eq": "$CURRENT_USER"
+                  }
+                }
+              }
+            },
+            {
+              "group_id": {
+                "users": {
+                  "role": {
+                    "_eq": "admin"
+                  }
+                }
+              }
+            }
+          ]
+        }
+      ]
+    },
+    "validation": null,
+    "presets": null,
+    "fields": null,
+    "_syncId": "57ffa7e0-8ed7-486f-ba80-95f471430388"
+  },
+  {
+    "role": "62a8abe7-e3ae-462e-b038-58ce5a2f5475",
+    "collection": "group_invites",
+    "action": "read",
+    "permissions": {
+      "_and": [
+        {
+          "_or": [
+            {
+              "group_id": {
+                "users": {
+                  "directus_users_id": {
+                    "_eq": "$CURRENT_USER"
+                  }
+                }
+              }
+            },
+            {
+              "user_id": {
+                "_eq": "$CURRENT_USER"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    "validation": null,
+    "presets": null,
+    "fields": null,
+    "_syncId": "043ff411-cb6a-40af-932c-cd858d242d9f"
+  },
+  {
+    "role": "62a8abe7-e3ae-462e-b038-58ce5a2f5475",
+    "collection": "group_invites",
+    "action": "update",
+    "permissions": {
+      "_and": [
+        {
+          "_and": [
+            {
+              "group_id": {
+                "users": {
+                  "directus_users_id": {
+                    "_eq": "$CURRENT_USER"
+                  }
+                }
+              }
+            },
+            {
+              "group_id": {
+                "users": {
+                  "role": {
+                    "_eq": "admin"
+                  }
+                }
+              }
+            }
+          ]
+        }
+      ]
+    },
+    "validation": null,
+    "presets": null,
+    "fields": null,
+    "_syncId": "1b282797-bce2-44ae-a0e2-11afd0889659"
+  },
+  {
+    "role": "62a8abe7-e3ae-462e-b038-58ce5a2f5475",
     "collection": "group",
     "action": "create",
     "permissions": {},
