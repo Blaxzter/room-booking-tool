@@ -53,6 +53,26 @@
     "_syncId": "3b4c29ec-b066-4b3a-a1e2-4c3bde99a0a5"
   },
   {
+    "name": "Add User Id To Invites After Registration",
+    "icon": "bolt",
+    "color": null,
+    "description": "After registering, all invites with the given email will be given the user id",
+    "status": "active",
+    "trigger": "event",
+    "accountability": "all",
+    "options": {
+      "type": "action",
+      "scope": [
+        "items.create"
+      ],
+      "collections": [
+        "directus_users"
+      ]
+    },
+    "operation": "f0f8a671-3d34-42ea-b2b5-6807512b2037",
+    "_syncId": "5fa12d68-e299-48ad-8120-3b1027cc48f0"
+  },
+  {
     "name": "Test Get Data",
     "icon": "bolt",
     "color": null,
@@ -160,7 +180,7 @@
     "trigger": "event",
     "accountability": "all",
     "options": {
-      "type": "filter",
+      "type": "action",
       "scope": [
         "items.delete"
       ],

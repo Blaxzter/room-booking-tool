@@ -1,5 +1,19 @@
 [
   {
+    "name": "add_user_id",
+    "key": "add_user_id",
+    "type": "exec",
+    "position_x": 37,
+    "position_y": 1,
+    "options": {
+      "code": "module.exports = async function(data) {\n    if (data.$last && data.$last.length > 0) {\n        const updatedLast = data.$last.map(invite => ({\n            user_id: data.$trigger.payload.id,\n            ...invite\n        }));\n        return updatedLast;\n    }\n    return {};\n}"
+    },
+    "resolve": "7a27e114-4a19-428e-a795-96b495f58f91",
+    "reject": null,
+    "flow": "5fa12d68-e299-48ad-8120-3b1027cc48f0",
+    "_syncId": "0ca58843-9dd6-4a3d-a84b-5c0838688d0f"
+  },
+  {
     "name": "Bookable Object Notification Settings",
     "key": "bookable_object_notification_setting",
     "type": "item-read",
@@ -218,7 +232,7 @@
     "position_x": 37,
     "position_y": 1,
     "options": {
-      "code": "module.exports = async function(data) {\n    if (data?.$last.length > 0) {\n        const ids = [];\n        data?.$last.map(item => {\n             ids.push(item?.id); \n        })\n        return ids;\n    }\n    return []\n}"
+      "code": "module.exports = async function(data) {\n    if (data?.$last?.length > 0) {\n        const ids = [];\n        data.$last.forEach(item => {\n            ids.push(item?.id);\n        });\n        return ids;\n    }\n    throw new Error('No user files found');\n}\n"
     },
     "resolve": "e5922ab3-0a8b-4851-b04c-1dbe94e39046",
     "reject": null,
@@ -340,6 +354,27 @@
     "reject": null,
     "flow": "77f42aee-c6f7-4b12-9dc5-fb62b9f17bfb",
     "_syncId": "ab3b8eb9-44be-4d15-a55c-69cb523e1658"
+  },
+  {
+    "name": "Get User Invites",
+    "key": "get_user_invites",
+    "type": "item-read",
+    "position_x": 19,
+    "position_y": 1,
+    "options": {
+      "query": {
+        "filter": {
+          "email": {
+            "_eq": "{{ $trigger.payload.email }}"
+          }
+        }
+      },
+      "collection": "group_invites"
+    },
+    "resolve": "0ca58843-9dd6-4a3d-a84b-5c0838688d0f",
+    "reject": null,
+    "flow": "5fa12d68-e299-48ad-8120-3b1027cc48f0",
+    "_syncId": "f0f8a671-3d34-42ea-b2b5-6807512b2037"
   },
   {
     "name": "group_data",
@@ -465,6 +500,22 @@
     "reject": null,
     "flow": "0c5d8064-2bf3-4284-b88b-23eeac843879",
     "_syncId": "9f886300-231b-48e1-8963-4ae77b5c1a64"
+  },
+  {
+    "name": "Update Data",
+    "key": "item_update_ilppg",
+    "type": "item-update",
+    "position_x": 55,
+    "position_y": 1,
+    "options": {
+      "payload": "{{ $last }}",
+      "collection": "group_invites",
+      "permissions": "$full"
+    },
+    "resolve": null,
+    "reject": null,
+    "flow": "5fa12d68-e299-48ad-8120-3b1027cc48f0",
+    "_syncId": "7a27e114-4a19-428e-a795-96b495f58f91"
   },
   {
     "name": "Log to Console",
