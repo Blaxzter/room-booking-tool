@@ -827,6 +827,8 @@ type directus_users {
   display_name: String
   Groups(filter: group_directus_users_filter, sort: [String], limit: Int, offset: Int, page: Int, search: String): [group_directus_users]
   Groups_func: count_functions
+  Invites(filter: group_invites_filter, sort: [String], limit: Int, offset: Int, page: Int, search: String): [group_invites]
+  Invites_func: count_functions
 }
 
 type directus_users_mutated {
@@ -1392,6 +1394,7 @@ input create_directus_users_input {
   theme_dark_overrides: JSON
   display_name: String
   Groups: [create_group_directus_users_input]
+  Invites: [create_group_invites_input]
 }
 
 input create_group_directus_users_input {
@@ -1672,6 +1675,8 @@ input directus_users_filter {
   display_name: string_filter_operators
   Groups: group_directus_users_filter
   Groups_func: count_function_filter_operators
+  Invites: group_invites_filter
+  Invites_func: count_function_filter_operators
   _and: [directus_users_filter]
   _or: [directus_users_filter]
 }
@@ -1936,6 +1941,7 @@ input update_directus_users_input {
   theme_dark_overrides: JSON
   display_name: String
   Groups: [update_group_directus_users_input]
+  Invites: [update_group_invites_input]
 }
 
 input update_group_directus_users_input {

@@ -1,4 +1,4 @@
-import { computed, ref } from 'vue'
+import { computed, ref, h } from 'vue'
 import { defineStore } from 'pinia'
 import {
   authentication,
@@ -21,7 +21,7 @@ import {
   deleteUser,
   registerUserVerify
 } from '@directus/sdk'
-import type { CreateUserRequest, MySchema, UpdateUserRequest, User } from '@/types'
+import type { CreateUserRequest, Group, MySchema, UpdateUserRequest, User } from '@/types'
 import router from '@/router'
 import { useRequests } from '@/stores/requests'
 import { useNotificationSetting } from '@/stores/notificationSettings'
@@ -31,6 +31,7 @@ import { useGlobal } from '@/stores/global'
 import { useGroups } from '@/stores/groups'
 import { useBookings } from '@/stores/booking'
 import { useBookableObjects } from '@/stores/bookableObjects'
+import { ToastAction } from '@/components/ui/toast'
 import { toast } from '@/components/ui/toast'
 
 export type MyDirectusClient = DirectusClient<MySchema> &
@@ -128,6 +129,33 @@ export const useUser = defineStore('user', () => {
     user.value = await client.request<User>(readMe())
     // write to local storage
     localStorage.setItem('user', JSON.stringify(user.value))
+    if (user.value?.Invites && user.value.Invites.length > 0) {
+      const { getInvites } = useGroups()
+      await getInvites(user.value.id).then((invites) => {
+        if (invites.length > 0) {
+          invites.forEach((invite) => {
+            if (invite.group_id) {
+              toast({
+                title: 'Invites',
+                description: `You have been invited to join ${(invite.group_id as Group).name}`,
+                variant: 'default',
+                duration: 5000,
+                action: h(
+                  ToastAction,
+                  {
+                    altText: 'Try again'
+                  },
+                  {
+                    default: () => 'Try again'
+                  }
+                )
+              })
+            }
+          })
+        }
+      })
+    }
+
     return user.value
   }
 

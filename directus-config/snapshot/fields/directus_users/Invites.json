@@ -1,23 +1,21 @@
 {
-  "collection": "group",
-  "field": "invites",
+  "collection": "directus_users",
+  "field": "Invites",
   "type": "alias",
   "meta": {
-    "collection": "group",
+    "collection": "directus_users",
     "conditions": null,
     "display": null,
     "display_options": null,
-    "field": "invites",
+    "field": "Invites",
     "group": null,
     "hidden": false,
     "interface": "list-o2m",
     "note": null,
-    "options": {
-      "template": "{{email}} {{role}}"
-    },
+    "options": null,
     "readonly": false,
-    "required": true,
-    "sort": 14,
+    "required": false,
+    "sort": 3,
     "special": [
       "o2m"
     ],

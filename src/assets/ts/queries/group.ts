@@ -10,6 +10,11 @@ export const groupFields = `
         avatar {
             id
         }
+        invites {
+            id
+            email
+            role
+        }
 `
 
 export const getGroupsWithUserQuery = ({
@@ -49,6 +54,11 @@ export const getGroupsWithUserQuery = ({
         }
         avatar {
             id
+        }
+        invites {
+            id
+            email
+            role
         }
     }
     ${

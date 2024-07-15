@@ -1,10 +1,10 @@
 <script setup lang="ts">
 import { ref, computed, inject } from 'vue'
 import { storeToRefs } from 'pinia'
-import { SendIcon } from 'lucide-vue-next'
+import { SendIcon, TrashIcon } from 'lucide-vue-next'
 import _ from 'lodash'
 
-import type { Group, GroupDirectusUser, User } from '@/types'
+import type { Group, GroupDirectusUser, GroupInvite, User } from '@/types'
 
 import { Input } from '@/components/ui/input'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
@@ -32,6 +32,13 @@ const users = computed(() => {
   return _.filter(props.group.users, (u) => (u.directus_users_id as User).id !== props.group?.owner?.id)
 })
 
+const invites = computed(() => {
+  if (!props.group) {
+    return []
+  }
+  return props.group.invites
+})
+
 const inviteRole = ref<'member' | 'admin' | 'viewer'>('member')
 const inviteEmail = ref('')
 
@@ -41,10 +48,19 @@ const sendInvite = () => {
   }
 
   const { addInvite } = useGroups()
-  addInvite(props.group.id, {
+  addInvite(props.group, {
     email: inviteEmail.value,
     role: inviteRole.value
   })
+}
+
+const deleteInvite = async (invite: GroupInvite) => {
+  if (!props.group) {
+    return
+  }
+
+  const { deleteInvite } = useGroups()
+  await deleteInvite(invite.id)
 }
 
 const getUser = (user: GroupDirectusUser) => {
@@ -121,6 +137,23 @@ const updateUserRole = async (user: GroupDirectusUser, role: string) => {
         </div>
       </div>
       <GroupRoleDropDown :role="c_user?.role" @update:role="($event) => updateUserRole(c_user, $event)" />
+    </div>
+    <div v-if="invites?.length !== 0">
+      <p class="text-sm text-muted-foreground">Invites</p>
+    </div>
+    <div class="flex items-center justify-between space-x-4" v-for="invite in invites" :key="invite.id">
+      <div class="flex items-center space-x-4">
+        <Avatar>
+          <AvatarFallback>{{ invite.email.charAt(0) }}</AvatarFallback>
+        </Avatar>
+        <div>
+          <p class="text-sm font-medium leading-none">{{ invite.email }}</p>
+          <p class="text-sm text-muted-foreground">Invited</p>
+        </div>
+      </div>
+      <Button variant="secondary" size="icon" class="flex-shrink-0" @click="deleteInvite(invite)">
+        <TrashIcon class="h-5 w-5" />
+      </Button>
     </div>
   </div>
 </template>

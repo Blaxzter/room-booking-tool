@@ -75,12 +75,13 @@ export type Group = {
   emoji?: string
   users?: GroupDirectusUser[]
   objects?: BookableObject[]
+  invites?: GroupInvite[]
 }
 
 export type GroupInvite = {
   id: string
-  group_id: string
-  user_id?: string
+  group_id: string | Group
+  user_id?: string | User
   email: string
   role: string
 }
@@ -130,6 +131,9 @@ export type User = {
   last_access: string
   last_page: string
   display_name: string
+
+  Groups?: GroupDirectusUser[]
+  Invites?: GroupInvite[]
 }
 
 export type NotificationSetting = {

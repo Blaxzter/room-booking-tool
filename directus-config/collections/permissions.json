@@ -1024,6 +1024,11 @@
         {
           "_or": [
             {
+              "user_id": {
+                "_eq": "$CURRENT_USER"
+              }
+            },
+            {
               "group_id": {
                 "users": {
                   "directus_users_id": {
@@ -1031,19 +1036,16 @@
                   }
                 }
               }
-            },
-            {
-              "user_id": {
-                "_eq": "$CURRENT_USER"
-              }
             }
           ]
         }
       ]
     },
-    "validation": null,
+    "validation": {},
     "presets": null,
-    "fields": null,
+    "fields": [
+      "*"
+    ],
     "_syncId": "043ff411-cb6a-40af-932c-cd858d242d9f"
   },
   {
@@ -1118,11 +1120,22 @@
     "permissions": {
       "_and": [
         {
-          "users": {
-            "directus_users_id": {
-              "_eq": "$CURRENT_USER"
+          "_or": [
+            {
+              "invites": {
+                "user_id": {
+                  "_eq": "$CURRENT_USER"
+                }
+              }
+            },
+            {
+              "users": {
+                "directus_users_id": {
+                  "_eq": "$CURRENT_USER"
+                }
+              }
             }
-          }
+          ]
         },
         {
           "status": {
@@ -1146,7 +1159,8 @@
       "sort",
       "owner",
       "avatar",
-      "emoji"
+      "emoji",
+      "invites"
     ],
     "_syncId": "a8ec1f4b-ad82-4bb2-836e-1acee571b9ac"
   },

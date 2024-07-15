@@ -2,13 +2,18 @@ import { computed, ref } from 'vue'
 import { defineStore, storeToRefs } from 'pinia'
 import _ from 'lodash'
 
-import type { CreateGroupRequest, Group, InviteCreateRequest } from '@/types'
+import type { CreateGroupRequest, Group, GroupInvite, InviteCreateRequest } from '@/types'
 import { useBookableObjects } from '@/stores/bookableObjects'
 import { useUser } from '@/stores/user'
 import { useLocalUser } from '@/stores/localUser'
 import { createItem, updateItem, deleteItem } from '@directus/sdk'
 import { getGroupsWithUserQuery } from '@/assets/ts/queries/group'
-import type { GetGroupQueryResponse, GetGroupsQueryResponse } from '@/assets/ts/queries/initial_data'
+import type {
+  GetGroupQueryResponse,
+  GetGroupsQueryResponse,
+  GetInviteQueryResponse
+} from '@/assets/ts/queries/initial_data'
+import { getInviteQuery } from '@/assets/ts/queries/invites'
 
 export const useGroups = defineStore('group', () => {
   const { setSelectedGroup, getSelectedGroup } = useLocalUser()
@@ -106,9 +111,24 @@ export const useGroups = defineStore('group', () => {
     return groups
   }
 
-  const addInvite = async (group_id: string, inviteRequest: InviteCreateRequest) => {
+  const getInvites = async (user_id: string) => {
     const { client } = useUser()
-    return await client.request(createItem('group_invites', { group_id, ...inviteRequest }))
+    const result = await client.query<GetInviteQueryResponse>(getInviteQuery({ as_query: true, user_id }))
+    return result.group_invites
+  }
+
+  const addInvite = async (group: Group, inviteRequest: InviteCreateRequest) => {
+    const { client } = useUser()
+    const newInvite = await client.request(createItem('group_invites', { group_id: group.id, ...inviteRequest }))
+    group.invites?.push(newInvite as GroupInvite)
+    return newInvite
+  }
+
+  const deleteInvite = async (group: Group, invite_id: string) => {
+    const { client } = useUser()
+    return await client.request(deleteItem('group_invites', invite_id)).then(() => {
+      group.invites = group.invites?.filter((invite) => invite.id !== invite_id)
+    })
   }
 
   const deleteGroup = async (group_id: string) => {
@@ -132,7 +152,9 @@ export const useGroups = defineStore('group', () => {
     selectGroup,
     createGroup,
     reset,
+    getInvites,
     addInvite,
+    deleteInvite,
     deleteGroup,
     updateGroupUser
   }

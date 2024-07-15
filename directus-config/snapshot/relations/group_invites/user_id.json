@@ -10,7 +10,7 @@
     "one_collection": "directus_users",
     "one_collection_field": null,
     "one_deselect_action": "nullify",
-    "one_field": null,
+    "one_field": "Invites",
     "sort_field": null
   },
   "schema": {

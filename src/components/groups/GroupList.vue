@@ -6,7 +6,7 @@ import _ from 'lodash'
 
 import { Badge } from '@/components/ui/badge'
 
-import { UsersIcon, BoxIcon } from 'lucide-vue-next'
+import { UsersIcon, BoxIcon, SendIcon } from 'lucide-vue-next'
 
 import type { Group, User } from '@/types'
 import { useGroups } from '@/stores/groups'
@@ -14,6 +14,7 @@ import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 const { groups } = storeToRefs(useGroups())
 
 import { useUser } from '@/stores/user'
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip'
 
 const { user } = storeToRefs(useUser())
 
@@ -104,11 +105,37 @@ defineEmits(['selectGroup'])
               <div class="font-semibold">
                 {{ group.name }}
               </div>
-              <div class="flex items-center gap-2 text-muted-foreground">
-                <span class="text-xl">
-                  {{ groupUser(group)?.length }}
-                </span>
-                <UsersIcon />
+              <div class="flex gap-4 text-muted-foreground">
+                <TooltipProvider>
+                  <Tooltip>
+                    <TooltipTrigger>
+                      <div class="flex items-center gap-2">
+                        <span class="text-xl">
+                          {{ groupUser(group)?.length }}
+                        </span>
+                        <UsersIcon />
+                      </div>
+                    </TooltipTrigger>
+                    <TooltipContent>
+                      <p>{{ groupUser(group)?.length }} users in this group</p>
+                    </TooltipContent>
+                  </Tooltip>
+                </TooltipProvider>
+                <TooltipProvider>
+                  <Tooltip>
+                    <TooltipTrigger>
+                      <div class="flex items-center gap-2">
+                        <span class="text-xl">
+                          {{ group.invites?.length }}
+                        </span>
+                        <SendIcon />
+                      </div>
+                    </TooltipTrigger>
+                    <TooltipContent>
+                      <p>{{ group.invites?.length }} invites in this group</p>
+                    </TooltipContent>
+                  </Tooltip>
+                </TooltipProvider>
               </div>
             </div>
             <div class="line-clamp-2 text-xs text-muted-foreground">

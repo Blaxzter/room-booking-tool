@@ -11056,6 +11056,20 @@
                 }
               ]
             }
+          },
+          "Invites": {
+            "nullable": true,
+            "type": "array",
+            "items": {
+              "oneOf": [
+                {
+                  "type": "integer"
+                },
+                {
+                  "$ref": "#/components/schemas/ItemsGroupInvites"
+                }
+              ]
+            }
           }
         },
         "x-collection": "directus_users"

@@ -1,4 +1,4 @@
-import type { BookableObject, Booking, Group, NotificationSetting } from '@/types'
+import type { BookableObject, Booking, Group, GroupInvite, NotificationSetting } from '@/types'
 import {
   bookableObjectByGroup,
   bookableObjectById,
@@ -104,6 +104,10 @@ export interface ObjectViewResponse {
 export interface GetGroupsQueryResponse {
   group: Group[]
   bookable_object?: BookableObject[]
+}
+
+export interface GetInviteQueryResponse {
+  group_invites: GroupInvite[]
 }
 
 export interface GetGroupQueryResponse {
