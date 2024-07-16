@@ -23,12 +23,12 @@ import { useInitialDataStore } from '@/stores/initial'
 import { useGroups } from '@/stores/groups'
 import { useUser } from '@/stores/user'
 
-const { user } = storeToRefs(useUser())
 import { Dialog } from '@/components/ui/dialog'
 import type { ShowAlertFunction } from '@/plugins/alert-dialog-plugin'
 
 const { fetchGroupData } = useInitialDataStore()
 const { init_loading } = storeToRefs(useInitialDataStore())
+const { user } = storeToRefs(useUser())
 
 const selectedGroup = ref<Group | undefined>(undefined)
 
@@ -74,6 +74,10 @@ const deleteGroup = () => {
     onConfirmText: 'Delete'
   })
 }
+
+const isOwner = computed(() => {
+  return (selectedGroup?.value?.owner as { id: string })?.id === user.value.id
+})
 </script>
 
 <template>
@@ -106,7 +110,7 @@ const deleteGroup = () => {
               <GroupMemberCard :group="selectedGroup" />
             </TabsContent>
           </Tabs>
-          <div class="flex justify-end" v-if="selectedGroup.owner?.id === user.id">
+          <div class="flex justify-end" v-if="isOwner">
             <Button variant="destructive" class="mt-4" @click="deleteGroup">
               <TrashIcon class="w-4 h-4 me-1" />
               Delete Group

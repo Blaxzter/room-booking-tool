@@ -29,7 +29,10 @@ const users = computed(() => {
     return []
   }
   // filter out the owner of the group
-  return _.filter(props.group.users, (u) => (u.directus_users_id as User).id !== props.group?.owner?.id)
+  return _.filter(
+    props.group.users,
+    (u) => (u.directus_users_id as User).id !== (props.group?.owner as { id: string })?.id
+  )
 })
 
 const invites = computed(() => {
@@ -60,7 +63,7 @@ const deleteInvite = async (invite: GroupInvite) => {
   }
 
   const { deleteInvite } = useGroups()
-  await deleteInvite(invite.id)
+  await deleteInvite(props.group, invite.id)
 }
 
 const getUser = (user: GroupDirectusUser) => {

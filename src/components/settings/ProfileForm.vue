@@ -55,10 +55,20 @@ const profileFormSchema = toTypedSchema(
   })
 )
 
+const getAvatarString = (avatar: string | { id: string } | undefined) => {
+  if (!avatar) {
+    return ''
+  }
+  if (typeof avatar === 'string') {
+    return avatar
+  }
+  return avatar.id
+}
+
 const { handleSubmit } = useForm({
   validationSchema: profileFormSchema,
   initialValues: {
-    avatar: user.value?.avatar ?? '',
+    avatar: getAvatarString(user.value?.avatar) ?? '',
     email: user.value?.email ?? '',
     first_name: user.value?.first_name ?? '',
     last_name: user.value?.last_name ?? '',
@@ -106,7 +116,7 @@ const onSubmit = handleSubmit(async (values) => {
         alignment="left"
         class="ms-2"
         folder="b9b3ad18-3da4-42e3-8cdc-dc749ce89041"
-        :initAvatar="user.avatar"
+        :initAvatar="getAvatarString(user.avatar)"
         @avatar-updated="avatarChanged = true"
       />
       <div class="text-sm text-muted-foreground">Upload a new image to change your profile picture.</div>

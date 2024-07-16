@@ -19,16 +19,16 @@ import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/comp
 const { user } = storeToRefs(useUser())
 
 const groupUser = (group: Group) => {
-  return _.filter(group.users, (u) => (u.directus_users_id as User).id !== group?.owner?.id)
+  return _.filter(group.users, (u) => (u.directus_users_id as User).id !== (group?.owner as { id: string })?.id)
 }
 
 // create a computed that are the groups the user is owner of
 const ownedGroups = computed(() => {
-  return groups.value.filter((group) => group.owner?.id === user.value.id)
+  return groups.value.filter((group) => (group.owner as { id: string })?.id === user.value.id)
 })
 
 const invitedGroups = computed(() => {
-  return groups.value.filter((group) => group.owner?.id !== user.value.id)
+  return groups.value.filter((group) => (group.owner as { id: string })?.id !== user.value.id)
 })
 
 const groupIterative = ref([
