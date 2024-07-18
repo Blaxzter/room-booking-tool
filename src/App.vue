@@ -17,8 +17,11 @@ const isDark = useDark()
 const darkModeVar = computed(() => {
   return `--dark-mode: ${isDark.value ? 'true' : 'false'}`
 })
-// provide import.meta.env.VITE_BACKEND_URL to all components as backendUrl
-provide('backendUrl', import.meta.env.VITE_BACKEND_URL)
+
+provide(
+  'backendUrl',
+  import.meta.env.VITE_BACKEND_URL ? import.meta.env.VITE_BACKEND_URL : `https://api.${window.location.host}`
+)
 provide('showAlertDialog', showAlertDialog)
 </script>
 

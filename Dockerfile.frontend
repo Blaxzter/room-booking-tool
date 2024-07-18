@@ -21,7 +21,7 @@ COPY tsconfig.json ./
 COPY tsconfig.node.json ./
 COPY vite.config.ts ./
 
-COPY .env ./.env
+# COPY .env ./.env
 COPY env.d.ts ./env.d.ts
 
 RUN pnpm run build

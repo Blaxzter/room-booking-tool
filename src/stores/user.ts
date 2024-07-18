@@ -108,13 +108,18 @@ export const useUser = defineStore('user', () => {
 
   const typedStorage: AuthenticationStorage = storage as unknown as AuthenticationStorage
 
-  const backendUrl = import.meta.env.VITE_BACKEND_URL as string
+  // current window.location.host but with api. prefix instead of www.
+  const backendUrl = import.meta.env.VITE_BACKEND_URL
+    ? import.meta.env.VITE_BACKEND_URL
+    : `https://api.${window.location.host}`
   const authMode: AuthenticationMode = 'json'
   const authConfig: AuthenticationConfig = {
     autoRefresh: true,
     msRefreshBeforeExpires: 10_000,
     storage: typedStorage
   }
+
+  console.log(backendUrl)
 
   const client: MyDirectusClient = createDirectus<MySchema>(backendUrl)
     .with(authentication(authMode, authConfig))
@@ -271,7 +276,7 @@ export const useUser = defineStore('user', () => {
       registerUser(data.email, data.password, {
         first_name: data.first_name,
         last_name: data.last_name,
-        verification_url: `${import.meta.env.VITE_FRONTEND_URL}/verify-email`
+        verification_url: `https://${window.location.host}/verify-email`
       })
     )
   }
@@ -298,7 +303,7 @@ export const useUser = defineStore('user', () => {
   const email = computed(() => user.value?.email)
   const hasName = computed(() => userName.value.trim() !== '')
   const name = computed(() => (hasName.value ? userName.value : email.value))
-  const avatar = computed(() => `${import.meta.env.VITE_BACKEND_URL}/assets/${user.value?.avatar}` ?? '')
+  const avatar = computed(() => `${backendUrl}/assets/${user.value?.avatar}` ?? '')
   const avatarId = computed(() => user.value?.avatar ?? '')
   const avatarFallback = computed(() => user.value?.first_name?.charAt(0) + user.value?.last_name?.charAt(0))
 
