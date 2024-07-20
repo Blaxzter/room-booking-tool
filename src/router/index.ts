@@ -44,7 +44,11 @@ const router = createRouter({
           props: (route) => ({
             id: route.params.id,
             date: route.query.date
-          })
+          }),
+          meta: {
+            requiresAuth: true,
+            hideVersion: true
+          }
         }
       ]
     },
@@ -67,7 +71,10 @@ const router = createRouter({
       path: '/bookable-object/:id',
       alias: ['/room/:id', '/equipment/:id'],
       name: 'bookable-object',
-      component: () => import('@/views/BookableObjectViewPublic.vue')
+      component: () => import('@/views/BookableObjectViewPublic.vue'),
+      meta: {
+        hideVersion: true
+      }
     },
     {
       path: '/:pathMatch(.*)*',

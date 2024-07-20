@@ -59,7 +59,7 @@ const profileFormSchema = toTypedSchema(
   })
 )
 
-const { handleSubmit, setValues } = useForm({
+const { handleSubmit, setValues, values } = useForm({
   validationSchema: profileFormSchema,
   // get the initial values from the group prop
   initialValues: {
@@ -100,6 +100,18 @@ const onSubmit = handleSubmit(async (values) => {
   })
   emit('created', newGroup as Group)
 })
+
+// Function to update the group in the backend
+const updateGroup = async (field: keyof Group, value: any) => {
+  if (props.group && props.group[field] !== value) {
+    const { updateGroup } = useGroups()
+    await updateGroup(props.group.id, { [field]: value })
+    toast({
+      title: 'Group updated',
+      description: `The group ${props.group.name} has been updated.`
+    })
+  }
+}
 </script>
 
 <template>
@@ -115,7 +127,7 @@ const onSubmit = handleSubmit(async (values) => {
         <div class="mx-1 sm:mx-5 mb-7">or</div>
 
         <div class="flex flex-col items-center w-[120px]">
-          <EmojiPicker v-model="selectedEmoji" />
+          <EmojiPicker v-model="selectedEmoji" @update="updateGroup('emoji', selectedEmoji)" />
           <div class="text-sm text-gray-500 mt-3">Select an Emoji</div>
         </div>
       </div>
@@ -124,7 +136,7 @@ const onSubmit = handleSubmit(async (values) => {
       <FormItem>
         <FormLabel>Group name</FormLabel>
         <FormControl>
-          <Input type="text" :placeholder="randomGroupName()" v-bind="componentField" />
+          <Input type="text" :placeholder="randomGroupName()" v-bind="componentField" @blur="updateGroup('name', values.name)" />
         </FormControl>
         <FormDescription> This is the name of the group that will be displayed to users. </FormDescription>
         <FormMessage />
@@ -134,7 +146,7 @@ const onSubmit = handleSubmit(async (values) => {
       <FormItem>
         <FormLabel>Description</FormLabel>
         <FormControl>
-          <Textarea placeholder="A short description of the group" v-bind="componentField" />
+          <Textarea placeholder="A short description of the group" v-bind="componentField" @blur="updateGroup('description', values.description)" />
         </FormControl>
         <FormDescription> This is a short description of the group that will be displayed to users. </FormDescription>
         <FormMessage />

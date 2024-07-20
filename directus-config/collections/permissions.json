@@ -1171,17 +1171,40 @@
     "permissions": {
       "_and": [
         {
-          "users": {
-            "role": {
-              "_eq": "admin"
+          "_or": [
+            {
+              "users": {
+                "role": {
+                  "_eq": "admin"
+                }
+              }
+            },
+            {
+              "owner": {
+                "_eq": "$CURRENT_USER"
+              }
             }
-          }
+          ]
         }
       ]
     },
     "validation": null,
     "presets": null,
-    "fields": null,
+    "fields": [
+      "name",
+      "owner",
+      "sort",
+      "user_created",
+      "description",
+      "emoji",
+      "status",
+      "user_updated",
+      "date_updated",
+      "users",
+      "date_created",
+      "invites",
+      "avatar"
+    ],
     "_syncId": "134b8848-7480-4cf5-81f6-f837705f45c3"
   },
   {

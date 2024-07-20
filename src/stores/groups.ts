@@ -141,6 +141,11 @@ export const useGroups = defineStore('group', () => {
     return await client.request(updateItem('group_directus_users', id, { role }))
   }
 
+  const updateGroup = async (group_id: string, data: Partial<Group>) => {
+    const { client } = useUser()
+    return await client.request(updateItem('group', group_id, data))
+  }
+
   return {
     groups,
     selectedGroupId,
@@ -156,6 +161,7 @@ export const useGroups = defineStore('group', () => {
     addInvite,
     deleteInvite,
     deleteGroup,
-    updateGroupUser
+    updateGroupUser,
+    updateGroup
   }
 })

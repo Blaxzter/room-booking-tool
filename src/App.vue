@@ -8,6 +8,7 @@ import { useDark } from '@vueuse/core'
 import { storeToRefs } from 'pinia'
 
 import { useInitialDataStore } from '@/stores/initial'
+import VersionDisplay from '@/components/utils/VersionDisplay.vue'
 
 const { init_loading } = storeToRefs(useInitialDataStore())
 
@@ -33,6 +34,19 @@ provide('showAlertDialog', showAlertDialog)
     <RouterView v-show="!init_loading" />
   </div>
   <Toaster />
+  <VersionDisplay class="version-display" />
 </template>
 
-<style scoped></style>
+<style scoped>
+.version-display {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  padding: 0.5rem;
+  font-size: 0.7rem;
+  font-family: 'Roboto', sans-serif;
+  color: #2c3e50;
+  user-select: none;
+  pointer-events: none;
+}
+</style>
