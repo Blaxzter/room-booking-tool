@@ -7,7 +7,7 @@ REPO_FRONTEND="blaxzter/bookitool-frontend"
 REPO_DIRECTUS="blaxzter/bookitool-directus"
 DOCKERFILE_DIRECTUS="Dockerfile.directus"
 DOCKERFILE_FRONTEND="Dockerfile.frontend"
-VERSION_FILE="src/version.js"
+VERSION_FILE="src/version.ts"
 
 # Ensure version.js file exists
 if [ ! -f "$VERSION_FILE" ]; then
