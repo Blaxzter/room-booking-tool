@@ -2,20 +2,20 @@
 import { computed, inject, onMounted, ref, watch } from 'vue'
 import { uploadFiles } from '@directus/sdk'
 
-import { UploadIcon, XIcon } from 'lucide-vue-next'
+import { UploadIcon, XIcon, TrashIcon } from 'lucide-vue-next'
 // @ts-ignore
 import AvatarCropper from 'vue-avatar-cropper'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 
 import { useUser } from '@/stores/user'
-
+import type { ShowAlertFunction } from '@/plugins/alert-dialog-plugin'
 const { client } = useUser()
 
 const showCropper = ref(false)
 const avatar = ref<string>('')
 const toBeUploadedImage = ref<Blob | null>(null)
 
-const emits = defineEmits(['avatar-updated'])
+const emits = defineEmits(['avatar-updated', 'avatar-cleared'])
 const props = defineProps({
   isSquare: {
     type: Boolean,
@@ -41,6 +41,10 @@ const props = defineProps({
   folder: {
     type: String,
     default: '76196db0-2d35-4646-ac32-8df8a9986615'
+  },
+  addClearRequest: {
+    type: Boolean,
+    default: false
   }
 })
 
@@ -65,10 +69,22 @@ const selectImage = (copperJsInstance: any) => {
     )
 }
 
+const showAlertDialog = inject('showAlertDialog') as ShowAlertFunction
 const clearImage = () => {
-  avatar.value = ''
-  toBeUploadedImage.value = null
-  emits('avatar-updated', true)
+  if (props.addClearRequest) {
+    showAlertDialog({
+      title: 'Delete Avatar',
+      description: `Are you sure you want to delete the avatar?`,
+      onConfirm: () => {
+        avatar.value = ''
+        toBeUploadedImage.value = null
+        emits('avatar-cleared', true)
+      },
+      confirmIcon: TrashIcon,
+      confirmVariant: 'destructive',
+      onConfirmText: 'Delete'
+    })
+  }
 }
 
 // random number between 1 and 500
@@ -95,7 +111,7 @@ const avatarCssVars = computed(() => {
 
 // on mouted set the avatar
 onMounted(() => {
-  avatar.value = `${backendUrl}/assets/${props.initAvatar}`
+  if (props.initAvatar) avatar.value = `${backendUrl}/assets/${props.initAvatar}`
 })
 
 watch(

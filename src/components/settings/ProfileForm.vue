@@ -118,6 +118,7 @@ const onSubmit = handleSubmit(async (values) => {
         folder="b9b3ad18-3da4-42e3-8cdc-dc749ce89041"
         :initAvatar="getAvatarString(user.avatar)"
         @avatar-updated="avatarChanged = true"
+        @avatar-cleared="avatarChanged = true"
       />
       <div class="text-sm text-muted-foreground">Upload a new image to change your profile picture.</div>
     </div>

@@ -1,6 +1,9 @@
 <script setup lang="ts">
+import { defineEmits } from 'vue'
 import { DropdownMenu, DropdownMenuContent, DropdownMenuTrigger } from '@/components/ui/dropdown-menu'
 import RandomEmoji from '@/components/utils/Emoji.vue'
+
+const emits = defineEmits(['select'])
 
 // @ts-ignore
 import { Emoji, Picker, EmojiIndex } from 'emoji-mart-vue-fast/src'
@@ -11,6 +14,7 @@ const selectedEmoji = defineModel()
 
 const selectEmoji = (emoji: Emoji) => {
   selectedEmoji.value = emoji.native
+  emits('select', emoji.native)
 }
 </script>
 

@@ -19,7 +19,8 @@ import {
   updateUser,
   registerUser,
   deleteUser,
-  registerUserVerify
+  registerUserVerify,
+  deleteFile
 } from '@directus/sdk'
 import type { CreateUserRequest, Group, MySchema, UpdateUserRequest, User } from '@/types'
 import router from '@/router'
@@ -299,6 +300,11 @@ export const useUser = defineStore('user', () => {
     await noAuthClient.request(registerUserVerify(emailed_token))
   }
 
+  const deleteDirectusFile = async (file_id: string) => {
+    const { client } = useUser()
+    return await client.request(deleteFile(file_id))
+  }
+
   const userName = computed(() => user.value?.first_name + ' ' + user.value?.last_name)
   const email = computed(() => user.value?.email)
   const hasName = computed(() => userName.value.trim() !== '')
@@ -328,6 +334,7 @@ export const useUser = defineStore('user', () => {
     avatar,
     avatarId,
     avatarFallback,
-    reset
+    reset,
+    deleteDirectusFile
   }
 })

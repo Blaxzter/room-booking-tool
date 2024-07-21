@@ -133,7 +133,9 @@ export const useGroups = defineStore('group', () => {
 
   const deleteGroup = async (group_id: string) => {
     const { client } = useUser()
-    return await client.request(deleteItem('group', group_id))
+    return await client.request(deleteItem('group', group_id)).then(() => {
+      groups.value = groups.value.filter((group) => group.id !== group_id)
+    })
   }
 
   const updateGroupUser = async (id: string, role: string) => {
@@ -143,7 +145,18 @@ export const useGroups = defineStore('group', () => {
 
   const updateGroup = async (group_id: string, data: Partial<Group>) => {
     const { client } = useUser()
-    return await client.request(updateItem('group', group_id, data))
+    // Do not send update to backend if data is avatar: { id: undefined }
+    if (data.avatar?.id !== undefined) {
+      console.log('updateItem')
+      await client.request(updateItem('group', group_id, data))
+    }
+    const group = groups.value.find((g) => g.id === group_id)
+    console.log(group)
+    if (group) {
+      Object.assign(group, data)
+    }
+    console.log(group)
+    return group
   }
 
   return {

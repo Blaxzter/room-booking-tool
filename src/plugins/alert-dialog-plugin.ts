@@ -5,7 +5,6 @@ import type { Component } from 'vue'
 export type ShowAlertFunction = (options: {
   title: string
   description: string
-  confirmText: string
   onConfirm: () => void
   confirmIcon?: Component
   confirmVariant?: 'primary' | 'destructive'

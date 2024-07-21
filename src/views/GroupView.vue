@@ -60,7 +60,6 @@ const deleteGroup = () => {
   showAlertDialog({
     title: 'Delete Group',
     description: `Are you sure you want to delete the group "${selectedGroup.value.name}"?`,
-    confirmText: 'Delete',
     onConfirm: () => {
       if (!selectedGroup.value) {
         return

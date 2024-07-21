@@ -86,7 +86,7 @@ defineEmits(['selectGroup'])
           shape="square"
           :class="selectedEditGroup?.id === group.id && 'border border-primary'"
         >
-          <AvatarImage :src="`${backendUrl}/assets/${group?.avatar?.id}`" :alt="group.name" />
+          <AvatarImage :src="`${backendUrl}/assets/${group?.avatar?.id}`" :alt="group.name" v-if="group?.avatar?.id" />
           <AvatarFallback>
             {{ nameInitials(group.name) }}
           </AvatarFallback>

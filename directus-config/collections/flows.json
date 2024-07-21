@@ -110,8 +110,8 @@
   },
   {
     "name": "Delete Avatar Image on Delete",
-    "icon": "bolt",
-    "color": null,
+    "icon": "restore_from_trash",
+    "color": "#2ECDA7",
     "description": "Delete Images if object is deleted",
     "status": "active",
     "trigger": "event",

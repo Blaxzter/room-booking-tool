@@ -16,6 +16,7 @@ import AvatarUploadComponent from '@/components/utils/AvatarUploadComponent.vue'
 import EmojiPicker from '@/components/utils/EmojiPicker.vue'
 import { useGroups } from '@/stores/groups'
 import type { Group } from '@/types'
+import { useUser } from '@/stores/user'
 
 const { toast } = useToast()
 
@@ -103,6 +104,24 @@ const onSubmit = handleSubmit(async (values) => {
 
 // Function to update the group in the backend
 const updateGroup = async (field: keyof Group, value: any) => {
+  console.log('updateGroup', field, value)
+  // if field is avatar and value is an empty string, delete the avatar
+  if (field === 'avatar') {
+    if (props.group?.avatar?.id) {
+      const { deleteDirectusFile } = useUser()
+      await deleteDirectusFile(props.group?.avatar?.id!).then(() => {
+        if (!value) {
+          toast({
+            title: 'Group avatar deleted',
+            description: `The group ${props.group?.name} has been updated.`
+          })
+        }
+      })
+    }
+    const avatar_id = await avatarUpload.value.uploadImage()
+    value = { id: avatar_id }
+  }
+
   if (props.group && props.group[field] !== value) {
     const { updateGroup } = useGroups()
     await updateGroup(props.group.id, { [field]: value })
@@ -120,14 +139,20 @@ const updateGroup = async (field: keyof Group, value: any) => {
       <Label for="name">Group Image</Label>
       <div class="flex items-center justify-center">
         <div class="mt-1 flex flex-col items-center w-[120px]">
-          <AvatarUploadComponent ref="avatarUpload" :initAvatar="group?.avatar?.id" />
+          <AvatarUploadComponent
+            ref="avatarUpload"
+            :initAvatar="group?.avatar?.id"
+            @avatar-updated="updateGroup('avatar', $event)"
+            @avatar-cleared="updateGroup('avatar', null)"
+            :add-clear-request="!!group"
+          />
           <div class="text-sm text-gray-500 mt-3">Upload an Image</div>
         </div>
 
         <div class="mx-1 sm:mx-5 mb-7">or</div>
 
         <div class="flex flex-col items-center w-[120px]">
-          <EmojiPicker v-model="selectedEmoji" @update="updateGroup('emoji', selectedEmoji)" />
+          <EmojiPicker v-model="selectedEmoji" @select="updateGroup('emoji', selectedEmoji)" />
           <div class="text-sm text-gray-500 mt-3">Select an Emoji</div>
         </div>
       </div>
@@ -136,7 +161,12 @@ const updateGroup = async (field: keyof Group, value: any) => {
       <FormItem>
         <FormLabel>Group name</FormLabel>
         <FormControl>
-          <Input type="text" :placeholder="randomGroupName()" v-bind="componentField" @blur="updateGroup('name', values.name)" />
+          <Input
+            type="text"
+            :placeholder="randomGroupName()"
+            v-bind="componentField"
+            @blur="updateGroup('name', values.name)"
+          />
         </FormControl>
         <FormDescription> This is the name of the group that will be displayed to users. </FormDescription>
         <FormMessage />
@@ -146,7 +176,11 @@ const updateGroup = async (field: keyof Group, value: any) => {
       <FormItem>
         <FormLabel>Description</FormLabel>
         <FormControl>
-          <Textarea placeholder="A short description of the group" v-bind="componentField" @blur="updateGroup('description', values.description)" />
+          <Textarea
+            placeholder="A short description of the group"
+            v-bind="componentField"
+            @blur="updateGroup('description', values.description)"
+          />
         </FormControl>
         <FormDescription> This is a short description of the group that will be displayed to users. </FormDescription>
         <FormMessage />

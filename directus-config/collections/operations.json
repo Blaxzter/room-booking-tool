@@ -62,6 +62,28 @@
     "_syncId": "8d6aaefb-076d-4f9f-b4f0-29d44e4ca9ea"
   },
   {
+    "name": "Delete Files",
+    "key": "delete_files",
+    "type": "item-delete",
+    "position_x": 73,
+    "position_y": 1,
+    "options": {
+      "key": null,
+      "collection": "directus_files",
+      "query": {
+        "filter": {
+          "id": {
+            "_in": "{{$last}}"
+          }
+        }
+      }
+    },
+    "resolve": null,
+    "reject": null,
+    "flow": "7f53dd18-b651-4f92-84c9-3af16cfae9ec",
+    "_syncId": "0e774a7f-62cd-4301-9660-f58c6b20489c"
+  },
+  {
     "name": "Prepare Email Data",
     "key": "email_data",
     "type": "transform",
@@ -94,7 +116,7 @@
     "options": {
       "code": "module.exports = async function(data) {\n    if (data?.$last.length > 0) {\n        const ids = [];\n        data?.$last.map(item => {\n             if (item?.avatar)\n             \tids.push(item?.avatar); \n            \n             if (item?.image)\n             \tids.push(item?.image); \n        })\n        return ids;\n    }\n    return {};\n}"
     },
-    "resolve": "f2814457-4acd-4727-a4fb-f4a817b8eadf",
+    "resolve": "0e774a7f-62cd-4301-9660-f58c6b20489c",
     "reject": null,
     "flow": "7f53dd18-b651-4f92-84c9-3af16cfae9ec",
     "_syncId": "76ced6f9-df9a-421c-8629-18673ff6aaa7"
@@ -676,8 +698,8 @@
     "name": "Webhook / Request URL",
     "key": "request_c4vti",
     "type": "request",
-    "position_x": 55,
-    "position_y": 1,
+    "position_x": 52,
+    "position_y": 18,
     "options": {
       "url": "http://localhost:8055/files",
       "headers": [
