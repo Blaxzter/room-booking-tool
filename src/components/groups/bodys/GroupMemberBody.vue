@@ -15,6 +15,7 @@ import GroupRoleDropDown from '@/components/groups/utils/GroupRoleDropDown.vue'
 
 import { useGroups } from '@/stores/groups'
 import { useUser } from '@/stores/user'
+import type { ShowAlertFunction } from '@/plugins/alert-dialog-plugin'
 
 const { user } = storeToRefs(useUser())
 
@@ -108,6 +109,32 @@ const updateUserRole = async (user: GroupDirectusUser, role: string) => {
     })
   })
 }
+
+const showAlertDialog = inject('showAlertDialog') as ShowAlertFunction
+const deleteUser = async (user: GroupDirectusUser) => {
+  if (!props.group || !user.id) {
+    return
+  }
+
+  showAlertDialog({
+    title: 'Remove user from Group',
+    description: `Are you sure you want to delete the user "${getUser(user).email}" from the group "${props.group.name}"?`,
+    onConfirm: () => {
+      const { deleteGroupUser } = useGroups()
+      deleteGroupUser(user.id!).then(() => {
+        const { toast } = useToast()
+        toast({
+          title: 'User removed',
+          description: `The user has been removed from the group.`,
+          variant: 'success'
+        })
+      })
+    },
+    confirmIcon: TrashIcon,
+    confirmVariant: 'destructive',
+    onConfirmText: 'Delete'
+  })
+}
 </script>
 
 <template>
@@ -139,7 +166,12 @@ const updateUserRole = async (user: GroupDirectusUser, role: string) => {
           <p class="text-sm text-muted-foreground">{{ getUser(c_user)?.email }}</p>
         </div>
       </div>
-      <GroupRoleDropDown :role="c_user?.role" @update:role="($event) => updateUserRole(c_user, $event)" />
+      <div class="flex items-center space-x-4">
+        <GroupRoleDropDown :role="c_user?.role" @update:role="($event) => updateUserRole(c_user, $event)" />
+        <Button variant="secondary" size="icon" class="flex-shrink-0" @click="deleteUser(c_user)">
+          <TrashIcon class="h-5 w-5" />
+        </Button>
+      </div>
     </div>
     <div v-if="invites?.length !== 0">
       <p class="text-sm text-muted-foreground">Invites</p>

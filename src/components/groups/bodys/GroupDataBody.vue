@@ -104,24 +104,6 @@ const onSubmit = handleSubmit(async (values) => {
 
 // Function to update the group in the backend
 const updateGroup = async (field: keyof Group, value: any) => {
-  console.log('updateGroup', field, value)
-  // if field is avatar and value is an empty string, delete the avatar
-  if (field === 'avatar') {
-    if (props.group?.avatar?.id) {
-      const { deleteDirectusFile } = useUser()
-      await deleteDirectusFile(props.group?.avatar?.id!).then(() => {
-        if (!value) {
-          toast({
-            title: 'Group avatar deleted',
-            description: `The group ${props.group?.name} has been updated.`
-          })
-        }
-      })
-    }
-    const avatar_id = await avatarUpload.value.uploadImage()
-    value = { id: avatar_id }
-  }
-
   if (props.group && props.group[field] !== value) {
     const { updateGroup } = useGroups()
     await updateGroup(props.group.id, { [field]: value })

@@ -145,14 +145,17 @@ export const useUser = defineStore('user', () => {
                 title: 'Invites',
                 description: `You have been invited to join ${(invite.group_id as Group).name}`,
                 variant: 'default',
-                duration: 5000,
+                duration: 20000,
                 action: h(
                   ToastAction,
                   {
-                    altText: 'Try again'
+                    altText: 'View',
+                    onClick: () => {
+                      router.push({ name: 'groups' })
+                    }
                   },
                   {
-                    default: () => 'Try again'
+                    default: () => 'View'
                   }
                 )
               })
@@ -206,6 +209,7 @@ export const useUser = defineStore('user', () => {
         expires: storage.get('expires') as number,
         expires_at: expires_at
       }
+      await getCurrentUserData()
       return true
     } else {
       // Access token exist, has expired, or expires in less than 5 minutes

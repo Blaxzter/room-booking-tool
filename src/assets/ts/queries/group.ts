@@ -12,6 +12,9 @@ export const groupFields = `
         }
         invites {
             id
+            user_id {
+                id
+            }
             email
             role
         }
@@ -57,6 +60,9 @@ export const getGroupsWithUserQuery = ({
         }
         invites {
             id
+            user_id {
+                id
+            }
             email
             role
         }

@@ -987,24 +987,33 @@
     "permissions": {
       "_and": [
         {
-          "_and": [
+          "_or": [
             {
-              "group_id": {
-                "users": {
-                  "directus_users_id": {
-                    "_eq": "$CURRENT_USER"
-                  }
-                }
+              "user_id": {
+                "_eq": "$CURRENT_USER"
               }
             },
             {
-              "group_id": {
-                "users": {
-                  "role": {
-                    "_eq": "admin"
+              "_and": [
+                {
+                  "group_id": {
+                    "users": {
+                      "directus_users_id": {
+                        "_eq": "$CURRENT_USER"
+                      }
+                    }
+                  }
+                },
+                {
+                  "group_id": {
+                    "users": {
+                      "role": {
+                        "_eq": "admin"
+                      }
+                    }
                   }
                 }
-              }
+              ]
             }
           ]
         }
@@ -1173,15 +1182,15 @@
         {
           "_or": [
             {
+              "owner": {
+                "_eq": "$CURRENT_USER"
+              }
+            },
+            {
               "users": {
                 "role": {
                   "_eq": "admin"
                 }
-              }
-            },
-            {
-              "owner": {
-                "_eq": "$CURRENT_USER"
               }
             }
           ]

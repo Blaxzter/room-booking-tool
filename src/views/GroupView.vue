@@ -5,7 +5,7 @@ import { PlusCircledIcon } from '@radix-icons/vue'
 import { TrashIcon } from 'lucide-vue-next'
 import _ from 'lodash'
 
-import type { Group } from '@/types'
+import type { Group, User } from '@/types'
 
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import { ScrollArea } from '@/components/ui/scroll-area'
@@ -77,6 +77,17 @@ const deleteGroup = () => {
 const isOwner = computed(() => {
   return (selectedGroup?.value?.owner as { id: string })?.id === user.value.id
 })
+
+const ownerEmail = computed(() => {
+  if (!selectedGroup.value) {
+    return ''
+  }
+  console.log(selectedGroup.value.users)
+  return _.find(
+    selectedGroup.value.users,
+    (u) => (u.directus_users_id as User).id === (selectedGroup.value?.owner as { id: string })?.id
+  )?.directus_users_id?.email
+})
 </script>
 
 <template>
@@ -109,7 +120,10 @@ const isOwner = computed(() => {
               <GroupMemberCard :group="selectedGroup" />
             </TabsContent>
           </Tabs>
-          <div class="flex justify-end" v-if="isOwner">
+          <div class="flex justify-end mt-2" v-if="!isOwner">
+            <span class="text-gray-500 text-sm">group by {{ ownerEmail }}</span>
+          </div>
+          <div class="flex justify-end" v-else>
             <Button variant="destructive" class="mt-4" @click="deleteGroup">
               <TrashIcon class="w-4 h-4 me-1" />
               Delete Group

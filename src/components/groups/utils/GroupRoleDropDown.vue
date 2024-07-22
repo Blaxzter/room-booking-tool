@@ -28,7 +28,7 @@ const roles = [
 </script>
 
 <template>
-  <Popover v-model="open" class="relative">
+  <Popover v-model:open="open" class="relative">
     <PopoverTrigger as-child>
       <Button variant="outline" class="ml-auto">
         {{ localRole.charAt(0).toUpperCase() + localRole.slice(1) }}

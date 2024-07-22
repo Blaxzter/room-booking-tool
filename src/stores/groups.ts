@@ -124,10 +124,17 @@ export const useGroups = defineStore('group', () => {
     return newInvite
   }
 
-  const deleteInvite = async (group: Group, invite_id: string) => {
+  const deleteInvite = async (group: Group, invite_id: string, reject: boolean) => {
     const { client } = useUser()
     return await client.request(deleteItem('group_invites', invite_id)).then(() => {
-      group.invites = group.invites?.filter((invite) => invite.id !== invite_id)
+      if (reject) groups.value = groups.value.filter((g) => g.id !== group.id)
+      else {
+        console.log('deleteInvite', group.invites)
+        const index = group.invites?.findIndex((invite) => invite.id === invite_id)
+        if (index !== undefined && index !== -1) {
+          group.invites?.splice(index, 1)
+        }
+      }
     })
   }
 
@@ -138,15 +145,31 @@ export const useGroups = defineStore('group', () => {
     })
   }
 
+  const deleteGroupUser = async (id: string) => {
+    const { client } = useUser()
+    return await client.request(deleteItem('group_directus_users', id)).then(() => {
+      const group = groups.value.find((g) => g.id === selectedGroupId.value)
+      if (group) {
+        group.users = group.users?.filter((user) => user.id !== id)
+      }
+    })
+  }
+
   const updateGroupUser = async (id: string, role: string) => {
     const { client } = useUser()
     return await client.request(updateItem('group_directus_users', id, { role }))
   }
 
+  const addGroupUser = async (group_id: string, user_id: string, role: string) => {
+    const { client } = useUser()
+    // call remove user from group
+    return await client.request(createItem('group_directus_users', { group_id, directus_users_id: user_id, role }))
+  }
+
   const updateGroup = async (group_id: string, data: Partial<Group>) => {
     const { client } = useUser()
     // Do not send update to backend if data is avatar: { id: undefined }
-    if (data.avatar?.id !== undefined) {
+    if (!(Object.keys(data).length === 1 && Object.keys(data)[0] === 'avatar' && data.avatar?.id === undefined)) {
       console.log('updateItem')
       await client.request(updateItem('group', group_id, data))
     }
@@ -173,8 +196,10 @@ export const useGroups = defineStore('group', () => {
     getInvites,
     addInvite,
     deleteInvite,
+    deleteGroupUser,
     deleteGroup,
     updateGroupUser,
+    addGroupUser,
     updateGroup
   }
 })
