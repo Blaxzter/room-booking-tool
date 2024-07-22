@@ -1,8 +1,13 @@
 <script setup lang="ts">
-import { defineEmits } from 'vue'
 import { DropdownMenu, DropdownMenuContent, DropdownMenuTrigger } from '@/components/ui/dropdown-menu'
 import RandomEmoji from '@/components/utils/Emoji.vue'
 
+const props = defineProps({
+  disabled: {
+    type: Boolean,
+    default: false
+  }
+})
 const emits = defineEmits(['select'])
 
 // @ts-ignore
@@ -19,7 +24,14 @@ const selectEmoji = (emoji: Emoji) => {
 </script>
 
 <template>
-  <DropdownMenu>
+  <div
+    class="border border-gray-200 rounded-full cursor-not-allowed mt-1 w-[5rem] h-[5rem] flex items-center justify-center"
+    v-if="disabled"
+  >
+    <emoji v-if="selectedEmoji" :data="emojiIndex" :emoji="selectedEmoji" :size="50" :native="true" />
+    <RandomEmoji v-else :size="50" @select="selectEmoji" />
+  </div>
+  <DropdownMenu v-else>
     <DropdownMenuTrigger>
       <div
         class="border border-gray-200 rounded-full cursor-pointer mt-1 w-[5rem] h-[5rem] flex items-center justify-center hover:border-gray-500"

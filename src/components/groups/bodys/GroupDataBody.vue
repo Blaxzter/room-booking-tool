@@ -1,8 +1,10 @@
 <script setup lang="ts">
-import { ref, watch } from 'vue'
+import { ref, watch, computed } from 'vue'
 import { toTypedSchema } from '@vee-validate/zod'
 import * as z from 'zod'
 import { useForm } from 'vee-validate'
+import { storeToRefs } from 'pinia'
+import _ from 'lodash'
 
 import { randomGroupName } from '@/assets/ts/constants'
 import { FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form'
@@ -15,8 +17,9 @@ import { useToast } from '@/components/ui/toast'
 import AvatarUploadComponent from '@/components/utils/AvatarUploadComponent.vue'
 import EmojiPicker from '@/components/utils/EmojiPicker.vue'
 import { useGroups } from '@/stores/groups'
-import type { Group } from '@/types'
+import type { Group, GroupDirectusUser, User } from '@/types'
 import { useUser } from '@/stores/user'
+const { user } = storeToRefs(useUser())
 
 const { toast } = useToast()
 
@@ -113,6 +116,17 @@ const updateGroup = async (field: keyof Group, value: any) => {
     })
   }
 }
+
+const isAdmin = computed(() => {
+  if (!props.group || !user.value.id) {
+    return ''
+  }
+  const groupUser = _.find(
+    props.group.users,
+    (u) => (u.directus_users_id as User).id === user.value.id
+  )! as GroupDirectusUser
+  return groupUser?.role === 'admin'
+})
 </script>
 
 <template>
@@ -127,15 +141,16 @@ const updateGroup = async (field: keyof Group, value: any) => {
             @avatar-updated="updateGroup('avatar', $event)"
             @avatar-cleared="updateGroup('avatar', null)"
             :add-clear-request="!!group"
+            :disabled="!isAdmin"
           />
-          <div class="text-sm text-gray-500 mt-3">Upload an Image</div>
+          <div class="text-sm text-gray-500 mt-3" v-if="isAdmin">Upload an Image</div>
         </div>
 
-        <div class="mx-1 sm:mx-5 mb-7">or</div>
+        <div class="mx-1 sm:mx-5" :class="[isAdmin ? 'mb-7' : 'mb-1']">or</div>
 
         <div class="flex flex-col items-center w-[120px]">
-          <EmojiPicker v-model="selectedEmoji" @select="updateGroup('emoji', selectedEmoji)" />
-          <div class="text-sm text-gray-500 mt-3">Select an Emoji</div>
+          <EmojiPicker v-model="selectedEmoji" @select="updateGroup('emoji', selectedEmoji)" :disabled="!isAdmin" />
+          <div class="text-sm text-gray-500 mt-3" v-if="isAdmin">Select an Emoji</div>
         </div>
       </div>
     </div>
@@ -148,6 +163,7 @@ const updateGroup = async (field: keyof Group, value: any) => {
             :placeholder="randomGroupName()"
             v-bind="componentField"
             @blur="updateGroup('name', values.name)"
+            :disabled="!isAdmin"
           />
         </FormControl>
         <FormDescription> This is the name of the group that will be displayed to users. </FormDescription>
@@ -162,6 +178,7 @@ const updateGroup = async (field: keyof Group, value: any) => {
             placeholder="A short description of the group"
             v-bind="componentField"
             @blur="updateGroup('description', values.description)"
+            :disabled="!isAdmin"
           />
         </FormControl>
         <FormDescription> This is a short description of the group that will be displayed to users. </FormDescription>

@@ -48,8 +48,10 @@ const selectedEditGroup = computed(() => {
 const showAlertDialog = inject('showAlertDialog') as ShowAlertFunction
 
 const created = (group: Group) => {
-  dialogType.value = 'edit-group'
-  editGroupId.value = group.id
+  fetchGroupData().then(() => {
+    dialogType.value = 'edit-group'
+    editGroupId.value = group.id
+  })
 }
 
 const deleteGroup = () => {

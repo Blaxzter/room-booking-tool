@@ -45,6 +45,10 @@ const props = defineProps({
   addClearRequest: {
     type: Boolean,
     default: false
+  },
+  disabled: {
+    type: Boolean,
+    default: false
   }
 })
 
@@ -117,7 +121,11 @@ onMounted(() => {
 watch(
   () => props.initAvatar,
   (newAvatar) => {
-    avatar.value = `${backendUrl}/assets/${newAvatar}`
+    if (newAvatar) avatar.value = `${backendUrl}/assets/${newAvatar}`
+    else {
+      avatar.value = ''
+      toBeUploadedImage.value = null
+    }
   }
 )
 
@@ -134,18 +142,22 @@ const backendUrl = inject('backendUrl')
       width: `calc(${props.height * (isSquare ? 0.75 : 1)}rem + 25px)`
     }"
   >
-    <div v-if="toBeUploadedImage || avatar" class="absolute end-[-5px] top-[-5px]">
+    <div v-if="(toBeUploadedImage || avatar) && !disabled" class="absolute end-[-5px] top-[-5px]">
       <XIcon class="w-4 h-4 cursor-pointer hover:opacity-75" @click="clearImage" />
     </div>
     <Avatar
-      class="cursor-pointer hover:opacity-75"
-      :class="`pastel-color-${random}`"
+      class="hover:opacity-75"
+      :class="[`pastel-color-${random}`, disabled ? 'cursor-not-allowed' : 'cursor-pointer ']"
       :style="{
         width: `${props.height * (isSquare ? 0.75 : 1)}rem`,
         height: `${props.height}rem`
       }"
       :shape="isSquare ? 'square' : 'circle'"
-      @click="showCropper = true"
+      @click="
+        () => {
+          if (!disabled) showCropper = true
+        }
+      "
     >
       <AvatarImage :src="avatar" />
       <AvatarFallback>

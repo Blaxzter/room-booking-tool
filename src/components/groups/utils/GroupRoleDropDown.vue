@@ -4,13 +4,18 @@ import { defineProps, defineEmits, ref, watch } from 'vue'
 import { Command, CommandEmpty, CommandGroup, CommandInput, CommandItem, CommandList } from '@/components/ui/command'
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover'
 import { Button } from '@/components/ui/button'
-import { ChevronDownIcon, TrashIcon } from 'lucide-vue-next'
-import { Separator } from '@/components/ui/separator'
-import { DialogTrigger } from '@/components/ui/dialog'
+import { ChevronDownIcon } from 'lucide-vue-next'
 
-const props = defineProps<{
-  role: string
-}>()
+const props = defineProps({
+  role: {
+    type: String,
+    required: true
+  },
+  disabled: {
+    type: Boolean,
+    default: false
+  }
+})
 const emit = defineEmits(['update:role', 'deleteUser'])
 
 const localRole = ref(props.role)
@@ -28,7 +33,10 @@ const roles = [
 </script>
 
 <template>
-  <Popover v-model:open="open" class="relative">
+  <div v-if="disabled" class="flex items-center me-1.5 border py-1.5 px-3 rounded">
+    <span>{{ localRole.charAt(0).toUpperCase() + localRole.slice(1) }}</span>
+  </div>
+  <Popover v-model:open="open" class="relative" v-else>
     <PopoverTrigger as-child>
       <Button variant="outline" class="ml-auto">
         {{ localRole.charAt(0).toUpperCase() + localRole.slice(1) }}
