@@ -83,10 +83,12 @@ const ownerEmail = computed(() => {
     return ''
   }
   console.log(selectedGroup.value.users)
-  return _.find(
-    selectedGroup.value.users,
-    (u) => (u.directus_users_id as User).id === (selectedGroup.value?.owner as { id: string })?.id
-  )?.directus_users_id?.email
+  return (
+    _.find(
+      selectedGroup.value.users,
+      (u) => (u.directus_users_id as User).id === (selectedGroup.value?.owner as { id: string })?.id
+    )?.directus_users_id as User
+  )?.email
 })
 </script>
 

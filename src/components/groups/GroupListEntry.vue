@@ -16,7 +16,7 @@ import type { ShowAlertFunction } from '@/plugins/alert-dialog-plugin'
 import { useInitialDataStore } from '@/stores/initial'
 
 defineProps<{
-  group: Group[]
+  group: Group
   showRole: boolean
   selectedGroup: Group | undefined
   isInvite: boolean
@@ -53,7 +53,8 @@ const nameInitials = (name: string) => {
 const { fetchGroupData } = useInitialDataStore()
 const { deleteInvite, addGroupUser } = useGroups()
 
-const acceptInvite = async (group: Group, invite: GroupInvite) => {
+const acceptInvite = async (group: Group) => {
+  const invite = (group.invites as { id: string }[])[0] as GroupInvite
   const userId = (invite.user_id as { id: string }).id
   try {
     await addGroupUser(group.id, userId, 'member').then(async () => {
@@ -72,11 +73,13 @@ const acceptInvite = async (group: Group, invite: GroupInvite) => {
 }
 
 const showAlertDialog = inject('showAlertDialog') as ShowAlertFunction
-const rejectInvite = async (group: Group, invite: GroupInvite) => {
+const rejectInvite = async (group: Group) => {
   showAlertDialog({
     title: 'Reject Invite',
     description: `Are you sure you want to reject the invite for the group "${group.name}"?`,
     onConfirm: async () => {
+      // const invite = _.find(group.invites, (i) => (i.user_id as { id: string }).id === user.value.id)
+      const invite = (group.invites as { id: string }[])[0]
       const inviteId = invite.id
       try {
         await deleteInvite(group, inviteId, true)
@@ -186,20 +189,10 @@ const rejectInvite = async (group: Group, invite: GroupInvite) => {
       </div>
     </div>
     <div class="flex items-center gap-2">
-      <Button
-        v-if="isInvite"
-        @click.stop="acceptInvite(group, (group.invites as { id: string }[])[0])"
-        variant="ghost"
-        size="icon"
-      >
+      <Button v-if="isInvite" @click.stop="acceptInvite(group)" variant="ghost" size="icon">
         <CheckIcon class="text-success" />
       </Button>
-      <Button
-        v-if="isInvite"
-        @click.stop="rejectInvite(group, (group.invites as { id: string }[])[0])"
-        variant="ghost"
-        size="icon"
-      >
+      <Button v-if="isInvite" @click.stop="rejectInvite(group)" variant="ghost" size="icon">
         <XIcon class="text-destructive" />
       </Button>
     </div>

@@ -64,7 +64,7 @@ const deleteInvite = async (invite: GroupInvite) => {
   }
 
   const { deleteInvite } = useGroups()
-  await deleteInvite(props.group, invite.id)
+  await deleteInvite(props.group, invite.id, false)
 }
 
 const getUser = (user: GroupDirectusUser) => {
