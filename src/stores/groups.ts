@@ -67,8 +67,9 @@ export const useGroups = defineStore('group', () => {
     ]
     const result = await client.request(createItem('group', group))
     // cast result to Group
-    addGroup(await fetchGroupWithData(result.id))
-    return result
+    const newGroupWithData = await fetchGroupWithData(result.id)
+    addGroup(newGroupWithData!)
+    return newGroupWithData
   }
 
   const fetchGroupWithData = async (group_id: string, with_bookable_objects = true) => {
@@ -76,7 +77,10 @@ export const useGroups = defineStore('group', () => {
     const result = await client.query<GetGroupQueryResponse>(
       getGroupsWithUserQuery({ as_query: true, with_bookable_objects, group_id })
     )
-    const group = result.group as Group
+    const groups = result.group as Group[]
+    // get the first group
+    if (!groups[0]) return
+    const group = groups[0]
     if (!_.isNil(result.bookable_object))
       for (const bookable_object of result.bookable_object) {
         if (!group.objects) {

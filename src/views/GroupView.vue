@@ -17,7 +17,7 @@ import GroupList from '@/components/groups/GroupList.vue'
 import GroupMemberCard from '@/components/groups/cards/GroupMemberCard.vue'
 import GroupDataCard from '@/components/groups/cards/GroupDataCard.vue'
 import NewGroupDialog from '@/components/groups/dialogs/NewGroupDialog.vue'
-import GroupEditDialog from '@/components/groups/dialogs/GroupEditDialog.vue'
+import GroupEditDialog from '@/components/groups/dialogs/GroupMemberDialog.vue'
 
 import { useInitialDataStore } from '@/stores/initial'
 import { useGroups } from '@/stores/groups'

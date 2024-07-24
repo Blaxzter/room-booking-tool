@@ -70,7 +70,7 @@ export const getGroupsWithUserQuery = ({
     ${
       with_bookable_objects
         ? `
-        bookable_object {
+        bookable_object${group_id ? `(filter: { group: { group_id: { id: { _eq: "${group_id}" } }} })` : ''} {
         name
         group {
             group_id {

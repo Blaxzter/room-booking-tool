@@ -100,7 +100,7 @@ const onSubmit = handleSubmit(async (values) => {
   const newGroup = await createGroup(values)
   toast({
     title: 'Group created',
-    description: `The group ${newGroup.name} has been created.`
+    description: `The group ${newGroup?.name} has been created.`
   })
   emit('created', newGroup as Group)
 })
@@ -117,15 +117,19 @@ const updateGroup = async (field: keyof Group, value: any) => {
   }
 }
 
-const isAdmin = computed(() => {
+const userRole = computed(() => {
   if (!props.group || !user.value.id) {
-    return ''
+    return undefined
   }
   const groupUser = _.find(
     props.group.users,
     (u) => (u.directus_users_id as User).id === user.value.id
   )! as GroupDirectusUser
-  return groupUser?.role === 'admin'
+  return groupUser?.role
+})
+
+const isDisabled = computed(() => {
+  return props.group !== undefined && userRole.value !== 'admin'
 })
 </script>
 
@@ -141,16 +145,16 @@ const isAdmin = computed(() => {
             @avatar-updated="updateGroup('avatar', $event)"
             @avatar-cleared="updateGroup('avatar', null)"
             :add-clear-request="!!group"
-            :disabled="!isAdmin"
+            :disabled="isDisabled"
           />
-          <div class="text-sm text-gray-500 mt-3" v-if="isAdmin">Upload an Image</div>
+          <div class="text-sm text-gray-500 mt-3" v-if="!isDisabled">Upload an Image</div>
         </div>
 
-        <div class="mx-1 sm:mx-5" :class="[isAdmin ? 'mb-7' : 'mb-1']">or</div>
+        <div class="mx-1 sm:mx-5" :class="[!isDisabled ? 'mb-7' : 'mb-1']">or</div>
 
         <div class="flex flex-col items-center w-[120px]">
-          <EmojiPicker v-model="selectedEmoji" @select="updateGroup('emoji', selectedEmoji)" :disabled="!isAdmin" />
-          <div class="text-sm text-gray-500 mt-3" v-if="isAdmin">Select an Emoji</div>
+          <EmojiPicker v-model="selectedEmoji" @select="updateGroup('emoji', selectedEmoji)" :disabled="isDisabled" />
+          <div class="text-sm text-gray-500 mt-3" v-if="!isDisabled">Select an Emoji</div>
         </div>
       </div>
     </div>
@@ -163,7 +167,7 @@ const isAdmin = computed(() => {
             :placeholder="randomGroupName()"
             v-bind="componentField"
             @blur="updateGroup('name', values.name)"
-            :disabled="!isAdmin"
+            :disabled="isDisabled"
           />
         </FormControl>
         <FormDescription> This is the name of the group that will be displayed to users. </FormDescription>
@@ -178,7 +182,7 @@ const isAdmin = computed(() => {
             placeholder="A short description of the group"
             v-bind="componentField"
             @blur="updateGroup('description', values.description)"
-            :disabled="!isAdmin"
+            :disabled="isDisabled"
           />
         </FormControl>
         <FormDescription> This is a short description of the group that will be displayed to users. </FormDescription>

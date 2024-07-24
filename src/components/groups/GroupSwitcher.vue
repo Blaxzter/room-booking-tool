@@ -27,7 +27,7 @@ import { useUser } from '@/stores/user'
 import { useGroups } from '@/stores/groups'
 
 import NewGroupDialog from '@/components/groups/dialogs/NewGroupDialog.vue'
-import GroupEditDialog from '@/components/groups/dialogs/GroupEditDialog.vue'
+import GroupMemberDialog from '@/components/groups/dialogs/GroupMemberDialog.vue'
 
 type GroupsDisplayData = { label: string; teams: Group[] }[]
 
@@ -110,7 +110,8 @@ const dialogType = ref('create-group')
 
 let selectedTeam = computed(() => {
   if (selectedGroupId.value != null && selectedGroupId.value !== '-1') {
-    return _.find(groups.value, { id: `${selectedGroupId.value}` })
+    const find = _.find(groups.value, { id: `${selectedGroupId.value}` })
+    if (find) return find
   }
   return displayData.value[0].teams[0]
 })
@@ -134,14 +135,11 @@ const groupClicked = async (team: Group) => {
   open.value = false
 }
 
-const editGroupId = ref('')
-const selectedEditGroup = computed(() => {
-  return _.find(groups.value, { id: editGroupId.value })
-})
-
-const created = (group: Group) => {
-  dialogType.value = 'edit-group'
-  editGroupId.value = group.id
+const createdGroup = ref<Group | undefined>(undefined)
+const created = async (group: Group) => {
+  dialogType.value = 'invite-dialog'
+  createdGroup.value = group
+  await selectGroup(group)
 }
 </script>
 
@@ -243,6 +241,6 @@ const created = (group: Group) => {
       </PopoverContent>
     </Popover>
     <NewGroupDialog @close="showDialog = false" v-if="dialogType === 'create-group'" @created="created" />
-    <GroupEditDialog @close="showDialog = false" v-if="dialogType === 'edit-group'" :group="selectedEditGroup" />
+    <GroupMemberDialog @close="showDialog = false" v-if="dialogType === 'invite-dialog'" :group="createdGroup" />
   </Dialog>
 </template>

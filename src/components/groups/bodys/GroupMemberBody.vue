@@ -43,7 +43,7 @@ const invites = computed(() => {
   return props.group.invites
 })
 
-const isAdmin = computed(() => {
+const userRole = computed(() => {
   if (!props.group || !user.value.id) {
     return ''
   }
@@ -51,7 +51,11 @@ const isAdmin = computed(() => {
     props.group.users,
     (u) => (u.directus_users_id as User).id === user.value.id
   )! as GroupDirectusUser
-  return groupUser?.role === 'admin'
+  return groupUser?.role
+})
+
+const isDisabled = computed(() => {
+  return props.group !== undefined && userRole.value !== 'admin'
 })
 
 const inviteRole = ref<'member' | 'admin' | 'viewer'>('member')
@@ -150,7 +154,7 @@ const deleteUser = async (user: GroupDirectusUser) => {
 
 <template>
   <div class="grid gap-6">
-    <div class="flex items-center justify-between space-x-4" v-if="isAdmin">
+    <div class="flex items-center justify-between space-x-4" v-if="!isDisabled">
       <Input type="email" placeholder="Enter email to invite" v-model="inviteEmail" />
       <GroupRoleDropDown v-model:role="inviteRole" />
       <Button variant="secondary" size="icon" class="flex-shrink-0" @click="sendInvite">
@@ -181,9 +185,9 @@ const deleteUser = async (user: GroupDirectusUser) => {
         <GroupRoleDropDown
           :role="c_user?.role"
           @update:role="($event) => updateUserRole(c_user, $event)"
-          :disabled="!isAdmin"
+          :disabled="isDisabled"
         />
-        <Button variant="secondary" size="icon" class="flex-shrink-0" @click="deleteUser(c_user)" v-if="isAdmin">
+        <Button variant="secondary" size="icon" class="flex-shrink-0" @click="deleteUser(c_user)" v-if="!isDisabled">
           <TrashIcon class="h-5 w-5" />
         </Button>
       </div>

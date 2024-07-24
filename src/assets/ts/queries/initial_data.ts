@@ -111,7 +111,7 @@ export interface GetInviteQueryResponse {
 }
 
 export interface GetGroupQueryResponse {
-  group: Group
+  group: Group[]
   bookable_object?: BookableObject[]
 }
 
