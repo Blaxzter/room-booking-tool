@@ -3,9 +3,12 @@ import type { BookableObject } from '@/types'
 interface GetBookableObjectParams {
   id: string
   isUniqueId?: boolean
+  isPublic?: boolean
 }
 
-export function getBookableObjectFields({ minimal }: { minimal: boolean } = { minimal: false }): string {
+export function getBookableObjectFields(
+  { minimal, isPublic }: { minimal: boolean; isPublic: boolean } = { minimal: false, isPublic: false }
+): string {
   const retFields = `
     id
     name
@@ -13,24 +16,22 @@ export function getBookableObjectFields({ minimal }: { minimal: boolean } = { mi
   if (!minimal) {
     return `
     ${retFields}
-    status
-    date_created
-    date_updated
+    ${isPublic ? 'status' : ''}
+    ${isPublic ? 'date_created' : ''}
+    ${isPublic ? 'date_updated' : ''}
     location
     description
     tags
     image {
         id
     }
-    is_internal
-    group {
-        id
-    }
+    ${isPublic ? 'is_internal' : ''}
+    ${isPublic ? 'group { id }' : ''}
     uniqueId
     type
     confirm_booking_required
     information_shared
-    confirm_role
+    ${isPublic ? 'confirm_role' : ''}
     `
   }
   return retFields
@@ -48,9 +49,9 @@ export const getBookableObjectByGroup = (group_id: string) => `
   }
 `
 
-export const bookableObjectById = ({ id, isUniqueId = false }: GetBookableObjectParams): string => `
+export const bookableObjectById = ({ id, isUniqueId = false, isPublic = false }: GetBookableObjectParams): string => `
   bookable_object(filter: { ${isUniqueId ? 'uniqueId' : 'id'}: { _eq: "${id}" } }) {
-      ${getBookableObjectFields()}
+      ${getBookableObjectFields({ minimal: false, isPublic: isPublic })}
   }
 `
 
@@ -68,15 +69,15 @@ bookable_object(
     ${getBookableObjectFields()}
 }`
 
-export const getAllBookableObjects = ({ minimal }: { minimal: boolean }) => `
+export const getAllBookableObjects = ({ minimal, isPublic }: { minimal: boolean; isPublic: boolean }) => `
 bookable_object{
-  ${getBookableObjectFields({ minimal })}
+  ${getBookableObjectFields({ minimal, isPublic })}
 }
 `
 
-export const qGetAllBookableObjects = ({ minimal }: { minimal: boolean }) => `
+export const qGetAllBookableObjects = ({ minimal, isPublic }: { minimal: boolean; isPublic: boolean }) => `
 query Bookable_object {
-  ${getAllBookableObjects({ minimal })}
+  ${getAllBookableObjects({ minimal, isPublic })}
 }
 `
 

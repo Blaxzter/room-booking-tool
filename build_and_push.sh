@@ -42,4 +42,5 @@ git add $VERSION_FILE
 git commit -m "Bump version to $NEW_VERSION"
 git push origin main
 
+echo "Deployed version $VERSION"
 echo "Build, push, and version update completed successfully!"

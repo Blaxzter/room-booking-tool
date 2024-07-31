@@ -4,7 +4,7 @@ import type { BookableObject, CreateBookableObjectRequest } from '@/types'
 import { useUser } from '@/stores/user'
 import { type BookableObjectsRequest } from '@/assets/ts/queries/initial_data'
 import { useToast } from '@/components/ui/toast'
-import { createItem } from '@directus/sdk'
+import { createItem, deleteItem } from '@directus/sdk'
 import { useGroups } from '@/stores/groups'
 import _ from 'lodash'
 import {
@@ -192,6 +192,13 @@ export const useBookableObjects = defineStore('bookableObjects', () => {
     return localBookableObject
   }
 
+  const deleteBookableObject = async (id: string) => {
+    // delete bookable object from server
+    await client.request(deleteItem('bookable_object', id)).then(() => {
+      bookableObjects.value = bookableObjects.value.filter((obj) => obj.id !== id)
+    })
+  }
+
   return {
     bookableObjects,
     selectedBookableObject,
@@ -204,6 +211,7 @@ export const useBookableObjects = defineStore('bookableObjects', () => {
     getBookableObjectBySelectedGroup,
     createBookableObject,
     getBookableObjectById,
+    deleteBookableObject,
     reset
   }
 })

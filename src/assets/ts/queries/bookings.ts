@@ -1,25 +1,31 @@
 import type { Booking } from '@/types'
 import { getBookableObjectFields } from '@/assets/ts/queries/bookable_objects'
 
-function bookingVariables({ include_bookable_object = false }: { include_bookable_object?: boolean }): string {
+function bookingVariables({
+  include_bookable_object = false,
+  isPublic = false
+}: {
+  include_bookable_object?: boolean
+  isPublic?: boolean
+}): string {
   const booking_rows = `
-    id
+    ${isPublic ? 'id' : ''}
     status
-    date_created
-    date_updated
+    ${isPublic ? 'date_created' : ''}
+    ${isPublic ? 'date_updated' : ''}
     start_date
     end_date
     is_full_day
     display_name
-    mail
-    phone
+    ${isPublic ? 'mail' : ''}
+    ${isPublic ? 'phone' : ''}
     description
     confirmed
     confirmed_by {
       display_name
     }
   `
-  if (include_bookable_object) {
+  if (include_bookable_object && !isPublic) {
     return `
     bookable_object_id {
       ${getBookableObjectFields()}
@@ -32,14 +38,16 @@ function bookingVariables({ include_bookable_object = false }: { include_bookabl
 
 export const getBookingQObject = ({
   bookable_object_id,
-  isUniqueId = false
+  isUniqueId = false,
+  isPublic = false
 }: {
   bookable_object_id: string
   isUniqueId?: boolean
+  isPublic?: boolean
 }): string => {
   return `
-  booking(filter: { bookable_object_id: { ${isUniqueId ? 'uniqueId' : 'id'}: { _eq: ${bookable_object_id} } } }) {
-      ${bookingVariables({})}
+  booking(filter: { bookable_object_id: { ${isUniqueId ? 'uniqueId' : 'id'}: { _eq: "${bookable_object_id}" } } }) {
+      ${bookingVariables({ include_bookable_object: true, isPublic: isPublic })}
     }`
 }
 

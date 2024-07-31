@@ -69,7 +69,7 @@ const nextStep = async () => {
     if (activeStep.value < steps.length - 1) activeStep.value++
     else {
       await createObject()
-      // open.value = false
+      open.value = false
     }
   }
 }

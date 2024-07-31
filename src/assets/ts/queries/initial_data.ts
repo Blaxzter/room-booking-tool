@@ -59,8 +59,8 @@ export const objectView = ({
   return `
     query Object_view {
         ${publicView ? '' : getGroupQuery({ as_query: false })}
-        ${getBookingQObject({ bookable_object_id, isUniqueId })}   
-        ${bookableObjectById({ id: bookable_object_id, isUniqueId })}
+        ${getBookingQObject({ bookable_object_id, isUniqueId, isPublic: publicView })}   
+        ${bookableObjectById({ id: bookable_object_id, isUniqueId, isPublic: publicView })}
     }
   `
 }
@@ -89,7 +89,7 @@ export const settingsViewQuery = (): string => {
   return `
     query Request_view {
         ${getGroupQuery({ as_query: false })}
-        ${getAllBookableObjects({ minimal: true })}
+        ${getAllBookableObjects({ minimal: true, isPublic: false })}
         ${getNotificationSettings()}
     }
   `

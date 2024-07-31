@@ -464,26 +464,35 @@
         {
           "_or": [
             {
-              "group": {
-                "group_id": {
-                  "users": {
-                    "directus_users_id": {
-                      "_eq": "$CURRENT_USER"
-                    }
-                  }
-                }
+              "owner": {
+                "_eq": "$CURRENT_USER"
               }
             },
             {
-              "group": {
-                "group_id": {
-                  "users": {
-                    "role": {
-                      "_eq": "admin"
+              "_and": [
+                {
+                  "group": {
+                    "group_id": {
+                      "users": {
+                        "directus_users_id": {
+                          "_eq": "$CURRENT_USER"
+                        }
+                      }
+                    }
+                  }
+                },
+                {
+                  "group": {
+                    "group_id": {
+                      "users": {
+                        "role": {
+                          "_eq": "admin"
+                        }
+                      }
                     }
                   }
                 }
-              }
+              ]
             }
           ]
         }
@@ -1299,6 +1308,66 @@
   },
   {
     "role": null,
+    "collection": "bookable_object",
+    "action": "read",
+    "permissions": {
+      "_and": [
+        {
+          "is_internal": {
+            "_eq": false
+          }
+        }
+      ]
+    },
+    "validation": null,
+    "presets": null,
+    "fields": [
+      "name",
+      "description",
+      "location",
+      "tags",
+      "image",
+      "uniqueId",
+      "type",
+      "information_shared",
+      "confirm_booking_required"
+    ],
+    "_syncId": "d5aeac77-db3b-4e19-b93c-53b858ff1c3f"
+  },
+  {
+    "role": null,
+    "collection": "booking",
+    "action": "read",
+    "permissions": {
+      "_and": [
+        {
+          "bookable_object_id": {
+            "is_internal": {
+              "_eq": false
+            }
+          }
+        }
+      ]
+    },
+    "validation": null,
+    "presets": null,
+    "fields": [
+      "bookable_object_id",
+      "event_data",
+      "end_date",
+      "is_full_day",
+      "confirmation_data",
+      "confirmed_by",
+      "confirmed",
+      "description",
+      "display_name",
+      "start_date",
+      "status"
+    ],
+    "_syncId": "f8a519b9-270f-4979-af7c-afe39b4a0355"
+  },
+  {
+    "role": null,
     "collection": "directus_files",
     "action": "read",
     "permissions": {},
@@ -1308,5 +1377,17 @@
       "*"
     ],
     "_syncId": "93b0266b-59b4-47d7-8973-8fe6e08730c7"
+  },
+  {
+    "role": null,
+    "collection": "directus_users",
+    "action": "read",
+    "permissions": null,
+    "validation": null,
+    "presets": null,
+    "fields": [
+      "display_name"
+    ],
+    "_syncId": "cf9f6662-e555-43b6-b110-18ad77206287"
   }
 ]
