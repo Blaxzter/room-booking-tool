@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed, ref, type PropType } from 'vue'
+import { computed, ref, type PropType, onBeforeMount } from 'vue'
 import { useForm } from 'vee-validate'
 import { toTypedSchema } from '@vee-validate/zod'
 import * as z from 'zod'
@@ -13,6 +13,7 @@ import { CopyIcon } from '@radix-icons/vue'
 import NameFade from '@/components/utils/NameFade.vue'
 import { bookableObjectRandoms, bookableObjectRandomsLower } from '@/assets/ts/constants'
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from '@/components/ui/collapsible'
+import type { BookableObject } from '@/types'
 
 interface InitialValues {
   is_internal: boolean
@@ -24,7 +25,11 @@ interface InitialValues {
 const props = defineProps({
   initialValues: {
     type: Object as PropType<InitialValues>,
-    required: true
+    required: false
+  },
+  bookableObject: {
+    type: Object as PropType<BookableObject>,
+    required: false
   }
 })
 
@@ -37,8 +42,6 @@ const formSchema = toTypedSchema(
     confirm_role: z.string().optional()
   })
 )
-
-const { is_internal, confirm_booking_required, confirm_role, information_shared } = props.initialValues
 
 const roles = [
   { id: 'admin', name: 'Admin' },
@@ -59,16 +62,31 @@ const copyLink = () => {
   navigator.clipboard.writeText(`${window.location.host}/${visibleMessage.value}/${randomString}`)
 }
 
-const { values, validate } = useForm({
-  validationSchema: formSchema,
-  initialValues: {
-    is_internal: is_internal || false,
-    uniqueId: randomString,
-    confirm_booking_required: confirm_booking_required || false,
-    information_shared: information_shared || true,
-    confirm_role: confirm_role || 'member'
+const { values, validate, setValues } = useForm({
+  validationSchema: formSchema
+})
+
+onBeforeMount(() => {
+  if (props.initialValues) {
+    setValues({
+      is_internal: props.initialValues.is_internal || false,
+      uniqueId: randomString,
+      confirm_booking_required: props.initialValues.confirm_booking_required || false,
+      information_shared: props.initialValues.information_shared || true,
+      confirm_role: props.initialValues.confirm_role || 'member'
+    })
+  } else if (props.bookableObject) {
+    console.log('AccessSettings:', props.bookableObject)
+    setValues({
+      is_internal: props.bookableObject.is_internal,
+      uniqueId: props.bookableObject.uniqueId,
+      confirm_booking_required: props.bookableObject.confirm_booking_required,
+      information_shared: props.bookableObject.information_shared,
+      confirm_role: props.bookableObject.confirm_role || 'member'
+    })
   }
 })
+
 const getValues = computed(() => values)
 defineExpose({ getValues, validate })
 </script>
@@ -96,7 +114,7 @@ defineExpose({ getValues, validate })
             >{{ currentHost }}/<NameFade
               :messages="bookableObjectRandomsLower"
               @value-changed="visibleMessage = $event"
-            />/{{ randomString }}</span
+            />/{{ values.uniqueId }}</span
           >
           <CollapsibleTrigger>
             <Button size="sm" variant="ghost" @click="copyLink" type="button">
@@ -161,11 +179,7 @@ defineExpose({ getValues, validate })
       </FormItem>
     </FormField>
 
-    <slot name="footer">
-      <Button type="submit" class="min-w-[120px]">
-        <span>Update <NameFade :messages="bookableObjectRandoms" /></span>
-      </Button>
-    </slot>
+    <slot name="footer"></slot>
   </form>
 </template>
 

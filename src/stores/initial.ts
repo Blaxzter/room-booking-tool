@@ -37,7 +37,7 @@ export const useInitialDataStore = defineStore('initial', () => {
   const { setRequests } = useRequests()
   const { setNotificationSettingsExtended } = useNotificationSetting()
 
-  const init_loading = ref(false)
+  const init_loading = ref(true)
 
   const reset = () => {
     init_loading.value = false

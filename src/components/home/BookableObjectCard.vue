@@ -1,14 +1,17 @@
 <script setup lang="ts">
-import { ref } from 'vue'
+import { inject, onMounted, ref } from 'vue'
 import { cn } from '@/lib/utils'
 import type { BookableObject } from '@/types'
 import RandomEmoji from '@/components/utils/Emoji.vue'
 
 import BookableObjectMenuButton from '@/components/bookable-object/BookableObjectMenuButton.vue'
 import BookingCardSplashImage from '@/components/home/BookingCardSplashImage.vue'
+import processImage from '@/assets/ts/image-utils'
+
+const backendUrl = inject('backendUrl')
 
 // add bookable object as prop
-defineProps<{
+const props = defineProps<{
   bookableObject: BookableObject
   aspectRatio?: 'portrait' | 'landscape'
   width?: number
@@ -18,6 +21,22 @@ defineProps<{
 
 const mouseover = ref(false)
 const open = ref(false)
+
+// map of bookable object ids to colors
+const idToColor = ref(new Map<string, string>())
+const getImageColor = async (image_id: string) => {
+  return await processImage(`${backendUrl}/assets/${image_id}`).then((color) => {
+    idToColor.value.set(image_id, color)
+    console.log(idToColor.value)
+    return color
+  })
+}
+
+onMounted(() => {
+  if (props.bookableObject.image) {
+    getImageColor(props.bookableObject.image.id)
+  }
+})
 </script>
 
 <template>
@@ -35,6 +54,7 @@ const open = ref(false)
         :width="width"
         :height="height"
         :aspectRatio="aspectRatio"
+        :style="`background-color:` + (idToColor.get(bookableObject.image.id) ?? 'white')"
       />
       <div v-else>
         <div

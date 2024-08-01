@@ -16,22 +16,22 @@ export function getBookableObjectFields(
   if (!minimal) {
     return `
     ${retFields}
-    ${isPublic ? 'status' : ''}
-    ${isPublic ? 'date_created' : ''}
-    ${isPublic ? 'date_updated' : ''}
+    ${!isPublic ? 'status' : ''}
+    ${!isPublic ? 'date_created' : ''}
+    ${!isPublic ? 'date_updated' : ''}
     location
     description
     tags
     image {
         id
     }
-    ${isPublic ? 'is_internal' : ''}
-    ${isPublic ? 'group { id }' : ''}
+    ${!isPublic ? 'is_internal' : ''}
+    ${!isPublic ? 'group { group_id { id } }' : ''}
     uniqueId
     type
     confirm_booking_required
     information_shared
-    ${isPublic ? 'confirm_role' : ''}
+    ${!isPublic ? 'confirm_role' : ''}
     `
   }
   return retFields

@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed, type PropType, ref } from 'vue'
+import { computed, type PropType, ref, onBeforeMount } from 'vue'
 import { useForm } from 'vee-validate'
 import { toTypedSchema } from '@vee-validate/zod'
 import * as z from 'zod'
@@ -12,6 +12,8 @@ import NameFade from '@/components/utils/NameFade.vue'
 import { bookableObjectRandoms, bookableObjectRandomsLower } from '@/assets/ts/constants'
 import { Label } from '@/components/ui/label'
 import AvatarUploadComponent from '@/components/utils/AvatarUploadComponent.vue'
+
+import type { BookableObject } from '@/types'
 
 interface InitialValues {
   splash_image_object: Blob
@@ -28,11 +30,13 @@ const objectTypes = [
 const props = defineProps({
   initialValues: {
     type: Object as PropType<InitialValues>,
-    required: true
+    required: false
+  },
+  bookableObject: {
+    type: Object as PropType<BookableObject>,
+    required: false
   }
 })
-
-const { object_type } = props.initialValues
 
 const avatarUpload = ref()
 
@@ -42,11 +46,8 @@ const formSchema = toTypedSchema(
   })
 )
 
-const { values, validate } = useForm({
-  validationSchema: formSchema,
-  initialValues: {
-    object_type: object_type || 'room'
-  }
+const { values, validate, setValues } = useForm({
+  validationSchema: formSchema
 })
 
 const upload = async () => {
@@ -57,15 +58,27 @@ const upload = async () => {
   return { id: uploaded_image_id } as { id: string }
 }
 
+onBeforeMount(() => {
+  if (props.initialValues) {
+    setValues({
+      object_type: props.initialValues.object_type || 'room'
+    })
+  } else if (props.bookableObject) {
+    setValues({
+      object_type: props.bookableObject.type || 'room'
+    })
+  }
+})
+
 const getValues = computed(() => values)
 defineExpose({ getValues, validate, upload })
 </script>
 
 <template>
   <form class="grid gap-5 py-4">
-    <div class="grid gap-2">
+    <div class="flex flex-col gap-3">
       <Label>Display Image</Label>
-      <AvatarUploadComponent ref="avatarUpload" :is-square="true" :height="8" />
+      <AvatarUploadComponent class="self-center" ref="avatarUpload" :is-square="true" :height="12" />
       <div class="text-sm text-muted-foreground">Upload an splash image.</div>
     </div>
     <FormField v-slot="{ componentField }" name="object_type">
@@ -90,11 +103,7 @@ defineExpose({ getValues, validate, upload })
       </FormItem>
     </FormField>
 
-    <slot name="footer">
-      <Button type="submit" class="min-w-[120px]">
-        <span>Update <NameFade :messages="bookableObjectRandoms" /></span>
-      </Button>
-    </slot>
+    <slot name="footer" />
   </form>
 </template>
 

@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import _ from 'lodash'
-import { computed, onBeforeMount, ref, useAttrs } from 'vue'
+import { computed, onBeforeMount, ref, useAttrs, watch } from 'vue'
 import { storeToRefs } from 'pinia'
 
 import { FormControl } from '@/components/ui/form'
@@ -52,6 +52,7 @@ const selectedGroupValue = computed(() => {
 })
 
 onBeforeMount(() => {
+  console.log(attrs)
   group.value = getInitialGroup()
   emit('input', group.value)
 })

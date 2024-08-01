@@ -1,19 +1,16 @@
 <script setup lang="ts">
-import { computed, type PropType } from 'vue'
+import { computed, type PropType, onBeforeMount } from 'vue'
 import { useForm } from 'vee-validate'
 import { toTypedSchema } from '@vee-validate/zod'
 import * as z from 'zod'
 
 import { FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form'
 import { Input } from '@/components/ui/input'
-import { Button } from '@/components/ui/button'
 
 import { Textarea } from '@/components/ui/textarea'
 import GroupSelect from '@/components/bits/GroupSelect.vue'
 
-import NameFade from '@/components/utils/NameFade.vue'
-
-import { bookableObjectRandoms } from '@/assets/ts/constants'
+import type { BookableObject } from '@/types'
 
 interface InitialValues {
   name?: string
@@ -24,15 +21,17 @@ interface InitialValues {
 const props = defineProps({
   initialValues: {
     type: Object as PropType<InitialValues>,
-    required: true
+    required: false
+  },
+  bookableObject: {
+    type: Object as PropType<BookableObject>,
+    required: false
   }
 })
 
 const formSchema = toTypedSchema(
   z.object({
-    name: z.string({
-      required_error: 'Please enter a name.'
-    }),
+    name: z.string().min(3, { message: 'Please enter a name that is at least 3 characters long.' }),
     description: z
       .string({
         required_error: 'Please enter a description.'
@@ -44,14 +43,36 @@ const formSchema = toTypedSchema(
   })
 )
 
-const { name, description, groupId } = props.initialValues
+const { values, validate, setValues } = useForm({
+  validationSchema: formSchema
+})
 
-const { values, validate } = useForm({
-  validationSchema: formSchema,
-  initialValues: {
-    name: name,
-    description: description,
-    groupId: groupId
+onBeforeMount(() => {
+  if (props.initialValues) {
+    setValues({
+      name: props.initialValues.name,
+      description: props.initialValues.description,
+      groupId: props.initialValues.groupId
+    })
+  } else if (props.bookableObject) {
+    const groups = props.bookableObject.group
+    let groupId = ''
+    if (groups && groups.length > 0) {
+      const firstGroup = groups[0]
+      console.log(firstGroup)
+      // check if firstGroup is string
+      if (typeof firstGroup === 'string') {
+        groupId = firstGroup
+      } else {
+        groupId = firstGroup.group_id.id
+      }
+    }
+
+    setValues({
+      name: props.bookableObject.name,
+      description: props.bookableObject.description,
+      groupId: groupId || '-1'
+    })
   }
 })
 
@@ -60,7 +81,7 @@ defineExpose({ getValues, validate })
 </script>
 
 <template>
-  <form class="grid gap-4 py-4 w-full">
+  <form class="grid gap-4 pt-4 w-full">
     <FormField v-slot="{ componentField }" name="name">
       <FormItem>
         <FormLabel>Name</FormLabel>
@@ -89,11 +110,7 @@ defineExpose({ getValues, validate })
         <FormMessage />
       </FormItem>
     </FormField>
-    <slot name="footer">
-      <Button type="submit" class="min-w-[120px]">
-        <span>Create <NameFade :messages="bookableObjectRandoms" /></span>
-      </Button>
-    </slot>
+    <slot name="footer"></slot>
   </form>
 </template>
 

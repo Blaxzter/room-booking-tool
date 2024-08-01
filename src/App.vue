@@ -9,6 +9,7 @@ import { storeToRefs } from 'pinia'
 
 import { useInitialDataStore } from '@/stores/initial'
 import VersionDisplay from '@/components/utils/VersionDisplay.vue'
+import CalenderLoader from '@/components/animations/CalenderLoader.vue'
 
 const { init_loading } = storeToRefs(useInitialDataStore())
 
@@ -27,9 +28,12 @@ provide('showAlertDialog', showAlertDialog)
 </script>
 
 <template>
+  {{ init_loading }}
   <div :style="darkModeVar">
     <div v-if="init_loading" class="loading">
-      <div class="loading__spinner"></div>
+      <div class="flex items-center justify-center h-full">
+        <CalenderLoader :height="400" />
+      </div>
     </div>
     <RouterView v-show="!init_loading" />
   </div>

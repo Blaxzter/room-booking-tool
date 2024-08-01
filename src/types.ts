@@ -43,6 +43,7 @@ export type BookableObject = {
   group?: { group_id: Group }[] | string[]
   type?: string
   confirm_booking_required?: boolean
+  confirm_role?: string
   information_shared?: boolean
 }
 

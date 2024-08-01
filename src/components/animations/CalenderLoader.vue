@@ -13,7 +13,7 @@ const props = defineProps({
     :animationData="flatten('#f8fafc', loader)"
     :auto-play="true"
     :loop="true"
-    :speed="2"
+    :speed="4"
     :style="{ height: `${props.height}px` }"
   />
 </template>

@@ -144,6 +144,10 @@ export const useBookableObjects = defineStore('bookableObjects', () => {
     }
     bookableObject.status = 'published'
     const result = await client.request(createItem('bookable_object', bookableObject))
+    // check if result.image is string and replace with { id: string } (yes it can be string)
+    if (result.image && typeof result.image === 'string') {
+      result.image = { id: result.image }
+    }
     console.log(result)
     // cast result to BookableObject
     addBookableObject(result as BookableObject)
