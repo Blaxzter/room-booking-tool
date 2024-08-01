@@ -28,7 +28,6 @@ provide('showAlertDialog', showAlertDialog)
 </script>
 
 <template>
-  {{ init_loading }}
   <div :style="darkModeVar">
     <div v-if="init_loading" class="loading">
       <div class="flex items-center justify-center h-full">
