@@ -3,7 +3,8 @@ import Toaster from '@/components/ui/toast/Toaster.vue'
 import { showAlertDialog } from '@/plugins/alert-dialog-plugin'
 
 import { computed, provide } from 'vue'
-import { RouterView } from 'vue-router'
+import { RouterView, useRoute } from 'vue-router'
+
 import { useDark } from '@vueuse/core'
 import { storeToRefs } from 'pinia'
 
@@ -11,7 +12,16 @@ import { useInitialDataStore } from '@/stores/initial'
 import VersionDisplay from '@/components/utils/VersionDisplay.vue'
 import CalenderLoader from '@/components/animations/CalenderLoader.vue'
 
+const route = useRoute()
 const { init_loading } = storeToRefs(useInitialDataStore())
+
+const showLoading = computed(() => {
+  if (route.meta.requiresAuth === undefined) {
+    return false
+  } else {
+    return init_loading.value
+  }
+})
 
 const isDark = useDark()
 
@@ -29,12 +39,12 @@ provide('showAlertDialog', showAlertDialog)
 
 <template>
   <div :style="darkModeVar">
-    <div v-if="init_loading" class="loading">
+    <div v-if="showLoading" class="loading">
       <div class="flex items-center justify-center h-full">
         <CalenderLoader :height="400" />
       </div>
     </div>
-    <RouterView v-show="!init_loading" />
+    <RouterView v-show="!showLoading" />
   </div>
   <Toaster />
   <VersionDisplay class="version-display" />
