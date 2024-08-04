@@ -1,12 +1,14 @@
 <script setup lang="ts">
-import { inject, onMounted, ref } from 'vue'
+import { inject, onMounted, ref, computed } from 'vue'
 import { cn } from '@/lib/utils'
-import type { BookableObject } from '@/types'
-import RandomEmoji from '@/components/utils/Emoji.vue'
+import { isMobile } from 'mobile-device-detect'
 
+import RandomEmoji from '@/components/utils/Emoji.vue'
 import BookableObjectMenuButton from '@/components/bookable-object/BookableObjectMenuButton.vue'
 import BookingCardSplashImage from '@/components/home/BookingCardSplashImage.vue'
 import processImage from '@/assets/ts/image-utils'
+
+import type { BookableObject } from '@/types'
 
 const backendUrl = inject('backendUrl')
 
@@ -81,7 +83,7 @@ onMounted(() => {
           {{ bookableObject.description }}
         </p>
       </div>
-      <div v-show="mouseover || open">
+      <div v-show="mouseover || open || isMobile">
         <BookableObjectMenuButton
           v-model="open"
           :bookable-object-id="bookableObject.id"

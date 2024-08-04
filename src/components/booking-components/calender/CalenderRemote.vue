@@ -7,8 +7,8 @@ const emits = defineEmits(['prev', 'next'])
 </script>
 
 <template>
-  <div>
-    <Button @click="emits('prev')" variant="secondary" size="icon" class="me-0.5">
+  <div class="flex gap-0.5">
+    <Button @click="emits('prev')" variant="secondary" size="icon">
       <ChevronLeft />
     </Button>
     <Button @click="emits('next')" variant="secondary" size="icon">

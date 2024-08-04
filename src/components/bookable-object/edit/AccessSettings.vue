@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed, ref, type PropType, onBeforeMount } from 'vue'
+import { computed, ref, type PropType, onBeforeMount, watch } from 'vue'
 import { useForm } from 'vee-validate'
 import { toTypedSchema } from '@vee-validate/zod'
 import * as z from 'zod'
@@ -32,6 +32,8 @@ const props = defineProps({
     required: false
   }
 })
+
+const emit = defineEmits(['update'])
 
 const formSchema = toTypedSchema(
   z.object({
@@ -76,7 +78,6 @@ onBeforeMount(() => {
       confirm_role: props.initialValues.confirm_role || 'member'
     })
   } else if (props.bookableObject) {
-    console.log('AccessSettings:', props.bookableObject)
     setValues({
       is_internal: props.bookableObject.is_internal,
       uniqueId: props.bookableObject.uniqueId,
@@ -86,6 +87,37 @@ onBeforeMount(() => {
     })
   }
 })
+
+// if props bookableObject is passed, create a watcher that calls validate() on change and sets the values to the new bookableObject
+if (props.bookableObject) {
+  const firstRun = ref(true)
+  watch(values, async () => {
+    if (firstRun.value || !props.bookableObject) {
+      firstRun.value = false
+      return
+    }
+    const valid = await validate()
+    console.log(valid)
+    if (valid.valid) return
+
+    // calc diff between values and bookableObject
+    const diff = Object.keys(values).reduce<Partial<BookableObject>>((acc, key) => {
+      const typedKey = key as keyof BookableObject
+      const typedValues = values as Partial<BookableObject>
+
+      if (props.bookableObject && typedValues[typedKey] !== props.bookableObject[typedKey]) {
+        acc[typedKey] = typedValues[typedKey] as any
+      }
+
+      return acc
+    }, {} as Partial<BookableObject>)
+
+    if (Object.keys(diff).length === 0) return
+    console.log(diff)
+    // emit the new values to the parent component
+    emit('update', values)
+  })
+}
 
 const getValues = computed(() => values)
 defineExpose({ getValues, validate })

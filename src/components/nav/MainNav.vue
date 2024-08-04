@@ -14,6 +14,10 @@ const routeName = computed(() => {
   return route.name
 })
 
+const showHeaderExtra = computed(() => {
+  return route.meta.showHeaderExtras === true
+})
+
 const navElements = [
   { label: 'Dashboard', routeName: 'home' },
   { label: 'Requests', routeName: 'requests' }
@@ -28,7 +32,7 @@ const navElements = [
       <Calendar class="h-6 w-6" />
       <span class="sr-only">Object Booking Tool</span>
     </RouterLink>
-    <GroupSwitcher />
+    <GroupSwitcher v-if="showHeaderExtra" />
     <template v-for="(navElement, idx) in navElements" :key="idx">
       <RouterLink
         :to="{ name: navElement.routeName }"

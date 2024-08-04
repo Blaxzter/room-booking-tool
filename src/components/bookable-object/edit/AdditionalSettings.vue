@@ -37,6 +37,7 @@ const props = defineProps({
     required: false
   }
 })
+const emit = defineEmits(['update'])
 
 const avatarUpload = ref()
 

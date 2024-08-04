@@ -61,16 +61,17 @@ defineEmits(['selectGroup'])
 </script>
 
 <template>
-  <div class="flex gap-2 flex-col" v-if="groups.length !== 0">
+  <div class="flex gap-2 flex-col max-w-full" v-if="groups.length !== 0">
     <template v-for="groupType in groupIterative" :key="groupType.title">
       <div class="font-semibold text-lg text-primary mt-3" v-if="groupType.groups.length">{{ groupType.title }}</div>
       <GroupListEntry
         v-for="group of groupType.groups"
         :key="group.id"
-        :selectedGroup="selectedEditGroup"
+        :isSelected="selectedEditGroup === group"
         :group="group"
         :show-role="groupType.showRole"
         :isInvite="groupType.isInvite"
+        class="max-w-full"
         @click="
           () => {
             if (groupType.isInvite) {

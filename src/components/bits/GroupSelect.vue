@@ -52,7 +52,6 @@ const selectedGroupValue = computed(() => {
 })
 
 onBeforeMount(() => {
-  console.log(attrs)
   group.value = getInitialGroup()
   emit('input', group.value)
 })

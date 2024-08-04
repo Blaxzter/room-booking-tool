@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed, type PropType, onBeforeMount } from 'vue'
+import { computed, type PropType, onBeforeMount, ref, watch } from 'vue'
 import { useForm } from 'vee-validate'
 import { toTypedSchema } from '@vee-validate/zod'
 import * as z from 'zod'
@@ -9,6 +9,8 @@ import { Input } from '@/components/ui/input'
 
 import { Textarea } from '@/components/ui/textarea'
 import GroupSelect from '@/components/bits/GroupSelect.vue'
+import { randomBookableObject } from '@/assets/ts/constants'
+const exampleObject = randomBookableObject()
 
 import type { BookableObject } from '@/types'
 
@@ -17,6 +19,8 @@ interface InitialValues {
   description?: string
   groupId?: string
 }
+
+const waitOnOnfocus = ['name', 'description']
 
 const props = defineProps({
   initialValues: {
@@ -28,6 +32,7 @@ const props = defineProps({
     required: false
   }
 })
+const emit = defineEmits(['update'])
 
 const formSchema = toTypedSchema(
   z.object({
@@ -70,11 +75,13 @@ onBeforeMount(() => {
 
     setValues({
       name: props.bookableObject.name,
-      description: props.bookableObject.description,
+      description: props.bookableObject.description || '',
       groupId: groupId || '-1'
     })
   }
 })
+
+const pendingChanges = ref<string[]>([])
 
 const getValues = computed(() => values)
 defineExpose({ getValues, validate })
@@ -84,9 +91,24 @@ defineExpose({ getValues, validate })
   <form class="grid gap-4 pt-4 w-full">
     <FormField v-slot="{ componentField }" name="name">
       <FormItem>
-        <FormLabel>Name</FormLabel>
+        <FormLabel>Name {{ pendingChanges.includes('name') ? ' *' : '' }}</FormLabel>
         <FormControl>
-          <Input type="text" placeholder="The moon" v-bind="componentField" />
+          <Input
+            type="text"
+            :placeholder="exampleObject.name"
+            @input="
+              (e: Event) => {
+                const target = e.target as HTMLInputElement
+                if (target.value != bookableObject?.name && !pendingChanges.includes('name')) {
+                  pendingChanges.push('name')
+                } else if (target.value == bookableObject?.name) {
+                  pendingChanges.splice(pendingChanges.indexOf('name'), 1)
+                }
+              }
+            "
+            @blur="emit('update', { name: $event.target.value })"
+            v-bind="componentField"
+          />
         </FormControl>
         <FormDescription> Please enter the name of the bookable object. </FormDescription>
         <FormMessage />
@@ -94,9 +116,23 @@ defineExpose({ getValues, validate })
     </FormField>
     <FormField v-slot="{ componentField }" name="description">
       <FormItem>
-        <FormLabel>Description</FormLabel>
+        <FormLabel>Description {{ pendingChanges.includes('description') ? ' *' : '' }}</FormLabel>
         <FormControl>
-          <Textarea placeholder="The moon is a beautiful place." v-bind="componentField" />
+          <Textarea
+            :placeholder="exampleObject.description"
+            @input="
+              (e: Event) => {
+                const target = e.target as HTMLInputElement
+                if (target.value != bookableObject?.name && !pendingChanges.includes('name')) {
+                  pendingChanges.push('name')
+                } else if (target.value == bookableObject?.name) {
+                  pendingChanges.splice(pendingChanges.indexOf('name'), 1)
+                }
+              }
+            "
+            @blur="emit('update', { description: $event.target.value })"
+            v-bind="componentField"
+          />
         </FormControl>
         <FormDescription> Please enter the description of the bookable object. </FormDescription>
         <FormMessage />
@@ -105,7 +141,7 @@ defineExpose({ getValues, validate })
     <FormField v-slot="{ componentField }" name="groupId">
       <FormItem>
         <FormLabel>Group</FormLabel>
-        <GroupSelect v-bind="componentField" :include-person="true" />
+        <GroupSelect v-bind="componentField" :include-person="true" @blur="emit('update', { group: { id: $event } })" />
         <FormDescription> Please select the group of the bookable object. </FormDescription>
         <FormMessage />
       </FormItem>

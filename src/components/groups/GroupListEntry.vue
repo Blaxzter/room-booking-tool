@@ -14,11 +14,12 @@ import { useUser } from '@/stores/user'
 import { useGroups } from '@/stores/groups'
 import type { ShowAlertFunction } from '@/plugins/alert-dialog-plugin'
 import { useInitialDataStore } from '@/stores/initial'
+import { ScrollArea, ScrollBar } from '@/components/ui/scroll-area'
 
 defineProps<{
   group: Group
   showRole: boolean
-  selectedGroup: Group | undefined
+  isSelected: boolean
   isInvite: boolean
 }>()
 
@@ -34,8 +35,6 @@ const groupRole = (group: Group) => {
   const role = _.find(group.users, (u) => (u.directus_users_id as User).id === user.value.id)?.role
   return role && role.charAt(0).toUpperCase() + role.slice(1)
 }
-
-const selectedEditGroup = ref<Group | undefined>(undefined)
 
 const backendUrl = inject('backendUrl')
 
@@ -65,7 +64,6 @@ const acceptInvite = async (group: Group) => {
       await deleteInvite(group, invite.id, false)
       await fetchGroupData()
     })
-    selectedEditGroup.value = group
     emit('selectGroup', group)
   } catch (error) {
     console.error('Error accepting invite:', error)
@@ -97,16 +95,15 @@ const rejectInvite = async (group: Group) => {
 <template>
   <div
     :class="[
-      'flex gap-2 rounded-lg border  text-left text-sm transition-all  justify-stretch',
-      selectedEditGroup?.id === group.id && 'bg-muted',
-      isInvite ? 'p-1' : 'p-3 hover:border-indigo-500/50 cursor-pointer'
+      'flex gap-2 rounded-lg border text-left text-sm transition-all overflow-hidden',
+      isSelected && 'bg-muted',
+      isInvite ? 'p-1' : 'p-1 md:p-2 hover:border-indigo-500/50 cursor-pointer'
     ]"
   >
     <Avatar
-      class="mr-4"
       v-if="!group.emoji || group?.avatar?.id"
       shape="square"
-      :class="[selectedEditGroup?.id === group.id && 'border border-primary', isInvite ? 'h-12 w-12' : 'h-20 w-20']"
+      :class="[isInvite ? 'h-12 w-12' : 'w-14 sm:w-20 h-14 sm:h-20']"
     >
       <AvatarImage :src="`${backendUrl}/assets/${group?.avatar?.id}`" :alt="group.name" v-if="group?.avatar?.id" />
       <AvatarFallback>
@@ -115,24 +112,20 @@ const rejectInvite = async (group: Group) => {
     </Avatar>
     <div
       v-else
-      class="inline-flex items-center justify-center font-normal text-foreground select-none shrink-0 bg-secondary overflow-hidden text-5xl rounded-md mr-4 h-20 w-20"
-      :class="selectedEditGroup?.id === group.id && 'border border-primary'"
+      class="inline-flex items-center justify-center font-normal text-foreground select-none shrink-0 bg-secondary overflow-hidden text-3xl sm:text-5xl rounded-md mr-4 w-14 sm:w-20 h-14 sm:h-20"
+      :class="isSelected && 'border border-primary'"
     >
       {{ group.emoji }}
     </div>
 
-    <div class="flex flex-col w-full gap-1" :class="isInvite ? 'justify-center' : 'justify-between'">
+    <div class="flex flex-col gap-1 flex-grow overflow-hidden" :class="isInvite ? 'justify-center' : 'justify-between'">
       <div>
         <div class="flex items-center gap-2 justify-between">
-          <div class="font-semibold">
+          <div class="font-semibold text-nowrap overflow-ellipsis flex-shrink overflow-hidden">
             {{ group.name }}
           </div>
-          <div class="flex gap-2 text-muted-foreground">
-            <Badge
-              v-if="showRole"
-              variant="secondary"
-              :class="selectedEditGroup?.id === group.id && 'border border-primary'"
-            >
+          <div class="flex gap-2 text-muted-foreground flex-shrink-0">
+            <Badge v-if="showRole" variant="secondary" :class="isSelected && 'border border-primary'">
               {{ groupRole(group) }}
             </Badge>
             <template v-if="!isInvite">
@@ -169,21 +162,26 @@ const rejectInvite = async (group: Group) => {
             </template>
           </div>
         </div>
-        <div class="line-clamp-2 text-xs text-muted-foreground">
+        <div class="hidden sm:block line-clamp-2 text-xs text-muted-foreground">
           {{ group.description }}
         </div>
       </div>
       <div class="flex items-center gap-2" v-if="!isInvite">
         <BoxIcon class="w-4 h-4 text-muted-foreground" />
         <template v-if="group?.objects !== undefined">
-          <Badge
-            v-for="objects of group.objects"
-            :key="objects.id"
-            variant="secondary"
-            :class="selectedEditGroup?.id === group.id && 'border border-primary'"
-          >
-            {{ objects.name }}
-          </Badge>
+          <ScrollArea>
+            <div class="flex flex-nowrap gap-1 text-nowrap">
+              <Badge
+                variant="secondary"
+                :class="isSelected && 'border border-primary'"
+                v-for="object of group.objects"
+                :key="object.id"
+              >
+                {{ object.name }}
+              </Badge>
+            </div>
+            <ScrollBar orientation="horizontal" />
+          </ScrollArea>
         </template>
         <div v-else class="text-muted-foreground">No objects</div>
       </div>

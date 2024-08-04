@@ -2,7 +2,7 @@
 import { onMounted, ref, computed, inject } from 'vue'
 import { storeToRefs } from 'pinia'
 import { PlusCircledIcon } from '@radix-icons/vue'
-import { TrashIcon } from 'lucide-vue-next'
+import { TrashIcon, ArrowLeftIcon } from 'lucide-vue-next'
 import _ from 'lodash'
 
 import type { Group, User } from '@/types'
@@ -25,6 +25,7 @@ import { useUser } from '@/stores/user'
 
 import { Dialog } from '@/components/ui/dialog'
 import type { ShowAlertFunction } from '@/plugins/alert-dialog-plugin'
+import { breakpointsTailwind, useBreakpoints } from '@vueuse/core'
 
 const { fetchGroupData } = useInitialDataStore()
 const { init_loading } = storeToRefs(useInitialDataStore())
@@ -92,53 +93,75 @@ const ownerEmail = computed(() => {
     )?.directus_users_id as User
   )?.email
 })
+
+const breakpoints = useBreakpoints(breakpointsTailwind)
+const mobile = breakpoints.smallerOrEqual('lg')
+const groupViewOpen = ref(false)
 </script>
 
 <template>
-  <div class="container pt-8 mx-auto h-full max-h-full overflow-hidden">
+  <div class="container pt-5 mx-auto h-full max-h-full overflow-hidden">
     <CalenderLoader :height="150" v-if="init_loading" />
-    <div v-else class="grid grid-cols-1 lg:grid-cols-2 gap-4 items-stretch h-full max-h-full overflow-hidden">
-      <ScrollArea class="mb-5 me-[-12px] pe-[12px]">
-        <GroupList @select-group="selectedGroup = $event" class="mb-2" />
-        <div
-          class="flex rounded-lg border p-3 transition-all hover:border-indigo-500/50 cursor-pointer h-[106px] items-center justify-center text-gray-500 hover:text-indigo-500"
-          @click="showDialog = true"
-        >
-          <div class="flex items-center gap-2">
-            <PlusCircledIcon class="w-6 h-6" />
-            Add Group
+    <template v-else>
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-4 items-stretch h-full max-h-full overflow-hidden">
+        <ScrollArea v-if="!mobile || !groupViewOpen">
+          <div class="mb-5 me-[-6px] pe-[6px] sm:me-[-12px] sm:pe-[12px] max-w-full">
+            <GroupList
+              @select-group="
+                ($event) => {
+                  selectedGroup = $event
+                  groupViewOpen = true
+                }
+              "
+              class="mb-2 max-w-full"
+            />
+            <div
+              class="flex rounded-lg border p-3 transition-all hover:border-indigo-500/50 cursor-pointer h-[66px] sm:h-[98px] items-center justify-center text-gray-500 hover:text-indigo-500"
+              @click="() => (showDialog = true)"
+            >
+              <div class="flex items-center gap-2">
+                <PlusCircledIcon class="w-6 h-6" />
+                Add Group
+              </div>
+            </div>
           </div>
-        </div>
-      </ScrollArea>
-      <ScrollArea class="max-h-full overflow-hidden">
-        <template v-if="selectedGroup">
-          <Tabs default-value="account">
-            <TabsList>
-              <TabsTrigger value="account"> Group Information </TabsTrigger>
-              <TabsTrigger value="password"> Members </TabsTrigger>
-            </TabsList>
-            <TabsContent value="account">
-              <GroupDataCard :group="selectedGroup" />
-            </TabsContent>
-            <TabsContent value="password">
-              <GroupMemberCard :group="selectedGroup" />
-            </TabsContent>
-          </Tabs>
-          <div class="flex justify-end mt-2" v-if="!isOwner">
-            <span class="text-gray-500 text-sm">group by {{ ownerEmail }}</span>
+        </ScrollArea>
+        <ScrollArea class="max-h-full overflow-hidden" v-if="!mobile || groupViewOpen">
+          <template v-if="selectedGroup">
+            <Tabs default-value="account">
+              <div class="flex justify-between">
+                <TabsList>
+                  <TabsTrigger value="account"> Group Information </TabsTrigger>
+                  <TabsTrigger value="password"> Members </TabsTrigger>
+                </TabsList>
+                <!-- back button -->
+                <Button variant="ghost" class="text-gray-500" @click="groupViewOpen = false" v-if="mobile">
+                  <ArrowLeftIcon class="w-4 h-4 me-1" /> Back
+                </Button>
+              </div>
+              <TabsContent value="account">
+                <GroupDataCard :group="selectedGroup" />
+              </TabsContent>
+              <TabsContent value="password">
+                <GroupMemberCard :group="selectedGroup" />
+              </TabsContent>
+            </Tabs>
+            <div class="flex justify-end mt-2" v-if="!isOwner">
+              <span class="text-gray-500 text-sm">group by {{ ownerEmail }}</span>
+            </div>
+            <div class="flex justify-end" v-else>
+              <Button variant="destructive" class="mt-4" @click="deleteGroup">
+                <TrashIcon class="w-4 h-4 me-1" />
+                Delete Group
+              </Button>
+            </div>
+          </template>
+          <div v-else class="flex justify-center items-center h-96">
+            <p class="text-lg text-gray-500">Select a group to view details.</p>
           </div>
-          <div class="flex justify-end" v-else>
-            <Button variant="destructive" class="mt-4" @click="deleteGroup">
-              <TrashIcon class="w-4 h-4 me-1" />
-              Delete Group
-            </Button>
-          </div>
-        </template>
-        <div v-else class="flex justify-center items-center h-96">
-          <p class="text-lg text-gray-500">Select a group to view details.</p>
-        </div>
-      </ScrollArea>
-    </div>
+        </ScrollArea>
+      </div>
+    </template>
   </div>
   <Dialog v-model:open="showDialog">
     <NewGroupDialog @close="showDialog = false" v-if="dialogType === 'create-group'" @created="created" />

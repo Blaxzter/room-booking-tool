@@ -41,6 +41,8 @@
 
     --primary-color-rgb: #3d68d2;
     --primary-color: 223.6 79.1% 31.8%;
+    --primary-color-light-rgb: #7272a6;
+
 
     --background-rgb: #ffffff;
     --foreground-rgb: #020817;
@@ -77,6 +79,7 @@
   .dark {
     --primary-color: 223.6 79.1% 31.8%;
     --primary-color-rgb: #789aff;
+    --primary-color-light-rgb: #95a2ce;
 
     --background: 222.2 84% 4.9%;
     --foreground: 210 40% 98%;

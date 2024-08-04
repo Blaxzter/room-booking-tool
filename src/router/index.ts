@@ -13,7 +13,10 @@ const router = createRouter({
           path: '/',
           name: 'home',
           alias: ['/home'],
-          component: () => import('@/views/HomeView.vue')
+          component: () => import('@/views/HomeView.vue'),
+          meta: {
+            showHeaderExtras: true
+          }
         },
         {
           path: '/groups',
@@ -47,7 +50,8 @@ const router = createRouter({
           }),
           meta: {
             requiresAuth: true,
-            hideVersion: true
+            hideVersion: true,
+            bookableObjectView: true
           }
         }
       ]
@@ -73,7 +77,8 @@ const router = createRouter({
       name: 'bookable-object',
       component: () => import('@/views/BookableObjectViewPublic.vue'),
       meta: {
-        hideVersion: true
+        hideVersion: true,
+        bookableObjectView: true
       }
     },
     {

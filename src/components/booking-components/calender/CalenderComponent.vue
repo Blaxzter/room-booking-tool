@@ -229,8 +229,8 @@ onMounted(() => {
 </script>
 
 <template>
-  <Card class="calender-content" :style="styleProps">
-    <card-header class="flex flex-col sm:flex-row sm:items-center space-y-1 sm:space-y-0 sm:space-x-4">
+  <Card class="calender-content overflow-hidden" :style="styleProps">
+    <CardHeader class="flex flex-col sm:flex-row sm:items-center space-y-1 p-2 sm:p-4 sm:space-y-0 sm:space-x-4">
       <div class="flex items-center">
         <CalendarIcon class="mr-2" />
         <h2 class="text-lg font-semibold" v-if="fullCalenderRef">
@@ -238,13 +238,13 @@ onMounted(() => {
         </h2>
       </div>
       <div class="flex-grow"></div>
-      <div class="flex items-center space-x-3">
+      <div class="flex items-center gap-2 sm:gap-3 justify-end">
         <Button @click="selectToday" :variant="isToday ? 'outline' : 'default'">Today</Button>
         <calender-remote @prev="togglePrev" @next="toggleNext" />
         <calender-tabs v-model="selectedTab" @update:model-value="switchTab" />
       </div>
-    </card-header>
-    <CardContent class="calender-wrapper">
+    </CardHeader>
+    <CardContent class="calender-wrapper p-0">
       <full-calendar :options="calendarOptions" ref="fullCalenderRef">
         <template v-slot:eventContent="arg">
           <CalenderEventSlot :arg="arg" />
@@ -267,6 +267,8 @@ onMounted(() => {
 <style lang="scss">
 :root {
   --top-padding: 0;
+
+  --fc-border-color: hsl(var(--border));
 }
 
 .calender-content {
@@ -284,8 +286,13 @@ onMounted(() => {
   }
 }
 
-.fc-day-today {
-  background: hsl(var(--secondary)) !important;
+.fc-dayGridFourWeek-view .fc-day-today.fc-daygrid-day,
+.fc-timeGridWeek-view .fc-day-today.fc-daygrid-day,
+.fc-timeGridDay-view .fc-day-today.fc-daygrid-day,
+.fc-timeGridDay-view .fc-day-today.fc-timegrid-col,
+.fc-dayGridFourWeek-view .fc-day-today.fc-timegrid-col,
+.fc-timeGridWeek-view .fc-day-today.fc-timegrid-col {
+  background: var(--primary-color-light-rgb) !important;
   border: none !important;
 }
 
@@ -293,6 +300,21 @@ onMounted(() => {
   background: hsl(var(--secondary)) !important;
   // create a inset border
   box-shadow: inset 0 0 0 2px var(--primary-color-rgb);
+}
+
+.fc-scrollgrid {
+  border: none !important;
+}
+.fc .fc-scrollgrid-section > * {
+  border: none !important;
+}
+.fc-col-header-cell {
+  border: none !important;
+  border-bottom: 1px solid hsl(var(--border)) !important;
+}
+
+.fc-scrollgrid td:last-of-type {
+  border-right: none !important;
 }
 
 .fc .fc-list-empty {
