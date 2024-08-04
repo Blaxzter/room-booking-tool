@@ -48,6 +48,8 @@ onMounted(async () => {
 </template>
 
 <style class="scss">
+/* TODO top pedding when top nav is visible */
+
 @media (min-width: 1024px) {
   .about {
     min-height: 100vh;
