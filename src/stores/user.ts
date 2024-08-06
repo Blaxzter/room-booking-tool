@@ -299,6 +299,7 @@ export const useUser = defineStore('user', () => {
   }
 
   const addTelegramId = async (telegram_user_id: string | null, telegram_user_name: string | null) => {
+    /* @ts-ignore */
     await client.request(updateUser(user.value.id, { telegram_user_id, telegram_user_name })).then(
       (result) => {
         user.value = result as unknown as User
