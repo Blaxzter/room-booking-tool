@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { cn } from '@/lib/utils'
+import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import { Button } from '@/components/ui/button'
 import { useRoute, useRouter } from 'vue-router'
 import { computed, watch } from 'vue'
@@ -44,7 +45,7 @@ watch(currentPage, (value) => {
 </script>
 
 <template>
-  <nav class="flex space-x-2 lg:flex-col lg:space-x-0 lg:space-y-1">
+  <nav class="hidden md:flex flex-col space-x-0 space-y-1">
     <Button
       v-for="item in sidebarNavItems"
       :key="item.title"
@@ -58,4 +59,17 @@ watch(currentPage, (value) => {
       {{ item.title }}
     </Button>
   </nav>
+  <Tabs v-model:model-value="selectedPage" class="md:hidden">
+    <TabsList>
+      <TabsTrigger
+        v-for="item in sidebarNavItems"
+        :key="item.value"
+        :value="item.value"
+        @click="selectPage(item.value)"
+        :class="cn('cursor-pointer', selectedPage === item.value && 'bg-muted hover:bg-muted')"
+      >
+        {{ item.title }}
+      </TabsTrigger>
+    </TabsList>
+  </Tabs>
 </template>

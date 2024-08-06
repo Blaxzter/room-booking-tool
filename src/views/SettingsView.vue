@@ -66,11 +66,11 @@ onMounted(async () => {
       <p class="text-muted-foreground">{{ description }}</p>
     </div>
     <Separator class="my-6" />
-    <div class="flex flex-col space-y-8 lg:flex-row lg:space-x-12 lg:space-y-0">
-      <aside class="-mx-4 lg:w-1/5">
+    <div class="flex flex-col space-y-8 md:flex-row md:space-x-12 md:space-y-0">
+      <aside class="md:-mx-4 md:w-1/5">
         <SidebarNav v-model="selectedPage" />
       </aside>
-      <div class="flex-1 lg:max-w-2xl">
+      <div class="flex-1 md:max-w-2xl">
         <div class="space-y-6">
           <Component :is="PageComponent" />
         </div>

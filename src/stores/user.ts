@@ -298,6 +298,18 @@ export const useUser = defineStore('user', () => {
     })
   }
 
+  const addTelegramId = async (telegram_user_id: string | null, telegram_user_name: string | null) => {
+    await client.request(updateUser(user.value.id, { telegram_user_id, telegram_user_name })).then(
+      (result) => {
+        user.value = result as unknown as User
+        localStorage.setItem('user', JSON.stringify(result))
+      },
+      (error) => {
+        console.error(error)
+      }
+    )
+  }
+
   const verifyEmail = async (emailed_token: string) => {
     const noAuthClient = createDirectus(backendUrl).with(rest())
 
@@ -339,6 +351,7 @@ export const useUser = defineStore('user', () => {
     avatarId,
     avatarFallback,
     reset,
-    deleteDirectusFile
+    deleteDirectusFile,
+    addTelegramId
   }
 })

@@ -133,6 +133,9 @@ export type User = {
   last_page: string
   display_name: string
 
+  telegram_user_id: string | null
+  telegram_user_name: string | null
+
   Groups?: GroupDirectusUser[]
   Invites?: GroupInvite[]
 }
@@ -154,6 +157,8 @@ export type UpdateUserRequest = {
   email: string
   avatar: string | null
   display_name: string
+  telegram_user_id: string | null
+  telegram_user_name: string | null
 }
 
 export type CreateUserRequest = {
