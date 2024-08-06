@@ -1,35 +1,33 @@
 {
-  "collection": "bookable_object",
-  "field": "image",
-  "type": "uuid",
+  "collection": "directus_users",
+  "field": "telegram_user_name",
+  "type": "string",
   "meta": {
-    "collection": "bookable_object",
+    "collection": "directus_users",
     "conditions": null,
     "display": null,
     "display_options": null,
-    "field": "image",
+    "field": "telegram_user_name",
     "group": null,
     "hidden": false,
-    "interface": "file-image",
+    "interface": "input",
     "note": null,
-    "options": {},
+    "options": null,
     "readonly": false,
     "required": false,
-    "sort": 10,
-    "special": [
-      "file"
-    ],
+    "sort": 5,
+    "special": null,
     "translations": null,
     "validation": null,
     "validation_message": null,
     "width": "full"
   },
   "schema": {
-    "name": "image",
-    "table": "bookable_object",
-    "data_type": "uuid",
+    "name": "telegram_user_name",
+    "table": "directus_users",
+    "data_type": "character varying",
     "default_value": null,
-    "max_length": null,
+    "max_length": 255,
     "numeric_precision": null,
     "numeric_scale": null,
     "is_nullable": true,
@@ -38,7 +36,7 @@
     "is_generated": false,
     "generation_expression": null,
     "has_auto_increment": false,
-    "foreign_key_table": "directus_files",
-    "foreign_key_column": "id"
+    "foreign_key_table": null,
+    "foreign_key_column": null
   }
 }
