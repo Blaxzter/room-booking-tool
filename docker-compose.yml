@@ -102,6 +102,23 @@ services:
       LETSENCRYPT_HOST: "${PUBLIC_URL}"
       LETSENCRYPT_EMAIL: "${LETSENCRYPT_EMAIL}"
 
+  booki-tool-telegram-bot:
+    build:
+      context: ./telegram-bot/
+    environment:
+      TELEGRAM_BOT_TOKEN: "${TELEGRAM_BOT_TOKEN}"
+      PORT: 3000
+
+      VIRTUAL_HOST: "${TELEGRAM_URL}"
+      LETSENCRYPT_HOST: "${TELEGRAM_URL}"
+      LETSENCRYPT_EMAIL: "${LETSENCRYPT_EMAIL}"
+    ports:
+      - "12000:3000"
+    restart: always
+    networks:
+      - directus-net
+      # - nginx-net
+
 #  frontend:
 #    depends_on:
 #      - directus
