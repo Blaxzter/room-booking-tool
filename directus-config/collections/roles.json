@@ -10,6 +10,16 @@
     "_syncId": "3038fc7f-e60d-4282-af54-ce712665a9fb"
   },
   {
+    "name": "bot",
+    "icon": "supervised_user_circle",
+    "description": "For bots that work on data",
+    "ip_access": null,
+    "enforce_tfa": false,
+    "admin_access": false,
+    "app_access": false,
+    "_syncId": "4c0ccba0-5dfc-4576-8bb1-cf516c9ce071"
+  },
+  {
     "name": "Member",
     "icon": "supervised_user_circle",
     "description": "All members with direct booking rights.",

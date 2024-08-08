@@ -10,6 +10,7 @@ import AccountForm from '@/components/settings/AccountForm.vue'
 import NotificationsForm from '@/components/settings/NotificationsForm.vue'
 
 import { useInitialDataStore } from '@/stores/initial'
+import { ScrollArea } from '@/components/ui/scroll-area'
 
 const { fetchSettingsViewData } = useInitialDataStore()
 
@@ -60,20 +61,27 @@ onMounted(async () => {
 </script>
 
 <template>
-  <div class="space-y-6 p-10 pb-16 md:block">
+  <div class="space-y-6 p-10 pb-16 h-full max-h-full">
     <div class="space-y-0.5">
       <h2 class="text-2xl font-bold tracking-tight">{{ title }}</h2>
       <p class="text-muted-foreground">{{ description }}</p>
     </div>
     <Separator class="my-6" />
-    <div class="flex flex-col space-y-8 md:flex-row md:space-x-12 md:space-y-0">
+    <div
+      class="flex flex-col space-y-8 md:flex-row md:space-x-12 md:space-y-0 h-full"
+      style="max-height: calc(100% - 50px)"
+    >
       <aside class="md:-mx-4 md:w-1/5">
         <SidebarNav v-model="selectedPage" />
       </aside>
-      <div class="flex-1 md:max-w-2xl">
-        <div class="space-y-6">
-          <Component :is="PageComponent" />
-        </div>
+      <div class="h-full overflow-hidden flex-grow">
+        <ScrollArea class="max-h-full overflow-y-scroll">
+          <div class="flex-1 md:max-w-2xl mb-5">
+            <div class="space-y-6">
+              <Component :is="PageComponent" />
+            </div>
+          </div>
+        </ScrollArea>
       </div>
     </div>
   </div>

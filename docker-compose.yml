@@ -71,7 +71,7 @@ services:
 
       PUBLIC_URL: "${PUBLIC_URL}"
       FRONTEND_URL: "${FRONTEND_URL}"
-      FLOWS_ENV_ALLOW_LIST: "FRONTEND_URL, PUBLIC_URL"
+      FLOWS_ENV_ALLOW_LIST: "FRONTEND_URL, PUBLIC_URL, TELEGRAM_URL"
       USER_REGISTER_URL_ALLOW_LIST: "${FRONTEND_URL}/verify-email"
       USER_INVITE_URL_ALLOW_LIST: "${FRONTEND_URL}/invite"
       PASSWORD_RESET_URL_ALLOW_LIST: "${FRONTEND_URL}/reset-password"
@@ -102,22 +102,24 @@ services:
       LETSENCRYPT_HOST: "${PUBLIC_URL}"
       LETSENCRYPT_EMAIL: "${LETSENCRYPT_EMAIL}"
 
-  booki-tool-telegram-bot:
-    build:
-      context: ./telegram-bot/
-    environment:
-      TELEGRAM_BOT_TOKEN: "${TELEGRAM_BOT_TOKEN}"
-      PORT: 3000
+      TELEGRAM_URL: localhost:12543
 
-      VIRTUAL_HOST: "${TELEGRAM_URL}"
-      LETSENCRYPT_HOST: "${TELEGRAM_URL}"
-      LETSENCRYPT_EMAIL: "${LETSENCRYPT_EMAIL}"
-    ports:
-      - "12000:3000"
-    restart: always
-    networks:
-      - directus-net
-      # - nginx-net
+#  booki-tool-telegram-bot:
+#    build:
+#      context: ./telegram-bot/
+#    environment:
+#      TELEGRAM_BOT_TOKEN: "${TELEGRAM_BOT_TOKEN}"
+#      PORT: 3000
+#
+#      VIRTUAL_HOST: "${TELEGRAM_URL}"
+#      LETSENCRYPT_HOST: "${TELEGRAM_URL}"
+#      LETSENCRYPT_EMAIL: "${LETSENCRYPT_EMAIL}"
+#    ports:
+#      - "12000:3000"
+#    restart: always
+#    networks:
+#      - directus-net
+#      # - nginx-net
 
 #  frontend:
 #    depends_on:

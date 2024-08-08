@@ -347,6 +347,66 @@
     "_syncId": "91882fba-2d24-4cbf-8531-f49c9d01e9f9"
   },
   {
+    "role": "4c0ccba0-5dfc-4576-8bb1-cf516c9ce071",
+    "collection": "bookable_object",
+    "action": "read",
+    "permissions": {},
+    "validation": {},
+    "presets": null,
+    "fields": [
+      "*"
+    ],
+    "_syncId": "2b5ea925-97de-481e-ba70-395ba26f60a0"
+  },
+  {
+    "role": "4c0ccba0-5dfc-4576-8bb1-cf516c9ce071",
+    "collection": "booking",
+    "action": "read",
+    "permissions": {},
+    "validation": {},
+    "presets": null,
+    "fields": [
+      "*"
+    ],
+    "_syncId": "256c64c9-ad60-4467-82dd-1cddcfc02ea5"
+  },
+  {
+    "role": "4c0ccba0-5dfc-4576-8bb1-cf516c9ce071",
+    "collection": "directus_users",
+    "action": "read",
+    "permissions": {},
+    "validation": {},
+    "presets": null,
+    "fields": [
+      "*"
+    ],
+    "_syncId": "0c3004a0-c192-4013-b471-b22c2c1419e5"
+  },
+  {
+    "role": "4c0ccba0-5dfc-4576-8bb1-cf516c9ce071",
+    "collection": "group_directus_users",
+    "action": "read",
+    "permissions": {},
+    "validation": {},
+    "presets": null,
+    "fields": [
+      "*"
+    ],
+    "_syncId": "5c7eee87-dd5e-4ec8-8618-e499dad81640"
+  },
+  {
+    "role": "4c0ccba0-5dfc-4576-8bb1-cf516c9ce071",
+    "collection": "group",
+    "action": "read",
+    "permissions": {},
+    "validation": {},
+    "presets": null,
+    "fields": [
+      "*"
+    ],
+    "_syncId": "b2864988-c5f6-4f7d-ba61-a2a507c893e6"
+  },
+  {
     "role": "62a8abe7-e3ae-462e-b038-58ce5a2f5475",
     "collection": "bookable_object_group",
     "action": "create",

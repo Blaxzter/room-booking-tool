@@ -12,7 +12,9 @@ COPY package*.json ./
 RUN npm install
 
 # Copy the rest of the application code
-COPY . .
+COPY bot.js ./
+COPY package.json ./
+COPY pnpm-lock.yaml ./
 
 # Build the application if needed
 # RUN npm run build

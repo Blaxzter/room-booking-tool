@@ -12,6 +12,7 @@ import { useToast } from '@/components/ui/toast'
 
 import type { NotificationSetting } from '@/types'
 import InDevelopment from '@/components/utils/InDevelopment.vue'
+import { ScrollArea } from '@/components/ui/scroll-area'
 
 const {
   notificationSettingsLoading,
@@ -55,7 +56,6 @@ const toggleNotification = async (setting: NotificationSetting, type: Notificati
   </div>
   <Separator />
   <div class="space-y-8 relative">
-    <InDevelopment width="55px" font-size="0.7rem" class="end-[21px]" />
     <div class="space-y-4 relative">
       <template v-if="!notificationSettingsLoading">
         <!-- Column Indicators -->

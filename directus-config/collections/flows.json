@@ -32,6 +32,38 @@
     "_syncId": "0c5d8064-2bf3-4284-b88b-23eeac843879"
   },
   {
+    "name": "Send Telegram Message Flow",
+    "icon": "bolt",
+    "color": "#2ECDA7",
+    "description": null,
+    "status": "active",
+    "trigger": "operation",
+    "accountability": "all",
+    "options": {},
+    "operation": "f83fb1e5-0dd0-4c06-8021-d7ab21da9dbc",
+    "_syncId": "16a1c30b-f4f7-474e-b178-9afd03d90c3f"
+  },
+  {
+    "name": "Send Telegram Booking Notifcation",
+    "icon": "send",
+    "color": "#E35169",
+    "description": "Sends a booking notification via telegram to all relevant users",
+    "status": "active",
+    "trigger": "event",
+    "accountability": "all",
+    "options": {
+      "type": "action",
+      "scope": [
+        "items.create"
+      ],
+      "collections": [
+        "booking"
+      ]
+    },
+    "operation": "83777f51-d458-490b-a489-babca8b6fc5a",
+    "_syncId": "33453e1c-94df-4088-b23b-07d010fc950d"
+  },
+  {
     "name": "Group Invite",
     "icon": "physical_therapy",
     "color": null,
@@ -73,6 +105,20 @@
     "_syncId": "5fa12d68-e299-48ad-8120-3b1027cc48f0"
   },
   {
+    "name": "Get Relevant Telegram User Data",
+    "icon": "bolt",
+    "color": null,
+    "description": "Helper Flow for getting user by telegram notification setting",
+    "status": "active",
+    "trigger": "operation",
+    "accountability": "all",
+    "options": {
+      "return": "$last"
+    },
+    "operation": "92ae0d98-9df9-4c0a-baba-8e19baf9508a",
+    "_syncId": "6226d022-cf33-40c5-91ef-fbcb861fa731"
+  },
+  {
     "name": "Test Get Data",
     "icon": "bolt",
     "color": null,
@@ -95,10 +141,10 @@
     "_syncId": "6cf2633a-b5df-4d08-9a1c-e28b631aff31"
   },
   {
-    "name": "Get Relevant User Data",
+    "name": "Get Relevant Email User Data ",
     "icon": "bolt",
     "color": null,
-    "description": null,
+    "description": "Helper Flow for getting user by email notification",
     "status": "active",
     "trigger": "operation",
     "accountability": "all",
@@ -152,7 +198,7 @@
     "_syncId": "926fe0af-3868-43dc-8962-6b17426e51f6"
   },
   {
-    "name": "Send Booking Notification",
+    "name": "Send Email Booking Notification",
     "icon": "mark_email_read",
     "color": "#E35169",
     "description": "Sends a booking notifcation to all relevant users",

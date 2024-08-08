@@ -24,6 +24,22 @@
       "collection": "notification_setting",
       "query": "{\n    \"filter\": {\n        \"bookable_object_id\": {\n            \"_eq\": {{ read_bookable_object.id }}\n        },\n        \"group_id\": {\n            \"_null\": true\n        }\n    }\n}\n"
     },
+    "resolve": "6f56c9f7-3f5f-423b-bed0-7b35859c94b5",
+    "reject": null,
+    "flow": "6226d022-cf33-40c5-91ef-fbcb861fa731",
+    "_syncId": "d6d26873-6e8a-4885-a74d-e0325846963c"
+  },
+  {
+    "name": "Bookable Object Notification Settings",
+    "key": "bookable_object_notification_setting",
+    "type": "item-read",
+    "position_x": 37,
+    "position_y": 1,
+    "options": {
+      "permissions": "$full",
+      "collection": "notification_setting",
+      "query": "{\n    \"filter\": {\n        \"bookable_object_id\": {\n            \"_eq\": {{ read_bookable_object.id }}\n        },\n        \"group_id\": {\n            \"_null\": true\n        }\n    }\n}\n"
+    },
     "resolve": "4827550b-d420-485b-a841-05b6061ca79c",
     "reject": null,
     "flow": "77f42aee-c6f7-4b12-9dc5-fb62b9f17bfb",
@@ -164,6 +180,20 @@
     "_syncId": "03585334-3b4b-4cbf-9c6d-be0d9ca6a83b"
   },
   {
+    "name": "Create final return user list",
+    "key": "exec_4ubnx",
+    "type": "exec",
+    "position_x": 39,
+    "position_y": 55,
+    "options": {
+      "code": "module.exports = async function(data) {\n  const res = [];\n  if (data?.get_user_data.length > 0) {\n    data?.get_user_data.map(item => {\n      if (item && !res.some(e => e.id === item.id)) {\n        res.push(item);\n      }\n    })\n  }\n  if (data?.read_owner) {\n    // check if owner has disabled telegram notification for this bookable object\n    const relevant_settings = data?.bookable_object_notification_setting.filter(setting => setting.user_id === data?.read_owner.id);\n    if (relevant_settings.length > 0 && !relevant_settings[0].telegram) {\n      return res;\n    }\n    \n    if (!res.some(e => e.id === data?.read_owner.id)) {\n      res.push(data?.read_owner);\n    }\n  }\n  return res;\n} "
+    },
+    "resolve": null,
+    "reject": null,
+    "flow": "6226d022-cf33-40c5-91ef-fbcb861fa731",
+    "_syncId": "8ca5386c-2067-440e-8e41-32f872bc21ef"
+  },
+  {
     "name": "Run Script",
     "key": "exec_804y2",
     "type": "exec",
@@ -178,6 +208,20 @@
     "_syncId": "9c75f79e-d8d2-4b05-ac24-38f234e33872"
   },
   {
+    "name": "Run Script",
+    "key": "exec_804y2",
+    "type": "exec",
+    "position_x": 21,
+    "position_y": 20,
+    "options": {
+      "code": "module.exports = async function(data) {\n  const ret_array = []\n  data?.relevant_user_data?.map(user => {\n      if (user.telegram_user_id) {\n          ret_array.push({\n              telegram_user_id: user.telegram_user_id,\n              owner_id: user.id,\n              data: data.telegram_data\n          })\n      }\n  })\n\n  // if ret_array is empty throw error\n  if (ret_array.length === 0) {\n    throw new Error('No Telegram User Ids found')\n  }\n\n  return ret_array;\n}\n"
+    },
+    "resolve": "34fe36b6-0f16-453d-b875-bc1f05d1024a",
+    "reject": null,
+    "flow": "33453e1c-94df-4088-b23b-07d010fc950d",
+    "_syncId": "54477823-92df-47dc-bc79-ad86f2171e14"
+  },
+  {
     "name": "Filter Data On Notification Settings",
     "key": "exec_av0v5",
     "type": "exec",
@@ -190,6 +234,20 @@
     "reject": null,
     "flow": "77f42aee-c6f7-4b12-9dc5-fb62b9f17bfb",
     "_syncId": "f71ffe29-1ae3-4157-b005-7f1f65152dc1"
+  },
+  {
+    "name": "Filter Data On Notification Settings",
+    "key": "exec_av0v5",
+    "type": "exec",
+    "position_x": 3,
+    "position_y": 55,
+    "options": {
+      "code": "module.exports = async function(data) {\n  if (data?.final_user_data.length > 0) {\n    const res = [];\n    data?.final_user_data.map(item => {\n      if (item.directus_users_id) {\n        // check for bookable object setting\n        const bs = data?.bookable_object_notification_setting.filter(setting => setting.user_id === item.directus_users_id);\n        if (bs.length > 0 && !bs[0].telegram) {\n          return;\n        }\n        \n        // check for group setting\n        const gs = data?.group_notification_settings.filter(setting => setting.user_id === item.directus_users_id && setting.bookable_object_id === null && setting.group_id === item.group_id);\n        if (gs.length > 0 && !gs[0].telegram) {\n          return;\n        }\n\n        res.push(item.directus_users_id);\n      }\n    })\n    return res;\n  }\n  return [];\n}\n"
+    },
+    "resolve": "8fda392b-31e8-454c-a86b-8e1312d81248",
+    "reject": null,
+    "flow": "6226d022-cf33-40c5-91ef-fbcb861fa731",
+    "_syncId": "92429429-21d5-475b-b7b6-40b662ed6878"
   },
   {
     "name": "Run Script",
@@ -218,6 +276,20 @@
     "reject": null,
     "flow": "c839f261-5b75-4242-9410-d18ec39be9cf",
     "_syncId": "64ae3c1c-4604-4a27-a660-60f65785b538"
+  },
+  {
+    "name": "Filter for personal telegram notification",
+    "key": "exec_m7q4f",
+    "type": "exec",
+    "position_x": 39,
+    "position_y": 1,
+    "options": {
+      "code": "module.exports = async function(data) {\n\tif(data.notification_data.length > 0) {\n        if (data.notification_data[0].telegram) {\n            return true\n        } else {\n            throw new Error('Telegram notification disabled')\n        }\n    }\n    // default for telegram is true atm\n    \n\treturn true;\n}"
+    },
+    "resolve": "ac55a6e9-d742-43a2-8daa-49711f93273b",
+    "reject": null,
+    "flow": "16a1c30b-f4f7-474e-b178-9afd03d90c3f",
+    "_syncId": "18d0f086-762f-4adf-86d2-133aec8cdca1"
   },
   {
     "name": "Check if Data is empty",
@@ -260,6 +332,22 @@
     "reject": null,
     "flow": "c0bc198a-e0a5-410d-8581-db3040ef89ef",
     "_syncId": "b6b4a3ca-02d2-4bc5-ba3a-02b8423b4812"
+  },
+  {
+    "name": "final_user_data",
+    "key": "final_user_data",
+    "type": "item-read",
+    "position_x": 39,
+    "position_y": 37,
+    "options": {
+      "collection": "group_directus_users",
+      "key": "{{$last}}",
+      "permissions": "$full"
+    },
+    "resolve": "92429429-21d5-475b-b7b6-40b662ed6878",
+    "reject": null,
+    "flow": "6226d022-cf33-40c5-91ef-fbcb861fa731",
+    "_syncId": "c7f32806-3cdc-414f-9d6b-6386910c78be"
   },
   {
     "name": "final_user_data",
@@ -372,6 +460,23 @@
       "key": "",
       "query": "{\n    \"filter\": {\n        \"id\": {\n            \"_in\": {{ $last }}\n        }\n    }\n}"
     },
+    "resolve": "8ca5386c-2067-440e-8e41-32f872bc21ef",
+    "reject": null,
+    "flow": "6226d022-cf33-40c5-91ef-fbcb861fa731",
+    "_syncId": "8fda392b-31e8-454c-a86b-8e1312d81248"
+  },
+  {
+    "name": "Get User Data",
+    "key": "get_user_data",
+    "type": "item-read",
+    "position_x": 21,
+    "position_y": 55,
+    "options": {
+      "collection": "directus_users",
+      "permissions": "$full",
+      "key": "",
+      "query": "{\n    \"filter\": {\n        \"id\": {\n            \"_in\": {{ $last }}\n        }\n    }\n}"
+    },
     "resolve": "03585334-3b4b-4cbf-9c6d-be0d9ca6a83b",
     "reject": null,
     "flow": "77f42aee-c6f7-4b12-9dc5-fb62b9f17bfb",
@@ -410,6 +515,23 @@
       "permissions": "$full",
       "key": "{{ read_bookable_object.group }}"
     },
+    "resolve": "a084beb7-8769-4ec1-b5f9-e15686f3acf8",
+    "reject": null,
+    "flow": "6226d022-cf33-40c5-91ef-fbcb861fa731",
+    "_syncId": "62584cdd-41d7-42a3-8c9d-76bb782e61e6"
+  },
+  {
+    "name": "group_data",
+    "key": "group_data",
+    "type": "item-read",
+    "position_x": 3,
+    "position_y": 20,
+    "options": {
+      "collection": "bookable_object_group",
+      "query": null,
+      "permissions": "$full",
+      "key": "{{ read_bookable_object.group }}"
+    },
     "resolve": "ed793401-d85b-40d6-80ee-641233f9dcdd",
     "reject": null,
     "flow": "77f42aee-c6f7-4b12-9dc5-fb62b9f17bfb",
@@ -424,10 +546,40 @@
     "options": {
       "code": "module.exports = async function(data) {\n    if (data?.group_data.length > 0) {\n        const res = [];\n        data?.group_data.map(item => {\n            if (item.group_id) { \n                res.push(item.group_id);\n            }\n        })\n        return res;\n    }\n    return [];\n} "
     },
+    "resolve": "1fcb1781-d8c0-4c35-bace-1832062d3c42",
+    "reject": null,
+    "flow": "6226d022-cf33-40c5-91ef-fbcb861fa731",
+    "_syncId": "a084beb7-8769-4ec1-b5f9-e15686f3acf8"
+  },
+  {
+    "name": "List Group IDs",
+    "key": "group_ids",
+    "type": "exec",
+    "position_x": 21,
+    "position_y": 20,
+    "options": {
+      "code": "module.exports = async function(data) {\n    if (data?.group_data.length > 0) {\n        const res = [];\n        data?.group_data.map(item => {\n            if (item.group_id) { \n                res.push(item.group_id);\n            }\n        })\n        return res;\n    }\n    return [];\n} "
+    },
     "resolve": "95909f9c-3986-457e-8798-734f87112ead",
     "reject": null,
     "flow": "77f42aee-c6f7-4b12-9dc5-fb62b9f17bfb",
     "_syncId": "ed793401-d85b-40d6-80ee-641233f9dcdd"
+  },
+  {
+    "name": "Group Notification Settings",
+    "key": "group_notification_settings",
+    "type": "item-read",
+    "position_x": 39,
+    "position_y": 20,
+    "options": {
+      "permissions": "$full",
+      "collection": "notification_setting",
+      "query": "{\n    \"filter\": {\n        \"bookable_object_id\": {\n            \"_null\": true\n        },\n        \"group_id\": {\n            \"_in\": {{ group_ids }}\n    \t}\n\t}\n}"
+    },
+    "resolve": "289c2d65-91fa-4eca-8be7-84f651556c7a",
+    "reject": null,
+    "flow": "6226d022-cf33-40c5-91ef-fbcb861fa731",
+    "_syncId": "1fcb1781-d8c0-4c35-bace-1832062d3c42"
   },
   {
     "name": "Group Notification Settings",
@@ -608,6 +760,34 @@
       "collection": "notification_setting",
       "permissions": "$full"
     },
+    "resolve": "18d0f086-762f-4adf-86d2-133aec8cdca1",
+    "reject": null,
+    "flow": "16a1c30b-f4f7-474e-b178-9afd03d90c3f",
+    "_syncId": "f83fb1e5-0dd0-4c06-8021-d7ab21da9dbc"
+  },
+  {
+    "name": "Get Notification Data",
+    "key": "notification_data",
+    "type": "item-read",
+    "position_x": 21,
+    "position_y": 1,
+    "options": {
+      "query": {
+        "filter": {
+          "user_id": {
+            "_eq": "{{ $trigger.owner_id }}"
+          },
+          "bookable_object_id": {
+            "_null": true
+          },
+          "group_id": {
+            "_null": true
+          }
+        }
+      },
+      "collection": "notification_setting",
+      "permissions": "$full"
+    },
     "resolve": "64ae3c1c-4604-4a27-a660-60f65785b538",
     "reject": null,
     "flow": "c839f261-5b75-4242-9410-d18ec39be9cf",
@@ -661,6 +841,39 @@
     "_syncId": "5ee2bb20-bcc0-4033-8728-a61d4bdc188e"
   },
   {
+    "name": "read_bookable_object",
+    "key": "read_bookable_object",
+    "type": "item-read",
+    "position_x": 19,
+    "position_y": 1,
+    "options": {
+      "query": null,
+      "collection": "bookable_object",
+      "permissions": "$full",
+      "key": "{{ $trigger.bookable_object_id }}"
+    },
+    "resolve": "d6d26873-6e8a-4885-a74d-e0325846963c",
+    "reject": null,
+    "flow": "6226d022-cf33-40c5-91ef-fbcb861fa731",
+    "_syncId": "92ae0d98-9df9-4c0a-baba-8e19baf9508a"
+  },
+  {
+    "name": "Read Bookable Object",
+    "key": "read_bookable_object",
+    "type": "item-read",
+    "position_x": 37,
+    "position_y": 1,
+    "options": {
+      "permissions": "$full",
+      "collection": "bookable_object",
+      "key": "{{ $trigger.payload.bookable_object_id }}"
+    },
+    "resolve": "0c908d6e-4fb6-40f3-8b8d-fff7c4760162",
+    "reject": null,
+    "flow": "33453e1c-94df-4088-b23b-07d010fc950d",
+    "_syncId": "1e552d95-f8ae-4369-81e6-3114c840145c"
+  },
+  {
     "name": "read owner",
     "key": "read_owner",
     "type": "item-read",
@@ -675,6 +888,22 @@
     "reject": null,
     "flow": "77f42aee-c6f7-4b12-9dc5-fb62b9f17bfb",
     "_syncId": "4827550b-d420-485b-a841-05b6061ca79c"
+  },
+  {
+    "name": "read owner",
+    "key": "read_owner",
+    "type": "item-read",
+    "position_x": 55,
+    "position_y": 1,
+    "options": {
+      "collection": "directus_users",
+      "key": "{{ read_bookable_object.owner }}",
+      "permissions": "$full"
+    },
+    "resolve": "62584cdd-41d7-42a3-8c9d-76bb782e61e6",
+    "reject": null,
+    "flow": "6226d022-cf33-40c5-91ef-fbcb861fa731",
+    "_syncId": "6f56c9f7-3f5f-423b-bed0-7b35859c94b5"
   },
   {
     "name": "Trigger Flow",
@@ -693,6 +922,24 @@
     "reject": null,
     "flow": "a52be475-3045-450e-b763-0acb11b45451",
     "_syncId": "bba0af9d-0da9-4f6e-8bd0-88ec6785d5b9"
+  },
+  {
+    "name": "Trigger Flow",
+    "key": "relevant_user_data",
+    "type": "trigger",
+    "position_x": 19,
+    "position_y": 1,
+    "options": {
+      "flow": "6226d022-cf33-40c5-91ef-fbcb861fa731",
+      "payload": {
+        "user": "{{ $accountability.user }}",
+        "bookable_object_id": "{{ $trigger.payload.bookable_object_id }}"
+      }
+    },
+    "resolve": "1e552d95-f8ae-4369-81e6-3114c840145c",
+    "reject": null,
+    "flow": "33453e1c-94df-4088-b23b-07d010fc950d",
+    "_syncId": "83777f51-d458-490b-a489-babca8b6fc5a"
   },
   {
     "name": "Webhook / Request URL",
@@ -763,6 +1010,21 @@
     "position_x": 39,
     "position_y": 20,
     "options": {
+      "flow": "16a1c30b-f4f7-474e-b178-9afd03d90c3f",
+      "payload": "{{ $last }}"
+    },
+    "resolve": null,
+    "reject": null,
+    "flow": "33453e1c-94df-4088-b23b-07d010fc950d",
+    "_syncId": "34fe36b6-0f16-453d-b875-bc1f05d1024a"
+  },
+  {
+    "name": "Send emails",
+    "key": "send_emails",
+    "type": "trigger",
+    "position_x": 39,
+    "position_y": 20,
+    "options": {
       "flow": "c839f261-5b75-4242-9410-d18ec39be9cf",
       "payload": "{{ $last }}"
     },
@@ -793,6 +1055,73 @@
     "reject": null,
     "flow": "3b4c29ec-b066-4b3a-a1e2-4c3bde99a0a5",
     "_syncId": "56905575-ebb4-4bda-b831-8aaf2a6867f4"
+  },
+  {
+    "name": "Send Request to Telegram Bot",
+    "key": "send_request_to_telegram_bot",
+    "type": "request",
+    "position_x": 39,
+    "position_y": 19,
+    "options": {
+      "method": "POST",
+      "url": "http://localhost:12543/send-booking-request-notification",
+      "body": "{{ $last }}"
+    },
+    "resolve": null,
+    "reject": null,
+    "flow": "16a1c30b-f4f7-474e-b178-9afd03d90c3f",
+    "_syncId": "08ffb7f8-faa5-445d-968f-38a3b7890f16"
+  },
+  {
+    "name": "Prepare Telegram Data",
+    "key": "telegram_data",
+    "type": "transform",
+    "position_x": 3,
+    "position_y": 20,
+    "options": {
+      "json": {
+        "bookingId": "{{ $trigger.key }}",
+        "display_name": "{{ $trigger.payload.display_name }}",
+        "mail": "{{ $trigger.payload.mail }}",
+        "phone": "{{ $trigger.payload.phone }}",
+        "description": "{{ $trigger.payload.description }}",
+        "start_date": "{{ $trigger.payload.start_date }}",
+        "end_date": "{{ $trigger.payload.end_date }}",
+        "is_full_day": "{{ $trigger.payload.is_full_day }}",
+        "bookable_object_name": "{{ read_bookable_object.name }}",
+        "host": "{{ $env.FRONTEND_URL }}"
+      }
+    },
+    "resolve": "54477823-92df-47dc-bc79-ad86f2171e14",
+    "reject": null,
+    "flow": "33453e1c-94df-4088-b23b-07d010fc950d",
+    "_syncId": "0c908d6e-4fb6-40f3-8b8d-fff7c4760162"
+  },
+  {
+    "name": "Prepare Telegram Data",
+    "key": "telegram_data",
+    "type": "transform",
+    "position_x": 21,
+    "position_y": 19,
+    "options": {
+      "json": {
+        "telegram_user_id": "{{ $trigger.telegram_user_id }}",
+        "bookingId": "{{ $trigger.data.bookingId }}",
+        "display_name": "{{ $trigger.data.display_name }}",
+        "mail": "{{ $trigger.data.mail }}",
+        "phone": "{{ $trigger.data.phone }}",
+        "description": "{{ $trigger.data.description }}",
+        "start_date": "{{ $trigger.data.start_date }}",
+        "end_date": "{{ $trigger.data.end_date }}",
+        "is_full_day": "{{ $trigger.data.is_full_day }}",
+        "bookable_object_name": "{{ $trigger.data.bookable_object_name }}",
+        "host": "{{ $env.FRONTEND_URL }}"
+      }
+    },
+    "resolve": "08ffb7f8-faa5-445d-968f-38a3b7890f16",
+    "reject": null,
+    "flow": "16a1c30b-f4f7-474e-b178-9afd03d90c3f",
+    "_syncId": "ac55a6e9-d742-43a2-8daa-49711f93273b"
   },
   {
     "name": "Transform Payload",
@@ -851,6 +1180,36 @@
     "reject": null,
     "flow": "77f42aee-c6f7-4b12-9dc5-fb62b9f17bfb",
     "_syncId": "fb5c2c3b-fdab-47ee-9595-17e530daf121"
+  },
+  {
+    "name": "user_group_data",
+    "key": "user_group_data",
+    "type": "item-read",
+    "position_x": 3,
+    "position_y": 37,
+    "options": {
+      "permissions": "$full",
+      "collection": "group",
+      "key": "{{ group_ids }}"
+    },
+    "resolve": "21340d64-932b-423b-8ccf-1fed48c5bfa3",
+    "reject": null,
+    "flow": "6226d022-cf33-40c5-91ef-fbcb861fa731",
+    "_syncId": "289c2d65-91fa-4eca-8be7-84f651556c7a"
+  },
+  {
+    "name": "Get Users From Group",
+    "key": "users_from_group",
+    "type": "exec",
+    "position_x": 21,
+    "position_y": 37,
+    "options": {
+      "code": "module.exports = async function(data) {\n    if (data?.user_group_data.length > 0) {\n        const res = [];\n        data?.user_group_data.map(item => {\n            item?.users.map(item => {\n                if (item) { \n                    res.push(item);\n                }\n            })\n        })\n        return res;\n    }\n    return [];\n} "
+    },
+    "resolve": "c7f32806-3cdc-414f-9d6b-6386910c78be",
+    "reject": null,
+    "flow": "6226d022-cf33-40c5-91ef-fbcb861fa731",
+    "_syncId": "21340d64-932b-423b-8ccf-1fed48c5bfa3"
   },
   {
     "name": "Get Users From Group",

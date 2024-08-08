@@ -5,6 +5,9 @@ settings:
   excludeLinksFromLockfile: false
 
 dependencies:
+  '@directus/sdk':
+    specifier: ^16.1.0
+    version: 16.1.2
   body-parser:
     specifier: ^1.20.2
     version: 1.20.2
@@ -19,6 +22,11 @@ dependencies:
     version: 1.28.0
 
 packages:
+
+  /@directus/sdk@16.1.2:
+    resolution: {integrity: sha512-TlKmS80tH5mmFQA1kRYZ6QuvggE/kP1uMRTTIM3qSTrAsAabaG1oKhRVLM3Qi8HZYL20DWqSSG6AQFjYgbKxFw==}
+    engines: {node: '>=18.0.0'}
+    dev: false
 
   /@grammyjs/types@3.12.0:
     resolution: {integrity: sha512-ttC8mFeE+52XwpuXzWarvj5CXWRL2PfHSf1X3WDBC7EzQUqrbPLjJTMnm2ikSOqyTwVseJhtujZ+v42A6NbZmQ==}

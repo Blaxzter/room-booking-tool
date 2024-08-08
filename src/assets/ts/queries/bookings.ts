@@ -9,16 +9,16 @@ function bookingVariables({
   isPublic?: boolean
 }): string {
   const booking_rows = `
-    ${isPublic ? 'id' : ''}
+    ${!isPublic ? 'id' : ''}
     status
-    ${isPublic ? 'date_created' : ''}
-    ${isPublic ? 'date_updated' : ''}
+    ${!isPublic ? 'date_created' : ''}
+    ${!isPublic ? 'date_updated' : ''}
     start_date
     end_date
     is_full_day
     display_name
-    ${isPublic ? 'mail' : ''}
-    ${isPublic ? 'phone' : ''}
+    ${!isPublic ? 'mail' : ''}
+    ${!isPublic ? 'phone' : ''}
     description
     confirmed
     confirmed_by {
