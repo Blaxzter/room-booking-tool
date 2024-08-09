@@ -31,8 +31,8 @@ export const useNotificationSetting = defineStore('notificationSetting', () => {
     user_id: user.value,
     group_id: undefined,
     bookable_object_id: undefined,
-    email_notification: true,
-    telegram: false
+    email_notification: true, // default value used in the flows
+    telegram: true // default value used in the flows
   }
 
   const setUserNotificationSettings = (notificationSettings: NotificationSetting) => {

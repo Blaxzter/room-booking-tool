@@ -172,7 +172,7 @@
     "position_x": 39,
     "position_y": 55,
     "options": {
-      "code": "module.exports = async function(data) {\n  const res = [];\n  if (data?.get_user_data.length > 0) {\n    data?.get_user_data.map(item => {\n      if (item && !res.some(e => e.id === item.id)) {\n        res.push(item);\n      }\n    })\n  }\n  if (data?.read_owner) {\n    // check if owner has disabled email notification for this bookable object\n    const relevant_settings = data?.bookable_object_notification_setting.filter(setting => setting.user_id === data?.read_owner.id);\n    if (relevant_settings.length > 0 && !relevant_settings[0].email_notification) {\n      return res;\n    }\n    \n    if (!res.some(e => e.id === data?.read_owner.id)) {\n      res.push(data?.read_owner);\n    }\n  }\n  return res;\n} "
+      "code": "module.exports = async function(data) {\n  const res = [];\n  if (data?.get_user_data.length > 0) {\n    data?.get_user_data.map(item => {\n      if (item && !res.some(e => e.id === item.id)) {\n        res.push(item);\n      }\n    })\n  }\n  if (data?.read_owner) {\n    // check if owner has disabled email notification for this bookable object\n    const relevant_settings = data?.bookable_object_notification_setting.filter(setting => setting.user_id === data?.read_owner.id);\n    if (relevant_settings.length > 0 && !relevant_settings[0].email_notification) {\n      return res;\n    }\n    \n    if (!res.some(e => e.id === data?.read_owner.id)) {\n      res.push(data?.read_owner[0]);\n    }\n  }\n  return res;\n} "
     },
     "resolve": null,
     "reject": null,
@@ -186,7 +186,7 @@
     "position_x": 39,
     "position_y": 55,
     "options": {
-      "code": "module.exports = async function(data) {\n  const res = [];\n  if (data?.get_user_data.length > 0) {\n    data?.get_user_data.map(item => {\n      if (item && !res.some(e => e.id === item.id)) {\n        res.push(item);\n      }\n    })\n  }\n  if (data?.read_owner) {\n    // check if owner has disabled telegram notification for this bookable object\n    const relevant_settings = data?.bookable_object_notification_setting.filter(setting => setting.user_id === data?.read_owner.id);\n    if (relevant_settings.length > 0 && !relevant_settings[0].telegram) {\n      return res;\n    }\n    \n    if (!res.some(e => e.id === data?.read_owner.id)) {\n      res.push(data?.read_owner);\n    }\n  }\n  return res;\n} "
+      "code": "module.exports = async function(data) {\n  const res = [];\n  if (data?.get_user_data.length > 0) {\n    data?.get_user_data.map(item => {\n      if (item && !res.some(e => e.id === item.id)) {\n        res.push(item);\n      }\n    })\n  }\n  if (data?.read_owner) {\n    // check if owner has disabled telegram notification for this bookable object\n    const relevant_settings = data?.bookable_object_notification_setting.filter(setting => setting.user_id === data?.read_owner.id);\n    if (relevant_settings.length > 0 && !relevant_settings[0].telegram) {\n      return res;\n    }\n    \n    if (!res.some(e => e.id === data?.read_owner.id)) {\n      res.push(data?.read_owner[0]);\n    }\n  }\n  return res;\n} "
     },
     "resolve": null,
     "reject": null,
@@ -341,8 +341,15 @@
     "position_y": 37,
     "options": {
       "collection": "group_directus_users",
-      "key": "{{$last}}",
-      "permissions": "$full"
+      "key": null,
+      "permissions": "$full",
+      "query": {
+        "filter": {
+          "id": {
+            "_in": "{{ $last }}"
+          }
+        }
+      }
     },
     "resolve": "92429429-21d5-475b-b7b6-40b662ed6878",
     "reject": null,
@@ -357,8 +364,15 @@
     "position_y": 37,
     "options": {
       "collection": "group_directus_users",
-      "key": "{{$last}}",
-      "permissions": "$full"
+      "key": null,
+      "permissions": "$full",
+      "query": {
+        "filter": {
+          "id": {
+            "_in": "{{ $last }}"
+          }
+        }
+      }
     },
     "resolve": "f71ffe29-1ae3-4157-b005-7f1f65152dc1",
     "reject": null,
@@ -511,9 +525,15 @@
     "position_y": 20,
     "options": {
       "collection": "bookable_object_group",
-      "query": null,
+      "query": {
+        "filter": {
+          "id": {
+            "_in": "{{ read_bookable_object.group }}"
+          }
+        }
+      },
       "permissions": "$full",
-      "key": "{{ read_bookable_object.group }}"
+      "key": null
     },
     "resolve": "a084beb7-8769-4ec1-b5f9-e15686f3acf8",
     "reject": null,
@@ -528,9 +548,15 @@
     "position_y": 20,
     "options": {
       "collection": "bookable_object_group",
-      "query": null,
+      "query": {
+        "filter": {
+          "id": {
+            "_in": "{{ read_bookable_object.group }}"
+          }
+        }
+      },
       "permissions": "$full",
-      "key": "{{ read_bookable_object.group }}"
+      "key": null
     },
     "resolve": "ed793401-d85b-40d6-80ee-641233f9dcdd",
     "reject": null,
@@ -881,8 +907,15 @@
     "position_y": 1,
     "options": {
       "collection": "directus_users",
-      "key": "{{ read_bookable_object.owner }}",
-      "permissions": "$full"
+      "key": null,
+      "permissions": "$full",
+      "query": {
+        "filter": {
+          "id": {
+            "_eq": "{{ read_bookable_object.owner }}"
+          }
+        }
+      }
     },
     "resolve": "f4e7df39-6dde-49ef-b2c3-ed06ae2d0afc",
     "reject": null,
@@ -897,8 +930,15 @@
     "position_y": 1,
     "options": {
       "collection": "directus_users",
-      "key": "{{ read_bookable_object.owner }}",
-      "permissions": "$full"
+      "key": null,
+      "permissions": "$full",
+      "query": {
+        "filter": {
+          "id": {
+            "_eq": "{{ read_bookable_object.owner }}"
+          }
+        }
+      }
     },
     "resolve": "62584cdd-41d7-42a3-8c9d-76bb782e61e6",
     "reject": null,
@@ -1064,7 +1104,7 @@
     "position_y": 19,
     "options": {
       "method": "POST",
-      "url": "http://localhost:12543/send-booking-request-notification",
+      "url": "https://telegram.bookitool.net/send-booking-request-notification",
       "body": "{{ $last }}"
     },
     "resolve": null,
@@ -1174,7 +1214,14 @@
     "options": {
       "permissions": "$full",
       "collection": "group",
-      "key": "{{ group_ids }}"
+      "key": null,
+      "query": {
+        "filter": {
+          "id": {
+            "_in": "{{ group_ids }}"
+          }
+        }
+      }
     },
     "resolve": "993a6770-d74b-4a43-8aa0-8cce5302c10e",
     "reject": null,
@@ -1190,7 +1237,14 @@
     "options": {
       "permissions": "$full",
       "collection": "group",
-      "key": "{{ group_ids }}"
+      "key": null,
+      "query": {
+        "filter": {
+          "id": {
+            "_in": "{{ group_ids }}"
+          }
+        }
+      }
     },
     "resolve": "21340d64-932b-423b-8ccf-1fed48c5bfa3",
     "reject": null,

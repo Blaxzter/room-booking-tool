@@ -361,6 +361,18 @@
   {
     "role": "4c0ccba0-5dfc-4576-8bb1-cf516c9ce071",
     "collection": "booking",
+    "action": "delete",
+    "permissions": {},
+    "validation": {},
+    "presets": null,
+    "fields": [
+      "*"
+    ],
+    "_syncId": "8f925125-03a1-4e4e-9d38-12cabc1c5755"
+  },
+  {
+    "role": "4c0ccba0-5dfc-4576-8bb1-cf516c9ce071",
+    "collection": "booking",
     "action": "read",
     "permissions": {},
     "validation": {},
@@ -369,6 +381,18 @@
       "*"
     ],
     "_syncId": "256c64c9-ad60-4467-82dd-1cddcfc02ea5"
+  },
+  {
+    "role": "4c0ccba0-5dfc-4576-8bb1-cf516c9ce071",
+    "collection": "booking",
+    "action": "update",
+    "permissions": {},
+    "validation": {},
+    "presets": null,
+    "fields": [
+      "*"
+    ],
+    "_syncId": "100432c8-1349-459a-8d4a-1a213f65b668"
   },
   {
     "role": "4c0ccba0-5dfc-4576-8bb1-cf516c9ce071",
