@@ -61,7 +61,7 @@ const bookingToEvent = ({ booking, editable = false }: { booking: Booking; edita
   return {
     ...booking,
     booking_id: booking.id,
-    title: booking.display_name,
+    title: booking.display_name || 'New Event',
     start: start_date,
     end: end_date,
     confirmed: booking.confirmed,
@@ -108,6 +108,7 @@ const calendarOptions = {
       duration: { weeks: 4 },
       selectable: false,
       timeFormat: 'H(:mm)',
+      monthStartFormat: { month: 'short', day: 'numeric' },
       dateClick(arg) {
         fullCalenderApi().gotoDate(arg.date)
         fullCalenderApi().changeView('timeGridDay')
@@ -284,6 +285,10 @@ onMounted(() => {
     height: calc(100% - 5rem);
     max-height: calc(100% - 5rem);
   }
+}
+
+.fc-day {
+  overflow: hidden;
 }
 
 .fc-dayGridFourWeek-view .fc-day-today.fc-daygrid-day,

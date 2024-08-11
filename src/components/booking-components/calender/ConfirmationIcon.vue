@@ -4,7 +4,11 @@ import { CheckIcon, CircleHelpIcon } from 'lucide-vue-next'
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip'
 
 defineProps({
-  confirmed: Boolean
+  confirmed: Boolean,
+  size: {
+    type: Number,
+    default: 20
+  }
 })
 </script>
 
@@ -12,8 +16,8 @@ defineProps({
   <TooltipProvider>
     <Tooltip>
       <TooltipTrigger>
-        <CheckIcon :size="20" v-if="confirmed" />
-        <CircleHelpIcon :size="20" v-else />
+        <CheckIcon :size="size" v-if="confirmed" />
+        <CircleHelpIcon :size="size" v-else />
       </TooltipTrigger>
       <TooltipContent>
         <p v-if="confirmed">Confirmed</p>

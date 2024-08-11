@@ -1,72 +1,93 @@
 <script setup lang="ts">
+import { computed, ref } from 'vue'
+import { storeToRefs } from 'pinia'
 import { cn } from '@/lib/utils'
+import { breakpointsTailwind, useBreakpoints } from '@vueuse/core'
 
 import { PencilIcon } from 'lucide-vue-next'
 import { useToast } from '@/components/ui/toast'
 
 import ConfirmationIcon from '@/components/booking-components/calender/ConfirmationIcon.vue'
 import { useLocalUser } from '@/stores/localUser'
+import { useUser } from '@/stores/user'
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip'
+import EditEvent from '@/components/booking-components/EditEvent.vue'
+
+const { user } = storeToRefs(useUser())
 
 const { userHasCreatedBooking } = useLocalUser()
 const { toast } = useToast()
 
+const selectedEvent = ref(undefined)
+const canEdit = ref(false)
+
 const eventClick = (arg: any) => {
-  console.log(arg.event)
   const canPossiblyEdit = userHasCreatedBooking(arg.event.booking_id)
-  toast({
-    title: 'Event Daten' + (canPossiblyEdit ? ' (Editing is coming soon)' : ''),
-    description: `Event: ${arg.event.title} \n Datum: ${arg.event.start} \n Bestätigt: ${
-      arg.event.extendedProps.confirmed ? 'Ja' : 'Nein'
-    }`
-  })
+  // TODO if user is null but canPossiblyEdit is true -> get remaing stuff in the future
+  if (user.value === null || Object.keys(user.value).length === 0) {
+    toast({
+      title: 'Event Daten',
+      description: `Event: ${arg.event.title} \n Datum: ${arg.event.start} \n Bestätigt: ${
+        arg.event.extendedProps.confirmed ? 'Ja' : 'Nein'
+      }`
+    })
+  } else {
+    selectedEvent.value = arg.event.extendedProps
+    canEdit.value = canPossiblyEdit
+  }
 }
 
-defineProps({
+const props = defineProps({
   arg: {
     type: Object,
     required: true
   }
 })
+
+const event = computed(() => {
+  return props.arg.event.extendedProps
+})
+
+const confirmed = computed(() => {
+  return event.value.confirmed
+})
+
+const closeDialog = () => {
+  console.log('close dialog')
+  selectedEvent.value = undefined
+}
+
+const breakpoints = useBreakpoints(breakpointsTailwind)
+const mobile = breakpoints.smallerOrEqual('md')
 </script>
 
 <template>
-  <div
-    class="w-full h-full"
-    :class="cn(arg.event.extendedProps.confirmed && 'event-confirmed')"
-    @click="eventClick(arg)"
-  >
+  <div class="w-full h-full" :class="cn(confirmed && 'event-confirmed')" @click="eventClick(arg)">
     <template v-if="arg.view.type == 'dayGridFourWeek'">
       <div class="relative" v-if="arg.event.allDay">
         <a
-          :class="
-            cn('cursor-pointer mx-0.5 fc-daygrid-event fc-daygrid-block-event block', arg.isPast && 'fc-event-past')
-          "
+          class="cursor-pointer mx-0.5 fc-daygrid-event fc-daygrid-block-event block"
+          :class="[arg.isPast && 'fc-event-past']"
         >
           <div class="flex">
             <div class="ms-0.5">
               {{ arg.event.title }}
             </div>
             <div class="flex-grow" />
-            <ConfirmationIcon :confirmed="arg.event.extendedProps.confirmed" />
+            <ConfirmationIcon :confirmed="confirmed" />
           </div>
         </a>
       </div>
       <div class="relative" v-else>
         <a
-          :class="
-            cn(
-              'decoration-0 cursor-pointer fc-event-resizable mx-0.5 fc-daygrid-event py-0.5 flex items-center',
-              arg.isPast && 'fc-event-past'
-            )
-          "
+          class="decoration-0 cursor-pointer fc-event-resizable fc-daygrid-event lg:mx-0.5 lg:py-0.5 flex items-center"
+          :class="[arg.isPast && 'fc-event-past', !confirmed && 'text-muted-foreground', mobile && 'event-mobile']"
         >
-          <div class="fc-daygrid-event-dot"></div>
-          <div class="me-1">{{ arg.timeText }}</div>
-          <div class="overflow-hidden">{{ arg.event.title }}</div>
+          <div class="fc-daygrid-event-dot" :class="[confirmed && 'confirmed']" v-if="!mobile"></div>
+          <div class="overflow-hidden flex-shrink overflow-ellipsis">{{ arg.event.title }}</div>
           <div class="flex-grow" />
-          <div class="me-[1px]">
-            <ConfirmationIcon :confirmed="arg.event.extendedProps.confirmed" />
+          <div class="me-[1px]" v-if="!mobile">
+            <ConfirmationIcon :confirmed="confirmed" />
           </div>
         </a>
       </div>
@@ -83,7 +104,20 @@ defineProps({
               {{ arg.event.title }}
             </div>
             <div class="flex-grow" />
-            <ConfirmationIcon :confirmed="arg.event.extendedProps.confirmed" />
+            <template v-if="!arg.isPast">
+              <TooltipProvider>
+                <Tooltip>
+                  <TooltipTrigger>
+                    <PencilIcon :size="mobile ? 15 : 20" class="me-2" />
+                  </TooltipTrigger>
+                  <TooltipContent>
+                    <p>You can edit this event</p>
+                  </TooltipContent>
+                </Tooltip>
+              </TooltipProvider>
+
+              <ConfirmationIcon :confirmed="confirmed" :size="mobile ? 15 : 20" />
+            </template>
           </div>
         </a>
       </div>
@@ -96,37 +130,97 @@ defineProps({
             {{ arg.event.title }}
           </div>
           <div class="flex-grow" />
+          <template v-if="!arg.isPast">
+            <TooltipProvider>
+              <Tooltip>
+                <TooltipTrigger>
+                  <PencilIcon :size="mobile ? 15 : 20" class="me-2" />
+                </TooltipTrigger>
+                <TooltipContent>
+                  <p>You can edit this event</p>
+                </TooltipContent>
+              </Tooltip>
+            </TooltipProvider>
+
+            <ConfirmationIcon :confirmed="confirmed" :size="mobile ? 15 : 20" />
+          </template>
+        </div>
+      </div>
+    </template>
+    <template v-else-if="arg.view.type == 'timeGridWeek'">
+      <div class="relative" v-if="arg.event.allDay">
+        <a
+          :class="
+            cn('cursor-pointer mx-0.5 fc-daygrid-event fc-daygrid-block-event block', arg.isPast && 'fc-event-past')
+          "
+        >
+          <div class="flex">
+            <div class="ms-0 sm:ms-0.5 break-all">
+              {{ arg.event.title }}
+            </div>
+            <div class="flex-grow" />
+            <div class="flex" v-if="!arg.isPast">
+              <TooltipProvider>
+                <Tooltip>
+                  <TooltipTrigger>
+                    <PencilIcon :size="mobile ? 15 : 20" class="sm:me-2" />
+                  </TooltipTrigger>
+                  <TooltipContent>
+                    <p>You can edit this event</p>
+                  </TooltipContent>
+                </Tooltip>
+              </TooltipProvider>
+
+              <ConfirmationIcon :confirmed="confirmed" :size="mobile ? 15 : 20" />
+            </div>
+          </div>
+        </a>
+      </div>
+      <div v-else class="h-full overflow-hidden">
+        <div class="flex flex-col h-full">
+          <div class="ms-0 sm:ms-0.5 break-all line-clamp-2">
+            {{ arg.event.title }}
+          </div>
+          <div class="flex-grow" />
+          <div class="flex" v-if="!arg.isPast">
+            <TooltipProvider>
+              <Tooltip>
+                <TooltipTrigger>
+                  <PencilIcon :size="mobile ? 15 : 20" class="sm:me-2" />
+                </TooltipTrigger>
+                <TooltipContent>
+                  <p>You can edit this event</p>
+                </TooltipContent>
+              </Tooltip>
+            </TooltipProvider>
+
+            <ConfirmationIcon :confirmed="confirmed" :size="mobile ? 13 : 20" />
+          </div>
+        </div>
+      </div>
+    </template>
+    <template v-else-if="arg.view.type == 'listWeek'">
+      <div class="flex cursor-pointer" :class="[arg.isPast && 'fc-event-past']">
+        <div class="ms-0.5 line-clamp-1">
+          {{ arg.event.title }}
+        </div>
+        <div class="flex-grow" />
+        <template v-if="!arg.isPast">
           <TooltipProvider>
             <Tooltip>
               <TooltipTrigger>
-                <PencilIcon :size="20" class="me-2" />
+                <PencilIcon :size="20" class="sm:me-2" />
               </TooltipTrigger>
               <TooltipContent>
                 <p>You can edit this event</p>
               </TooltipContent>
             </Tooltip>
           </TooltipProvider>
-
-          <ConfirmationIcon :confirmed="arg.event.extendedProps.confirmed" />
-        </div>
+          <ConfirmationIcon :confirmed="confirmed" />
+        </template>
       </div>
-      <!--      <div v-else>-->
-      <!--        <div-->
-      <!--          class="fc-timegrid-event-harness fc-timegrid-event-harness-inset"-->
-      <!--          style="inset: 850px 0% -975px; z-index: 1"-->
-      <!--        >-->
-      <!--          <a class="fc-event fc-event-draggable fc-event-resizable mx-0.5 fc-event-past fc-timegrid-event fc-v-event"-->
-      <!--            ><div class="fc-event-main text-red-500">-->
-      <!--              <div class="fc-event-main-frame">-->
-      <!--                <div class="fc-event-time">{{ arg.timeText }}</div>-->
-      <!--                <div class="fc-event-title-container"><div class="fc-event-title fc-sticky">Frederic Abraham</div></div>-->
-      <!--              </div>-->
-      <!--            </div>-->
-      <!--            <div class="fc-event-resizer fc-event-resizer-end"></div-->
-      <!--          ></a>-->
-      <!--        </div>-->
-      <!--      </div>-->
     </template>
+    <EditEvent :event="selectedEvent" @close="closeDialog" />
   </div>
 </template>
 
@@ -136,10 +230,20 @@ defineProps({
 .fc-daygrid-event-dot {
   width: 0.5rem;
   height: 0.5rem;
+  min-width: 0.5rem;
+  min-height: 0.5rem;
   background: hsl(var(--primary));
   border-radius: 50%;
   margin-right: 0.5rem;
   border: none;
+
+  &.confirmed {
+    background: hsl(var(--success));
+  }
+
+  @media (max-width: 768px) {
+    display: none;
+  }
 }
 
 .fc-event {
@@ -160,8 +264,71 @@ defineProps({
   }
 }
 
+.fc-timeGridWeek-view .fc-daygrid-body table tbody tr:first-child,
+.fc-timeGridDay-view .fc-daygrid-body table tbody tr:first-child {
+  height: 80px !important;
+  max-height: 80px !important;
+  overflow: hidden;
+
+  td {
+    height: 80px !important;
+    max-height: 80px !important;
+  }
+}
+
 .fc-v-event .fc-event-main {
   padding: 0.25rem;
   color: hsl(var(--primary-foreground));
+}
+
+.event-mobile {
+  padding: 0 !important;
+  margin: 0 !important;
+}
+
+// mobile view
+@media (max-width: 768px) {
+  .fc-daygrid-day-events {
+    min-height: 0 !important;
+
+    .fc-event {
+      padding: 0.25px 0 !important;
+      margin: 0.25px 0 !important;
+      font-size: 0.75rem;
+    }
+
+    .fc-daygrid-more-link.fc-more-link {
+      font-size: 0.75rem !important;
+      padding: 2px 0 !important;
+      margin: 0.25px 0 !important;
+    }
+  }
+
+  .fc-daygrid-day-top {
+    font-size: 0.75rem;
+  }
+
+  .fc-daygrid-month-start {
+    // remove bold
+    font-weight: 400 !important;
+  }
+
+  .fc-list-event {
+    font-size: 0.75rem;
+  }
+}
+
+.fc-list-day-cushion.fc-cell-shaded {
+  color: hsl(var(--primary-foreground));
+}
+
+.fc-event.fc-event-start.fc-event-end.fc-list-event {
+  padding: 1px;
+  color: hsl(var(--foreground)) !important;
+
+  &:hover {
+    color: hsl(var(--primary-foreground)) !important;
+    background-color: hsl(var(--primary)) !important;
+  }
 }
 </style>

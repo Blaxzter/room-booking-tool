@@ -13,7 +13,7 @@ const activeStep = defineModel({ default: 0, required: true })
     <TabsList class="flex justify-between w-full px-2 py-2">
       <template v-for="(step, index) in steps" :key="index">
         <TabsTrigger
-          :class="['stepper-trigger', { 'stepper-trigger-active': index === activeStep }]"
+          :class="['stepper-trigger text-muted-foreground', { 'stepper-trigger-active': index === activeStep }]"
           :value="index"
           :disabled="activeStep <= index"
         >
@@ -48,7 +48,6 @@ const activeStep = defineModel({ default: 0, required: true })
   display: flex;
   flex-direction: column;
   align-items: center;
-  color: hsl(var(--secondary));
 }
 
 .stepper-trigger-active {

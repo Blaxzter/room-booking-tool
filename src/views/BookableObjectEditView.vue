@@ -10,7 +10,7 @@ import { Card, CardContent } from '@/components/ui/card'
 import DefaultSettings from '@/components/bookable-object/edit/DefaultSettings.vue'
 import AdditionalSettings from '@/components/bookable-object/edit/AdditionalSettings.vue'
 import AccessSettings from '@/components/bookable-object/edit/AccessSettings.vue'
-import { ScrollArea, ScrollBar } from '@/components/ui/scroll-area'
+import { ScrollArea } from '@/components/ui/scroll-area'
 
 const { fetchObjectViewData } = useInitialDataStore()
 const { selectedBookableObject } = storeToRefs(useBookableObjects())

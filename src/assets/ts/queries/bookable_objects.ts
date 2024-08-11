@@ -10,7 +10,7 @@ export function getBookableObjectFields(
   { minimal, isPublic }: { minimal: boolean; isPublic: boolean } = { minimal: false, isPublic: false }
 ): string {
   const retFields = `
-    id
+    ${!isPublic ? 'id' : ''}
     name
   `
   if (!minimal) {

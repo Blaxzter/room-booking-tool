@@ -27,6 +27,7 @@ const props = defineProps<{
   bookableObjectId: string
   bookableObjectUniqueId: string | undefined
   bookableObjectType: string | undefined
+  isInternal?: boolean
 }>()
 
 const showAlertDialog = inject('showAlertDialog') as ShowAlertFunction
@@ -63,6 +64,7 @@ const deleteBookableObject = async () => {
     <DropdownMenuContent>
       <DropdownMenuGroup>
         <DropdownMenuItem
+          v-if="!props.isInternal"
           class="hover:cursor-pointer"
           @click.stop="router.push(`/${bookableObjectType}/${bookableObjectUniqueId}`)"
         >

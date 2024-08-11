@@ -80,7 +80,7 @@ export const useBookings = defineStore('bookings', () => {
   }
 
   const currentBookings = computed(() => {
-    const id = selectedBookableObject?.value?.id
+    const id = selectedBookableObject?.value?.id || selectedBookableObject?.value?.uniqueId
     if (!id) {
       return []
     }

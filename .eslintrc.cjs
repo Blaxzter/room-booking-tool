@@ -22,6 +22,9 @@ module.exports = {
         caughtErrorsIgnorePattern: '^_'
       }
     ],
+    "vue/no-mutating-props": ["error", {
+      "shallowOnly": true
+    }],
     'vue/multi-word-component-names': 'off',
     // set prettier width to 120
     'prettier/prettier': ['error', { printWidth: 120 }]

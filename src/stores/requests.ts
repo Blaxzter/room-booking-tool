@@ -30,6 +30,8 @@ export const useRequests = defineStore('requests', () => {
       .request(updateItem('booking', request.id, { confirmed: true, confirmed_by: user.value.id }))
       .then(() => {
         toast({ variant: 'success', title: 'Request approved' })
+        request.confirmed = true
+        request.confirmed_by = user.value
         requests.value = requests.value.filter((r) => r.id !== request.id)
       })
     requestLoading.value = false

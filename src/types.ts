@@ -20,7 +20,7 @@ export type Booking = {
   phone: string
   description: string
   confirmed: boolean
-  confirmed_by?: string
+  confirmed_by?: string | User
   secret_edit_key?: string
 }
 

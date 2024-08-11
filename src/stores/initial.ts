@@ -103,6 +103,7 @@ export const useInitialDataStore = defineStore('initial', () => {
       }
       addBookableObject(res.bookable_object[0])
       setBookings(bookable_object_id, res.booking)
+      console.log(bookable_object_id, res.booking)
     })
 
     init_loading.value = false

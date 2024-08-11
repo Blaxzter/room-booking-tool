@@ -8,6 +8,8 @@ import EventData from '@/components/booking-components/booking-request-dialog/Ev
 import TimeData from '@/components/booking-components/booking-request-dialog/TimeData.vue'
 import { useBookings } from '@/stores/booking'
 import type { CreateBookingRequest } from '@/assets/ts/queries/bookings'
+import { Drawer, DrawerContent, DrawerDescription, DrawerHeader, DrawerTitle } from '@/components/ui/drawer'
+import { createReusableTemplate, useMediaQuery } from '@vueuse/core'
 
 const activeStep = ref(0)
 const steps = ['Time', 'Contact', 'Event']
@@ -117,45 +119,64 @@ watch(open, (val) => {
     emit('close')
   }
 })
+
+const [UseTemplate, GridForm] = createReusableTemplate()
+const isDesktop = useMediaQuery('(min-width: 768px)')
 </script>
 
 <template>
-  <Dialog v-model:open="open" @close="handleClose" @dismiss="handleDismiss">
-    <DialogContent :trap-focus="true">
+  <UseTemplate>
+    <StepperComponent v-model="activeStep" :steps="steps">
+      <template v-slot:step-0>
+        <TimeData ref="timeData" :initial-values="stepToValues[0]">
+          <template v-slot:footer>
+            <DialogFooter>
+              <Button @click="nextStep" type="button">Next</Button>
+            </DialogFooter>
+          </template>
+        </TimeData>
+      </template>
+      <template v-slot:step-1>
+        <ContactData ref="contactData" :initial-values="stepToValues[1]">
+          <template v-slot:footer>
+            <DialogFooter>
+              <Button @click="activeStep--" type="button">Back</Button>
+              <Button @click="nextStep" type="button">Next</Button>
+            </DialogFooter>
+          </template>
+        </ContactData>
+      </template>
+      <template v-slot:step-2>
+        <EventData ref="eventData" :initial-values="stepToValues[2]">
+          <template v-slot:footer>
+            <DialogFooter>
+              <Button @click="activeStep--" type="button">Back</Button>
+              <Button @click="nextStep" type="button">Create</Button>
+            </DialogFooter>
+          </template>
+        </EventData>
+      </template>
+    </StepperComponent>
+  </UseTemplate>
+
+  <Dialog v-if="isDesktop" v-model:open="open" @close="handleClose" @dismiss="handleDismiss">
+    <DialogContent :trap-focus="true" class="max-h-full overflow-y-auto">
       <DialogHeader class="mb-2">
         <DialogTitle class="fade-transition"> Create a Booking </DialogTitle>
       </DialogHeader>
-      <StepperComponent v-model="activeStep" :steps="steps">
-        <template v-slot:step-0>
-          <TimeData ref="timeData" :initial-values="stepToValues[0]">
-            <template v-slot:footer>
-              <DialogFooter>
-                <Button @click="nextStep" type="button">Next</Button>
-              </DialogFooter>
-            </template>
-          </TimeData>
-        </template>
-        <template v-slot:step-1>
-          <ContactData ref="contactData" :initial-values="stepToValues[1]">
-            <template v-slot:footer>
-              <DialogFooter>
-                <Button @click="activeStep--" type="button">Back</Button>
-                <Button @click="nextStep" type="button">Next</Button>
-              </DialogFooter>
-            </template>
-          </ContactData>
-        </template>
-        <template v-slot:step-2>
-          <EventData ref="eventData" :initial-values="stepToValues[2]">
-            <template v-slot:footer>
-              <DialogFooter>
-                <Button @click="activeStep--" type="button">Back</Button>
-                <Button @click="nextStep" type="button">Create</Button>
-              </DialogFooter>
-            </template>
-          </EventData>
-        </template>
-      </StepperComponent>
+      <GridForm />
     </DialogContent>
   </Dialog>
+
+  <Drawer v-else v-model:open="open" @close="handleClose" @dismiss="handleDismiss">
+    <DrawerContent class="max-h-screen">
+      <DrawerHeader class="text-left">
+        <DrawerTitle>Edit profile</DrawerTitle>
+        <DrawerDescription> Make changes to your profile here. Click save when you're done. </DrawerDescription>
+      </DrawerHeader>
+      <div class="p-4 max-h-[60%] overflow-y-auto">
+        <GridForm />
+      </div>
+    </DrawerContent>
+  </Drawer>
 </template>

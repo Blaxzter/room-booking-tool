@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed } from 'vue'
+import { computed, ref } from 'vue'
 
 import { Button } from '@/components/ui/button'
 import { Menu, Calendar } from 'lucide-vue-next'
@@ -22,6 +22,8 @@ const navElements = [
   { label: 'Dashboard', routeName: 'home' },
   { label: 'Requests', routeName: 'requests' }
 ]
+
+const open = ref(false)
 </script>
 
 <template>
@@ -42,7 +44,7 @@ const navElements = [
       >
     </template>
   </nav>
-  <Sheet>
+  <Sheet v-model:open="open">
     <SheetTrigger as-child>
       <Button variant="outline" size="icon" class="shrink-0 md:hidden">
         <Menu class="h-5 w-5" />
@@ -59,9 +61,11 @@ const navElements = [
           <RouterLink
             :to="{ name: navElement.routeName }"
             class="active:text-foreground text-muted-foreground hover:text-foreground"
-            :class="routeName === navElement.routeName ? 'text-red-500' : ''"
-            >{{ navElement.label }}</RouterLink
+            :class="routeName === navElement.routeName ? 'text-primary' : ''"
+            @click="open = false"
           >
+            {{ navElement.label }}
+          </RouterLink>
         </template>
       </nav>
     </SheetContent>

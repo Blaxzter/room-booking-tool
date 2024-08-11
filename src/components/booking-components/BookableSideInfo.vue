@@ -23,7 +23,7 @@ const imageLarge = breakpoints.smallerOrEqual('lg')
 const imageSmall = breakpoints.smallerOrEqual('md')
 
 const imageHeight = computed(() => {
-  if (props.topNav) return 50
+  if (props.topNav) return 40
   if (imageSmall.value) return 50
   if (imageLarge.value) return 75
   return undefined
@@ -50,7 +50,7 @@ defineEmits(['createBookableObject'])
         class="me-2 lg:me-0"
       />
       <div class="overflow-hidden">
-        <div class="text-2xl" :class="{ 'text-nowrap': topNav }">{{ bookableObject?.name }}</div>
+        <div class="sm:text-2xl text-sm" :class="{ 'text-nowrap text-l': topNav }">{{ bookableObject?.name }}</div>
         <div
           class="text-sm text-muted-foreground"
           :class="{

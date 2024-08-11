@@ -28,7 +28,7 @@ function bookingVariables({
   if (include_bookable_object && !isPublic) {
     return `
     bookable_object_id {
-      ${getBookableObjectFields()}
+      ${getBookableObjectFields({ minimal: true, isPublic: isPublic })}
     }
     ${booking_rows}
     `

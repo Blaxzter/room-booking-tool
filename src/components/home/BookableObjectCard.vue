@@ -89,6 +89,7 @@ onMounted(() => {
           :bookable-object-id="bookableObject.id"
           :bookable-object-type="bookableObject.type"
           :bookable-object-unique-id="bookableObject.uniqueId"
+          :is-Internal="bookableObject.is_internal"
         />
       </div>
     </div>
