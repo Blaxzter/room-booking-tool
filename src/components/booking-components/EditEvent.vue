@@ -31,7 +31,7 @@ const props = defineProps({
   }
 })
 
-const emit = defineEmits(['close'])
+const emit = defineEmits(['close', 'delete', 'confirmed'])
 
 const open = ref(false)
 
@@ -51,12 +51,22 @@ const canConfirm = computed(() => {
   return true
 })
 
+const isConfirmed = ref(false)
+
 const confirmEvent = async () => {
-  await approveRequest({ id: props?.event?.booking_id, ...props.event } as Booking)
+  await approveRequest({ id: props?.event?.booking_id, ...props.event } as Booking).then(() => {
+    console.log('confirm event')
+    isConfirmed.value = true
+    emit('confirmed', props?.event?.booking_id)
+  })
 }
 
 const deleteEvent = async () => {
-  await rejectRequest({ id: props?.event?.booking_id, ...props.event } as Booking)
+  await rejectRequest({ id: props?.event?.booking_id, ...props.event } as Booking).then(() => {
+    open.value = false
+    console.log('delete event')
+    emit('delete', props?.event?.booking_id)
+  })
 }
 
 // watcher on event -> open dialog if event is set close if null
@@ -65,6 +75,9 @@ watch(
   (event) => {
     console.log(event)
     open.value = !!event
+    if (event) {
+      isConfirmed.value = event.confirmed
+    }
   }
 )
 
@@ -83,15 +96,15 @@ watch(
       <div>
         <div class="flex gap-3">
           <h3 class="text-md font-semibold">Status:</h3>
-          <p :class="{ 'text-green-600': event.confirmed, 'text-red-600': !event.confirmed }">
-            {{ event.confirmed ? 'Confirmed' : 'Not Confirmed' }}
+          <p :class="{ 'text-green-600': isConfirmed, 'text-red-600': !isConfirmed }">
+            {{ isConfirmed ? 'Confirmed' : 'Not Confirmed' }}
           </p>
         </div>
         <div v-if="requestLoading" class="text-muted-foreground flex">
           <LoaderIcon class="w-4 h-4 me-2 text-muted-foreground animate-spin" />
           Loading...
         </div>
-        <div v-else-if="canConfirm && !event.confirmed" class="flex gap-2 mt-2">
+        <div v-else-if="canConfirm && !isConfirmed" class="flex gap-2 mt-2">
           <Button variant="outline" @click="confirmEvent">
             <CheckIcon class="w-4 h-4 me-2 text-green-500" />
             Confirm

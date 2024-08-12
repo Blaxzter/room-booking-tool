@@ -97,7 +97,6 @@ if (props.bookableObject) {
       return
     }
     const valid = await validate()
-    console.log(valid)
     if (valid.valid) return
 
     // calc diff between values and bookableObject
@@ -113,7 +112,6 @@ if (props.bookableObject) {
     }, {} as Partial<BookableObject>)
 
     if (Object.keys(diff).length === 0) return
-    console.log(diff)
     // emit the new values to the parent component
     emit('update', values)
   })

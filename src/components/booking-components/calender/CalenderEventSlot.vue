@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed, ref } from 'vue'
+import { computed, ref, onMounted } from 'vue'
 import { storeToRefs } from 'pinia'
 import { cn } from '@/lib/utils'
 import { breakpointsTailwind, useBreakpoints } from '@vueuse/core'
@@ -44,13 +44,13 @@ const props = defineProps({
   }
 })
 
+const emit = defineEmits(['delete'])
+
 const event = computed(() => {
   return props.arg.event.extendedProps
 })
 
-const confirmed = computed(() => {
-  return event.value.confirmed
-})
+const confirmed = ref(false)
 
 const closeDialog = () => {
   console.log('close dialog')
@@ -59,6 +59,10 @@ const closeDialog = () => {
 
 const breakpoints = useBreakpoints(breakpointsTailwind)
 const mobile = breakpoints.smallerOrEqual('md')
+
+onMounted(() => {
+  confirmed.value = event.value.confirmed
+})
 </script>
 
 <template>
@@ -220,7 +224,20 @@ const mobile = breakpoints.smallerOrEqual('md')
         </template>
       </div>
     </template>
-    <EditEvent :event="selectedEvent" @close="closeDialog" />
+    <EditEvent
+      :event="selectedEvent"
+      @close="closeDialog"
+      @delete="
+        () => {
+          emit('delete', arg.event.id)
+        }
+      "
+      @confirmed="
+        () => {
+          confirmed = true
+        }
+      "
+    />
   </div>
 </template>
 

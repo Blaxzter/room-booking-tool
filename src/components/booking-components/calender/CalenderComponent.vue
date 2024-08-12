@@ -116,7 +116,6 @@ const calendarOptions = {
         currentDateString.value = fullCalenderData().viewTitle
         selectedDay.value = dayjs(fullCalenderData().currentDate)
         const now = dayjs()
-        console.log('Scrolling to now', now.format('HH:mm:ss'))
         fullCalenderApi().scrollToTime(now.format('HH:mm:ss'))
       }
     }
@@ -155,10 +154,8 @@ const switchTab = (tab: CalendarViewType) => {
   currentDateString.value = fullCalenderData().viewTitle
   selectedDay.value = dayjs(fullCalenderData().currentDate)
 
-  console.log('Switching tab', tab)
   if (tab === 'timeGridWeek' || tab === 'timeGridDay') {
     const now = dayjs()
-    console.log('Scrolling to now', now.format('HH:mm:ss'))
     fullCalenderApi().scrollToTime(now.format('HH:mm:ss'))
   }
 }
@@ -182,21 +179,22 @@ const selectToday = () => {
 }
 
 const addEvent = (event: Booking) => {
-  console.log('Adding event', event)
   fullCalenderApi().addEvent(bookingToEvent({ booking: event, editable: true }))
   openEventDialog.value = false
 }
 
 const dismissTempEvent = () => {
-  console.log('dismiss')
   createdTempEvent.value?.remove()
   openEventDialog.value = false
 }
 
 const closeDialog = () => {
-  console.log('Closing dialog')
   createdTempEvent.value?.remove()
   openEventDialog.value = false
+}
+
+const removeEvent = (booking_id: string) => {
+  fullCalenderApi().getEventById(booking_id)?.remove()
 }
 
 // computed that is true if selected date is today with day js
@@ -222,8 +220,6 @@ onMounted(() => {
       dayElement.classList.add('fc-day-highlight')
     }
   }
-
-  console.log(currentBookings.value)
 })
 
 // setTimeout(() => window.dispatchEvent(new Event('resize')), 20)
@@ -248,7 +244,7 @@ onMounted(() => {
     <CardContent class="calender-wrapper p-0">
       <full-calendar :options="calendarOptions" ref="fullCalenderRef">
         <template v-slot:eventContent="arg">
-          <CalenderEventSlot :arg="arg" />
+          <CalenderEventSlot :arg="arg" @delete="removeEvent($event)" />
         </template>
       </full-calendar>
     </CardContent>

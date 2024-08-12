@@ -37,7 +37,6 @@ const deleteBookableObject = async () => {
     description: 'Are you sure you want to delete this bookable object?',
     onConfirm: async () => {
       const { deleteBookableObject } = useBookableObjects()
-      console.log('Deleting bookable object with id:', props.bookableObjectId)
       await deleteBookableObject(props.bookableObjectId).then(() => {
         const { toast } = useToast()
         toast({

@@ -75,7 +75,7 @@ export const useBookings = defineStore('bookings', () => {
       addCreatedBooking(result.id, result.secret_edit_key)
     }
     // cast result to BookableObject
-    currentBookings.value.push(result)
+    currentBookings.value.push(result as Booking)
     return result
   }
 
@@ -91,12 +91,26 @@ export const useBookings = defineStore('bookings', () => {
     return bookingsPerBookableObjectId.value[id]
   })
 
+  const removeBookingById = (booking_id: string) => {
+    if (!booking_id) {
+      return
+    }
+    const id = selectedBookableObject?.value?.id || selectedBookableObject?.value?.uniqueId
+    if (!id) {
+      return
+    }
+    bookingsPerBookableObjectId.value[id] = bookingsPerBookableObjectId.value[id].filter(
+      (booking) => booking.id !== booking_id
+    )
+  }
+
   return {
     bookingsPerBookableObjectId,
     currentBookings,
     fetchBookableObjectsByGroupId,
     createBooking,
     setBookings,
-    reset
+    reset,
+    removeBookingById
   }
 })

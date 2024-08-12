@@ -172,7 +172,7 @@
     "position_x": 39,
     "position_y": 55,
     "options": {
-      "code": "module.exports = async function(data) {\n  const res = [];\n  if (data?.get_user_data.length > 0) {\n    data?.get_user_data.map(item => {\n      if (item && !res.some(e => e.id === item.id)) {\n        res.push(item);\n      }\n    })\n  }\n  if (data?.read_owner) {\n    // check if owner has disabled email notification for this bookable object\n    const relevant_settings = data?.bookable_object_notification_setting.filter(setting => setting.user_id === data?.read_owner.id);\n    if (relevant_settings.length > 0 && !relevant_settings[0].email_notification) {\n      return res;\n    }\n    \n    if (!res.some(e => e.id === data?.read_owner.id)) {\n      res.push(data?.read_owner[0]);\n    }\n  }\n  return res;\n} "
+      "code": "module.exports = async function(data) {\n  const res = [];\n  if (data?.get_user_data.length > 0) {\n    data?.get_user_data.map(item => {\n      if (item && !res.some(e => e.id === item.id)) {\n        res.push(item);\n      }\n    })\n  }\n  if (data?.read_owner) {\n    // check if owner has disabled email notification for this bookable object\n    const relevant_settings = data?.bookable_object_notification_setting.filter(setting => setting.user_id === data?.read_owner[0].id);\n    if (relevant_settings.length > 0 && !relevant_settings[0].email_notification) {\n      return res;\n    }\n    \n    if (!res.some(e => e.id === data?.read_owner[0].id)) {\n      res.push(data?.read_owner[0]);\n    }\n  }\n  return res;\n} "
     },
     "resolve": null,
     "reject": null,
@@ -186,7 +186,7 @@
     "position_x": 39,
     "position_y": 55,
     "options": {
-      "code": "module.exports = async function(data) {\n  const res = [];\n  if (data?.get_user_data.length > 0) {\n    data?.get_user_data.map(item => {\n      if (item && !res.some(e => e.id === item.id)) {\n        res.push(item);\n      }\n    })\n  }\n  if (data?.read_owner) {\n    // check if owner has disabled telegram notification for this bookable object\n    const relevant_settings = data?.bookable_object_notification_setting.filter(setting => setting.user_id === data?.read_owner.id);\n    if (relevant_settings.length > 0 && !relevant_settings[0].telegram) {\n      return res;\n    }\n    \n    if (!res.some(e => e.id === data?.read_owner.id)) {\n      res.push(data?.read_owner[0]);\n    }\n  }\n  return res;\n} "
+      "code": "module.exports = async function(data) {\n  const res = [];\n  if (data?.get_user_data.length > 0) {\n    data?.get_user_data.map(item => {\n      if (item && !res.some(e => e.id === item.id)) {\n        res.push(item);\n      }\n    })\n  }\n  if (data?.read_owner) {\n    // check if owner has disabled telegram notification for this bookable object\n    const relevant_settings = data?.bookable_object_notification_setting.filter(setting => setting.user_id === data?.read_owner[0].id);\n    if (relevant_settings.length > 0 && !relevant_settings[0].telegram) {\n      return res;\n    }\n    \n    if (!res.some(e => e.id === data?.read_owner[0].id)) {\n      res.push(data?.read_owner[0]);\n    }\n  }\n  return res;\n} "
     },
     "resolve": null,
     "reject": null,

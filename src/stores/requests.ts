@@ -4,6 +4,7 @@ import type { Booking } from '@/types'
 import { useUser } from '@/stores/user'
 import { useToast } from '@/components/ui/toast'
 import { deleteItem, updateItem } from '@directus/sdk'
+import { useBookings } from '@/stores/booking'
 
 export const useRequests = defineStore('requests', () => {
   const { toast } = useToast()
@@ -42,6 +43,8 @@ export const useRequests = defineStore('requests', () => {
     await client.request(deleteItem('booking', request.id)).then(() => {
       toast({ variant: 'destructive', title: 'Request rejected' })
       requests.value = requests.value.filter((r) => r.id !== request.id)
+      const { removeBookingById } = useBookings()
+      removeBookingById(request.id)
     })
     requestLoading.value = false
   }
