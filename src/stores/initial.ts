@@ -81,7 +81,9 @@ export const useInitialDataStore = defineStore('initial', () => {
   }) => {
     init_loading.value = true
 
-    const objectViewQuery = objectView({ bookable_object_id, isUniqueId, publicView })
+    const { user } = storeToRefs(useUser())
+
+    const objectViewQuery = objectView({ bookable_object_id, isUniqueId, publicView, user_id: user.value.id })
     await client.query<ObjectViewResponse>(objectViewQuery).then(async (res) => {
       if (res.group) {
         await setGroups(res.group)

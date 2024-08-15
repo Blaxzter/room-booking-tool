@@ -63,7 +63,7 @@ const deleteBookableObject = async () => {
     <DropdownMenuContent>
       <DropdownMenuGroup>
         <DropdownMenuItem
-          v-if="!props.isInternal"
+          v-if="props.isInternal"
           class="hover:cursor-pointer"
           @click.stop="router.push(`/${bookableObjectType}/${bookableObjectUniqueId}`)"
         >

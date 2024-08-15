@@ -900,6 +900,8 @@ type group {
   users_func: count_functions
   invites(filter: group_invites_filter, sort: [String], limit: Int, offset: Int, page: Int, search: String): [group_invites]
   invites_func: count_functions
+  bookable_objects(filter: bookable_object_group_filter, sort: [String], limit: Int, offset: Int, page: Int, search: String): [bookable_object_group]
+  bookable_objects_func: count_functions
 }
 
 type group_aggregated {
@@ -930,6 +932,7 @@ type group_aggregated_count {
   emoji: Int
   users: Int
   invites: Int
+  bookable_objects: Int
 }
 
 type group_aggregated_fields {
@@ -1146,6 +1149,7 @@ type version_group {
   emoji: String
   users: JSON
   invites: JSON
+  bookable_objects: JSON
 }
 
 """"""
@@ -1423,6 +1427,7 @@ input create_group_input {
   emoji: String
   users: [create_group_directus_users_input]
   invites: [create_group_invites_input]
+  bookable_objects: [create_bookable_object_group_input]
 }
 
 input create_group_invites_input {
@@ -1743,6 +1748,8 @@ input group_filter {
   users_func: count_function_filter_operators
   invites: group_invites_filter
   invites_func: count_function_filter_operators
+  bookable_objects: bookable_object_group_filter
+  bookable_objects_func: count_function_filter_operators
   _and: [group_filter]
   _or: [group_filter]
 }
@@ -1974,6 +1981,7 @@ input update_group_input {
   emoji: String
   users: [update_group_directus_users_input]
   invites: [update_group_invites_input]
+  bookable_objects: [update_bookable_object_group_input]
 }
 
 input update_group_invites_input {

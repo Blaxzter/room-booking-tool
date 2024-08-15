@@ -2,7 +2,7 @@ import { computed, ref } from 'vue'
 import { defineStore, storeToRefs } from 'pinia'
 import _ from 'lodash'
 
-import type { CreateGroupRequest, Group, GroupInvite, InviteCreateRequest } from '@/types'
+import type { BookableObject, CreateGroupRequest, Group, GroupInvite, InviteCreateRequest } from '@/types'
 import { useBookableObjects } from '@/stores/bookableObjects'
 import { useUser } from '@/stores/user'
 import { useLocalUser } from '@/stores/localUser'
@@ -81,13 +81,6 @@ export const useGroups = defineStore('group', () => {
     // get the first group
     if (!groups[0]) return
     const group = groups[0]
-    if (!_.isNil(result.bookable_object))
-      for (const bookable_object of result.bookable_object) {
-        if (!group.objects) {
-          group.objects = []
-        }
-        group.objects.push(bookable_object)
-      }
     return group
   }
 
@@ -97,20 +90,6 @@ export const useGroups = defineStore('group', () => {
       getGroupsWithUserQuery({ as_query: true, with_bookable_objects })
     )
     const groups = result.group as Group[]
-    if (!_.isNil(result.bookable_object))
-      for (const bookable_object of result.bookable_object) {
-        console.log(bookable_object)
-        const group = groups.find((group) =>
-          _.find(bookable_object.group as { group_id: Group }[], (g) => g.group_id.id === group?.id)
-        )
-        console.log(group)
-        if (group) {
-          if (!group.objects) {
-            group.objects = []
-          }
-          group.objects.push(bookable_object)
-        }
-      }
     await setGroups(groups, false)
     return groups
   }
@@ -186,6 +165,37 @@ export const useGroups = defineStore('group', () => {
     return group
   }
 
+  const getUserRoleByBookableObject = (bookable_object: BookableObject | undefined) => {
+    if (!bookable_object) {
+      const { selectedBookableObject } = storeToRefs(useBookableObjects())
+      bookable_object = selectedBookableObject.value as BookableObject
+    }
+
+    const { user } = storeToRefs(useUser())
+
+    console.log(bookable_object.id)
+    console.log(user.value?.id)
+    if (user.value?.id === bookable_object.owner?.id) return 4
+
+    console.log(typeof bookable_object.id)
+
+    // get all groups that have the bookable object
+    const relevantGroups = groups.value.filter((group) => {
+      return group.bookable_objects?.find((object) => object.bookable_object_id.id === bookable_object.id)
+    })
+
+    let retRole = 1
+    // get the highest role
+    for (const group of relevantGroups) {
+      for (const group_user of group.users || []) {
+        if (group_user.role === 'admin') return 3
+
+        if (group_user.role === 'member') retRole = 2
+      }
+    }
+    return retRole
+  }
+
   return {
     groups,
     selectedGroupId,
@@ -204,6 +214,7 @@ export const useGroups = defineStore('group', () => {
     deleteGroup,
     updateGroupUser,
     addGroupUser,
-    updateGroup
+    updateGroup,
+    getUserRoleByBookableObject
   }
 })

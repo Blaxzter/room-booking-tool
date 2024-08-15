@@ -1,4 +1,6 @@
-export const groupFields = `
+export const groupFields = ({ user_id = undefined }: { user_id?: string }) => {
+  console.log(user_id)
+  return `
         id
         status
         sort
@@ -18,7 +20,14 @@ export const groupFields = `
             email
             role
         }
-`
+        bookable_objects {
+            bookable_object_id {
+                id
+            }
+        }
+        ${user_id != undefined ? `users(filter: { directus_users_id: { id: { _eq: "${user_id}" } } }) { role }` : ''}
+  `
+}
 
 export const getGroupsWithUserQuery = ({
   as_query,
@@ -66,19 +75,7 @@ export const getGroupsWithUserQuery = ({
             email
             role
         }
-    }
-    ${
-      with_bookable_objects
-        ? `
-        bookable_object${group_id ? `(filter: { group: { group_id: { id: { _eq: "${group_id}" } }} })` : ''} {
-        name
-        group {
-            group_id {
-                id
-            }
-        }
-    }`
-        : ''
+        ${with_bookable_objects ? `bookable_objects { bookable_object_id { name } }` : ''}
     }
     `
 
@@ -95,9 +92,9 @@ export const getGroupsWithUserQuery = ({
   `
 }
 
-export const getGroupQuery = ({ as_query }: { as_query: boolean }): string => {
+export const getGroupQuery = ({ as_query, user_id }: { as_query: boolean; user_id?: string }): string => {
   const group_query = `group {
-      ${groupFields}
+      ${groupFields({ user_id })}
     }`
 
   if (as_query) {

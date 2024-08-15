@@ -5,4 +5,4 @@ schema:
   - http://localhost:8055/graphql:
       headers:
         # This is a local host token :p
-        # Authorization: Bearer B7fdxkrplz6Tw6srxuXNIbSNksV2y3Nu
+        Authorization: Bearer B7fdxkrplz6Tw6srxuXNIbSNksV2y3Nu

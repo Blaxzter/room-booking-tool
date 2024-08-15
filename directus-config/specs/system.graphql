@@ -1552,6 +1552,8 @@ type group {
   users_func: count_functions
   invites(filter: group_invites_filter, sort: [String], limit: Int, offset: Int, page: Int, search: String): [group_invites]
   invites_func: count_functions
+  bookable_objects(filter: bookable_object_group_filter, sort: [String], limit: Int, offset: Int, page: Int, search: String): [bookable_object_group]
+  bookable_objects_func: count_functions
 }
 
 type group_directus_users {
@@ -1708,6 +1710,34 @@ input boolean_filter_operators {
 
 input count_function_filter_operators {
   count: number_filter_operators
+}
+
+input create_bookable_object_group_input {
+  id: ID
+  bookable_object_id: create_bookable_object_input
+  group_id: create_group_input
+}
+
+input create_bookable_object_input {
+  id: ID
+  status: String
+  date_created: Date
+  date_updated: Date
+  location: GraphQLGeoJSON
+  name: String
+  description: String
+  tags: JSON
+  image: create_directus_files_input
+
+  """If the bookable object requires login to see the booking page."""
+  is_internal: Boolean
+  owner: create_directus_users_input
+  uniqueId: String
+  type: String
+  confirm_booking_required: Boolean
+  information_shared: Boolean
+  confirm_role: String
+  group: [create_bookable_object_group_input]
 }
 
 input create_directus_collections_fields_input {
@@ -1997,6 +2027,7 @@ input create_group_input {
   emoji: String
   users: [create_group_directus_users_input]
   invites: [create_group_invites_input]
+  bookable_objects: [create_bookable_object_group_input]
 }
 
 input create_group_invites_input {
@@ -2485,6 +2516,8 @@ input group_filter {
   users_func: count_function_filter_operators
   invites: group_invites_filter
   invites_func: count_function_filter_operators
+  bookable_objects: bookable_object_group_filter
+  bookable_objects_func: count_function_filter_operators
   _and: [group_filter]
   _or: [group_filter]
 }
@@ -2541,6 +2574,34 @@ input string_filter_operators {
   _nnull: Boolean
   _empty: Boolean
   _nempty: Boolean
+}
+
+input update_bookable_object_group_input {
+  id: ID
+  bookable_object_id: update_bookable_object_input
+  group_id: update_group_input
+}
+
+input update_bookable_object_input {
+  id: ID
+  status: String
+  date_created: Date
+  date_updated: Date
+  location: GraphQLGeoJSON
+  name: String
+  description: String
+  tags: JSON
+  image: update_directus_files_input
+
+  """If the bookable object requires login to see the booking page."""
+  is_internal: Boolean
+  owner: update_directus_users_input
+  uniqueId: String
+  type: String
+  confirm_booking_required: Boolean
+  information_shared: Boolean
+  confirm_role: String
+  group: [update_bookable_object_group_input]
 }
 
 input update_directus_collections_input {
@@ -2874,6 +2935,7 @@ input update_group_input {
   emoji: String
   users: [update_group_directus_users_input]
   invites: [update_group_invites_input]
+  bookable_objects: [update_bookable_object_group_input]
 }
 
 input update_group_invites_input {

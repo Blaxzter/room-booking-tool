@@ -12892,6 +12892,20 @@
                 }
               ]
             }
+          },
+          "bookable_objects": {
+            "nullable": true,
+            "type": "array",
+            "items": {
+              "oneOf": [
+                {
+                  "type": "integer"
+                },
+                {
+                  "$ref": "#/components/schemas/ItemsBookableObjectGroup"
+                }
+              ]
+            }
           }
         },
         "x-collection": "group"

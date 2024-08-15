@@ -38,10 +38,10 @@ export const useRequests = defineStore('requests', () => {
     requestLoading.value = false
   }
 
-  const rejectRequest = async (request: Booking) => {
+  const rejectRequest = async (request: Booking, deleted: boolean = false) => {
     requestLoading.value = true
     await client.request(deleteItem('booking', request.id)).then(() => {
-      toast({ variant: 'destructive', title: 'Request rejected' })
+      toast({ variant: 'destructive', title: deleted ? '' : 'Request rejected' })
       requests.value = requests.value.filter((r) => r.id !== request.id)
       const { removeBookingById } = useBookings()
       removeBookingById(request.id)

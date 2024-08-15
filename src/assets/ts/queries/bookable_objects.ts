@@ -19,6 +19,7 @@ export function getBookableObjectFields(
     ${!isPublic ? 'status' : ''}
     ${!isPublic ? 'date_created' : ''}
     ${!isPublic ? 'date_updated' : ''}
+    ${!isPublic ? 'owner { id }' : ''}
     location
     description
     tags

@@ -103,6 +103,7 @@ const rejectInvite = async (group: Group) => {
     <Avatar
       v-if="!group.emoji || group?.avatar?.id"
       shape="square"
+      class="mr-1 md:mr-4"
       :class="[isInvite ? 'h-12 w-12' : 'w-14 sm:w-20 h-14 sm:h-20']"
     >
       <AvatarImage :src="`${backendUrl}/assets/${group?.avatar?.id}`" :alt="group.name" v-if="group?.avatar?.id" />
@@ -112,7 +113,7 @@ const rejectInvite = async (group: Group) => {
     </Avatar>
     <div
       v-else
-      class="inline-flex items-center justify-center font-normal text-foreground select-none shrink-0 bg-secondary overflow-hidden text-3xl sm:text-5xl rounded-md mr-4 w-14 sm:w-20 h-14 sm:h-20"
+      class="inline-flex items-center justify-center font-normal text-foreground select-none shrink-0 bg-secondary overflow-hidden text-3xl sm:text-5xl rounded-md mr-1 md:mr-4 w-14 sm:w-20 h-14 sm:h-20"
       :class="isSelected && 'border border-primary'"
     >
       {{ group.emoji }}
@@ -168,16 +169,16 @@ const rejectInvite = async (group: Group) => {
       </div>
       <div class="flex items-center gap-2" v-if="!isInvite">
         <BoxIcon class="w-4 h-4 text-muted-foreground" />
-        <template v-if="group?.objects !== undefined">
+        <template v-if="group?.bookable_objects !== undefined && group.bookable_objects.length > 0">
           <ScrollArea>
             <div class="flex flex-nowrap gap-1 text-nowrap">
               <Badge
                 variant="secondary"
                 :class="isSelected && 'border border-primary'"
-                v-for="object of group.objects"
+                v-for="object of group.bookable_objects"
                 :key="object.id"
               >
-                {{ object.name }}
+                {{ object.bookable_object_id.name }}
               </Badge>
             </div>
             <ScrollBar orientation="horizontal" />

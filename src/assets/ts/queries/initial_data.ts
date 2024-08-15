@@ -50,15 +50,17 @@ query Bookable_object {
 export const objectView = ({
   bookable_object_id,
   isUniqueId = false,
-  publicView = false
+  publicView = false,
+  user_id = undefined
 }: {
   bookable_object_id: string
   isUniqueId?: boolean
   publicView?: boolean
+  user_id?: string
 }): string => {
   return `
     query Object_view {
-        ${publicView ? '' : getGroupQuery({ as_query: false })}
+        ${publicView ? '' : getGroupQuery({ as_query: false, user_id: user_id })}
         ${getBookingQObject({ bookable_object_id, isUniqueId, isPublic: publicView })}   
         ${bookableObjectById({ id: bookable_object_id, isUniqueId, isPublic: publicView })}
     }
@@ -112,7 +114,6 @@ export interface GetInviteQueryResponse {
 
 export interface GetGroupQueryResponse {
   group: Group[]
-  bookable_object?: BookableObject[]
 }
 
 export interface GetInitialDataQueryResponse {

@@ -24,6 +24,12 @@ export type Booking = {
   secret_edit_key?: string
 }
 
+export type GroupBookableObjectReference = {
+  id: string
+  bookable_object_id: BookableObject
+  group_id: Group | string
+}
+
 export type BookableObject = {
   id: string
   status?: string
@@ -75,7 +81,7 @@ export type Group = {
   }
   emoji?: string
   users?: GroupDirectusUser[]
-  objects?: BookableObject[]
+  bookable_objects?: GroupBookableObjectReference[]
   invites?: GroupInvite[]
 }
 

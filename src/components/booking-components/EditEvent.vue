@@ -16,6 +16,7 @@ import { Input } from '@/components/ui/input'
 import { useUser } from '@/stores/user'
 import { useRequests } from '@/stores/requests'
 import type { Booking } from '@/types'
+import { useGroups } from '@/stores/groups'
 const { approveRequest, rejectRequest } = useRequests()
 const { requestLoading } = storeToRefs(useRequests())
 const { user } = storeToRefs(useUser())
@@ -40,6 +41,11 @@ const formattedDate = computed(() => {
   return new Date(props.event.start_date).toLocaleDateString()
 })
 
+const roleValue = computed(() => {
+  const { getUserRoleByBookableObject } = useGroups()
+  return getUserRoleByBookableObject(undefined)
+})
+
 const formattedTime = computed(() => {
   if (!props.event) return ''
   const startTime = new Date(props.event.start_date).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
@@ -55,16 +61,14 @@ const isConfirmed = ref(false)
 
 const confirmEvent = async () => {
   await approveRequest({ id: props?.event?.booking_id, ...props.event } as Booking).then(() => {
-    console.log('confirm event')
     isConfirmed.value = true
     emit('confirmed', props?.event?.booking_id)
   })
 }
 
 const deleteEvent = async () => {
-  await rejectRequest({ id: props?.event?.booking_id, ...props.event } as Booking).then(() => {
+  await rejectRequest({ id: props?.event?.booking_id, ...props.event } as Booking, true).then(() => {
     open.value = false
-    console.log('delete event')
     emit('delete', props?.event?.booking_id)
   })
 }
@@ -111,7 +115,7 @@ watch(
           </Button>
           <Button variant="outline" @click="deleteEvent">
             <TrashIcon class="w-4 h-4 me-2 text-red-500" />
-            Delete
+            Reject
           </Button>
         </div>
       </div>
@@ -135,6 +139,19 @@ watch(
         <div class="grid w-full max-w-sm items-center gap-1.5" v-if="event.description">
           <Label class="text-md font-semibold">Description</Label>
           <Textarea v-model="event.description" readonly />
+        </div>
+      </div>
+      <!-- Admin stuff -->
+      <div v-if="roleValue >= 3" class="flex flex-col gap-2">
+        <h3 class="text-md font-semibold">Admin</h3>
+        <div class="-mt-2.5 pt-1.5 border-l-2 border-l-red-800 ps-3 flex flex-col gap-2">
+          <div class="text-muted-foreground text-sm">
+            You are able to see these fields because you are an admin of the object
+          </div>
+          <Button variant="outline" @click="deleteEvent">
+            <TrashIcon class="w-4 h-4 me-2 text-red-500" />
+            Delete
+          </Button>
         </div>
       </div>
     </div>

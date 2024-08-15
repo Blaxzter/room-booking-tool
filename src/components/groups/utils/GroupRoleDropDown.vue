@@ -26,8 +26,8 @@ watch(localRole, (newRole) => {
 })
 
 const roles = [
-  { name: 'Viewer', value: 'viewer', description: 'Can view and comment.' },
-  { name: 'Member', value: 'member', description: 'Can view, comment and edit.' },
+  { name: 'Viewer', value: 'viewer', description: 'Can view.' },
+  { name: 'Member', value: 'member', description: 'Can view and edit.' },
   { name: 'Admin', value: 'admin', description: 'Admin-level access to all resources.' }
 ]
 </script>
