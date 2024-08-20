@@ -49,11 +49,16 @@ export const useInitialDataStore = defineStore('initial', () => {
       const selectedGroup = getSelectedGroup()
       let received_data = null
       if (!_.isNil(selectedGroup) && selectedGroup !== '-1') {
-        const groupQuery = getDashboardByGroup(selectedGroup)
+        const groupQuery = getDashboardByGroup()
         received_data = await client.query<GetGroupQueryResponse>(groupQuery)
-
-        if (received_data.bookable_object) {
-          setBookableObjects({ data: received_data.bookable_object, groupId: selectedGroup })
+        console.log('received_data', received_data)
+        for (const group of received_data.group) {
+          if (group.bookable_objects && group.bookable_objects.length > 0) {
+            setBookableObjects({
+              data: _.map(group.bookable_objects, (ele) => ele.bookable_object_id),
+              groupId: group.id
+            })
+          }
         }
       } else {
         const initialDataQuery = getInitialDataQuery(user.value.id)

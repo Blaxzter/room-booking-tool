@@ -3,13 +3,14 @@ import {
   bookableObjectByGroup,
   bookableObjectById,
   getAllBookableObjects,
+  getBookableObjectFields,
   qGetBookableObjectByOwner
 } from '@/assets/ts/queries/bookable_objects'
 import { getBookingByManagement, getBookingQObject } from '@/assets/ts/queries/bookings'
 import { getGroupQuery } from '@/assets/ts/queries/group'
 import { getNotificationSettings } from '@/assets/ts/queries/notificationSettings'
 
-export const getDashboardByGroup = (group_id: string) => `
+export const getDashboardByGroup = () => `
 query Initial_Data {
     group {
         id
@@ -23,8 +24,12 @@ query Initial_Data {
         avatar {
             id
         }
+        bookable_objects {
+           bookable_object_id {
+            ${getBookableObjectFields()}
+           }
+        }
     }
-    ${bookableObjectByGroup(group_id)}
 }
 `
 

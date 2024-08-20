@@ -9,7 +9,11 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 interface DataTablePaginationProps {
   table: Table<Booking>
 }
-defineProps<DataTablePaginationProps>()
+const props = defineProps<DataTablePaginationProps>()
+
+const selectPageSize = (value: string) => {
+  props.table.setPageSize(Number(value))
+}
 </script>
 
 <template>
@@ -21,7 +25,7 @@ defineProps<DataTablePaginationProps>()
     <div class="flex items-center space-x-6 lg:space-x-8">
       <div class="flex items-center space-x-2">
         <p class="text-sm font-medium">Rows per page</p>
-        <Select :model-value="`${table.getState().pagination.pageSize}`" @update:model-value="table.setPageSize">
+        <Select :model-value="`${table.getState().pagination.pageSize}`" @update:model-value="selectPageSize">
           <SelectTrigger class="h-8 w-[70px]">
             <SelectValue :placeholder="`${table.getState().pagination.pageSize}`" />
           </SelectTrigger>
