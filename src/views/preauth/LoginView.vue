@@ -63,9 +63,6 @@ onMounted(async () => {
       showCheckmark.value = true
     }, 1000)
     setTimeout(() => {
-      showScreenGrower.value = true
-    }, 1900)
-    setTimeout(() => {
       let to = getRedirect() || { name: 'home' }
       router.push(to)
     }, 2000)
@@ -93,7 +90,7 @@ onMounted(async () => {
           </CardTitle>
           <CardDescription> Enter your email below to login to your account. </CardDescription>
         </CardHeader>
-        <CardContent class="grid gap-4 max-w-sm m-auto m-auto">
+        <CardContent class="grid gap-4 max-w-sm m-auto">
           <div class="grid gap-2">
             <Label for="email">Email</Label>
             <Input
@@ -142,7 +139,7 @@ onMounted(async () => {
             {{ errorMessage }}
           </div>
         </CardContent>
-        <CardFooter class="flex-col max-w-sm m-auto m-auto">
+        <CardFooter class="flex-col max-w-sm m-auto">
           <Button class="w-full" type="submit" @click="loginWrapper">
             <template v-if="loading">
               <Loader2 class="w-4 h-4 mr-2 animate-spin" />
@@ -156,13 +153,7 @@ onMounted(async () => {
           </div>
         </CardFooter>
       </Card>
-      <AutoLoginCard
-        class="max-w-sm m-auto"
-        v-else
-        :showCheckmark="showCheckmark"
-        :showCross="showCross"
-        :showScreenGrower="showScreenGrower"
-      />
+      <AutoLoginCard v-else :showCheckmark="showCheckmark" :showCross="showCross" :loading="loading" />
     </div>
   </main>
 </template>

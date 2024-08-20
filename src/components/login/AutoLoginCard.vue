@@ -1,22 +1,21 @@
 <script setup lang="ts">
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import LogoImage from '@/components/bits/LogoImage.vue'
+import LoginAnimation from '@/components/login/LoginAnimation.vue'
+import CalenderLoader from '@/components/animations/CalenderLoader.vue'
 
 defineProps({
+  loading: Boolean,
   showCheckmark: Boolean,
-  showCross: Boolean,
-  showScreenGrower: Boolean
+  showCross: Boolean
 })
 </script>
 
 <template>
-  <Card
-    class="rounded-none h-full w-full sm:max-w-sm sm:h-auto sm:rounded-xl grid place-content-center"
-    :class="{ 'login-screen-grower': showScreenGrower }"
-  >
+  <Card class="rounded-none h-full w-full sm:max-w-sm sm:h-auto sm:rounded-xl place-content-center">
     <CardHeader class="max-w-sm m-auto">
       <CardTitle class="text-2xl">
-        <div class="flex gap-4 mb-3">
+        <div class="flex gap-4 mb-1">
           <LogoImage />
           <div class="text-3xl font-bold">
             <div>BookiTool</div>
@@ -25,11 +24,9 @@ defineProps({
         </div>
       </CardTitle>
     </CardHeader>
-    <CardContent class="grid place-items-center pt-6" :class="{ 'fade-out': showScreenGrower }">
-      <div class="circle-loader mb-2 h-[200px]" :class="{ 'load-complete': showCheckmark, error: showCross }">
-        <div class="checkmark draw" :style="{ display: !showCheckmark ? 'none' : 'block' }"></div>
-        <div class="cross draw" :style="{ display: !showCross ? 'none' : 'block' }"></div>
-      </div>
+    <CardContent class="grid place-items-center pt-0">
+      <CalenderLoader v-if="!showCheckmark && !showCross" :height="200" />
+      <LoginAnimation :show-checkmark="showCheckmark" :height="200" v-else />
       <CardTitle v-if="showCheckmark"> Authenticated </CardTitle>
       <CardTitle v-else-if="showCross"> Invalid email or password </CardTitle>
       <CardTitle v-else> Logging in </CardTitle>
