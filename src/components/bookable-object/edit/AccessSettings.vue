@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed, ref, type PropType, onBeforeMount, watch } from 'vue'
+import { computed, ref, type PropType, onBeforeMount } from 'vue'
 import { useForm } from 'vee-validate'
 import { toTypedSchema } from '@vee-validate/zod'
 import * as z from 'zod'
@@ -11,10 +11,9 @@ import { Select, SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectVa
 import { CopyIcon } from '@radix-icons/vue'
 
 import NameFade from '@/components/utils/NameFade.vue'
-import { bookableObjectRandoms, bookableObjectRandomsLower } from '@/assets/ts/constants'
+import { bookableObjectRandomsLower } from '@/assets/ts/constants'
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from '@/components/ui/collapsible'
 import type { BookableObject } from '@/types'
-
 interface InitialValues {
   is_internal: boolean
   confirm_booking_required: boolean
@@ -33,7 +32,7 @@ const props = defineProps({
   }
 })
 
-const emit = defineEmits(['update'])
+defineEmits(['update'])
 
 const formSchema = toTypedSchema(
   z.object({
@@ -88,45 +87,17 @@ onBeforeMount(() => {
   }
 })
 
-// if props bookableObject is passed, create a watcher that calls validate() on change and sets the values to the new bookableObject
-if (props.bookableObject) {
-  const firstRun = ref(true)
-  watch(values, async () => {
-    if (firstRun.value || !props.bookableObject) {
-      firstRun.value = false
-      return
-    }
-    const valid = await validate()
-    if (valid.valid) return
-
-    // calc diff between values and bookableObject
-    const diff = Object.keys(values).reduce<Partial<BookableObject>>((acc, key) => {
-      const typedKey = key as keyof BookableObject
-      const typedValues = values as Partial<BookableObject>
-
-      if (props.bookableObject && typedValues[typedKey] !== props.bookableObject[typedKey]) {
-        acc[typedKey] = typedValues[typedKey] as any
-      }
-
-      return acc
-    }, {} as Partial<BookableObject>)
-
-    if (Object.keys(diff).length === 0) return
-    // emit the new values to the parent component
-    emit('update', values)
-  })
-}
-
 const getValues = computed(() => values)
 defineExpose({ getValues, validate })
 </script>
 
 <template>
   <form class="grid gap-5 py-4">
+    <div class="text-lg font-semibold mb-2">Access Settings</div>
     <FormField v-slot="{ value, handleChange }" name="is_internal">
       <FormItem class="flex flex-row items-start gap-x-3 space-y-0 rounded-md">
         <FormControl>
-          <Checkbox :checked="value" @update:checked="handleChange" />
+          <Checkbox :checked="value" @update:checked="handleChange" @click="$emit('update', 'is_internal', !value)" />
         </FormControl>
         <div class="space-y-1 leading-none">
           <FormLabel>Public Visible</FormLabel>
@@ -139,8 +110,8 @@ defineExpose({ getValues, validate })
     <Collapsible v-model:open="values.is_internal">
       <CollapsibleContent>
         <div>Link</div>
-        <div class="flex items-center justify-between gap-x-2 border rounded px-3 py-0.5">
-          <span class="text-sm text-gray-500"
+        <div class="flex items-center justify-between gap-x-2 border rounded px-3 py-0.5 max-w-full">
+          <span class="text-xs text-gray-500 truncate overflow-ellipsis"
             >{{ currentHost }}/<NameFade
               :messages="bookableObjectRandomsLower"
               @value-changed="visibleMessage = $event"
@@ -158,7 +129,11 @@ defineExpose({ getValues, validate })
     <FormField v-slot="{ value, handleChange }" name="confirm_booking_required">
       <FormItem class="flex flex-row items-start gap-x-3 space-y-0 rounded-md">
         <FormControl>
-          <Checkbox :checked="value" @update:checked="handleChange" />
+          <Checkbox
+            :checked="value"
+            @update:checked="handleChange"
+            @click="$emit('update', 'confirm_booking_required', !value)"
+          />
         </FormControl>
         <div class="space-y-1 leading-none">
           <FormLabel>Booking requires confirmation</FormLabel>
@@ -175,7 +150,7 @@ defineExpose({ getValues, validate })
         <FormField v-slot="{ componentField }" name="confirm_role">
           <FormItem>
             <FormLabel>Confirm Role</FormLabel>
-            <Select v-bind="componentField">
+            <Select v-bind="componentField" @update:modelValue="$emit('update', 'confirm_role', values.confirm_role)">
               <FormControl>
                 <SelectTrigger>
                   <SelectValue placeholder="Select a role" />
@@ -199,7 +174,11 @@ defineExpose({ getValues, validate })
     <FormField v-slot="{ value, handleChange }" name="information_shared">
       <FormItem class="flex flex-row items-start gap-x-3 space-y-0 rounded-md">
         <FormControl>
-          <Checkbox :checked="value" @update:checked="handleChange" />
+          <Checkbox
+            :checked="value"
+            @update:checked="handleChange"
+            @click="$emit('update', 'information_shared', !value)"
+          />
         </FormControl>
         <div class="space-y-1 leading-none">
           <FormLabel>Information shared</FormLabel>

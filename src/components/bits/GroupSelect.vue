@@ -30,6 +30,10 @@ const props = defineProps({
   includePerson: {
     type: Boolean,
     default: false
+  },
+  editable: {
+    type: Boolean,
+    default: true
   }
 })
 
@@ -58,7 +62,7 @@ onBeforeMount(() => {
 </script>
 
 <template>
-  <Select v-model="group" v-bind="$attrs">
+  <Select v-model="group" v-bind="$attrs" :disabled="!editable">
     <FormControl>
       <SelectTrigger>
         <SelectValue placeholder="Select a group" asChild>

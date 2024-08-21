@@ -112,7 +112,6 @@ export const useGroups = defineStore('group', () => {
     return await client.request(deleteItem('group_invites', invite_id)).then(() => {
       if (reject) groups.value = groups.value.filter((g) => g.id !== group.id)
       else {
-        console.log('deleteInvite', group.invites)
         const index = group.invites?.findIndex((invite) => invite.id === invite_id)
         if (index !== undefined && index !== -1) {
           group.invites?.splice(index, 1)
@@ -153,15 +152,12 @@ export const useGroups = defineStore('group', () => {
     const { client } = useUser()
     // Do not send update to backend if data is avatar: { id: undefined }
     if (!(Object.keys(data).length === 1 && Object.keys(data)[0] === 'avatar' && data.avatar?.id === undefined)) {
-      console.log('updateItem')
       await client.request(updateItem('group', group_id, data))
     }
     const group = groups.value.find((g) => g.id === group_id)
-    console.log(group)
     if (group) {
       Object.assign(group, data)
     }
-    console.log(group)
     return group
   }
 
@@ -173,11 +169,8 @@ export const useGroups = defineStore('group', () => {
 
     const { user } = storeToRefs(useUser())
 
-    console.log(bookable_object.id)
-    console.log(user.value?.id)
-    if (user.value?.id === bookable_object.owner?.id) return 4
-
-    console.log(typeof bookable_object.id)
+    if (user.value?.id === bookable_object.owner || user.value?.id === (bookable_object.owner as { id: string })?.id)
+      return 4
 
     // get all groups that have the bookable object
     const relevantGroups = groups.value.filter((group) => {
@@ -196,6 +189,30 @@ export const useGroups = defineStore('group', () => {
     return retRole
   }
 
+  const addBookableObjectToGroup = async (group_id: string, bookable_object: BookableObject) => {
+    const group = groups.value.find((g) => g.id === group_id)
+    if (!group) {
+      return
+    }
+
+    if (group.bookable_objects?.find((obj) => obj.bookable_object_id.id === bookable_object.id)) {
+      return
+    }
+
+    group.bookable_objects?.push({ bookable_object_id: bookable_object })
+  }
+
+  const deleteAvatar = async (group: Group) => {
+    if (!group.avatar) {
+      return
+    }
+
+    const { deleteDirectusFile, client } = useUser()
+    return await client.request(updateItem('group', group.id, { avatar: null })).then(async () => {
+      await deleteDirectusFile(group.avatar!.id)
+    })
+  }
+
   return {
     groups,
     selectedGroupId,
@@ -212,9 +229,11 @@ export const useGroups = defineStore('group', () => {
     deleteInvite,
     deleteGroupUser,
     deleteGroup,
+    deleteAvatar,
     updateGroupUser,
     addGroupUser,
     updateGroup,
+    addBookableObjectToGroup,
     getUserRoleByBookableObject
   }
 })

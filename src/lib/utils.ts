@@ -11,3 +11,8 @@ export function cn(...inputs: ClassValue[]) {
 export function valueUpdater<T extends Updater<any>>(updaterOrValue: T, ref: Ref) {
   ref.value = typeof updaterOrValue === 'function' ? updaterOrValue(ref.value) : updaterOrValue
 }
+
+export function capitalize(value: string | undefined): string | undefined {
+  if (!value) return undefined
+  return value.charAt(0).toUpperCase() + value.slice(1)
+}

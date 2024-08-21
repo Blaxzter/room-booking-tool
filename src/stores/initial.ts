@@ -49,9 +49,9 @@ export const useInitialDataStore = defineStore('initial', () => {
       const selectedGroup = getSelectedGroup()
       let received_data = null
       if (!_.isNil(selectedGroup) && selectedGroup !== '-1') {
-        const groupQuery = getDashboardByGroup()
+        const { user } = storeToRefs(useUser())
+        const groupQuery = getDashboardByGroup(user.value.id)
         received_data = await client.query<GetGroupQueryResponse>(groupQuery)
-        console.log('received_data', received_data)
         for (const group of received_data.group) {
           if (group.bookable_objects && group.bookable_objects.length > 0) {
             setBookableObjects({
@@ -110,7 +110,6 @@ export const useInitialDataStore = defineStore('initial', () => {
       }
       addBookableObject(res.bookable_object[0])
       setBookings(bookable_object_id, res.booking)
-      console.log(bookable_object_id, res.booking)
     })
 
     init_loading.value = false
@@ -134,7 +133,6 @@ export const useInitialDataStore = defineStore('initial', () => {
     try {
       const query = settingsViewQuery()
       const res = await client.query<SettingsViewResponse>(query)
-      console.log(res)
       await setGroups(res.group)
       setNotificationSettingsExtended(res.notification_setting, res.group, res.bookable_object)
     } catch (error) {

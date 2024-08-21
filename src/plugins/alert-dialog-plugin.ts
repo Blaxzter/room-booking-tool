@@ -29,8 +29,6 @@ export function showAlertDialog({
   const container = document.createElement('div')
   document.body.appendChild(container)
 
-  console.log(confirmVariant)
-
   render(
     createVNode(AlertDialogComponent, {
       title,

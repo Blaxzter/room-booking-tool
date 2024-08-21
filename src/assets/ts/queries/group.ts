@@ -1,5 +1,4 @@
 export const groupFields = ({ user_id = undefined }: { user_id?: string }) => {
-  console.log(user_id)
   return `
         id
         status

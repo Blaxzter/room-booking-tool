@@ -20,8 +20,6 @@ interface InitialValues {
   groupId?: string
 }
 
-const waitOnOnfocus = ['name', 'description']
-
 const props = defineProps({
   initialValues: {
     type: Object as PropType<InitialValues>,
@@ -64,7 +62,6 @@ onBeforeMount(() => {
     let groupId = ''
     if (groups && groups.length > 0) {
       const firstGroup = groups[0]
-      console.log(firstGroup)
       // check if firstGroup is string
       if (typeof firstGroup === 'string') {
         groupId = firstGroup
@@ -91,7 +88,7 @@ defineExpose({ getValues, validate })
   <form class="grid gap-4 pt-4 w-full">
     <FormField v-slot="{ componentField }" name="name">
       <FormItem>
-        <FormLabel>Name {{ pendingChanges.includes('name') ? ' *' : '' }}</FormLabel>
+        <FormLabel>Name {{ pendingChanges.includes('name') && props.bookableObject ? ' *' : '' }}</FormLabel>
         <FormControl>
           <Input
             type="text"
@@ -106,7 +103,14 @@ defineExpose({ getValues, validate })
                 }
               }
             "
-            @blur="emit('update', { name: $event.target.value })"
+            @blur="
+              (e: Event) => {
+                if (props.bookableObject) {
+                  emit('update', 'name', (e.target as HTMLInputElement).value)
+                  pendingChanges.splice(pendingChanges.indexOf('name'), 1)
+                }
+              }
+            "
             v-bind="componentField"
           />
         </FormControl>
@@ -116,21 +120,30 @@ defineExpose({ getValues, validate })
     </FormField>
     <FormField v-slot="{ componentField }" name="description">
       <FormItem>
-        <FormLabel>Description {{ pendingChanges.includes('description') ? ' *' : '' }}</FormLabel>
+        <FormLabel
+          >Description {{ pendingChanges.includes('description') && props.bookableObject ? ' *' : '' }}</FormLabel
+        >
         <FormControl>
           <Textarea
             :placeholder="exampleObject.description"
             @input="
               (e: Event) => {
                 const target = e.target as HTMLInputElement
-                if (target.value != bookableObject?.name && !pendingChanges.includes('name')) {
-                  pendingChanges.push('name')
+                if (target.value != bookableObject?.name && !pendingChanges.includes('description')) {
+                  pendingChanges.push('description')
                 } else if (target.value == bookableObject?.name) {
-                  pendingChanges.splice(pendingChanges.indexOf('name'), 1)
+                  pendingChanges.splice(pendingChanges.indexOf('description'), 1)
                 }
               }
             "
-            @blur="emit('update', { description: $event.target.value })"
+            @blur="
+              (e: Event) => {
+                if (props.bookableObject) {
+                  emit('update', 'description', (e.target as HTMLInputElement).value)
+                  pendingChanges.splice(pendingChanges.indexOf('description'), 1)
+                }
+              }
+            "
             v-bind="componentField"
           />
         </FormControl>
@@ -141,7 +154,7 @@ defineExpose({ getValues, validate })
     <FormField v-slot="{ componentField }" name="groupId">
       <FormItem>
         <FormLabel>Group</FormLabel>
-        <GroupSelect v-bind="componentField" :include-person="true" @blur="emit('update', { group: { id: $event } })" />
+        <GroupSelect v-bind="componentField" :include-person="true" :editable="!props.bookableObject" />
         <FormDescription> Please select the group of the bookable object. </FormDescription>
         <FormMessage />
       </FormItem>

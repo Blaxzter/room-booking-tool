@@ -107,6 +107,7 @@ const onSubmit = handleSubmit(async (values) => {
 
 // Function to update the group in the backend
 const updateGroup = async (field: keyof Group, value: any) => {
+  console.log('updateGroup', field, value)
   if (props.group && props.group[field] !== value) {
     const { updateGroup } = useGroups()
     await updateGroup(props.group.id, { [field]: value })
@@ -114,6 +115,19 @@ const updateGroup = async (field: keyof Group, value: any) => {
       title: 'Group updated',
       description: `The group ${props.group.name} has been updated.`
     })
+  }
+}
+
+const updateGroupAvatar = async (isDelete: boolean) => {
+  if (props.group) {
+    // delete old avatar
+    if (isDelete) {
+      const { deleteAvatar } = useGroups()
+      await deleteAvatar(props.group)
+    }
+    if (!isDelete) {
+      await updateGroup('avatar', { id: await avatarUpload.value.uploadImage() })
+    }
   }
 }
 
@@ -142,8 +156,8 @@ const isDisabled = computed(() => {
           <AvatarUploadComponent
             ref="avatarUpload"
             :initAvatar="group?.avatar?.id"
-            @avatar-updated="updateGroup('avatar', $event)"
-            @avatar-cleared="updateGroup('avatar', null)"
+            @avatar-updated="updateGroupAvatar(false)"
+            @avatar-cleared="updateGroupAvatar(true)"
             :add-clear-request="!!group"
             :disabled="isDisabled"
           />

@@ -56,14 +56,12 @@ const createObject = async () => {
   }
   delete createObject.groupId
 
-  console.log('Creating object with values:', createObject)
   const { createBookableObject } = useBookableObjects()
   await createBookableObject(createObject)
 }
 
 const nextStep = async () => {
   const valRes = await stepRefMap[activeStep.value].value.validate()
-  console.log('Validation result:', valRes)
   if (valRes.valid) {
     steptoValues[activeStep.value] = valRes.values
     if (activeStep.value < steps.length - 1) activeStep.value++

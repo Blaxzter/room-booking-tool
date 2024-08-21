@@ -30,7 +30,6 @@ onMounted(async () => {
     select: true,
     publicView: false
   }).catch(() => {
-    console.log('error')
     router.push({ name: 'home' })
   })
 })

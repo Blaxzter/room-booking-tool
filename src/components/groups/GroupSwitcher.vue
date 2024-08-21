@@ -120,7 +120,6 @@ const filterGroups = (
   val: string[] | number[] | Record<string, any>[] | false[] | true[],
   term: string
 ): string[] | number[] | Record<string, any>[] | false[] | true[] => {
-  console.log(val)
   return val.filter((group, index) => {
     if (index === val.length - 2) {
       return true

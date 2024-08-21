@@ -53,7 +53,6 @@ const event = computed(() => {
 const confirmed = ref(false)
 
 const closeDialog = () => {
-  console.log('close dialog')
   selectedEvent.value = undefined
 }
 

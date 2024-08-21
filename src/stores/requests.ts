@@ -25,7 +25,6 @@ export const useRequests = defineStore('requests', () => {
   }
 
   const approveRequest = async (request: Booking) => {
-    console.log('Approving request', request)
     requestLoading.value = true
     await client
       .request(updateItem('booking', request.id, { confirmed: true, confirmed_by: user.value.id }))

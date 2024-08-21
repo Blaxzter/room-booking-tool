@@ -14,6 +14,8 @@ import { Label } from '@/components/ui/label'
 import AvatarUploadComponent from '@/components/utils/AvatarUploadComponent.vue'
 
 import type { BookableObject } from '@/types'
+import { useGroups } from '@/stores/groups'
+import { useBookableObjects } from '@/stores/bookableObjects'
 
 interface InitialValues {
   splash_image_object: Blob
@@ -37,7 +39,7 @@ const props = defineProps({
     required: false
   }
 })
-const emit = defineEmits(['update'])
+const emits = defineEmits(['update'])
 
 const avatarUpload = ref()
 
@@ -71,6 +73,19 @@ onBeforeMount(() => {
   }
 })
 
+const updateBookableObjectImage = async (isDelete: boolean) => {
+  if (props.bookableObject) {
+    // delete old avatar
+    if (isDelete) {
+      const { deleteImage } = useBookableObjects()
+      await deleteImage(props.bookableObject)
+    }
+    if (!isDelete) {
+      emits('update', 'image', { id: await avatarUpload.value.uploadImage() })
+    }
+  }
+}
+
 const getValues = computed(() => values)
 defineExpose({ getValues, validate, upload })
 </script>
@@ -79,13 +94,22 @@ defineExpose({ getValues, validate, upload })
   <form class="grid gap-5 py-4">
     <div class="flex flex-col gap-3">
       <Label>Display Image</Label>
-      <AvatarUploadComponent class="self-center" ref="avatarUpload" :is-square="true" :height="12" />
+      <AvatarUploadComponent
+        class="self-center"
+        ref="avatarUpload"
+        :is-square="true"
+        :height="12"
+        :initAvatar="bookableObject?.image?.id"
+        @avatar-updated="updateBookableObjectImage(false)"
+        @avatar-cleared="updateBookableObjectImage(true)"
+        :add-clear-request="!!bookableObject"
+      />
       <div class="text-sm text-muted-foreground">Upload an splash image.</div>
     </div>
     <FormField v-slot="{ componentField }" name="object_type">
       <FormItem>
         <FormLabel>Choose type of <NameFade :messages="bookableObjectRandoms" /></FormLabel>
-        <Select v-bind="componentField">
+        <Select v-bind="componentField" @update:modelValue="$emit('update', 'object_type', values.object_type)">
           <FormControl>
             <SelectTrigger>
               <SelectValue />

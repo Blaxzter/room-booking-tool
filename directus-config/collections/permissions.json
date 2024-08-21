@@ -649,26 +649,35 @@
         {
           "_or": [
             {
-              "group": {
-                "group_id": {
-                  "users": {
-                    "directus_users_id": {
-                      "_eq": "$CURRENT_USER"
-                    }
-                  }
-                }
+              "owner": {
+                "_eq": "$CURRENT_USER"
               }
             },
             {
-              "group": {
-                "group_id": {
-                  "users": {
-                    "role": {
-                      "_eq": "admin"
+              "_and": [
+                {
+                  "group": {
+                    "group_id": {
+                      "users": {
+                        "directus_users_id": {
+                          "_eq": "$CURRENT_USER"
+                        }
+                      }
+                    }
+                  }
+                },
+                {
+                  "group": {
+                    "group_id": {
+                      "users": {
+                        "role": {
+                          "_eq": "admin"
+                        }
+                      }
                     }
                   }
                 }
-              }
+              ]
             }
           ]
         }
@@ -676,7 +685,18 @@
     },
     "validation": null,
     "presets": null,
-    "fields": null,
+    "fields": [
+      "name",
+      "description",
+      "image",
+      "confirm_role",
+      "confirm_booking_required",
+      "information_shared",
+      "type",
+      "is_internal",
+      "location",
+      "group"
+    ],
     "_syncId": "f2c82f35-2d43-4cfc-8182-3e1c632ef94d"
   },
   {

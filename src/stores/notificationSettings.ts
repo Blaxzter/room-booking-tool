@@ -75,7 +75,6 @@ export const useNotificationSetting = defineStore('notificationSetting', () => {
     groups: Group[],
     bookableObjects: BookableObject[]
   ) => {
-    console.log(notificationSettings)
     groups.forEach((group) => {
       const groupSetting = _.find(notificationSettings, (item) => _.get(item, 'group_id.id') === group.id)
       if (groupSetting) {
@@ -106,7 +105,6 @@ export const useNotificationSetting = defineStore('notificationSetting', () => {
       notificationSettings,
       (item) => item.bookable_object_id === null && item.group_id === null
     )
-    console.log(userNotificationSetting)
     if (userNotificationSetting) {
       setUserNotificationSettings(userNotificationSetting)
     } else {

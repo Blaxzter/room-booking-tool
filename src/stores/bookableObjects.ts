@@ -1,10 +1,10 @@
 import { defineStore, storeToRefs } from 'pinia'
 import { computed, ref } from 'vue'
-import type { BookableObject, CreateBookableObjectRequest } from '@/types'
+import type { BookableObject, CreateBookableObjectRequest, Group } from '@/types'
 import { useUser } from '@/stores/user'
 import { type BookableObjectsRequest } from '@/assets/ts/queries/initial_data'
 import { useToast } from '@/components/ui/toast'
-import { createItem, deleteItem } from '@directus/sdk'
+import { createItem, deleteItem, updateItem } from '@directus/sdk'
 import { useGroups } from '@/stores/groups'
 import _ from 'lodash'
 import {
@@ -148,7 +148,10 @@ export const useBookableObjects = defineStore('bookableObjects', () => {
     if (result.image && typeof result.image === 'string') {
       result.image = { id: result.image }
     }
-    console.log(result)
+    if (bookableObject.group.length > 0) {
+      const { addBookableObjectToGroup } = useGroups()
+      addBookableObjectToGroup(bookableObject.group[0]?.group_id.id, result)
+    }
     // cast result to BookableObject
     addBookableObject(result as BookableObject)
     return result
@@ -203,6 +206,35 @@ export const useBookableObjects = defineStore('bookableObjects', () => {
     })
   }
 
+  const updateBookableObject = async (bookable_object_id: string, data: Partial<BookableObject>) => {
+    const { client } = useUser()
+    // Do not send update to backend if data is avatar: { id: undefined }
+    if (!(Object.keys(data).length === 1 && Object.keys(data)[0] === 'image' && data.image?.id === undefined)) {
+      await client.request(updateItem('bookable_object', bookable_object_id, data))
+    }
+
+    if (selectedBookableObject.value?.id === bookable_object_id) {
+      Object.assign(selectedBookableObject.value, data)
+    }
+
+    const bookable_object = bookableObjects.value.find((g) => g.id === bookable_object_id)
+    if (bookable_object) {
+      Object.assign(bookable_object, data)
+    }
+    return bookable_object
+  }
+
+  const deleteImage = async (bookableObject: BookableObject) => {
+    if (!bookableObject.image) {
+      return
+    }
+
+    const { deleteDirectusFile, client } = useUser()
+    return await client.request(updateItem('bookable_object', bookableObject.id, { image: null })).then(async () => {
+      await deleteDirectusFile(bookableObject.image!.id)
+    })
+  }
+
   return {
     bookableObjects,
     selectedBookableObject,
@@ -216,6 +248,8 @@ export const useBookableObjects = defineStore('bookableObjects', () => {
     createBookableObject,
     getBookableObjectById,
     deleteBookableObject,
-    reset
+    deleteImage,
+    reset,
+    updateBookableObject
   }
 })

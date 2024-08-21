@@ -80,7 +80,6 @@ const avatarUpload = ref()
 const avatarChanged = ref(false)
 
 const onSubmit = handleSubmit(async (values) => {
-  console.log(avatarUpload.value, avatarChanged)
   if (avatarUpload.value && avatarChanged.value) {
     const avatar = await avatarUpload.value.uploadImage()
     if (avatar) {

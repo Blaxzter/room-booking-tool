@@ -10,7 +10,7 @@ import { getBookingByManagement, getBookingQObject } from '@/assets/ts/queries/b
 import { getGroupQuery } from '@/assets/ts/queries/group'
 import { getNotificationSettings } from '@/assets/ts/queries/notificationSettings'
 
-export const getDashboardByGroup = () => `
+export const getDashboardByGroup = (user_id: string) => `
 query Initial_Data {
     group {
         id
@@ -23,6 +23,12 @@ query Initial_Data {
         emoji
         avatar {
             id
+        }
+        users (filter: {directus_users_id: { id: {_eq: "${user_id}"}}}) {
+            directus_users_id {
+                id
+            }
+            role
         }
         bookable_objects {
            bookable_object_id {

@@ -11,6 +11,11 @@ import DefaultSettings from '@/components/bookable-object/edit/DefaultSettings.v
 import AdditionalSettings from '@/components/bookable-object/edit/AdditionalSettings.vue'
 import AccessSettings from '@/components/bookable-object/edit/AccessSettings.vue'
 import { ScrollArea } from '@/components/ui/scroll-area'
+import type { BookableObject } from '@/types'
+import { capitalize } from '@/lib/utils'
+import { useToast } from '@/components/ui/toast'
+
+const { toast } = useToast()
 
 const { fetchObjectViewData } = useInitialDataStore()
 const { selectedBookableObject } = storeToRefs(useBookableObjects())
@@ -28,15 +33,21 @@ onMounted(() => {
   })
 })
 
-const updateBookableObject = (data: any) => {
-  console.log('update bookable object', data)
+const updateBookableObject = async (field: keyof BookableObject, value: any) => {
+  if (selectedBookableObject.value && selectedBookableObject.value[field] !== value) {
+    const { updateBookableObject } = useBookableObjects()
+    await updateBookableObject(selectedBookableObject.value.id, { [field]: value })
+    toast({
+      title: `${capitalize(selectedBookableObject.value?.type) || 'Bookable Object'} updated`,
+      description: `The ${capitalize(selectedBookableObject.value?.type) || 'Bookable Object'} "${selectedBookableObject.value.name}" has been updated.`
+    })
+  }
 }
 </script>
 
 <template>
   <div class="container py-8 h-full max-h-full overflow-hidden" v-if="selectedBookableObject">
     <ScrollArea class="max-h-full h-full overflow-hidden me-[-12px] pe-[12px]">
-      <div class="text-2xl font-bold mb-4">Currently only viewable and not editable.</div>
       <div class="flex flex-wrap justify-center gap-4 align-top flex-col md:flex-row lg:justify-start">
         <Card class="lg:max-w-[320px] md:w-[calc(50%-0.5rem)] lg:w-[calc(30%-0.7rem)]">
           <CardContent>

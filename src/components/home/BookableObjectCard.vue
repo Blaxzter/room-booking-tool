@@ -9,6 +9,7 @@ import BookingCardSplashImage from '@/components/home/BookingCardSplashImage.vue
 import processImage from '@/assets/ts/image-utils'
 
 import type { BookableObject } from '@/types'
+import { useGroups } from '@/stores/groups'
 
 const backendUrl = inject('backendUrl')
 
@@ -29,10 +30,14 @@ const idToColor = ref(new Map<string, string>())
 const getImageColor = async (image_id: string) => {
   return await processImage(`${backendUrl}/assets/${image_id}`).then((color) => {
     idToColor.value.set(image_id, color)
-    console.log(idToColor.value)
     return color
   })
 }
+
+const roleValue = computed(() => {
+  const { getUserRoleByBookableObject } = useGroups()
+  return getUserRoleByBookableObject(props.bookableObject)
+})
 
 onMounted(() => {
   if (props.bookableObject.image) {
@@ -83,7 +88,7 @@ onMounted(() => {
           {{ bookableObject.description }}
         </p>
       </div>
-      <div v-show="mouseover || open || isMobile">
+      <div v-show="mouseover || open || isMobile" v-if="roleValue >= 3">
         <BookableObjectMenuButton
           v-model="open"
           :bookable-object-id="bookableObject.id"

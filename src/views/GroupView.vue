@@ -85,7 +85,6 @@ const ownerEmail = computed(() => {
   if (!selectedGroup.value) {
     return ''
   }
-  console.log(selectedGroup.value.users)
   return (
     _.find(
       selectedGroup.value.users,

@@ -15,7 +15,6 @@ const { requests } = storeToRefs(useRequests())
 
 onMounted(async () => {
   await fetchRequestViewData()
-  console.log(requests.value)
 })
 </script>
 

@@ -25,15 +25,15 @@ export type Booking = {
 }
 
 export type GroupBookableObjectReference = {
-  id: string
+  id?: string
   bookable_object_id: BookableObject
-  group_id: Group | string
+  group_id?: Group | string
 }
 
 export type BookableObject = {
   id: string
   status?: string
-  owner?: { id: string }
+  owner?: { id: string } | string
   date_created?: string
   date_updated?: string
   name: string

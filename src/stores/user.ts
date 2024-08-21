@@ -120,8 +120,6 @@ export const useUser = defineStore('user', () => {
     storage: typedStorage
   }
 
-  console.log(backendUrl)
-
   const client: MyDirectusClient = createDirectus<MySchema>(backendUrl)
     .with(authentication(authMode, authConfig))
     .with(rest())

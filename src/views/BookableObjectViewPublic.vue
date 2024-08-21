@@ -26,8 +26,6 @@ onMounted(async () => {
     isUniqueId: true,
     select: true,
     publicView: true
-  }).catch((e) => {
-    console.log('error', e)
   })
 })
 </script>

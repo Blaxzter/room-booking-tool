@@ -77,7 +77,6 @@ const deleteEvent = async () => {
 watch(
   () => props.event,
   (event) => {
-    console.log(event)
     open.value = !!event
     if (event) {
       isConfirmed.value = event.confirmed
@@ -88,7 +87,6 @@ watch(
 watch(
   () => open.value,
   (isOpen) => {
-    console.log(isOpen)
     if (!isOpen) emit('close')
   }
 )

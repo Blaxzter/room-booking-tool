@@ -24,7 +24,7 @@ const props = defineProps({
     :animationData="cross"
     :auto-play="true"
     :loop="false"
-    :speed="1.5"
+    :speed="1.8"
     :style="{ height: `${props.height}px` }"
   />
 </template>

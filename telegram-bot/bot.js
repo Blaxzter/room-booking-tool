@@ -31,7 +31,6 @@ const token = process.env.TELEGRAM_BOT_TOKEN
 const bot = new Bot(token)
 
 const getUserByTelegramId = async (telegramId) => {
-  console.log('telegramId', telegramId)
   return await client
     .request(
       readUsers({
@@ -49,14 +48,7 @@ const getUserByTelegramId = async (telegramId) => {
 }
 
 const approveRequest = async (bookingId, user_id) => {
-  await client
-    .request(updateItem('booking', bookingId, { confirmed: true, confirmed_by: user_id }))
-    .then((response) => {
-      console.log('response', response)
-    })
-    .catch((error) => {
-      console.log('error', error)
-    })
+  await client.request(updateItem('booking', bookingId, { confirmed: true, confirmed_by: user_id }))
 }
 
 const rejectRequest = async (bookingId) => {
