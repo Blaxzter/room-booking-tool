@@ -77,6 +77,7 @@ const router = createRouter({
       name: 'bookable-object',
       component: () => import('@/views/BookableObjectViewPublic.vue'),
       meta: {
+        publicView: true,
         hideVersion: true,
         bookableObjectView: true
       }

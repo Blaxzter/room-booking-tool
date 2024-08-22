@@ -2,6 +2,7 @@
 import { computed, ref, watch } from 'vue'
 import { createReusableTemplate, useMediaQuery } from '@vueuse/core'
 import { storeToRefs } from 'pinia'
+import { useRoute } from 'vue-router'
 
 // import icons
 import { CheckIcon, TrashIcon, LoaderIcon } from 'lucide-vue-next'
@@ -13,13 +14,13 @@ import { Textarea } from '@/components/ui/textarea'
 import { Label } from '@/components/ui/label'
 import { Input } from '@/components/ui/input'
 
-import { useUser } from '@/stores/user'
 import { useRequests } from '@/stores/requests'
-import type { Booking } from '@/types'
 import { useGroups } from '@/stores/groups'
+import type { BookableObject, Booking } from '@/types'
+import { useBookableObjects } from '@/stores/bookableObjects'
+
 const { approveRequest, rejectRequest } = useRequests()
 const { requestLoading } = storeToRefs(useRequests())
-const { user } = storeToRefs(useUser())
 
 // Reuse `form` section
 const [UseTemplate, GridForm] = createReusableTemplate()
@@ -46,6 +47,20 @@ const roleValue = computed(() => {
   return getUserRoleByBookableObject(undefined)
 })
 
+const roleRequiredForConfirmation = computed(() => {
+  const { selectedBookableObject } = storeToRefs(useBookableObjects())
+  if (!selectedBookableObject.value) return 4
+
+  switch (selectedBookableObject.value.confirm_role) {
+    case 'admin':
+      return 3
+    case 'member':
+      return 2
+    default:
+      return 4
+  }
+})
+
 const formattedTime = computed(() => {
   if (!props.event) return ''
   const startTime = new Date(props.event.start_date).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
@@ -54,7 +69,10 @@ const formattedTime = computed(() => {
 })
 
 const canConfirm = computed(() => {
-  return true
+  // check in route if meta.publicView is true -> return false
+  const route = useRoute()
+  if (route.meta.publicView) return false
+  return roleValue.value >= roleRequiredForConfirmation.value
 })
 
 const isConfirmed = ref(false)

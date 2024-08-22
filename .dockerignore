@@ -8,3 +8,6 @@ docker-compose*
 README.md
 LICENSE
 .vscode
+
+directus-extension/public/node_modules
+directus-extension/public/dist
