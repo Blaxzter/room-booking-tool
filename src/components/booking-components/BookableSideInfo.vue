@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { computed, type PropType, ref } from 'vue'
-import { PlusCircledIcon } from '@radix-icons/vue'
+import { PlusCircledIcon, CopyIcon } from '@radix-icons/vue'
+import { useRoute } from 'vue-router'
 
 import { Button } from '@/components/ui/button'
 
@@ -30,6 +31,18 @@ const imageHeight = computed(() => {
 })
 
 const openEventDialog = ref(false)
+
+const isPublicView = computed(() => {
+  const route = useRoute()
+  return route.meta.publicView
+})
+
+const copySharingLink = () => {
+  if (props.bookableObject) {
+    const url = `${window.location.origin}/${props.bookableObject.type}/${props.bookableObject.uniqueId}`
+    navigator.clipboard.writeText(url)
+  }
+}
 
 defineEmits(['createBookableObject'])
 </script>
@@ -65,10 +78,16 @@ defineEmits(['createBookableObject'])
       class="flex flex-row justify-end items-center flex-grow lg:items-start lg:flex-col lg:justify-stretch p-2 md:p-4 lg:p-6"
     >
       <div class="lg:flex-grow"></div>
-      <Button @click="openEventDialog = true" :size="topNav ? 'icon' : 'default'">
-        <PlusCircledIcon class="h-6 w-6 sm:h-4 sm:w-4" />
-        <span class="hidden sm:inline ms-2">Create Booking</span>
-      </Button>
+      <div class="flex flex-col gap-2 md:flex-row">
+        <Button @click="openEventDialog = true" :size="topNav ? 'icon' : 'default'">
+          <PlusCircledIcon class="h-6 w-6 sm:h-4 sm:w-4" />
+          <span class="hidden sm:inline ms-2">Create Booking</span>
+        </Button>
+        <Button @click="copySharingLink" variant="ghost" v-if="!isPublicView">
+          <CopyIcon class="h-6 w-6 sm:h-4 sm:w-4" />
+          <span class="hidden sm:inline ms-2">Copy Sharing Link</span>
+        </Button>
+      </div>
       <booking-request-wrapper v-model="openEventDialog" />
     </div>
   </div>

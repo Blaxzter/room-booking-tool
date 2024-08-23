@@ -116,9 +116,13 @@ watch(
       <div>
         <div class="flex gap-3">
           <h3 class="text-md font-semibold">Status:</h3>
-          <p :class="{ 'text-green-600': isConfirmed, 'text-red-600': !isConfirmed }">
-            {{ isConfirmed ? 'Confirmed' : 'Not Confirmed' }}
-          </p>
+          <div class="flex gap-1">
+            <p :class="{ 'text-green-600': isConfirmed, 'text-red-600': !isConfirmed }">
+              {{ isConfirmed ? 'Confirmed' : 'Not Confirmed' }}
+            </p>
+            <span class="text-muted-foreground"> by </span>
+            <span class="text-md font-semibold">{{ event.confirmed_by_name || event.confirmed_by?.display_name }}</span>
+          </div>
         </div>
         <div v-if="requestLoading" class="text-muted-foreground flex">
           <LoaderIcon class="w-4 h-4 me-2 text-muted-foreground animate-spin" />
@@ -136,11 +140,23 @@ watch(
         </div>
       </div>
       <div class="flex flex-col gap-2">
-        <h3 class="text-md font-semibold">Contact Information</h3>
-        <div v-if="event.mail || event.phone" class="ps-3 flex flex-col gap-2 border-l-2 -mt-2.5 pt-2.5">
-          <div class="grid w-full max-w-sm items-center gap-1.5" v-if="event.display_name">
-            <Label class="text-muted-foreground">Name:</Label>
-            <Input v-model="event.display_name" readonly />
+        <h3
+          class="text-md font-semibold"
+          v-if="event.mail || event.phone || event.display_name || event.booking_display_name"
+        >
+          Contact Information
+        </h3>
+        <div
+          v-if="event.mail || event.phone || event.display_name || event.booking_display_name"
+          class="ps-3 flex flex-col gap-2 border-l-2 -mt-2.5 pt-2.5"
+        >
+          <div
+            class="grid w-full max-w-sm items-center gap-1.5"
+            v-if="event.display_name || event.booking_display_name"
+          >
+            <Label class="text-muted-foreground">Title:</Label>
+            <Input v-model="event.display_name" v-if="event.display_name" readonly />
+            <Input v-model="event.booking_display_name" v-else readonly />
           </div>
           <div class="grid w-full max-w-sm items-center gap-1.5" v-if="event.mail">
             <Label class="text-muted-foreground">Email:</Label>
@@ -174,7 +190,7 @@ watch(
   </UseTemplate>
 
   <Dialog v-if="isDesktop" v-model:open="open">
-    <DialogContent class="sm:max-w-[425px]">
+    <DialogContent class="sm:max-w-[450px]">
       <DialogHeader>
         <DialogTitle>
           Event on the {{ formattedDate }}

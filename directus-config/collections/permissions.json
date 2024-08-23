@@ -1413,86 +1413,39 @@
   },
   {
     "role": null,
-    "collection": "bookable_object",
-    "action": "read",
-    "permissions": {
-      "_and": [
-        {
-          "is_internal": {
-            "_eq": false
-          }
-        }
-      ]
-    },
-    "validation": null,
-    "presets": null,
-    "fields": [
-      "name",
-      "description",
-      "location",
-      "tags",
-      "image",
-      "uniqueId",
-      "type",
-      "information_shared",
-      "confirm_booking_required"
-    ],
-    "_syncId": "d5aeac77-db3b-4e19-b93c-53b858ff1c3f"
-  },
-  {
-    "role": null,
-    "collection": "booking",
-    "action": "read",
-    "permissions": {
-      "_and": [
-        {
-          "bookable_object_id": {
-            "is_internal": {
-              "_eq": false
-            }
-          }
-        }
-      ]
-    },
-    "validation": null,
-    "presets": null,
-    "fields": [
-      "bookable_object_id",
-      "event_data",
-      "end_date",
-      "is_full_day",
-      "confirmation_data",
-      "confirmed_by",
-      "confirmed",
-      "description",
-      "display_name",
-      "start_date",
-      "status"
-    ],
-    "_syncId": "f8a519b9-270f-4979-af7c-afe39b4a0355"
-  },
-  {
-    "role": null,
     "collection": "directus_files",
     "action": "read",
     "permissions": {},
     "validation": {},
     "presets": null,
     "fields": [
-      "*"
+      "id",
+      "title",
+      "description",
+      "focal_point_divider",
+      "focal_point_x",
+      "focal_point_y",
+      "storage_divider",
+      "filename_download",
+      "type",
+      "filesize",
+      "modified_by",
+      "embed",
+      "folder",
+      "width",
+      "height",
+      "charset",
+      "duration",
+      "$thumbnail",
+      "filename_disk",
+      "metadata",
+      "location",
+      "storage",
+      "tags",
+      "uploaded_on",
+      "modified_on",
+      "uploaded_by"
     ],
     "_syncId": "93b0266b-59b4-47d7-8973-8fe6e08730c7"
-  },
-  {
-    "role": null,
-    "collection": "directus_users",
-    "action": "read",
-    "permissions": null,
-    "validation": null,
-    "presets": null,
-    "fields": [
-      "display_name"
-    ],
-    "_syncId": "cf9f6662-e555-43b6-b110-18ad77206287"
   }
 ]

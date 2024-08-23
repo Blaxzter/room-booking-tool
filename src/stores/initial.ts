@@ -8,6 +8,7 @@ import {
   type GetInitialDataQueryResponse,
   objectView,
   type ObjectViewResponse,
+  type PublicObjectViewResponse,
   requestViewQuery,
   type RequestViewResponse,
   settingsViewQuery,
@@ -23,6 +24,8 @@ import _ from 'lodash'
 import { useToast } from '@/components/ui/toast/use-toast'
 import { useNotificationSetting } from '@/stores/notificationSettings'
 import type { Group } from '@/types'
+import axios from 'axios'
+import type { AxiosResponse } from 'axios'
 
 export const useInitialDataStore = defineStore('initial', () => {
   const { toast } = useToast()
@@ -70,6 +73,28 @@ export const useInitialDataStore = defineStore('initial', () => {
     } catch (error) {
       console.error(error)
     }
+    init_loading.value = false
+  }
+
+  const fetchPublicObjectViewData = async ({ bookable_object_id }: { bookable_object_id: string }) => {
+    init_loading.value = true
+
+    await axios
+      .get(`${import.meta.env.VITE_BACKEND_URL}/public/${bookable_object_id}`)
+      .then(async (res: AxiosResponse<PublicObjectViewResponse>) => {
+        selectBookableObject(res.data.bookableObject)
+        addBookableObject(res.data.bookableObject)
+        console.log(bookable_object_id, res.data.bookings)
+        setBookings(bookable_object_id, res.data.bookings)
+      })
+      .catch((error) => {
+        toast({
+          title: 'Error',
+          description: 'No bookable object found'
+        })
+        throw new Error('No bookable object found')
+      })
+
     init_loading.value = false
   }
 
@@ -153,6 +178,7 @@ export const useInitialDataStore = defineStore('initial', () => {
     fetchSettingsViewData,
     fetchDashboardViewData,
     fetchObjectViewData,
+    fetchPublicObjectViewData,
     fetchRequestViewData,
     fetchGroupData,
     reset

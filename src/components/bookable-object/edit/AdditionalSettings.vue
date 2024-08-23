@@ -109,7 +109,7 @@ defineExpose({ getValues, validate, upload })
     <FormField v-slot="{ componentField }" name="object_type">
       <FormItem>
         <FormLabel>Choose type of <NameFade :messages="bookableObjectRandoms" /></FormLabel>
-        <Select v-bind="componentField" @update:modelValue="$emit('update', 'object_type', values.object_type)">
+        <Select v-bind="componentField" @update:modelValue="$emit('update', 'type', values.object_type)">
           <FormControl>
             <SelectTrigger>
               <SelectValue />

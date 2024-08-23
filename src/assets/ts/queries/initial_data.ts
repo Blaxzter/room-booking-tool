@@ -114,6 +114,11 @@ export interface ObjectViewResponse {
   bookable_object: BookableObject[]
 }
 
+export interface PublicObjectViewResponse {
+  bookings: Booking[]
+  bookableObject: BookableObject
+}
+
 export interface GetGroupsQueryResponse {
   group: Group[]
   bookable_object?: BookableObject[]

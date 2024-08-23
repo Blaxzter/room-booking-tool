@@ -84,7 +84,7 @@ onMounted(() => {
         <h3 class="font-medium leading-none">
           {{ bookableObject.name }}
         </h3>
-        <p class="text-xs text-muted-foreground">
+        <p class="text-xs text-muted-foreground line-clamp-3">
           {{ bookableObject.description }}
         </p>
       </div>

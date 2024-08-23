@@ -16,6 +16,8 @@ export type Booking = {
   end_date: string
   is_full_day: boolean
   display_name?: string
+  booking_display_name?: string
+  confirmed_by_name?: string
   mail: string
   phone: string
   description: string

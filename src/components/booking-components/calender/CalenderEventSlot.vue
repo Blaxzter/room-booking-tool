@@ -4,7 +4,7 @@ import { storeToRefs } from 'pinia'
 import { cn } from '@/lib/utils'
 import { breakpointsTailwind, useBreakpoints } from '@vueuse/core'
 
-import { PencilIcon } from 'lucide-vue-next'
+import { PencilIcon, HistoryIcon } from 'lucide-vue-next'
 import { useToast } from '@/components/ui/toast'
 
 import ConfirmationIcon from '@/components/booking-components/calender/ConfirmationIcon.vue'
@@ -24,7 +24,8 @@ const canEdit = ref(false)
 const eventClick = (arg: any) => {
   const canPossiblyEdit = userHasCreatedBooking(arg.event.booking_id)
   // TODO if user is null but canPossiblyEdit is true -> get remaing stuff in the future
-  if (user.value === null || Object.keys(user.value).length === 0) {
+  console.log(arg)
+  if (user.value === null || Object.keys(user.value).length === 0 || arg.isPast) {
     toast({
       title: 'Event Daten',
       description: `Event: ${arg.event.title} \n Datum: ${arg.event.start} \n Bestätigt: ${
@@ -86,12 +87,18 @@ onMounted(() => {
           class="decoration-0 cursor-pointer fc-event-resizable fc-daygrid-event lg:mx-0.5 lg:py-0.5 flex items-center"
           :class="[arg.isPast && 'fc-event-past', !confirmed && 'text-muted-foreground', mobile && 'event-mobile']"
         >
-          <div class="fc-daygrid-event-dot" :class="[confirmed && 'confirmed']" v-if="!mobile"></div>
+          <div
+            class="fc-daygrid-event-dot"
+            :class="[confirmed && 'confirmed', !confirmed && 'not-confirmed']"
+            v-if="!mobile"
+          ></div>
           <div class="overflow-hidden flex-shrink overflow-ellipsis">{{ arg.event.title }}</div>
           <div class="flex-grow" />
-          <div class="me-[1px]" v-if="!mobile">
-            <ConfirmationIcon :confirmed="confirmed" />
-          </div>
+          <template v-if="!arg.isPast">
+            <div class="me-[1px]" v-if="!mobile">
+              <ConfirmationIcon :confirmed="confirmed" />
+            </div>
+          </template>
         </a>
       </div>
     </template>
@@ -106,9 +113,10 @@ onMounted(() => {
             <div class="ms-0.5">
               {{ arg.event.title }}
             </div>
+            <div v-if="arg.isPast">Past Event</div>
             <div class="flex-grow" />
             <template v-if="!arg.isPast">
-              <TooltipProvider>
+              <TooltipProvider v-if="false">
                 <Tooltip>
                   <TooltipTrigger>
                     <PencilIcon :size="mobile ? 15 : 20" class="me-2" />
@@ -119,13 +127,13 @@ onMounted(() => {
                 </Tooltip>
               </TooltipProvider>
 
-              <ConfirmationIcon :confirmed="confirmed" :size="mobile ? 15 : 20" />
+              <ConfirmationIcon :confirmed="confirmed" :size="mobile ? 15 : 20" class="me-3" />
             </template>
           </div>
         </a>
       </div>
       <div v-else>
-        <div class="flex">
+        <div class="flex pe-2">
           <div>
             <div>
               {{ arg.timeText }}
@@ -134,7 +142,7 @@ onMounted(() => {
           </div>
           <div class="flex-grow" />
           <template v-if="!arg.isPast">
-            <TooltipProvider>
+            <TooltipProvider v-if="false">
               <Tooltip>
                 <TooltipTrigger>
                   <PencilIcon :size="mobile ? 15 : 20" class="me-2" />
@@ -146,6 +154,18 @@ onMounted(() => {
             </TooltipProvider>
 
             <ConfirmationIcon :confirmed="confirmed" :size="mobile ? 15 : 20" />
+          </template>
+          <template v-else>
+            <TooltipProvider>
+              <Tooltip>
+                <TooltipTrigger>
+                  <HistoryIcon :size="mobile ? 15 : 20" />
+                </TooltipTrigger>
+                <TooltipContent>
+                  <p>This event is in the past</p>
+                </TooltipContent>
+              </Tooltip>
+            </TooltipProvider>
           </template>
         </div>
       </div>
@@ -257,6 +277,10 @@ onMounted(() => {
     background: hsl(var(--success));
   }
 
+  &.not-confirmed {
+    background: hsl(var(--destructive));
+  }
+
   @media (max-width: 768px) {
     display: none;
   }
@@ -277,6 +301,11 @@ onMounted(() => {
 
   &:hover {
     filter: brightness(95%);
+  }
+
+  &.fc-event-past {
+    // make it a bit transparent
+    filter: brightness(50%);
   }
 }
 

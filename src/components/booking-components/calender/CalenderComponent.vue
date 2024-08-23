@@ -57,14 +57,24 @@ const bookingToEvent = ({ booking, editable = false }: { booking: Booking; edita
     start_date = booking.start_date.split('T')[0]
     end_date = booking.end_date.split('T')[0]
   }
+  const start_time = dayjs(booking.start_date).format('HH:mm')
+  const end_time = dayjs(booking.end_date).format('HH:mm')
+  // get date representation dd mm or mm/dd depending on locale date time
+  const date = dayjs(booking.start_date).format('DD.MM')
+
+  // create a alternative name: "Event: 2024-07-18 10:00 - 12:00"
+  const title = `Event: ${date} ${start_time} - ${end_time}`
+
+  console.log(booking)
 
   return {
     ...booking,
     booking_id: booking.id,
-    title: booking.display_name || 'New Event',
+    title: booking.display_name || booking.booking_display_name || title,
     start: start_date,
     end: end_date,
     confirmed: booking.confirmed,
+
     // editable stuff,
     editable: editable,
     startEditable: editable,

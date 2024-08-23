@@ -13,7 +13,7 @@ import CalenderLoader from '@/components/animations/CalenderLoader.vue'
 
 // store refs
 const route = useRoute()
-const { fetchObjectViewData } = useInitialDataStore()
+const { fetchPublicObjectViewData } = useInitialDataStore()
 const { selectedBookableObject } = storeToRefs(useBookableObjects())
 const { init_loading } = storeToRefs(useInitialDataStore())
 
@@ -21,11 +21,8 @@ const { init_loading } = storeToRefs(useInitialDataStore())
 const bookableObjectId = route.params.id
 
 onMounted(async () => {
-  await fetchObjectViewData({
-    bookable_object_id: bookableObjectId as string,
-    isUniqueId: true,
-    select: true,
-    publicView: true
+  await fetchPublicObjectViewData({
+    bookable_object_id: bookableObjectId as string
   })
 })
 </script>
