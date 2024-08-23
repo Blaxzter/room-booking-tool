@@ -79,8 +79,12 @@ export const useInitialDataStore = defineStore('initial', () => {
   const fetchPublicObjectViewData = async ({ bookable_object_id }: { bookable_object_id: string }) => {
     init_loading.value = true
 
+    const backendUrl = import.meta.env.VITE_BACKEND_URL
+      ? import.meta.env.VITE_BACKEND_URL
+      : `https://api.${window.location.host}`
+
     await axios
-      .get(`${import.meta.env.VITE_BACKEND_URL}/public/${bookable_object_id}`)
+      .get(`${backendUrl}/public/${bookable_object_id}`)
       .then(async (res: AxiosResponse<PublicObjectViewResponse>) => {
         selectBookableObject(res.data.bookableObject)
         addBookableObject(res.data.bookableObject)
