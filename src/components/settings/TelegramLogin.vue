@@ -1,5 +1,5 @@
 <template>
-  <div class="flex justify-between">
+  <div class="flex flex-col gap-3 sm:flex-row sm:gap-0 justify-between">
     <div>
       <div class="text-xl font-bold mb-2">Telegram</div>
       <div class="text-muted-foreground">Link your Telegram account to receive notifications</div>

@@ -78,7 +78,7 @@ defineEmits(['createBookableObject'])
       class="flex flex-row justify-end items-center flex-grow lg:items-start lg:flex-col lg:justify-stretch p-2 md:p-4 lg:p-6"
     >
       <div class="lg:flex-grow"></div>
-      <div class="flex flex-col gap-2 md:flex-row">
+      <div class="flex gap-2 flex-row">
         <Button @click="openEventDialog = true" :size="topNav ? 'icon' : 'default'">
           <PlusCircledIcon class="h-6 w-6 sm:h-4 sm:w-4" />
           <span class="hidden sm:inline ms-2">Create Booking</span>
