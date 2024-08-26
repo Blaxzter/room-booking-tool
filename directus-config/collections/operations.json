@@ -14,6 +14,23 @@
     "_syncId": "0ca58843-9dd6-4a3d-a84b-5c0838688d0f"
   },
   {
+    "name": "Read Bookable Object",
+    "key": "bookable_object",
+    "type": "item-read",
+    "position_x": 20,
+    "position_y": 1,
+    "options": {
+      "collection": "bookable_object",
+      "query": null,
+      "permissions": "$full",
+      "key": "{{$trigger.payload.bookable_object_id}}"
+    },
+    "resolve": "9f597ac7-a21f-45c6-a52a-9d9edee5e252",
+    "reject": null,
+    "flow": "a52be475-3045-450e-b763-0acb11b45451",
+    "_syncId": "45216128-382b-4525-954a-ea13fedc0c26"
+  },
+  {
     "name": "Bookable Object Notification Settings",
     "key": "bookable_object_notification_setting",
     "type": "item-read",
@@ -46,11 +63,31 @@
     "_syncId": "bf2da71b-a3d6-4ddd-b45d-d46247efb4fd"
   },
   {
+    "name": "Condition",
+    "key": "condition_86e4q",
+    "type": "condition",
+    "position_x": 38,
+    "position_y": 1,
+    "options": {
+      "filter": {
+        "bookable_object": {
+          "confirm_booking_required": {
+            "_eq": true
+          }
+        }
+      }
+    },
+    "resolve": "bba0af9d-0da9-4f6e-8bd0-88ec6785d5b9",
+    "reject": null,
+    "flow": "a52be475-3045-450e-b763-0acb11b45451",
+    "_syncId": "9f597ac7-a21f-45c6-a52a-9d9edee5e252"
+  },
+  {
     "name": "create random string",
     "key": "create_random_string",
     "type": "exec",
-    "position_x": 22,
-    "position_y": 8,
+    "position_x": 19,
+    "position_y": 1,
     "options": {
       "code": "module.exports = async function(data) {\n\tlet result = '';\n    const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';\n    const charactersLength = characters.length;\n    let counter = 0;\n    while (counter < 15) {\n      result += characters.charAt(Math.floor(Math.random() * charactersLength));\n      counter += 1;\n    }\n\treturn {\n    \t\"randomString\": result\n    };\n}"
     },
@@ -103,7 +140,7 @@
     "name": "Prepare Email Data",
     "key": "email_data",
     "type": "transform",
-    "position_x": 3,
+    "position_x": 20,
     "position_y": 20,
     "options": {
       "json": {
@@ -197,7 +234,7 @@
     "name": "Run Script",
     "key": "exec_804y2",
     "type": "exec",
-    "position_x": 21,
+    "position_x": 39,
     "position_y": 20,
     "options": {
       "code": "module.exports = async function(data) {\n  const ret_array = []\n  data?.relevant_user_data?.map(user => {\n    ret_array.push({\n      subject: \"New Booking Request\",\n      target: user.email,\n      owner_id: user.id,\n      template: 'request',\n      data: data.email_data\n    })\n  })\n\n  // if ret_array is empty throw error\n  if (ret_array.length === 0) {\n    throw new Error('No email address found to send email')\n  }\n\n  return ret_array;\n}\n"
@@ -679,8 +716,8 @@
     "name": "Update Data",
     "key": "item_update_bg87p",
     "type": "item-update",
-    "position_x": 23,
-    "position_y": 24,
+    "position_x": 37,
+    "position_y": 1,
     "options": {
       "permissions": "$full",
       "collection": "bookable_object",
@@ -716,20 +753,6 @@
     "reject": null,
     "flow": "5fa12d68-e299-48ad-8120-3b1027cc48f0",
     "_syncId": "7a27e114-4a19-428e-a795-96b495f58f91"
-  },
-  {
-    "name": "Log to Console",
-    "key": "log_edne5",
-    "type": "log",
-    "position_x": 48,
-    "position_y": 14,
-    "options": {
-      "message": "{{ $last.randomString }}"
-    },
-    "resolve": null,
-    "reject": null,
-    "flow": "0c5d8064-2bf3-4284-b88b-23eeac843879",
-    "_syncId": "d3b708dd-9828-4410-aacd-bd99541c33b2"
   },
   {
     "name": "Log to Console",
@@ -854,8 +877,8 @@
     "name": "Read Bookable Object",
     "key": "read_bookable_object",
     "type": "item-read",
-    "position_x": 37,
-    "position_y": 1,
+    "position_x": 3,
+    "position_y": 20,
     "options": {
       "permissions": "$full",
       "collection": "bookable_object",
@@ -949,7 +972,7 @@
     "name": "Trigger Flow",
     "key": "relevant_user_data",
     "type": "trigger",
-    "position_x": 19,
+    "position_x": 57,
     "position_y": 1,
     "options": {
       "flow": "77f42aee-c6f7-4b12-9dc5-fb62b9f17bfb",
@@ -1062,7 +1085,7 @@
     "name": "Send emails",
     "key": "send_emails",
     "type": "trigger",
-    "position_x": 39,
+    "position_x": 57,
     "position_y": 20,
     "options": {
       "flow": "c839f261-5b75-4242-9410-d18ec39be9cf",

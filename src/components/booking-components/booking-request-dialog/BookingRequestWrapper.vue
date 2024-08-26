@@ -1,15 +1,18 @@
 <script setup lang="ts">
 import { defineEmits, ref, watch } from 'vue'
-import { Button } from '@/components/ui/button'
+import { createReusableTemplate, useMediaQuery } from '@vueuse/core'
+import type { CreateBookingRequest } from '@/assets/ts/queries/bookings'
+
 import { Dialog, DialogContent, DialogFooter, DialogHeader, DialogTitle } from '@/components/ui/dialog'
+import { Drawer, DrawerContent, DrawerDescription, DrawerHeader, DrawerTitle } from '@/components/ui/drawer'
+import { Button } from '@/components/ui/button'
+
 import StepperComponent from '@/components/utils/StepperComponent.vue'
 import ContactData from '@/components/booking-components/booking-request-dialog/ContactData.vue'
 import EventData from '@/components/booking-components/booking-request-dialog/EventData.vue'
 import TimeData from '@/components/booking-components/booking-request-dialog/TimeData.vue'
+
 import { useBookings } from '@/stores/booking'
-import type { CreateBookingRequest } from '@/assets/ts/queries/bookings'
-import { Drawer, DrawerContent, DrawerDescription, DrawerHeader, DrawerTitle } from '@/components/ui/drawer'
-import { createReusableTemplate, useMediaQuery } from '@vueuse/core'
 
 const activeStep = ref(0)
 const steps = ['Time', 'Contact', 'Event']

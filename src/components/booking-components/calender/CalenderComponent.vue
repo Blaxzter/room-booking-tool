@@ -215,6 +215,7 @@ const isToday = computed(() => {
 const styleProps = computed(() => {
   return `--top-padding: ${props.topPadding}px`
 })
+
 onMounted(() => {
   currentDateString.value = fullCalenderData().viewTitle
   selectedDay.value = dayjs(fullCalenderData().currentDate)

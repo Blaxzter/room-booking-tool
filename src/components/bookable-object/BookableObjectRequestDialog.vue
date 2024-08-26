@@ -1,11 +1,20 @@
 <script setup lang="ts">
-import { PlusCircledIcon } from '@radix-icons/vue'
+import { ref } from 'vue'
+import { PlusCircledIcon, ChevronRightIcon, ChevronLeftIcon, RocketIcon } from '@radix-icons/vue'
+import { createReusableTemplate, useMediaQuery } from '@vueuse/core'
 
-import NameFade from '@/components/utils/NameFade.vue'
+import { Dialog, DialogContent, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog'
+import {
+  Drawer,
+  DrawerContent,
+  DrawerDescription,
+  DrawerHeader,
+  DrawerTitle,
+  DrawerTrigger
+} from '@/components/ui/drawer'
 
 import { Button } from '@/components/ui/button'
-import { Dialog, DialogContent, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog'
-
+import NameFade from '@/components/utils/NameFade.vue'
 import StepperComponent from '@/components/utils/StepperComponent.vue'
 import DefaultSettings from '@/components/bookable-object/edit/DefaultSettings.vue'
 import AccessSettings from '@/components/bookable-object/edit/AccessSettings.vue'
@@ -13,8 +22,6 @@ import AdditionalSettings from '@/components/bookable-object/edit/AdditionalSett
 
 import { bookableObjectRandomsSingular } from '@/assets/ts/constants'
 import { useBookableObjects } from '@/stores/bookableObjects'
-
-import { ref } from 'vue'
 
 const activeStep = ref(0)
 const steps = ['Basic Info', 'Permissions', 'Additional']
@@ -71,10 +78,62 @@ const nextStep = async () => {
     }
   }
 }
+
+const [UseTemplate, GridForm] = createReusableTemplate()
+const isDesktop = useMediaQuery('(min-width: 768px)')
 </script>
 
 <template>
-  <Dialog v-model:open="open">
+  <UseTemplate>
+    <StepperComponent v-model="activeStep" :steps="steps">
+      <template v-slot:step-0>
+        <DefaultSettings ref="defaultSettings" :initial-values="steptoValues[0]">
+          <template v-slot:footer>
+            <DialogFooter>
+              <Button @click="nextStep" type="button">
+                Next
+                <ChevronRightIcon class="h-4 w-4 ms-1" />
+              </Button>
+            </DialogFooter>
+          </template>
+        </DefaultSettings>
+      </template>
+      <template v-slot:step-1>
+        <AccessSettings ref="accessSettings" :initial-values="steptoValues[1]">
+          <template v-slot:footer>
+            <div class="flex gap-2">
+              <Button @click="activeStep--" type="button" class="flex-grow">
+                <ChevronLeftIcon class="h-4 w-4 me-1" />
+                Back
+              </Button>
+              <Button @click="nextStep" type="button" class="flex-grow">
+                Next
+                <ChevronRightIcon class="h-4 w-4 ms-1" />
+              </Button>
+            </div>
+          </template>
+        </AccessSettings>
+      </template>
+      <template v-slot:step-2>
+        <AdditionalSettings ref="additionalSettings" :initial-values="steptoValues[2]">
+          <template v-slot:footer>
+            <div class="flex gap-2">
+              <Button @click="activeStep--" type="button" class="flex-grow">
+                <ChevronLeftIcon class="h-4 w-4 me-1" />
+                Back
+              </Button>
+              <Button @click="nextStep" type="button" class="flex-grow">
+                Create
+                <RocketIcon class="h-4 w-4 ms-1" />
+              </Button>
+            </div>
+          </template>
+        </AdditionalSettings>
+      </template>
+    </StepperComponent>
+  </UseTemplate>
+
+  <Dialog v-model:open="open" v-if="isDesktop">
     <DialogTrigger>
       <Button class="hidden sm:flex">
         <PlusCircledIcon class="mr-2 h-4 w-4" />
@@ -91,37 +150,24 @@ const nextStep = async () => {
           <NameFade :messages="bookableObjectRandomsSingular" />
         </DialogTitle>
       </DialogHeader>
-      <StepperComponent v-model="activeStep" :steps="steps">
-        <template v-slot:step-0>
-          <DefaultSettings ref="defaultSettings" :initial-values="steptoValues[0]">
-            <template v-slot:footer>
-              <DialogFooter>
-                <Button @click="nextStep" type="button"> Next</Button>
-              </DialogFooter>
-            </template>
-          </DefaultSettings>
-        </template>
-        <template v-slot:step-1>
-          <AccessSettings ref="accessSettings" :initial-values="steptoValues[1]">
-            <template v-slot:footer>
-              <DialogFooter>
-                <Button @click="activeStep--" type="button"> Back</Button>
-                <Button @click="nextStep" type="button"> Next</Button>
-              </DialogFooter>
-            </template>
-          </AccessSettings>
-        </template>
-        <template v-slot:step-2>
-          <AdditionalSettings ref="additionalSettings" :initial-values="steptoValues[2]">
-            <template v-slot:footer>
-              <DialogFooter>
-                <Button @click="activeStep--" type="button"> Back</Button>
-                <Button @click="nextStep" type="button">Create</Button>
-              </DialogFooter>
-            </template>
-          </AdditionalSettings>
-        </template>
-      </StepperComponent>
+      <GridForm />
     </DialogContent>
   </Dialog>
+
+  <Drawer v-else v-model:open="open">
+    <DrawerTrigger>
+      <Button class="fixed bottom-0 right-0 m-3 h-14 w-14 rounded-2xl z-10" variant="default">
+        <PlusCircledIcon class="w-6 h-6" />
+      </Button>
+    </DrawerTrigger>
+    <DrawerContent class="max-h-screen">
+      <DrawerHeader class="text-left">
+        <DrawerTitle>Edit profile</DrawerTitle>
+        <DrawerDescription> Make changes to your profile here. Click save when you're done. </DrawerDescription>
+      </DrawerHeader>
+      <div class="p-4 max-h-[60%] overflow-y-auto">
+        <GridForm />
+      </div>
+    </DrawerContent>
+  </Drawer>
 </template>

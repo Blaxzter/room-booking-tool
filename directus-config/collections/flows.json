@@ -17,7 +17,7 @@
     "name": "Button Create Unique ID",
     "icon": "stylus_laser_pointer",
     "color": null,
-    "description": null,
+    "description": "Manually change Unique ID on Bookable Objects",
     "status": "active",
     "trigger": "manual",
     "accountability": "all",
@@ -30,6 +30,27 @@
     },
     "operation": "2656a256-78dd-40f6-9c90-1719cf7fc81f",
     "_syncId": "0c5d8064-2bf3-4284-b88b-23eeac843879"
+  },
+  {
+    "name": "ConfirmDenyChecks",
+    "icon": "bolt",
+    "color": null,
+    "description": "If a user tries to confirm or deny a booking we need to check if the user has the right role",
+    "status": "active",
+    "trigger": "event",
+    "accountability": "all",
+    "options": {
+      "type": "filter",
+      "scope": [
+        "items.update"
+      ],
+      "collections": [
+        "booking"
+      ],
+      "return": "$all"
+    },
+    "operation": null,
+    "_syncId": "1014e550-527c-4df1-b236-b332ea554308"
   },
   {
     "name": "Send Telegram Message Flow",
@@ -214,7 +235,7 @@
         "booking"
       ]
     },
-    "operation": "bba0af9d-0da9-4f6e-8bd0-88ec6785d5b9",
+    "operation": "45216128-382b-4525-954a-ea13fedc0c26",
     "_syncId": "a52be475-3045-450e-b763-0acb11b45451"
   },
   {

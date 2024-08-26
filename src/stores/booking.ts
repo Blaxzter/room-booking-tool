@@ -65,8 +65,14 @@ export const useBookings = defineStore('bookings', () => {
     if (!selectedBookableObject.value) {
       throw new Error('No bookable object selected')
     }
+
+    if (!selectedBookableObject.value.confirm_booking_required) {
+      booking.confirmed = true
+    }
+
     booking.bookable_object_id = `${selectedBookableObject.value.id}`
     booking.secret_edit_key = uuidv4()
+
     const result = await client.request(createItem('booking', booking))
 
     // Add the secret edit key to the local user store to allow editing of unlogged in users

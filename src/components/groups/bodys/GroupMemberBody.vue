@@ -3,6 +3,7 @@ import { ref, computed, inject } from 'vue'
 import { storeToRefs } from 'pinia'
 import { SendIcon, TrashIcon } from 'lucide-vue-next'
 import _ from 'lodash'
+import { createReusableTemplate, useMediaQuery } from '@vueuse/core'
 
 import type { Group, GroupDirectusUser, GroupInvite, User } from '@/types'
 
@@ -150,15 +151,24 @@ const deleteUser = async (user: GroupDirectusUser) => {
     onConfirmText: 'Delete'
   })
 }
+
+const [UseTemplate, GridForm] = createReusableTemplate()
+const isDesktop = useMediaQuery('(min-width: 768px)')
 </script>
 
 <template>
   <div class="grid gap-6">
-    <div class="flex items-center justify-between space-x-4" v-if="!isDisabled">
+    <div class="flex flex-col gap-2 items-stretch md:justify-between md:flex-row" v-if="!isDisabled">
       <Input type="email" placeholder="Enter email to invite" v-model="inviteEmail" />
-      <GroupRoleDropDown v-model:role="inviteRole" />
-      <Button variant="secondary" size="icon" class="flex-shrink-0" @click="sendInvite">
-        <SendIcon class="h-5 w-5" />
+      <GroupRoleDropDown v-model:role="inviteRole" class="flex-grow" />
+      <Button
+        variant="secondary"
+        :size="isDesktop ? 'icon' : 'default'"
+        class="flex-shrink-0 flex-grow"
+        @click="sendInvite"
+      >
+        <span class="inline md:hidden">Send invite</span>
+        <SendIcon class="h-5 w-5 ms-2 md:ms-0" />
       </Button>
     </div>
     <div v-if="users.length !== 0">

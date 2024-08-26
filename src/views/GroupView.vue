@@ -4,6 +4,7 @@ import { storeToRefs } from 'pinia'
 import { PlusCircledIcon } from '@radix-icons/vue'
 import { TrashIcon, ArrowLeftIcon } from 'lucide-vue-next'
 import _ from 'lodash'
+import { createReusableTemplate, useMediaQuery } from '@vueuse/core'
 
 import type { Group, User } from '@/types'
 
@@ -24,6 +25,7 @@ import { useGroups } from '@/stores/groups'
 import { useUser } from '@/stores/user'
 
 import { Dialog } from '@/components/ui/dialog'
+import { Drawer } from '@/components/ui/drawer'
 import type { ShowAlertFunction } from '@/plugins/alert-dialog-plugin'
 import { breakpointsTailwind, useBreakpoints } from '@vueuse/core'
 
@@ -95,6 +97,7 @@ const ownerEmail = computed(() => {
 
 const breakpoints = useBreakpoints(breakpointsTailwind)
 const mobile = breakpoints.smallerOrEqual('lg')
+const isDesktop = useMediaQuery('(min-width: 768px)')
 const groupViewOpen = ref(false)
 </script>
 
@@ -162,10 +165,25 @@ const groupViewOpen = ref(false)
       </div>
     </template>
   </div>
-  <Dialog v-model:open="showDialog">
-    <NewGroupDialog @close="showDialog = false" v-if="dialogType === 'create-group'" @created="created" />
+
+  <Dialog v-model:open="showDialog" v-if="isDesktop || dialogType === 'edit-group'">
+    <NewGroupDialog
+      @close="showDialog = false"
+      v-if="dialogType === 'create-group'"
+      @created="created"
+      :show-dialog="true"
+    />
     <GroupEditDialog @close="showDialog = false" v-if="dialogType === 'edit-group'" :group="selectedEditGroup" />
   </Dialog>
+
+  <Drawer v-model:open="showDialog" v-else>
+    <NewGroupDialog
+      @close="showDialog = false"
+      v-if="dialogType === 'create-group'"
+      @created="created"
+      :show-dialog="false"
+    />
+  </Drawer>
 </template>
 
 <style scoped></style>

@@ -38,7 +38,7 @@ const roles = [
   </div>
   <Popover v-model:open="open" class="relative" v-else>
     <PopoverTrigger as-child>
-      <Button variant="outline" class="ml-auto">
+      <Button variant="outline">
         {{ localRole.charAt(0).toUpperCase() + localRole.slice(1) }}
         <ChevronDownIcon class="ml-2 h-4 w-4 text-muted-foreground" />
       </Button>
