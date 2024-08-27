@@ -1,4 +1,4 @@
-# Room Booking Tool
+# 📅 Room Booking Tool
 
 ## Docker Setup
 
