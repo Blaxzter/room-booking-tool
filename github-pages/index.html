@@ -1,35 +1,79 @@
-<!DOCTYPE html>
-<html lang='en'>
+<html>
+
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Room Booking Tool - Visualization</title>
-    <script src='https://cdnjs.cloudflare.com/ajax/libs/mermaid/11.0.2/mermaid.min.js'></script>
+  <style type="text/css">
+    #mySvgId {
+      height: 90%;
+      width: 100%;
+    }
+  </style>
 </head>
 
 <body>
-    <h1>Room Booking Tool - Graph Visualization</h1>
+  <div id="graphDiv"></div>
+  <script src="https://bumbu.me/svg-pan-zoom/dist/svg-pan-zoom.min.js"></script>
+  <script type="module">
+    import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs';
+    mermaid.initialize({ startOnLoad: false });
 
-    <pre><code class='language-mermaid'>graph LR
-    A--&gt;B
-    </code></pre>
+    const drawDiagram = async function () {
+      const element = document.querySelector('#graphDiv');
+      const graphDefinition = `
+flowchart LR
+a(mermaid) --> b(flowchart) --> c(flowchart) --> d(flowchart) --> e(flowchart) --> f(flowchart)
+        `;
+      const { svg } = await mermaid.render('mySvgId', graphDefinition);
+      element.innerHTML = svg.replace(/( )*max-width:( 0-9\.)*px;/i, '');
 
-    <div class='mermaid'>graph LR
-        A--&gt;B
-    </div>
+      var doPan = false;
+      var eventsHandler;
+      var panZoom;
+      var mousepos;
 
-</body>
-<script>
-    var config = {
-        startOnLoad: true,
-        theme: 'forest',
-        flowchart: {
-            useMaxWidth: false,
-            htmlLabels: true
+      eventsHandler = {
+        haltEventListeners: ['mousedown', 'mousemove', 'mouseup']
+
+        , mouseDownHandler: function (ev) {
+          if (event.target.className == "[object SVGAnimatedString]") {
+            doPan = true;
+            mousepos = { x: ev.clientX, y: ev.clientY }
+          };
         }
-    }
-    mermaid.initialize(config)
-    window.mermaid.init(undefined, document.querySelectorAll('.language-mermaid'))
-</script>
+
+        , mouseMoveHandler: function (ev) {
+          if (doPan) {
+            panZoom.panBy({ x: ev.clientX - mousepos.x, y: ev.clientY - mousepos.y });
+            mousepos = { x: ev.clientX, y: ev.clientY };
+            window.getSelection().removeAllRanges();
+          }
+        }
+
+        , mouseUpHandler: function (ev) {
+          doPan = false;
+        }
+
+        , init: function (options) {
+          options.svgElement.addEventListener('mousedown', this.mouseDownHandler, false);
+          options.svgElement.addEventListener('mousemove', this.mouseMoveHandler, false);
+          options.svgElement.addEventListener('mouseup', this.mouseUpHandler, false);
+        }
+
+        , destroy: function (options) {
+          options.svgElement.removeEventListener('mousedown', this.mouseDownHandler, false);
+          options.svgElement.removeEventListener('mousemove', this.mouseMoveHandler, false);
+          options.svgElement.removeEventListener('mouseup', this.mouseUpHandler, false);
+        }
+      }
+      panZoom = svgPanZoom('#mySvgId', {
+        zoomEnabled: true
+        , controlIconsEnabled: true
+        , fit: 1
+        , center: 1
+        , customEventsHandler: eventsHandler
+      })
+    };
+    await drawDiagram();
+  </script>
+</body>
 
 </html>
