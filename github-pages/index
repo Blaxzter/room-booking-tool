@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang='en'>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Room Booking Tool - Visualization</title>
+    <script src='https://cdnjs.cloudflare.com/ajax/libs/mermaid/11.0.2/mermaid.min.js'></script>
+</head>
+
+<body>
+    <h1>Room Booking Tool - Graph Visualization</h1>
+
+    <pre><code class='language-mermaid'>graph LR
+    A--&gt;B
+    </code></pre>
+
+    <div class='mermaid'>graph LR
+        A--&gt;B
+    </div>
+
+</body>
+<script>
+    var config = {
+        startOnLoad: true,
+        theme: 'forest',
+        flowchart: {
+            useMaxWidth: false,
+            htmlLabels: true
+        }
+    }
+    mermaid.initialize(config)
+    window.mermaid.init(undefined, document.querySelectorAll('.language-mermaid'))
+</script>
+
+</html>
