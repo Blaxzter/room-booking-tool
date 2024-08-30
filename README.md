@@ -5,7 +5,7 @@
 ![Docker Pulls](https://img.shields.io/docker/pulls/blaxzter/bookitool-frontend)
 ![Docker Image Size (latest by date)](https://img.shields.io/docker/image-size/blaxzter/bookitool-frontend?sort=date)
   
-[!["Buy Me A Coffee"](https://www.buymeacoffee.com/assets/img/custom_images/orange_img.png)](buymeacoffee.com/fabraham)
+[!["Buy Me A Coffee"](https://www.buymeacoffee.com/assets/img/custom_images/orange_img.png)](https://buymeacoffee.com/fabraham)
 
 
 ![Booki Tool Dashboard Image](https://github.com/Blaxzter/room-booking-tool/blob/main/github-pages/bookitool-dashboard.png?raw=true)
