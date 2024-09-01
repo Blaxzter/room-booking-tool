@@ -4,6 +4,8 @@
 ![Frontend Docker Image Version](https://img.shields.io/docker/v/blaxzter/bookitool-frontend?sort=date)
 ![Docker Pulls](https://img.shields.io/docker/pulls/blaxzter/bookitool-frontend)
 ![Docker Image Size (latest by date)](https://img.shields.io/docker/image-size/blaxzter/bookitool-frontend?sort=date)
+[![Quality Gate Status](https://sonarqube.fabraham.dev/api/project_badges/measure?project=Blaxzter_room-booking-tool_AZGtr7PlGScuunZVyOtX&metric=alert_status&token=sqb_22a9bebb77a4ce308aa4bbe491dc949d0bb6b89c)](https://sonarqube.fabraham.dev/dashboard?id=Blaxzter_room-booking-tool_AZGtr7PlGScuunZVyOtX)
+[![Maintainability Rating](https://sonarqube.fabraham.dev/api/project_badges/measure?project=Blaxzter_room-booking-tool_AZGtr7PlGScuunZVyOtX&metric=sqale_rating&token=sqb_22a9bebb77a4ce308aa4bbe491dc949d0bb6b89c)](https://sonarqube.fabraham.dev/dashboard?id=Blaxzter_room-booking-tool_AZGtr7PlGScuunZVyOtX)
   
 [!["Buy Me A Coffee"](https://www.buymeacoffee.com/assets/img/custom_images/orange_img.png)](https://buymeacoffee.com/fabraham)
 
