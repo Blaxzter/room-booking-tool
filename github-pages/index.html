@@ -21,8 +21,8 @@
         }
 
         svg {
-            width: 100%;
-            height: 100%;
+            width: 100vw;
+            height: 100vh;
         }
     </style>
 </head>
@@ -45,10 +45,14 @@
                 const instance = svgPanZoom('#my-svg', {
                     zoomEnabled: true,
                     controlIconsEnabled: true,
-                    fit: true,
-                    center: true
+                    fit: false,
+                    center: false,
+                    minZoom: 0.1,
+                    maxZoom: 10,
+                    zoomScaleSensitivity: 0.5
                 });
-                instance.zoomAtPointBy(1.9, {x: 2000, y: 1100})
+                instance.zoomAtPointBy(1.1, {x: 20550, y: 29150})
+                // instance.zoomAtPointBy(1, {x: 330, y: 610})
             })
             .catch(error => console.error('Error loading the SVG file:', error));
     </script>
