@@ -42,6 +42,10 @@ onMounted(async () => {
     }
   })
 })
+
+import { useGlobalSettings } from '@/stores/globalSettings'
+import { Checkbox } from '@/components/ui/checkbox'
+const { displayLegal } = storeToRefs(useGlobalSettings())
 </script>
 
 <template>
@@ -88,6 +92,11 @@ onMounted(async () => {
         Log out
         <DropdownMenuShortcut>⇧⌘Q</DropdownMenuShortcut>
       </DropdownMenuItem>
+      <div class="text-[10px] text-muted-foreground py-1 text-center" v-if="displayLegal">
+        <router-link to="/terms-of-service" class="underline"> Terms of Service </router-link>
+        &
+        <router-link to="/privacy" class="underline"> Privacy Policy </router-link>
+      </div>
     </DropdownMenuContent>
   </DropdownMenu>
 </template>

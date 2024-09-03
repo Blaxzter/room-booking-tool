@@ -1,21 +1,28 @@
 <script setup lang="ts">
+import { ref } from 'vue'
+
 import { useUser } from '@/stores/user'
 import { useForm } from 'vee-validate'
 import { toTypedSchema } from '@vee-validate/zod'
-import * as z from 'zod'
 
+import * as z from 'zod'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
-import { FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form'
+import { FormControl, FormField, FormItem, FormLabel, FormMessage, FormDescription } from '@/components/ui/form'
 import type { CreateUserRequest } from '@/types'
-import { ref } from 'vue'
 import LogoImage from '@/components/bits/LogoImage.vue'
+
+import { useGlobalSettings } from '@/stores/globalSettings'
+import { storeToRefs } from 'pinia'
+import { Checkbox } from '@/components/ui/checkbox'
+const { displayLegal } = storeToRefs(useGlobalSettings())
 
 const signupSchema = z.object({
   first_name: z.string().optional(),
   last_name: z.string().optional(),
   email: z.string().email('Email must be valid').min(1, { message: 'Email is required' }),
+  legal: z.boolean().refine((value) => value === true, { message: 'You must agree to the terms and conditions' }),
   password: z
     .string()
     .min(8, { message: 'Password must be at least 8 characters long' })
@@ -108,6 +115,25 @@ const onSubmit = async () => {
             </FormControl>
           </FormItem>
         </FormField>
+        <template v-if="displayLegal">
+          <FormField v-slot="{ value, handleChange }" type="checkbox" name="legal">
+            <FormItem class="flex flex-row items-start gap-x-3 space-y-0 rounded-md">
+              <FormControl>
+                <Checkbox :checked="value" @update:checked="handleChange" />
+              </FormControl>
+              <div class="space-y-1 leading-none">
+                <FormLabel>I agree to the terms and conditions</FormLabel>
+                <FormDescription>
+                  By signing up, you agree to our
+                  <router-link to="/terms-of-service" class="underline">Terms of Service</router-link>
+                  and
+                  <router-link to="/privacy" class="underline">Privacy Policy</router-link>
+                </FormDescription>
+                <FormMessage />
+              </div>
+            </FormItem>
+          </FormField>
+        </template>
         <Button type="submit" class="w-full mt-3" :loading="loading"> Create an account </Button>
       </form>
       <div class="mt-4 text-center text-sm max-w-sm m-auto">

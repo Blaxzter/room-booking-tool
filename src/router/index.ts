@@ -83,9 +83,18 @@ const router = createRouter({
       }
     },
     {
-      path: '/:pathMatch(.*)*',
+      path: '/404',
       name: 'not-found',
       component: () => import('@/views/NotFoundView.vue')
+    },
+    {
+      path: '/:pathMatch(.*)*',
+      name: 'static-page',
+      component: () => import('@/views/StaticPage.vue'),
+      meta: {
+        publicView: true,
+        hideVersion: true
+      }
     }
   ]
 })

@@ -10,6 +10,25 @@
         <FormDescription class="col-span-4"> Describe the event you are booking </FormDescription>
       </FormItem>
     </FormField>
+    <template v-if="displayLegal">
+      <FormField v-slot="{ value, handleChange }" type="checkbox" name="legal">
+        <FormItem class="flex flex-row items-start gap-x-3 space-y-0 rounded-md">
+          <FormControl>
+            <Checkbox :checked="value" @update:checked="handleChange" />
+          </FormControl>
+          <div class="space-y-1 leading-none">
+            <FormLabel>I agree to the terms and conditions</FormLabel>
+            <FormDescription>
+              By creating a booking, you agree to our
+              <router-link to="/terms-of-service" class="underline">Terms of Service</router-link>
+              and
+              <router-link to="/privacy" class="underline">Privacy Policy</router-link>
+            </FormDescription>
+            <FormMessage />
+          </div>
+        </FormItem>
+      </FormField>
+    </template>
     <slot name="footer"></slot>
   </form>
 </template>
@@ -20,6 +39,11 @@ import * as z from 'zod'
 import { toTypedSchema } from '@vee-validate/zod'
 import { FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form'
 import { Textarea } from '@/components/ui/textarea'
+
+import { useGlobalSettings } from '@/stores/globalSettings'
+import { storeToRefs } from 'pinia'
+import { Checkbox } from '@/components/ui/checkbox'
+const { displayLegal } = storeToRefs(useGlobalSettings())
 
 interface InitialValues {
   description: string

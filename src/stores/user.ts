@@ -40,6 +40,8 @@ export type MyDirectusClient = DirectusClient<MySchema> &
   RestClient<MySchema> &
   GraphqlClient<MySchema>
 
+export type NoAuthDirectusClient = DirectusClient<MySchema> & RestClient<MySchema> & GraphqlClient<MySchema>
+
 export const useUser = defineStore('user', () => {
   const authenticated = ref(false)
 
@@ -124,6 +126,8 @@ export const useUser = defineStore('user', () => {
     .with(authentication(authMode, authConfig))
     .with(rest())
     .with(graphql())
+
+  const noAuthClient: NoAuthDirectusClient = createDirectus<MySchema>(backendUrl).with(rest()).with(graphql())
 
   const isAuthenticated = computed(() => {
     return authenticated.value
@@ -330,6 +334,7 @@ export const useUser = defineStore('user', () => {
 
   return {
     client,
+    noAuthClient,
     user,
     auth_data,
     login,

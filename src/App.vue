@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { onBeforeMount } from 'vue'
 import Toaster from '@/components/ui/toast/Toaster.vue'
 import { showAlertDialog } from '@/plugins/alert-dialog-plugin'
 
@@ -9,6 +10,8 @@ import { useDark } from '@vueuse/core'
 import { storeToRefs } from 'pinia'
 
 import { useInitialDataStore } from '@/stores/initial'
+import { useGlobalSettings } from '@/stores/globalSettings'
+
 import VersionDisplay from '@/components/utils/VersionDisplay.vue'
 import CalenderLoader from '@/components/animations/CalenderLoader.vue'
 
@@ -35,6 +38,12 @@ provide(
   import.meta.env.VITE_BACKEND_URL ? import.meta.env.VITE_BACKEND_URL : `https://api.${window.location.host}`
 )
 provide('showAlertDialog', showAlertDialog)
+
+// before mount get initial data
+onBeforeMount(async () => {
+  const { fetchGlobalSetting } = useGlobalSettings()
+  await fetchGlobalSetting()
+})
 </script>
 
 <template>

@@ -6,6 +6,17 @@ export type MySchema = {
   notification_setting: NotificationSetting[]
   group_directus_users: GroupDirectusUser[]
   group_invites: GroupInvite[]
+  static_page: StaticPage[]
+  settings: GlobalSettings
+}
+
+export type GlobalSettings = {
+  display_legal: boolean
+}
+
+export type StaticPage = {
+  slug: string
+  content: string
 }
 
 export type Booking = {

@@ -1,6 +1,5 @@
 import type { BookableObject, Booking, Group, GroupInvite, NotificationSetting } from '@/types'
 import {
-  bookableObjectByGroup,
   bookableObjectById,
   getAllBookableObjects,
   getBookableObjectFields,
