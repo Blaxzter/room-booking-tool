@@ -12,6 +12,8 @@
 
 ![Booki Tool Dashboard Image](https://github.com/Blaxzter/room-booking-tool/blob/main/github-pages/bookitool-dashboard.png?raw=true)
 
+### 🔎 View can view an app overview on the [github pages](https://blaxzter.github.io/room-booking-tool/). (https://blaxzter.github.io/room-booking-tool/)
+
 ## 🚀 Installation
 
 Run `docker-compose up` to start the development server.
