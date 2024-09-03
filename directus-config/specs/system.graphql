@@ -237,6 +237,8 @@ type Subscription {
   group_invites_mutated(event: EventEnum): group_invites_mutated
   notification_setting_mutated(event: EventEnum): notification_setting_mutated
   group_mutated(event: EventEnum): group_mutated
+  staticpages_mutated(event: EventEnum): staticpages_mutated
+  settings_mutated(event: EventEnum): settings_mutated
 }
 
 """The `Boolean` scalar type represents `true` or `false`."""
@@ -1645,6 +1647,30 @@ type server_info_websocket_graphql {
 type server_info_websocket_rest {
   authentication: server_info_websocket_rest_authentication
   path: String
+}
+
+type settings {
+  id: ID!
+  display_legal: Boolean
+}
+
+type settings_mutated {
+  key: ID!
+  event: EventEnum
+  data: settings
+}
+
+type staticpages {
+  id: ID!
+  status: String
+  slug: String
+  content: String
+}
+
+type staticpages_mutated {
+  key: ID!
+  event: EventEnum
+  data: staticpages
 }
 
 type users_me_tfa_generate_data {

@@ -1447,5 +1447,29 @@
       "uploaded_by"
     ],
     "_syncId": "93b0266b-59b4-47d7-8973-8fe6e08730c7"
+  },
+  {
+    "role": null,
+    "collection": "settings",
+    "action": "read",
+    "permissions": {},
+    "validation": {},
+    "presets": null,
+    "fields": [
+      "*"
+    ],
+    "_syncId": "d53b17ee-153b-4256-adbc-658eb5d9daab"
+  },
+  {
+    "role": null,
+    "collection": "staticpages",
+    "action": "read",
+    "permissions": {},
+    "validation": {},
+    "presets": null,
+    "fields": [
+      "*"
+    ],
+    "_syncId": "9bde9d26-2c5a-4c66-8d5c-ec060e3cb9b8"
   }
 ]

@@ -1,0 +1,44 @@
+{
+  "collection": "settings",
+  "field": "display_legal",
+  "type": "boolean",
+  "meta": {
+    "collection": "settings",
+    "conditions": null,
+    "display": null,
+    "display_options": null,
+    "field": "display_legal",
+    "group": null,
+    "hidden": false,
+    "interface": "boolean",
+    "note": null,
+    "options": null,
+    "readonly": false,
+    "required": false,
+    "sort": 2,
+    "special": [
+      "cast-boolean"
+    ],
+    "translations": null,
+    "validation": null,
+    "validation_message": null,
+    "width": "full"
+  },
+  "schema": {
+    "name": "display_legal",
+    "table": "settings",
+    "data_type": "boolean",
+    "default_value": false,
+    "max_length": null,
+    "numeric_precision": null,
+    "numeric_scale": null,
+    "is_nullable": true,
+    "is_unique": false,
+    "is_primary_key": false,
+    "is_generated": false,
+    "generation_expression": null,
+    "has_auto_increment": false,
+    "foreign_key_table": null,
+    "foreign_key_column": null
+  }
+}

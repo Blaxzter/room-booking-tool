@@ -31,6 +31,12 @@ type Query {
   group_by_id(id: ID!, version: String): group
   group_aggregated(groupBy: [String], filter: group_filter, limit: Int, offset: Int, page: Int, search: String, sort: [String]): [group_aggregated!]!
   group_by_version(version: String!, id: ID!): version_group
+  staticpages(filter: staticpages_filter, sort: [String], limit: Int, offset: Int, page: Int, search: String): [staticpages!]!
+  staticpages_by_id(id: ID!, version: String): staticpages
+  staticpages_aggregated(groupBy: [String], filter: staticpages_filter, limit: Int, offset: Int, page: Int, search: String, sort: [String]): [staticpages_aggregated!]!
+  staticpages_by_version(version: String!, id: ID!): version_staticpages
+  settings(version: String): settings
+  settings_by_version(version: String!): version_settings
 }
 
 type Mutation {
@@ -50,6 +56,8 @@ type Mutation {
   create_notification_setting_item(data: create_notification_setting_input!): notification_setting
   create_group_items(filter: group_filter, sort: [String], limit: Int, offset: Int, page: Int, search: String, data: [create_group_input!]): [group!]!
   create_group_item(data: create_group_input!): group
+  create_staticpages_items(filter: staticpages_filter, sort: [String], limit: Int, offset: Int, page: Int, search: String, data: [create_staticpages_input!]): [staticpages!]!
+  create_staticpages_item(data: create_staticpages_input!): staticpages
   update_booking_items(filter: booking_filter, sort: [String], limit: Int, offset: Int, page: Int, search: String, ids: [ID]!, data: update_booking_input!): [booking!]!
   update_booking_batch(filter: booking_filter, sort: [String], limit: Int, offset: Int, page: Int, search: String, data: [update_booking_input!]): [booking!]!
   update_booking_item(id: ID!, data: update_booking_input!): booking
@@ -74,6 +82,10 @@ type Mutation {
   update_group_items(filter: group_filter, sort: [String], limit: Int, offset: Int, page: Int, search: String, ids: [ID]!, data: update_group_input!): [group!]!
   update_group_batch(filter: group_filter, sort: [String], limit: Int, offset: Int, page: Int, search: String, data: [update_group_input!]): [group!]!
   update_group_item(id: ID!, data: update_group_input!): group
+  update_staticpages_items(filter: staticpages_filter, sort: [String], limit: Int, offset: Int, page: Int, search: String, ids: [ID]!, data: update_staticpages_input!): [staticpages!]!
+  update_staticpages_batch(filter: staticpages_filter, sort: [String], limit: Int, offset: Int, page: Int, search: String, data: [update_staticpages_input!]): [staticpages!]!
+  update_staticpages_item(id: ID!, data: update_staticpages_input!): staticpages
+  update_settings(data: update_settings_input!): settings
   delete_booking_items(ids: [ID]!): delete_many
   delete_booking_item(id: ID!): delete_one
   delete_group_directus_users_items(ids: [ID]!): delete_many
@@ -90,6 +102,8 @@ type Mutation {
   delete_notification_setting_item(id: ID!): delete_one
   delete_group_items(ids: [ID]!): delete_many
   delete_group_item(id: ID!): delete_one
+  delete_staticpages_items(ids: [ID]!): delete_many
+  delete_staticpages_item(id: ID!): delete_one
 }
 
 type Subscription {
@@ -119,6 +133,8 @@ type Subscription {
   group_invites_mutated(event: EventEnum): group_invites_mutated
   notification_setting_mutated(event: EventEnum): notification_setting_mutated
   group_mutated(event: EventEnum): group_mutated
+  staticpages_mutated(event: EventEnum): staticpages_mutated
+  settings_mutated(event: EventEnum): settings_mutated
 }
 
 """The `Boolean` scalar type represents `true` or `false`."""
@@ -1067,6 +1083,44 @@ type notification_setting_mutated {
   data: notification_setting
 }
 
+type settings {
+  id: ID!
+  display_legal: Boolean
+}
+
+type settings_mutated {
+  key: ID!
+  event: EventEnum
+  data: settings
+}
+
+type staticpages {
+  id: ID!
+  status: String
+  slug: String
+  content: String
+}
+
+type staticpages_aggregated {
+  group: JSON
+  countAll: Int
+  count: staticpages_aggregated_count
+  countDistinct: staticpages_aggregated_count
+}
+
+type staticpages_aggregated_count {
+  id: Int
+  status: Int
+  slug: Int
+  content: Int
+}
+
+type staticpages_mutated {
+  key: ID!
+  event: EventEnum
+  data: staticpages
+}
+
 """"""
 type version_bookable_object {
   id: ID
@@ -1177,6 +1231,20 @@ type version_notification_setting {
   bookable_object_id: JSON
   group_id: JSON
   telegram: Boolean
+}
+
+""""""
+type version_settings {
+  id: ID
+  display_legal: Boolean
+}
+
+""""""
+type version_staticpages {
+  id: ID
+  status: String
+  slug: String
+  content: String
 }
 
 input big_int_filter_operators {
@@ -1445,6 +1513,13 @@ input create_notification_setting_input {
   bookable_object_id: create_bookable_object_input
   group_id: create_group_input
   telegram: Boolean
+}
+
+input create_staticpages_input {
+  id: ID
+  status: String
+  slug: String
+  content: String
 }
 
 input date_filter_operators {
@@ -1797,6 +1872,15 @@ input number_filter_operators {
   _nbetween: [GraphQLStringOrFloat]
 }
 
+input staticpages_filter {
+  id: string_filter_operators
+  status: string_filter_operators
+  slug: string_filter_operators
+  content: string_filter_operators
+  _and: [staticpages_filter]
+  _or: [staticpages_filter]
+}
+
 input string_filter_operators {
   _eq: String
   _neq: String
@@ -1999,4 +2083,16 @@ input update_notification_setting_input {
   bookable_object_id: update_bookable_object_input
   group_id: update_group_input
   telegram: Boolean
+}
+
+input update_settings_input {
+  id: ID
+  display_legal: Boolean
+}
+
+input update_staticpages_input {
+  id: ID
+  status: String
+  slug: String
+  content: String
 }
