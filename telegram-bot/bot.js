@@ -131,7 +131,6 @@ bot.on('callback_query:data', async (ctx) => {
 
   switch (action) {
     case 'accept':
-      z
       await approveRequest(bookingId, user.id)
       await ctx.editMessageText(message)
       break
