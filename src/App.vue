@@ -41,8 +41,8 @@ provide('showAlertDialog', showAlertDialog)
 
 // before mount get initial data
 onBeforeMount(async () => {
-  const { fetchGlobalSetting } = useGlobalSettings()
-  await fetchGlobalSetting()
+  const { fetchGlobalSetting, fetchRoles } = useGlobalSettings()
+  await Promise.all([fetchGlobalSetting(), fetchRoles()])
 })
 </script>
 
