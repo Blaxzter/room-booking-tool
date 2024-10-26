@@ -15,7 +15,8 @@ export const useGlobalSettings = defineStore('globalSettings', () => {
   }
 
   const fetchRoles = async () => {
-    const { client } = useUser()
+    const { client, authenticated } = useUser()
+    if (!authenticated) return
     const roles = await client.request(
       readRoles({
         fields: ['*']

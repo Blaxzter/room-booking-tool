@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import { defineProps } from 'vue'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import GroupMemberBody from '@/components/groups/bodys/GroupMemberBody.vue'
 import type { Group } from '@/types'

@@ -48,6 +48,11 @@ services:
     networks:
       - directus-net
       # - nginx-net
+    healthcheck:
+      test: [ "CMD", "curl", "-f", "http://localhost:8055/server/health" ]
+      interval: 30s
+      timeout: 10s
+      retries: 5
     environment:
       KEY: "${KEY}"
       SECRET: "${SECRET}"
@@ -103,6 +108,22 @@ services:
       LETSENCRYPT_EMAIL: "${LETSENCRYPT_EMAIL}"
 
       TELEGRAM_URL: localhost:12543
+
+  init:
+    build:
+      context: .
+      dockerfile: Dockerfile.init
+    depends_on:
+      directus:
+        condition: service_healthy
+    networks:
+      - directus-net
+    environment:
+      ADMIN_EMAIL: "${ADMIN_EMAIL}"
+      ADMIN_PASSWORD: "${ADMIN_PASSWORD}"
+      DEMO_MODE: "${DEMO_MODE}"
+    volumes:
+      - ./:/usr/src/app
 
 #  booki-tool-telegram-bot:
 #    build:

@@ -1,0 +1,9 @@
+FROM node:14-alpine
+
+RUN apk add --no-cache curl jq
+
+WORKDIR /usr/src/app
+
+COPY ./init-script.sh .
+
+CMD ["sh", "./init-script.sh"]
