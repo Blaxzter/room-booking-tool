@@ -1,7 +1,6 @@
 <script setup lang="ts">
 import { DropdownMenu, DropdownMenuContent, DropdownMenuTrigger } from '@/components/ui/dropdown-menu'
-import RandomEmoji from '@/components/utils/Emoji.vue'
-// @ts-expect-error
+import RandomEmoji from '@/components/utils/EmojiComponent.vue'
 import { Emoji, EmojiIndex, Picker } from 'emoji-mart-vue-fast/src'
 import data from 'emoji-mart-vue-fast/data/all.json'
 

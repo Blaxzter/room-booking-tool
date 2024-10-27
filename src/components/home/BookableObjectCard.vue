@@ -3,7 +3,7 @@ import { computed, inject, onMounted, ref } from 'vue'
 import { cn } from '@/lib/utils'
 import { isMobile } from 'mobile-device-detect'
 
-import RandomEmoji from '@/components/utils/Emoji.vue'
+import RandomEmoji from '@/components/utils/EmojiComponent.vue'
 import BookableObjectMenuButton from '@/components/bookable-object/BookableObjectMenuButton.vue'
 import BookingCardSplashImage from '@/components/home/BookingCardSplashImage.vue'
 import processImage from '@/assets/ts/image-utils'

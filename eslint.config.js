@@ -4,21 +4,13 @@ import skipFormatting from '@vue/eslint-config-prettier/skip-formatting'
 
 export default [
   {
-    ignores: [
-      "dist/",
-      "src/components/ui/",
-      "telegram-bot/",
-      "tailwind.config.js"
-    ]
-  },
-  {
     name: 'app/files-to-lint',
     files: ['**/*.{ts,mts,tsx,vue}'],
   },
 
   {
     name: 'app/files-to-ignore',
-    ignores: ['**/dist/**', '**/dist-ssr/**', '**/coverage/**'],
+    ignores: ['**/dist/**', '**/dist-ssr/**', '**/coverage/**', 'src/components/ui/', "telegram-bot/", "tailwind.config.js"],
   },
 
   ...pluginVue.configs['flat/essential'],

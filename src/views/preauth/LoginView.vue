@@ -113,7 +113,7 @@ onMounted(async () => {
                 @keyup.enter="loginWrapper"
               />
               <Button
-                class-name="absolute end-1 inset-y-0 flex items-center justify-center px-2"
+                className="absolute end-1 inset-y-0 flex items-center justify-center px-2"
                 type="button"
                 @click="showPassword = !showPassword"
               >
