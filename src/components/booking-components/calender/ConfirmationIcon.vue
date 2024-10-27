@@ -16,8 +16,8 @@ defineProps({
   <TooltipProvider>
     <Tooltip>
       <TooltipTrigger>
-        <CheckIcon :size="size" v-if="confirmed" />
-        <CircleHelpIcon :size="size" v-else />
+        <CheckIcon v-if="confirmed" :size="size" />
+        <CircleHelpIcon v-else :size="size" />
       </TooltipTrigger>
       <TooltipContent>
         <p v-if="confirmed">Confirmed</p>

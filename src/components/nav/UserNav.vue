@@ -18,6 +18,7 @@ import { storeToRefs } from 'pinia'
 import { useUser } from '@/stores/user'
 import router from '@/router'
 import DarkscreenToggle from '@/components/animations/DarkscreenToggle.vue'
+import { useGlobalSettings } from '@/stores/globalSettings'
 
 const isDark = useDark()
 const toggleDark = useToggle(isDark)
@@ -43,8 +44,6 @@ onMounted(async () => {
   })
 })
 
-import { useGlobalSettings } from '@/stores/globalSettings'
-import { Checkbox } from '@/components/ui/checkbox'
 const { displayLegal } = storeToRefs(useGlobalSettings())
 </script>
 
@@ -62,18 +61,18 @@ const { displayLegal } = storeToRefs(useGlobalSettings())
       <DropdownMenuLabel class="font-normal flex">
         <div class="flex flex-col space-y-1">
           <p class="text-sm font-medium leading-none">{{ name }}</p>
-          <p class="text-xs leading-none text-muted-foreground" v-if="hasName">{{ email }}</p>
+          <p v-if="hasName" class="text-xs leading-none text-muted-foreground">{{ email }}</p>
         </div>
       </DropdownMenuLabel>
       <DropdownMenuSeparator />
       <DropdownMenuGroup>
-        <DropdownMenuItem @click="router.push({ name: 'settings', params: { tab: 'profile' } })" class="cursor-pointer">
+        <DropdownMenuItem class="cursor-pointer" @click="router.push({ name: 'settings', params: { tab: 'profile' } })">
           Profile
           <DropdownMenuShortcut>⇧⌘P</DropdownMenuShortcut>
         </DropdownMenuItem>
         <DropdownMenuItem
-          @click="() => toggleDark()"
           class="cursor-pointer my-0 py-0"
+          @click="() => toggleDark()"
           @mouseenter="toggleDarkmodeAnimation = true"
           @mouseleave="toggleDarkmodeAnimation = false"
         >
@@ -82,17 +81,17 @@ const { displayLegal } = storeToRefs(useGlobalSettings())
           <div class="flex-grow" />
           <DarkscreenToggle :height="30" :toggle-animation="toggleDarkmodeAnimation" />
         </DropdownMenuItem>
-        <DropdownMenuItem @click="router.push({ name: 'settings', params: { tab: 'account' } })" class="cursor-pointer">
+        <DropdownMenuItem class="cursor-pointer" @click="router.push({ name: 'settings', params: { tab: 'account' } })">
           Settings
           <DropdownMenuShortcut>⌘S</DropdownMenuShortcut>
         </DropdownMenuItem>
       </DropdownMenuGroup>
       <DropdownMenuSeparator />
-      <DropdownMenuItem @click="logout" class="cursor-pointer">
+      <DropdownMenuItem class="cursor-pointer" @click="logout">
         Log out
         <DropdownMenuShortcut>⇧⌘Q</DropdownMenuShortcut>
       </DropdownMenuItem>
-      <div class="text-[10px] text-muted-foreground py-1 text-center" v-if="displayLegal">
+      <div v-if="displayLegal" class="text-[10px] text-muted-foreground py-1 text-center">
         <router-link to="/terms-of-service" class="underline"> Terms of Service </router-link>
         &
         <router-link to="/privacy" class="underline"> Privacy Policy </router-link>

@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { inject, onMounted, ref, computed } from 'vue'
+import { computed, inject, onMounted, ref } from 'vue'
 import { cn } from '@/lib/utils'
 import { isMobile } from 'mobile-device-detect'
 
@@ -60,7 +60,7 @@ onMounted(() => {
         :image_id="bookableObject.image.id"
         :width="width"
         :height="height"
-        :aspectRatio="aspectRatio"
+        :aspect-ratio="aspectRatio"
         :style="`background-color:` + (idToColor.get(bookableObject.image.id) ?? 'white')"
       />
       <div v-else>
@@ -94,7 +94,7 @@ onMounted(() => {
           :bookable-object-id="bookableObject.id"
           :bookable-object-type="bookableObject.type"
           :bookable-object-unique-id="bookableObject.uniqueId"
-          :is-Internal="bookableObject.is_internal"
+          :is-internal="bookableObject.is_internal"
         />
       </div>
     </div>

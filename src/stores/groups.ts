@@ -1,12 +1,11 @@
 import { computed, ref } from 'vue'
 import { defineStore, storeToRefs } from 'pinia'
-import _ from 'lodash'
 
 import type { BookableObject, CreateGroupRequest, Group, GroupInvite, InviteCreateRequest } from '@/types'
 import { useBookableObjects } from '@/stores/bookableObjects'
 import { useUser } from '@/stores/user'
 import { useLocalUser } from '@/stores/localUser'
-import { createItem, updateItem, deleteItem } from '@directus/sdk'
+import { createItem, deleteItem, updateItem } from '@directus/sdk'
 import { getGroupsWithUserQuery } from '@/assets/ts/queries/group'
 import type {
   GetGroupQueryResponse,

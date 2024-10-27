@@ -2,13 +2,14 @@
 import { computed, inject, onMounted, ref, watch } from 'vue'
 import { uploadFiles } from '@directus/sdk'
 
-import { UploadIcon, XIcon, TrashIcon } from 'lucide-vue-next'
+import { TrashIcon, UploadIcon, XIcon } from 'lucide-vue-next'
 // @ts-ignore
 import AvatarCropper from 'vue-avatar-cropper'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 
 import { useUser } from '@/stores/user'
 import type { ShowAlertFunction } from '@/plugins/alert-dialog-plugin'
+
 const { client } = useUser()
 
 const showCropper = ref(false)
@@ -166,6 +167,7 @@ const backendUrl = inject('backendUrl')
     </Avatar>
 
     <avatar-cropper
+      v-model="showCropper"
       :style="avatarCssVars"
       :cropper-options="{
         aspectRatio: isSquare ? 0.75 : 1,
@@ -173,7 +175,6 @@ const backendUrl = inject('backendUrl')
         movable: true,
         zoomable: true
       }"
-      v-model="showCropper"
       :upload-handler="selectImage"
     />
   </div>

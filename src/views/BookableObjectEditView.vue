@@ -46,7 +46,7 @@ const updateBookableObject = async (field: keyof BookableObject, value: any) => 
 </script>
 
 <template>
-  <div class="container py-8 h-full max-h-full overflow-hidden" v-if="selectedBookableObject">
+  <div v-if="selectedBookableObject" class="container py-8 h-full max-h-full overflow-hidden">
     <ScrollArea class="max-h-full h-full overflow-hidden me-[-12px] pe-[12px]">
       <div class="flex flex-wrap justify-center gap-4 align-top flex-col md:flex-row lg:justify-start">
         <Card class="lg:max-w-[320px] md:w-[calc(50%-0.5rem)] lg:w-[calc(30%-0.7rem)]">

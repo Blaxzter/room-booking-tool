@@ -50,11 +50,11 @@ watch(currentPage, (value) => {
       v-for="item in sidebarNavItems"
       :key="item.title"
       as="a"
-      @click="selectPage(item.value)"
       variant="ghost"
       :class="
         cn('w-full text-left justify-start cursor-pointer', selectedPage === item.value && 'bg-muted hover:bg-muted')
       "
+      @click="selectPage(item.value)"
     >
       {{ item.title }}
     </Button>
@@ -65,8 +65,8 @@ watch(currentPage, (value) => {
         v-for="item in sidebarNavItems"
         :key="item.value"
         :value="item.value"
-        @click="selectPage(item.value)"
         :class="cn('cursor-pointer', selectedPage === item.value && 'bg-muted hover:bg-muted')"
+        @click="selectPage(item.value)"
       >
         {{ item.title }}
       </TabsTrigger>

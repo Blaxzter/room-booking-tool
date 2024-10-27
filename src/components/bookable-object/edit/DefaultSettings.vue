@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed, type PropType, onBeforeMount, ref, watch } from 'vue'
+import { computed, onBeforeMount, type PropType, ref } from 'vue'
 import { useForm } from 'vee-validate'
 import { toTypedSchema } from '@vee-validate/zod'
 import * as z from 'zod'
@@ -10,9 +10,9 @@ import { Input } from '@/components/ui/input'
 import { Textarea } from '@/components/ui/textarea'
 import GroupSelect from '@/components/bits/GroupSelect.vue'
 import { randomBookableObject } from '@/assets/ts/constants'
-const exampleObject = randomBookableObject()
-
 import type { BookableObject } from '@/types'
+
+const exampleObject = randomBookableObject()
 
 interface InitialValues {
   name?: string
@@ -93,6 +93,7 @@ defineExpose({ getValues, validate })
           <Input
             type="text"
             :placeholder="exampleObject.name"
+            v-bind="componentField"
             @input="
               (e: Event) => {
                 const target = e.target as HTMLInputElement
@@ -111,7 +112,6 @@ defineExpose({ getValues, validate })
                 }
               }
             "
-            v-bind="componentField"
           />
         </FormControl>
         <FormDescription> Please enter the name of the bookable object. </FormDescription>
@@ -126,6 +126,7 @@ defineExpose({ getValues, validate })
         <FormControl>
           <Textarea
             :placeholder="exampleObject.description"
+            v-bind="componentField"
             @input="
               (e: Event) => {
                 const target = e.target as HTMLInputElement
@@ -144,7 +145,6 @@ defineExpose({ getValues, validate })
                 }
               }
             "
-            v-bind="componentField"
           />
         </FormControl>
         <FormDescription> Please enter the description of the bookable object. </FormDescription>

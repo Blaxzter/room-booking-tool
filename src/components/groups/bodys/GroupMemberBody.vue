@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, computed, inject } from 'vue'
+import { computed, inject, ref } from 'vue'
 import { storeToRefs } from 'pinia'
 import { SendIcon, TrashIcon } from 'lucide-vue-next'
 import _ from 'lodash'
@@ -158,8 +158,8 @@ const isDesktop = useMediaQuery('(min-width: 768px)')
 
 <template>
   <div class="grid gap-6">
-    <div class="flex flex-col gap-2 items-stretch md:justify-between md:flex-row" v-if="!isDisabled">
-      <Input type="email" placeholder="Enter email to invite" v-model="inviteEmail" />
+    <div v-if="!isDisabled" class="flex flex-col gap-2 items-stretch md:justify-between md:flex-row">
+      <Input v-model="inviteEmail" type="email" placeholder="Enter email to invite" />
       <GroupRoleDropDown v-model:role="inviteRole" class="flex-grow" />
       <Button
         variant="secondary"
@@ -174,7 +174,7 @@ const isDesktop = useMediaQuery('(min-width: 768px)')
     <div v-if="users.length !== 0">
       <p class="text-sm text-muted-foreground">Team members</p>
     </div>
-    <div class="flex items-center justify-between space-x-4" v-for="c_user in users" :key="c_user.id">
+    <div v-for="c_user in users" :key="c_user.id" class="flex items-center justify-between space-x-4">
       <div class="flex items-center space-x-4">
         <Avatar>
           <AvatarImage
@@ -194,10 +194,10 @@ const isDesktop = useMediaQuery('(min-width: 768px)')
       <div class="flex items-center space-x-4">
         <GroupRoleDropDown
           :role="c_user?.role"
-          @update:role="($event) => updateUserRole(c_user, $event)"
           :disabled="isDisabled"
+          @update:role="($event) => updateUserRole(c_user, $event)"
         />
-        <Button variant="secondary" size="icon" class="flex-shrink-0" @click="deleteUser(c_user)" v-if="!isDisabled">
+        <Button v-if="!isDisabled" variant="secondary" size="icon" class="flex-shrink-0" @click="deleteUser(c_user)">
           <TrashIcon class="h-5 w-5" />
         </Button>
       </div>
@@ -205,7 +205,7 @@ const isDesktop = useMediaQuery('(min-width: 768px)')
     <div v-if="invites?.length !== 0">
       <p class="text-sm text-muted-foreground">Invites</p>
     </div>
-    <div class="flex items-center justify-between space-x-4" v-for="invite in invites" :key="invite.id">
+    <div v-for="invite in invites" :key="invite.id" class="flex items-center justify-between space-x-4">
       <div class="flex items-center space-x-4">
         <Avatar>
           <AvatarFallback>{{ invite.email.charAt(0) }}</AvatarFallback>

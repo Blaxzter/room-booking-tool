@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import _ from 'lodash'
-import { computed, onBeforeMount, ref, useAttrs, watch } from 'vue'
+import { computed, onBeforeMount, ref, useAttrs } from 'vue'
 import { storeToRefs } from 'pinia'
 
 import { FormControl } from '@/components/ui/form'
@@ -65,7 +65,7 @@ onBeforeMount(() => {
   <Select v-model="group" v-bind="$attrs" :disabled="!editable">
     <FormControl>
       <SelectTrigger>
-        <SelectValue placeholder="Select a group" asChild>
+        <SelectValue placeholder="Select a group" as-child>
           {{ selectedGroupValue }}
         </SelectValue>
       </SelectTrigger>

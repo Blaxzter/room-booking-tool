@@ -131,7 +131,7 @@ defineExpose({ getValues, validate })
         <FormLabel for="date" class="text-right"> Start Date </FormLabel>
         <FormControl>
           <div class="relative">
-            <Input type="date" id="date" v-bind="componentField" class="pl-10" />
+            <Input id="date" type="date" v-bind="componentField" class="pl-10" />
             <div class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
               <CalendarIcon class="w-5 h-5 text-gray-400" />
             </div>
@@ -160,7 +160,7 @@ defineExpose({ getValues, validate })
             <FormLabel for="start-time" class="text-right"> Start Time </FormLabel>
             <FormControl>
               <div class="relative">
-                <Input type="time" id="start-time" v-bind="componentField" class="pl-10" />
+                <Input id="start-time" type="time" v-bind="componentField" class="pl-10" />
                 <div class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
                   <ClockIcon class="w-5 h-5 text-gray-400" />
                 </div>
@@ -175,7 +175,7 @@ defineExpose({ getValues, validate })
             <FormLabel for="end-time" class="text-right"> End Time </FormLabel>
             <FormControl>
               <div class="relative">
-                <Input type="time" id="end-time" v-bind="componentField" class="pl-10" />
+                <Input id="end-time" type="time" v-bind="componentField" class="pl-10" />
                 <div class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
                   <Clock10Icon class="w-5 h-5 text-gray-400" />
                 </div>
@@ -206,7 +206,7 @@ defineExpose({ getValues, validate })
             <FormLabel for="end-date" class="text-right"> End Date </FormLabel>
             <FormControl>
               <div class="relative">
-                <Input type="date" id="end-date" v-bind="componentField" class="pl-10" />
+                <Input id="end-date" type="date" v-bind="componentField" class="pl-10" />
                 <div class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
                   <CalendarIcon class="w-5 h-5 text-gray-400" />
                 </div>

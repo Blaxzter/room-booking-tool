@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { CalendarDays, CalendarClock, CalendarFold, CalendarRange } from 'lucide-vue-next'
+import { CalendarClock, CalendarDays, CalendarFold, CalendarRange } from 'lucide-vue-next'
 
 import { Button } from '@/components/ui/button'
 import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs'
@@ -14,7 +14,6 @@ import {
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip'
 
 import { breakpointsTailwind, useBreakpoints } from '@vueuse/core'
-import { ref } from 'vue'
 
 export type CalendarViewType = 'dayGridFourWeek' | 'timeGridWeek' | 'timeGridDay' | 'listWeek'
 
@@ -52,7 +51,7 @@ const mobile = breakpoints.smallerOrEqual('lg')
     <DropdownMenu>
       <DropdownMenuTrigger>
         <Button variant="secondary">
-          <Component v-bind:is="calenderType.find((type) => type.value === model)?.icon" class="me-2" />
+          <Component :is="calenderType.find((type) => type.value === model)?.icon" class="me-2" />
           {{ calenderType.find((type) => type.value === model)?.label }}
         </Button>
       </DropdownMenuTrigger>
@@ -68,7 +67,7 @@ const mobile = breakpoints.smallerOrEqual('lg')
             }
           "
         >
-          <Component v-bind:is="type.icon" class="me-2" />
+          <Component :is="type.icon" class="me-2" />
           {{ type.label }}
         </DropdownMenuItem>
       </DropdownMenuContent>
@@ -81,7 +80,7 @@ const mobile = breakpoints.smallerOrEqual('lg')
           <Tooltip>
             <TooltipTrigger as-child>
               <TabsTrigger :value="type.value">
-                <Component v-bind:is="type.icon" />
+                <Component :is="type.icon" />
               </TabsTrigger>
             </TooltipTrigger>
             <TooltipContent>

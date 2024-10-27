@@ -1,7 +1,7 @@
 <template>
-  <div class="parent" @click="handleClick" :style="{ width: `${width}` }">
+  <div class="parent" :style="{ width: `${width}` }" @click="handleClick">
     <div class="background absolute"></div>
-    <div class="banner" ref="shakeElement" :style="{ fontSize: fontSize }">In Development</div>
+    <div ref="shakeElement" class="banner" :style="{ fontSize: fontSize }">In Development</div>
   </div>
 </template>
 

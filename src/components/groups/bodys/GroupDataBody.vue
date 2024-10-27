@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, watch, computed } from 'vue'
+import { computed, ref, watch } from 'vue'
 import { toTypedSchema } from '@vee-validate/zod'
 import * as z from 'zod'
 import { useForm } from 'vee-validate'
@@ -19,6 +19,7 @@ import EmojiPicker from '@/components/utils/EmojiPicker.vue'
 import { useGroups } from '@/stores/groups'
 import type { Group, GroupDirectusUser, User } from '@/types'
 import { useUser } from '@/stores/user'
+
 const { user } = storeToRefs(useUser())
 
 const { toast } = useToast()
@@ -155,20 +156,20 @@ const isDisabled = computed(() => {
         <div class="mt-1 flex flex-col items-center w-[120px]">
           <AvatarUploadComponent
             ref="avatarUpload"
-            :initAvatar="group?.avatar?.id"
-            @avatar-updated="updateGroupAvatar(false)"
-            @avatar-cleared="updateGroupAvatar(true)"
+            :init-avatar="group?.avatar?.id"
             :add-clear-request="!!group"
             :disabled="isDisabled"
+            @avatar-updated="updateGroupAvatar(false)"
+            @avatar-cleared="updateGroupAvatar(true)"
           />
-          <div class="text-sm text-gray-500 mt-3" v-if="!isDisabled">Upload an Image</div>
+          <div v-if="!isDisabled" class="text-sm text-gray-500 mt-3">Upload an Image</div>
         </div>
 
         <div class="mx-1 sm:mx-5" :class="[!isDisabled ? 'mb-7' : 'mb-1']">or</div>
 
         <div class="flex flex-col items-center w-[120px]">
-          <EmojiPicker v-model="selectedEmoji" @select="updateGroup('emoji', selectedEmoji)" :disabled="isDisabled" />
-          <div class="text-sm text-gray-500 mt-3" v-if="!isDisabled">Select an Emoji</div>
+          <EmojiPicker v-model="selectedEmoji" :disabled="isDisabled" @select="updateGroup('emoji', selectedEmoji)" />
+          <div v-if="!isDisabled" class="text-sm text-gray-500 mt-3">Select an Emoji</div>
         </div>
       </div>
     </div>
@@ -180,8 +181,8 @@ const isDisabled = computed(() => {
             type="text"
             :placeholder="randomGroupName()"
             v-bind="componentField"
-            @blur="updateGroup('name', values.name)"
             :disabled="isDisabled"
+            @blur="updateGroup('name', values.name)"
           />
         </FormControl>
         <FormDescription> This is the name of the group that will be displayed to users. </FormDescription>
@@ -195,8 +196,8 @@ const isDisabled = computed(() => {
           <Textarea
             placeholder="A short description of the group"
             v-bind="componentField"
-            @blur="updateGroup('description', values.description)"
             :disabled="isDisabled"
+            @blur="updateGroup('description', values.description)"
           />
         </FormControl>
         <FormDescription> This is a short description of the group that will be displayed to users. </FormDescription>

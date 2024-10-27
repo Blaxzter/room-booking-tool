@@ -1,6 +1,6 @@
 import { h } from 'vue'
 import type { ColumnDef } from '@tanstack/vue-table'
-import { ArrowUpDown, PhoneIcon, MailIcon } from 'lucide-vue-next'
+import { ArrowUpDown, MailIcon, PhoneIcon } from 'lucide-vue-next'
 
 import RequestAction from '@/components/requests-components/RequestAction.vue'
 import { Button } from '@/components/ui/button'

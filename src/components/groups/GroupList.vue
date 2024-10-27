@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed, inject, ref } from 'vue'
+import { computed, ref } from 'vue'
 import { storeToRefs } from 'pinia'
 import _ from 'lodash'
 
@@ -61,16 +61,16 @@ defineEmits(['selectGroup'])
 </script>
 
 <template>
-  <div class="flex gap-2 flex-col max-w-full" v-if="groups.length !== 0">
+  <div v-if="groups.length !== 0" class="flex gap-2 flex-col max-w-full">
     <template v-for="groupType in groupIterative" :key="groupType.title">
-      <div class="font-semibold text-lg text-primary mt-3" v-if="groupType.groups.length">{{ groupType.title }}</div>
+      <div v-if="groupType.groups.length" class="font-semibold text-lg text-primary mt-3">{{ groupType.title }}</div>
       <GroupListEntry
         v-for="group of groupType.groups"
         :key="group.id"
-        :isSelected="selectedEditGroup === group"
+        :is-selected="selectedEditGroup === group"
         :group="group"
         :show-role="groupType.showRole"
-        :isInvite="groupType.isInvite"
+        :is-invite="groupType.isInvite"
         class="max-w-full"
         @click="
           () => {

@@ -1,6 +1,6 @@
+import type { Component } from 'vue'
 import { createVNode, render } from 'vue'
 import AlertDialogComponent from '@/components/utils/AlertDialogComponent.vue'
-import type { Component } from 'vue'
 
 export type ShowAlertFunction = (options: {
   title: string

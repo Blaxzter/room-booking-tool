@@ -24,8 +24,8 @@ import _ from 'lodash'
 import { useToast } from '@/components/ui/toast/use-toast'
 import { useNotificationSetting } from '@/stores/notificationSettings'
 import type { Group } from '@/types'
-import axios from 'axios'
 import type { AxiosResponse } from 'axios'
+import axios from 'axios'
 
 export const useInitialDataStore = defineStore('initial', () => {
   const { toast } = useToast()

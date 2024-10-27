@@ -75,8 +75,8 @@ onMounted(async () => {
   <main>
     <div class="flex justify-center items-center h-screen">
       <Card
-        class="rounded-none h-full w-full sm:max-w-sm sm:h-auto sm:rounded-xl place-content-center"
         v-if="!isAuthenticated && !loading"
+        class="rounded-none h-full w-full sm:max-w-sm sm:h-auto sm:rounded-xl place-content-center"
       >
         <CardHeader class="max-w-sm m-auto">
           <CardTitle>
@@ -95,10 +95,10 @@ onMounted(async () => {
             <Label for="email">Email</Label>
             <Input
               id="email"
+              v-model="email"
               type="email"
               :placeholder="randomEmail()"
               required
-              v-model="email"
               @keyup.enter="loginWrapper"
             />
           </div>
@@ -107,18 +107,18 @@ onMounted(async () => {
             <div class="relative w-full max-w-sm items-center">
               <Input
                 id="password"
+                v-model="password"
                 :type="showPassword ? 'text' : 'password'"
                 required
-                v-model="password"
                 @keyup.enter="loginWrapper"
               />
               <Button
-                @click="showPassword = !showPassword"
-                className="absolute end-1 inset-y-0 flex items-center justify-center px-2"
+                class-name="absolute end-1 inset-y-0 flex items-center justify-center px-2"
                 type="button"
+                @click="showPassword = !showPassword"
               >
-                <EyeOff v-if="showPassword" className="text-current" :size="18" />
-                <Eye v-else className="text-current" :size="18" />
+                <EyeOff v-if="showPassword" class-name="text-current" :size="18" />
+                <Eye v-else class-name="text-current" :size="18" />
               </Button>
             </div>
           </div>
@@ -153,7 +153,7 @@ onMounted(async () => {
           </div>
         </CardFooter>
       </Card>
-      <AutoLoginCard v-else :showCheckmark="showCheckmark" :showCross="showCross" :loading="loading" />
+      <AutoLoginCard v-else :show-checkmark="showCheckmark" :show-cross="showCross" :loading="loading" />
     </div>
   </main>
 </template>

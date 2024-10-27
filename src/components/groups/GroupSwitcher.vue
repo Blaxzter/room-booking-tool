@@ -3,7 +3,7 @@ import { computed, type ComputedRef, inject, ref } from 'vue'
 import { storeToRefs } from 'pinia'
 import _ from 'lodash'
 
-import { LoaderIcon, Edit2Icon } from 'lucide-vue-next'
+import { Edit2Icon, LoaderIcon } from 'lucide-vue-next'
 import { CaretSortIcon, CheckIcon, PlusCircledIcon } from '@radix-icons/vue'
 import router from '@/router'
 
@@ -147,14 +147,14 @@ const created = async (group: Group) => {
     <Popover v-model:open="open">
       <PopoverTrigger as-child>
         <Button
+          v-if="selectedTeam"
           variant="outline"
           role="combobox"
           aria-expanded="true"
           aria-label="Select a team"
           :class="cn('sm:w-[200px] justify-between', $attrs.class ?? '')"
-          v-if="selectedTeam"
         >
-          <Avatar class="mr-2 h-5 w-5" v-if="!selectedTeam.emoji || selectedTeam?.avatar?.id">
+          <Avatar v-if="!selectedTeam.emoji || selectedTeam?.avatar?.id" class="mr-2 h-5 w-5">
             <AvatarImage :src="`${backendUrl}/assets/${selectedTeam?.avatar?.id}`" :alt="selectedTeam.name" />
             <AvatarFallback>
               {{ nameInitials(selectedTeam.name) }}
@@ -171,7 +171,7 @@ const created = async (group: Group) => {
           </div>
           <CaretSortIcon class="ml-auto h-4 w-4 shrink-0 opacity-50" />
         </Button>
-        <LoaderIcon v-else className="animate-spin" />
+        <LoaderIcon v-else class-name="animate-spin" />
       </PopoverTrigger>
       <PopoverContent class="w-[200px] p-0">
         <Command :filter-function="filterGroups">
@@ -186,7 +186,7 @@ const created = async (group: Group) => {
                 class="text-sm cursor-pointer"
                 @select="groupClicked(team)"
               >
-                <Avatar class="mr-2 h-5 w-5" v-if="!team.emoji || team?.avatar?.id">
+                <Avatar v-if="!team.emoji || team?.avatar?.id" class="mr-2 h-5 w-5">
                   <AvatarImage :src="`${backendUrl}/assets/${team?.avatar?.id}`" :alt="team.name" />
                   <AvatarFallback>
                     {{ nameInitials(team.name) }}
@@ -239,7 +239,7 @@ const created = async (group: Group) => {
         </Command>
       </PopoverContent>
     </Popover>
-    <NewGroupDialog @close="showDialog = false" v-if="dialogType === 'create-group'" @created="created" />
-    <GroupMemberDialog @close="showDialog = false" v-if="dialogType === 'invite-dialog'" :group="createdGroup" />
+    <NewGroupDialog v-if="dialogType === 'create-group'" @close="showDialog = false" @created="created" />
+    <GroupMemberDialog v-if="dialogType === 'invite-dialog'" :group="createdGroup" @close="showDialog = false" />
   </Dialog>
 </template>

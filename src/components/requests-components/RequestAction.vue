@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { storeToRefs } from 'pinia'
-import { CheckIcon, CalendarIcon, XIcon } from 'lucide-vue-next'
+import { CalendarIcon, CheckIcon, XIcon } from 'lucide-vue-next'
 
 import { Button } from '@/components/ui/button'
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip'
@@ -31,7 +31,7 @@ const goToCalender = (booking: Booking) => {
     <TooltipProvider>
       <Tooltip>
         <TooltipTrigger as-child>
-          <Button variant="outline" size="icon" @click="approveRequest(booking)" :loading="requestLoading">
+          <Button variant="outline" size="icon" :loading="requestLoading" @click="approveRequest(booking)">
             <CheckIcon class="w-4 h-4" />
           </Button>
         </TooltipTrigger>
@@ -43,7 +43,7 @@ const goToCalender = (booking: Booking) => {
     <TooltipProvider>
       <Tooltip>
         <TooltipTrigger as-child>
-          <Button variant="outline" size="icon" @click="rejectRequest(booking)" :loading="requestLoading">
+          <Button variant="outline" size="icon" :loading="requestLoading" @click="rejectRequest(booking)">
             <XIcon class="w-4 h-4" />
           </Button>
         </TooltipTrigger>

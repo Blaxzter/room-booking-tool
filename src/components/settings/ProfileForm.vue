@@ -115,7 +115,7 @@ const onSubmit = handleSubmit(async (values) => {
         alignment="left"
         class="ms-2"
         folder="b9b3ad18-3da4-42e3-8cdc-dc749ce89041"
-        :initAvatar="getAvatarString(user.avatar)"
+        :init-avatar="getAvatarString(user.avatar)"
         @avatar-updated="avatarChanged = true"
         @avatar-cleared="avatarChanged = true"
       />

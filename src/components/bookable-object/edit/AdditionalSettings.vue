@@ -1,11 +1,10 @@
 <script setup lang="ts">
-import { computed, type PropType, ref, onBeforeMount } from 'vue'
+import { computed, onBeforeMount, type PropType, ref } from 'vue'
 import { useForm } from 'vee-validate'
 import { toTypedSchema } from '@vee-validate/zod'
 import * as z from 'zod'
 
 import { FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form'
-import { Button } from '@/components/ui/button'
 import { Select, SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
 
 import NameFade from '@/components/utils/NameFade.vue'
@@ -14,7 +13,6 @@ import { Label } from '@/components/ui/label'
 import AvatarUploadComponent from '@/components/utils/AvatarUploadComponent.vue'
 
 import type { BookableObject } from '@/types'
-import { useGroups } from '@/stores/groups'
 import { useBookableObjects } from '@/stores/bookableObjects'
 
 interface InitialValues {
@@ -95,21 +93,21 @@ defineExpose({ getValues, validate, upload })
     <div class="flex flex-col gap-3">
       <Label>Display Image</Label>
       <AvatarUploadComponent
-        class="self-center"
         ref="avatarUpload"
+        class="self-center"
         :is-square="true"
         :height="12"
-        :initAvatar="bookableObject?.image?.id"
+        :init-avatar="bookableObject?.image?.id"
+        :add-clear-request="!!bookableObject"
         @avatar-updated="updateBookableObjectImage(false)"
         @avatar-cleared="updateBookableObjectImage(true)"
-        :add-clear-request="!!bookableObject"
       />
       <div class="text-sm text-muted-foreground">Upload an splash image.</div>
     </div>
     <FormField v-slot="{ componentField }" name="object_type">
       <FormItem>
         <FormLabel>Choose type of <NameFade :messages="bookableObjectRandoms" /></FormLabel>
-        <Select v-bind="componentField" @update:modelValue="$emit('update', 'type', values.object_type)">
+        <Select v-bind="componentField" @update:model-value="$emit('update', 'type', values.object_type)">
           <FormControl>
             <SelectTrigger>
               <SelectValue />

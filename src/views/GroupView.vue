@@ -1,10 +1,10 @@
 <script setup lang="ts">
-import { onMounted, ref, computed, inject } from 'vue'
+import { computed, inject, onMounted, ref } from 'vue'
 import { storeToRefs } from 'pinia'
 import { PlusCircledIcon } from '@radix-icons/vue'
-import { TrashIcon, ArrowLeftIcon } from 'lucide-vue-next'
+import { ArrowLeftIcon, TrashIcon } from 'lucide-vue-next'
 import _ from 'lodash'
-import { createReusableTemplate, useMediaQuery } from '@vueuse/core'
+import { breakpointsTailwind, useBreakpoints, useMediaQuery } from '@vueuse/core'
 
 import type { Group, User } from '@/types'
 
@@ -27,7 +27,6 @@ import { useUser } from '@/stores/user'
 import { Dialog } from '@/components/ui/dialog'
 import { Drawer } from '@/components/ui/drawer'
 import type { ShowAlertFunction } from '@/plugins/alert-dialog-plugin'
-import { breakpointsTailwind, useBreakpoints } from '@vueuse/core'
 
 const { fetchGroupData } = useInitialDataStore()
 const { init_loading } = storeToRefs(useInitialDataStore())
@@ -103,19 +102,19 @@ const groupViewOpen = ref(false)
 
 <template>
   <div class="container pt-5 mx-auto h-full max-h-full overflow-hidden">
-    <CalenderLoader :height="150" v-if="init_loading" />
+    <CalenderLoader v-if="init_loading" :height="150" />
     <template v-else>
       <div class="grid grid-cols-1 lg:grid-cols-2 gap-4 items-stretch h-full max-h-full overflow-hidden">
         <ScrollArea v-if="!mobile || !groupViewOpen">
           <div class="mb-5 me-[-6px] pe-[6px] sm:me-[-12px] sm:pe-[12px] max-w-full">
             <GroupList
+              class="mb-2 max-w-full"
               @select-group="
                 ($event) => {
                   selectedGroup = $event
                   groupViewOpen = true
                 }
               "
-              class="mb-2 max-w-full"
             />
             <div
               class="flex rounded-lg border p-3 transition-all hover:border-indigo-500/50 cursor-pointer h-[66px] sm:h-[98px] items-center justify-center text-gray-500 hover:text-indigo-500"
@@ -128,7 +127,7 @@ const groupViewOpen = ref(false)
             </div>
           </div>
         </ScrollArea>
-        <ScrollArea class="max-h-full overflow-hidden" v-if="!mobile || groupViewOpen">
+        <ScrollArea v-if="!mobile || groupViewOpen" class="max-h-full overflow-hidden">
           <template v-if="selectedGroup">
             <Tabs default-value="account">
               <div class="flex justify-between">
@@ -137,7 +136,7 @@ const groupViewOpen = ref(false)
                   <TabsTrigger value="password"> Members </TabsTrigger>
                 </TabsList>
                 <!-- back button -->
-                <Button variant="ghost" class="text-gray-500" @click="groupViewOpen = false" v-if="mobile">
+                <Button v-if="mobile" variant="ghost" class="text-gray-500" @click="groupViewOpen = false">
                   <ArrowLeftIcon class="w-4 h-4 me-1" /> Back
                 </Button>
               </div>
@@ -148,10 +147,10 @@ const groupViewOpen = ref(false)
                 <GroupMemberCard :group="selectedGroup" />
               </TabsContent>
             </Tabs>
-            <div class="flex justify-end mt-2" v-if="!isOwner">
+            <div v-if="!isOwner" class="flex justify-end mt-2">
               <span class="text-gray-500 text-sm">group by {{ ownerEmail }}</span>
             </div>
-            <div class="flex justify-end" v-else>
+            <div v-else class="flex justify-end">
               <Button variant="destructive" class="mt-4" @click="deleteGroup">
                 <TrashIcon class="w-4 h-4 me-1" />
                 Delete Group
@@ -166,22 +165,22 @@ const groupViewOpen = ref(false)
     </template>
   </div>
 
-  <Dialog v-model:open="showDialog" v-if="isDesktop || dialogType === 'edit-group'">
+  <Dialog v-if="isDesktop || dialogType === 'edit-group'" v-model:open="showDialog">
     <NewGroupDialog
-      @close="showDialog = false"
       v-if="dialogType === 'create-group'"
-      @created="created"
       :show-dialog="true"
+      @close="showDialog = false"
+      @created="created"
     />
-    <GroupEditDialog @close="showDialog = false" v-if="dialogType === 'edit-group'" :group="selectedEditGroup" />
+    <GroupEditDialog v-if="dialogType === 'edit-group'" :group="selectedEditGroup" @close="showDialog = false" />
   </Dialog>
 
-  <Drawer v-model:open="showDialog" v-else>
+  <Drawer v-else v-model:open="showDialog">
     <NewGroupDialog
-      @close="showDialog = false"
       v-if="dialogType === 'create-group'"
-      @created="created"
       :show-dialog="false"
+      @close="showDialog = false"
+      @created="created"
     />
   </Drawer>
 </template>

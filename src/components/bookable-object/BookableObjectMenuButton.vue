@@ -2,7 +2,7 @@
 import { inject } from 'vue'
 import { useRouter } from 'vue-router'
 
-import { EllipsisVertical, LinkIcon, EditIcon, TrashIcon } from 'lucide-vue-next'
+import { EditIcon, EllipsisVertical, LinkIcon, TrashIcon } from 'lucide-vue-next'
 
 import { Button } from '@/components/ui/button'
 import {

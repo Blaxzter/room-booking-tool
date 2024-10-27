@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, computed } from 'vue'
+import { computed, ref } from 'vue'
 import { storeToRefs } from 'pinia'
 import { useUser } from '@/stores/user'
 
@@ -53,7 +53,7 @@ const { deleteUserRequest } = useUser()
           <div>
             Please type <code class="text-primary">{{ user.email }}</code> to confirm.
           </div>
-          <Input type="text" class="w-full mt-4" placeholder="Type your email" v-model="inputEmail" />
+          <Input v-model="inputEmail" type="text" class="w-full mt-4" placeholder="Type your email" />
         </AlertDialogDescription>
       </AlertDialogHeader>
       <AlertDialogFooter>

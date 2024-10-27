@@ -1,4 +1,4 @@
-import { computed, ref, h } from 'vue'
+import { computed, h, ref } from 'vue'
 import { defineStore } from 'pinia'
 import {
   authentication,
@@ -8,19 +8,19 @@ import {
   type AuthenticationMode,
   type AuthenticationStorage,
   createDirectus,
+  deleteFile,
+  deleteUser,
   type DirectusClient,
   type DirectusUser,
   graphql,
   type GraphqlClient,
   type Query,
   readMe,
+  registerUser,
+  registerUserVerify,
   rest,
   type RestClient,
-  updateUser,
-  registerUser,
-  deleteUser,
-  registerUserVerify,
-  deleteFile
+  updateUser
 } from '@directus/sdk'
 import type { CreateUserRequest, Group, MySchema, UpdateUserRequest, User } from '@/types'
 import router from '@/router'
@@ -32,8 +32,7 @@ import { useGlobal } from '@/stores/global'
 import { useGroups } from '@/stores/groups'
 import { useBookings } from '@/stores/booking'
 import { useBookableObjects } from '@/stores/bookableObjects'
-import { ToastAction } from '@/components/ui/toast'
-import { toast } from '@/components/ui/toast'
+import { toast, ToastAction } from '@/components/ui/toast'
 
 export type MyDirectusClient = DirectusClient<MySchema> &
   AuthenticationClient<MySchema> &

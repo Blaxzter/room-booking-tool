@@ -1,6 +1,6 @@
 import { ref, type Ref } from 'vue'
 import { defineStore } from 'pinia'
-import { readSingleton, readRoles } from '@directus/sdk'
+import { readRoles, readSingleton } from '@directus/sdk'
 import { useUser } from '@/stores/user'
 
 export const useGlobalSettings = defineStore('globalSettings', () => {

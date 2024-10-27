@@ -1,9 +1,8 @@
 <script setup lang="ts">
 import type { Group } from '@/types'
 
-import { DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from '@/components/ui/dialog'
+import { DialogContent, DialogDescription, DialogHeader, DialogTitle } from '@/components/ui/dialog'
 import GroupMemberCard from '@/components/groups/bodys/GroupMemberBody.vue'
-import { Button } from '@/components/ui/button'
 
 defineProps<{
   group: Group | undefined

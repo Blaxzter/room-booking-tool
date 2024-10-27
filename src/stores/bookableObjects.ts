@@ -1,6 +1,6 @@
 import { defineStore, storeToRefs } from 'pinia'
 import { computed, ref } from 'vue'
-import type { BookableObject, CreateBookableObjectRequest, Group } from '@/types'
+import type { BookableObject, CreateBookableObjectRequest } from '@/types'
 import { useUser } from '@/stores/user'
 import { type BookableObjectsRequest } from '@/assets/ts/queries/initial_data'
 import { useToast } from '@/components/ui/toast'

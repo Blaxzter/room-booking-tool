@@ -68,7 +68,7 @@ defineExpose({ getValues, validate })
 
 <template>
   <form class="grid gap-5 py-4">
-    <FormField name="display_name" v-slot="{ componentField }">
+    <FormField v-slot="{ componentField }" name="display_name">
       <FormItem>
         <FormLabel for="name"> Name </FormLabel>
         <FormControl>
@@ -81,7 +81,7 @@ defineExpose({ getValues, validate })
         </FormDescription>
       </FormItem>
     </FormField>
-    <FormField name="mail" v-slot="{ componentField }">
+    <FormField v-slot="{ componentField }" name="mail">
       <FormItem>
         <FormLabel for="mail"> E-Mail </FormLabel>
         <FormControl>
@@ -96,7 +96,7 @@ defineExpose({ getValues, validate })
         <FormDescription> Please enter your email address. </FormDescription>
       </FormItem>
     </FormField>
-    <FormField name="phone" v-slot="{ componentField }">
+    <FormField v-slot="{ componentField }" name="phone">
       <FormItem>
         <FormLabel for="phone"> Phone </FormLabel>
         <FormControl>

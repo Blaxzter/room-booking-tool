@@ -1,10 +1,10 @@
 <script setup lang="ts">
-import { computed, ref, onMounted } from 'vue'
+import { computed, onMounted, ref } from 'vue'
 import { storeToRefs } from 'pinia'
 import { cn } from '@/lib/utils'
 import { breakpointsTailwind, useBreakpoints } from '@vueuse/core'
 
-import { PencilIcon, HistoryIcon } from 'lucide-vue-next'
+import { HistoryIcon, PencilIcon } from 'lucide-vue-next'
 import { useToast } from '@/components/ui/toast'
 
 import ConfirmationIcon from '@/components/booking-components/calender/ConfirmationIcon.vue'
@@ -68,7 +68,7 @@ onMounted(() => {
 <template>
   <div class="w-full h-full" :class="cn(confirmed && 'event-confirmed')" @click="eventClick(arg)">
     <template v-if="arg.view.type == 'dayGridFourWeek'">
-      <div class="relative" v-if="arg.event.allDay">
+      <div v-if="arg.event.allDay" class="relative">
         <a
           class="cursor-pointer mx-0.5 fc-daygrid-event fc-daygrid-block-event block"
           :class="[arg.isPast && 'fc-event-past']"
@@ -82,20 +82,20 @@ onMounted(() => {
           </div>
         </a>
       </div>
-      <div class="relative" v-else>
+      <div v-else class="relative">
         <a
           class="decoration-0 cursor-pointer fc-event-resizable fc-daygrid-event lg:mx-0.5 lg:py-0.5 flex items-center"
           :class="[arg.isPast && 'fc-event-past', !confirmed && 'text-muted-foreground', mobile && 'event-mobile']"
         >
           <div
+            v-if="!mobile"
             class="fc-daygrid-event-dot"
             :class="[confirmed && 'confirmed', !confirmed && 'not-confirmed']"
-            v-if="!mobile"
           ></div>
           <div class="overflow-hidden flex-shrink overflow-ellipsis">{{ arg.event.title }}</div>
           <div class="flex-grow" />
           <template v-if="!arg.isPast">
-            <div class="me-[1px]" v-if="!mobile">
+            <div v-if="!mobile" class="me-[1px]">
               <ConfirmationIcon :confirmed="confirmed" />
             </div>
           </template>
@@ -103,7 +103,7 @@ onMounted(() => {
       </div>
     </template>
     <template v-else-if="arg.view.type == 'timeGridDay'">
-      <div class="relative" v-if="arg.event.allDay">
+      <div v-if="arg.event.allDay" class="relative">
         <a
           :class="
             cn('cursor-pointer mx-0.5 fc-daygrid-event fc-daygrid-block-event block', arg.isPast && 'fc-event-past')
@@ -171,7 +171,7 @@ onMounted(() => {
       </div>
     </template>
     <template v-else-if="arg.view.type == 'timeGridWeek'">
-      <div class="relative" v-if="arg.event.allDay">
+      <div v-if="arg.event.allDay" class="relative">
         <a
           :class="
             cn('cursor-pointer mx-0.5 fc-daygrid-event fc-daygrid-block-event block', arg.isPast && 'fc-event-past')
@@ -182,7 +182,7 @@ onMounted(() => {
               {{ arg.event.title }}
             </div>
             <div class="flex-grow" />
-            <div class="flex" v-if="!arg.isPast">
+            <div v-if="!arg.isPast" class="flex">
               <TooltipProvider>
                 <Tooltip>
                   <TooltipTrigger>
@@ -205,7 +205,7 @@ onMounted(() => {
             {{ arg.event.title }}
           </div>
           <div class="flex-grow" />
-          <div class="flex" v-if="!arg.isPast">
+          <div v-if="!arg.isPast" class="flex">
             <TooltipProvider>
               <Tooltip>
                 <TooltipTrigger>

@@ -1,9 +1,7 @@
 <script setup lang="ts">
-import { onBeforeMount } from 'vue'
+import { computed, onBeforeMount, provide } from 'vue'
 import Toaster from '@/components/ui/toast/Toaster.vue'
 import { showAlertDialog } from '@/plugins/alert-dialog-plugin'
-
-import { computed, provide } from 'vue'
 import { RouterView, useRoute } from 'vue-router'
 
 import { useDark } from '@vueuse/core'

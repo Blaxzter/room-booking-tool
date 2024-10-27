@@ -31,35 +31,4 @@ export const getInviteQuery = ({ as_query, user_id }: { as_query: boolean; user_
     ${invite_query}
   `
 }
-;`
 
-query Invite {
-    group_invites(
-        filter: { user_id: { id: { _eq: "25c64529-2876-4391-977b-7b23a57239f7" } } ) {
-      
-        id
-        group_id {
-            name
-        }
-        email
-        role                                                  
-
-    }
-      }
-      
-      
-query Invite {
-    group_invites(
-        filter: { user_id: { id: { _eq: "25c64529-2876-4391-977b-7b23a57239f7" } } }
-    ) {
-        id
-        group_id {
-            name
-        }
-        email
-        role
-    }
-}
-                                                                
-
-    `

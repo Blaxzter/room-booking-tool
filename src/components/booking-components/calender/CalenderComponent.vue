@@ -241,20 +241,20 @@ onMounted(() => {
     <CardHeader class="flex flex-col sm:flex-row sm:items-center space-y-1 p-2 sm:p-4 sm:space-y-0 sm:space-x-4">
       <div class="flex items-center">
         <CalendarIcon class="mr-2" />
-        <h2 class="text-lg font-semibold" v-if="fullCalenderRef">
+        <h2 v-if="fullCalenderRef" class="text-lg font-semibold">
           {{ currentDateString }}
         </h2>
       </div>
       <div class="flex-grow"></div>
       <div class="flex items-center gap-2 sm:gap-3 justify-end">
-        <Button @click="selectToday" :variant="isToday ? 'outline' : 'default'">Today</Button>
+        <Button :variant="isToday ? 'outline' : 'default'" @click="selectToday">Today</Button>
         <calender-remote @prev="togglePrev" @next="toggleNext" />
         <calender-tabs v-model="selectedTab" @update:model-value="switchTab" />
       </div>
     </CardHeader>
     <CardContent class="calender-wrapper p-0">
-      <full-calendar :options="calendarOptions" ref="fullCalenderRef">
-        <template v-slot:eventContent="arg">
+      <full-calendar ref="fullCalenderRef" :options="calendarOptions">
+        <template #eventContent="arg">
           <CalenderEventSlot :arg="arg" @delete="removeEvent($event)" />
         </template>
       </full-calendar>
