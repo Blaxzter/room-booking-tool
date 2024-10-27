@@ -3,7 +3,7 @@ import { computed, inject, onMounted, ref, watch } from 'vue'
 import { uploadFiles } from '@directus/sdk'
 
 import { TrashIcon, UploadIcon, XIcon } from 'lucide-vue-next'
-// @ts-ignore
+// @ts-expect-error
 import AvatarCropper from 'vue-avatar-cropper'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 

@@ -53,7 +53,6 @@
     "@eslint/js": "^9.13.0",
     "@rushstack/eslint-patch": "^1.10.4",
     "@tsconfig/node20": "^20.1.4",
-    "@types/eslint__js": "^8.42.3",
     "@types/lodash": "^4.17.12",
     "@types/node": "^22.8.1",
     "@types/uuid": "^10.0.0",

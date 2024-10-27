@@ -81,7 +81,7 @@ function createTelegramWidget() {
   script.setAttribute('data-request-access', 'write')
 
   if (telegramWidget.value) {
-    /* @ts-ignore */
+    /* @ts-expect-error */
     telegramWidget.value.appendChild(script)
   }
 }

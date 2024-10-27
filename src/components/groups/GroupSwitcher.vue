@@ -108,7 +108,7 @@ const open = ref(false)
 const showDialog = ref(false)
 const dialogType = ref('create-group')
 
-let selectedTeam = computed(() => {
+const selectedTeam = computed(() => {
   if (selectedGroupId.value != null && selectedGroupId.value !== '-1') {
     const find = _.find(groups.value, { id: `${selectedGroupId.value}` })
     if (find) return find

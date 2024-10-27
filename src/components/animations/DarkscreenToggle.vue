@@ -6,7 +6,7 @@ import { useDark } from '@vueuse/core'
 
 const isDark = useDark()
 
-let anim = ref()
+const anim = ref()
 
 const currentFrame = ref(0)
 const currentDirection = ref(1)

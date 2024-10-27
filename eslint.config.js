@@ -1,44 +1,33 @@
-//@ts-check
-import eslint from '@eslint/js';
-import tsParser from '@typescript-eslint/parser';
-import tsPlugin from '@typescript-eslint/eslint-plugin';
-import pluginVue from 'eslint-plugin-vue';
-import eslintConfigPrettier from 'eslint-config-prettier';
+import pluginVue from 'eslint-plugin-vue'
+import vueTsEslintConfig from '@vue/eslint-config-typescript'
+import skipFormatting from '@vue/eslint-config-prettier/skip-formatting'
 
 export default [
-  // Your linting configuration
   {
-    files: ["src/**/*.ts", "src/**/*.vue"],
     ignores: [
-      "dist/**",
-      "node_modules/**",
-      ".github/**",
-      ".vscode/**",
-      "directus-config/**",
-      "directus-extension/**",
-      "directus-uploads/**",
-      "github-pages/**",
-      "telegram-bot/**",
-      "uploads/**",
-    ],
-    languageOptions: {
-      parser: tsParser,
-      parserOptions: {
-        ecmaVersion: "latest",
-        sourceType: "module",
-        project: "./tsconfig.json",
-      },
-    },
-    plugins: {
-      "@typescript-eslint": tsPlugin,
-      "vue": pluginVue,
-    },
-    rules: {
-      ...eslint.configs.recommended.rules,
-      ...tsPlugin.configs.recommended.rules,
-      ...pluginVue.configs['flat/recommended'].rules,
-      ...eslintConfigPrettier.rules,
-      "@typescript-eslint/no-explicit-any": "off",
-    },
+      "dist/",
+      "src/components/ui/",
+      "telegram-bot/",
+      "tailwind.config.js"
+    ]
   },
-];
+  {
+    name: 'app/files-to-lint',
+    files: ['**/*.{ts,mts,tsx,vue}'],
+  },
+
+  {
+    name: 'app/files-to-ignore',
+    ignores: ['**/dist/**', '**/dist-ssr/**', '**/coverage/**'],
+  },
+
+  ...pluginVue.configs['flat/essential'],
+  ...vueTsEslintConfig(),
+  skipFormatting,
+  // Add your own rules here ( @typescript-eslint/no-explicit-any)
+  {
+    rules: {
+      '@typescript-eslint/no-explicit-any': 'off'
+    }
+  }
+]

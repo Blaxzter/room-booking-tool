@@ -42,7 +42,7 @@ const loginWrapper = async () => {
         showScreenGrower.value = true
       }, 900)
       setTimeout(() => {
-        let to = getRedirect() || { name: 'home' }
+        const to = getRedirect() || { name: 'home' }
         router.push(to)
       }, 1000)
     })
@@ -63,7 +63,7 @@ onMounted(async () => {
       showCheckmark.value = true
     }, 1000)
     setTimeout(() => {
-      let to = getRedirect() || { name: 'home' }
+      const to = getRedirect() || { name: 'home' }
       router.push(to)
     }, 2000)
   }

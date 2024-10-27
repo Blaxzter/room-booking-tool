@@ -91,7 +91,7 @@ export const useInitialDataStore = defineStore('initial', () => {
         console.log(bookable_object_id, res.data.bookings)
         setBookings(bookable_object_id, res.data.bookings)
       })
-      .catch((error) => {
+      .catch(() => {
         toast({
           title: 'Error',
           description: 'No bookable object found'

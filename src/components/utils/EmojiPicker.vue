@@ -1,11 +1,11 @@
 <script setup lang="ts">
 import { DropdownMenu, DropdownMenuContent, DropdownMenuTrigger } from '@/components/ui/dropdown-menu'
 import RandomEmoji from '@/components/utils/Emoji.vue'
-// @ts-ignore
+// @ts-expect-error
 import { Emoji, EmojiIndex, Picker } from 'emoji-mart-vue-fast/src'
 import data from 'emoji-mart-vue-fast/data/all.json'
 
-const props = defineProps({
+defineProps({
   disabled: {
     type: Boolean,
     default: false
