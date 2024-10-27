@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { ref } from 'vue'
-import { ChevronLeftIcon, ChevronRightIcon, PlusCircledIcon, RocketIcon } from '@radix-icons/vue'
+import { PlusCircledIcon, ChevronRightIcon, ChevronLeftIcon, RocketIcon } from '@radix-icons/vue'
 import { createReusableTemplate, useMediaQuery } from '@vueuse/core'
 
 import { Dialog, DialogContent, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog'
@@ -86,11 +86,11 @@ const isDesktop = useMediaQuery('(min-width: 768px)')
 <template>
   <UseTemplate>
     <StepperComponent v-model="activeStep" :steps="steps">
-      <template #step-0>
+      <template v-slot:step-0>
         <DefaultSettings ref="defaultSettings" :initial-values="steptoValues[0]">
-          <template #footer>
+          <template v-slot:footer>
             <DialogFooter>
-              <Button type="button" @click="nextStep">
+              <Button @click="nextStep" type="button">
                 Next
                 <ChevronRightIcon class="h-4 w-4 ms-1" />
               </Button>
@@ -98,15 +98,15 @@ const isDesktop = useMediaQuery('(min-width: 768px)')
           </template>
         </DefaultSettings>
       </template>
-      <template #step-1>
+      <template v-slot:step-1>
         <AccessSettings ref="accessSettings" :initial-values="steptoValues[1]">
-          <template #footer>
+          <template v-slot:footer>
             <div class="flex gap-2">
-              <Button type="button" class="flex-grow" @click="activeStep--">
+              <Button @click="activeStep--" type="button" class="flex-grow">
                 <ChevronLeftIcon class="h-4 w-4 me-1" />
                 Back
               </Button>
-              <Button type="button" class="flex-grow" @click="nextStep">
+              <Button @click="nextStep" type="button" class="flex-grow">
                 Next
                 <ChevronRightIcon class="h-4 w-4 ms-1" />
               </Button>
@@ -114,15 +114,15 @@ const isDesktop = useMediaQuery('(min-width: 768px)')
           </template>
         </AccessSettings>
       </template>
-      <template #step-2>
+      <template v-slot:step-2>
         <AdditionalSettings ref="additionalSettings" :initial-values="steptoValues[2]">
-          <template #footer>
+          <template v-slot:footer>
             <div class="flex gap-2">
-              <Button type="button" class="flex-grow" @click="activeStep--">
+              <Button @click="activeStep--" type="button" class="flex-grow">
                 <ChevronLeftIcon class="h-4 w-4 me-1" />
                 Back
               </Button>
-              <Button type="button" class="flex-grow" @click="nextStep">
+              <Button @click="nextStep" type="button" class="flex-grow">
                 Create
                 <RocketIcon class="h-4 w-4 ms-1" />
               </Button>
@@ -133,7 +133,7 @@ const isDesktop = useMediaQuery('(min-width: 768px)')
     </StepperComponent>
   </UseTemplate>
 
-  <Dialog v-if="isDesktop" v-model:open="open">
+  <Dialog v-model:open="open" v-if="isDesktop">
     <DialogTrigger>
       <Button class="hidden sm:flex">
         <PlusCircledIcon class="mr-2 h-4 w-4" />

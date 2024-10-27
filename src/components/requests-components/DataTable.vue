@@ -1,7 +1,7 @@
 <script setup lang="ts" generic="TData, TValue">
 import { ref } from 'vue'
 import type { ColumnDef, SortingState } from '@tanstack/vue-table'
-import { FlexRender, getCoreRowModel, getPaginationRowModel, getSortedRowModel, useVueTable } from '@tanstack/vue-table'
+import { FlexRender, getCoreRowModel, useVueTable, getPaginationRowModel, getSortedRowModel } from '@tanstack/vue-table'
 
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table'
 import DataTablePagination from '@/components/requests-components/DataTablePagination.vue'

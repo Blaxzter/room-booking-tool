@@ -1,6 +1,6 @@
 <template>
   <form class="grid gap-5 py-4">
-    <FormField v-slot="{ componentField }" name="description">
+    <FormField name="description" v-slot="{ componentField }">
       <FormItem>
         <FormLabel for="description"> Description </FormLabel>
         <FormControl class="col-span-3">
@@ -43,7 +43,6 @@ import { Textarea } from '@/components/ui/textarea'
 import { useGlobalSettings } from '@/stores/globalSettings'
 import { storeToRefs } from 'pinia'
 import { Checkbox } from '@/components/ui/checkbox'
-
 const { displayLegal } = storeToRefs(useGlobalSettings())
 
 interface InitialValues {

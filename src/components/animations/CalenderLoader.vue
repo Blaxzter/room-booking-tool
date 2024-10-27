@@ -10,7 +10,7 @@ const props = defineProps({
 
 <template>
   <LottieAnimation
-    :animation-data="flatten('#f8fafc', loader)"
+    :animationData="flatten('#f8fafc', loader)"
     :auto-play="true"
     :loop="true"
     :speed="4"

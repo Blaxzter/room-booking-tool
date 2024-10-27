@@ -20,7 +20,7 @@ onMounted(async () => {
 
 <template>
   <div class="container py-10 mx-auto">
-    <CalenderLoader v-if="init_loading" :height="150" />
-    <DataTable v-else :columns="columns" :data="requests" />
+    <CalenderLoader :height="150" v-if="init_loading" />
+    <DataTable :columns="columns" :data="requests" v-else />
   </div>
 </template>

@@ -11,6 +11,7 @@ import {
   AlertDialogTitle
 } from '@/components/ui/alert-dialog'
 import { CheckIcon } from 'lucide-vue-next'
+import { Button } from '@/components/ui/button'
 
 defineProps({
   title: {
@@ -54,7 +55,7 @@ defineProps({
       <AlertDialogFooter>
         <AlertDialogCancel @click="onDismiss">Cancel</AlertDialogCancel>
 
-        <AlertDialogAction :varient="confirmVariant" @click="onConfirm">
+        <AlertDialogAction @click="onConfirm" :varient="confirmVariant">
           <component :is="confirmIcon" class="w-4 h-4 me-2" />
           <slot name="confirm">
             {{ onConfirmText }}

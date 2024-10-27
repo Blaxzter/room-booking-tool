@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { ref } from 'vue'
 import { TabsContent, TabsList, TabsRoot, TabsTrigger } from 'radix-vue'
-import { CircleCheckBigIcon, CircleDotIcon, CircleIcon } from 'lucide-vue-next'
+import { CircleIcon, CircleDotIcon, CircleCheckBigIcon } from 'lucide-vue-next'
 
 const steps = ref(['Basic Info', 'Permissions', 'Additional'])
 
@@ -9,7 +9,7 @@ const activeStep = defineModel({ default: 0, required: true })
 </script>
 
 <template>
-  <TabsRoot v-model="activeStep" class="stepper">
+  <TabsRoot class="stepper" v-model="activeStep">
     <TabsList class="flex justify-between w-full px-2 py-2">
       <template v-for="(step, index) in steps" :key="index">
         <TabsTrigger
@@ -19,9 +19,9 @@ const activeStep = defineModel({ default: 0, required: true })
         >
           <div class="flex flex-col items-center">
             <div class="mb-1">
-              <CircleIcon v-if="activeStep < index" class="h-6 w-6" />
-              <CircleDotIcon v-else-if="activeStep === index" class="h-6 w-6" />
-              <CircleCheckBigIcon v-else class="h-6 w-6" />
+              <CircleIcon class="h-6 w-6" v-if="activeStep < index" />
+              <CircleDotIcon class="h-6 w-6" v-else-if="activeStep === index" />
+              <CircleCheckBigIcon class="h-6 w-6" v-else />
             </div>
             <div>
               {{ step }}
@@ -31,7 +31,7 @@ const activeStep = defineModel({ default: 0, required: true })
         <div v-if="index < steps.length - 1" class="flex-grow h-[2px] mx-2 mt-[10px] bg-secondary"></div>
       </template>
     </TabsList>
-    <TabsContent v-for="(step, index) in steps" :key="index" :value="index" class="w-full">
+    <TabsContent :value="index" v-for="(step, index) in steps" :key="index" class="w-full">
       <slot :name="`step-${index}`"> Missing content for step {{ index }} </slot>
     </TabsContent>
   </TabsRoot>

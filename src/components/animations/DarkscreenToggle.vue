@@ -64,7 +64,7 @@ const enterFrame = () => {
     :loop="false"
     :speed="3"
     :style="{ height: `${props.height}px` }"
-    @enter-frame="enterFrame"
+    @enterFrame="enterFrame"
   />
 </template>
 

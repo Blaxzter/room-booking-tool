@@ -13,7 +13,7 @@ const props = defineProps({
 <template>
   <LottieAnimation
     v-if="showCheckmark"
-    :animation-data="check"
+    :animationData="check"
     :auto-play="true"
     :loop="false"
     :speed="1"
@@ -21,7 +21,7 @@ const props = defineProps({
   />
   <LottieAnimation
     v-else
-    :animation-data="cross"
+    :animationData="cross"
     :auto-play="true"
     :loop="false"
     :speed="1.8"

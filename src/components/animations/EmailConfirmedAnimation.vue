@@ -9,7 +9,7 @@ defineProps({
 
 <template>
   <LottieAnimation
-    :animation-data="rocket"
+    :animationData="rocket"
     :auto-play="true"
     :loop="false"
     :speed="1"

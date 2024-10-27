@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { ref } from 'vue'
 import { storeToRefs } from 'pinia'
 import { MailIcon, SendIcon } from 'lucide-vue-next'
 
@@ -10,6 +11,8 @@ import { useNotificationSetting } from '@/stores/notificationSettings'
 import { useToast } from '@/components/ui/toast'
 
 import type { NotificationSetting } from '@/types'
+import InDevelopment from '@/components/utils/InDevelopment.vue'
+import { ScrollArea } from '@/components/ui/scroll-area'
 
 const {
   notificationSettingsLoading,

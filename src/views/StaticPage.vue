@@ -48,7 +48,7 @@ onBeforeMount(async () => {
 </script>
 
 <template>
-  <div v-if="page" class="h-full px-4 py-6 lg:px-8">
+  <div class="h-full px-4 py-6 lg:px-8" v-if="page">
     <div v-html="page.content"></div>
   </div>
 </template>

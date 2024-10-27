@@ -18,12 +18,12 @@ const setEmailVerified = () => {
 
 <template>
   <BackgroundImage />
-  <div v-if="visibleView === 'emailSend' && !hideRocket" class="rocket-wrapper">
+  <div class="rocket-wrapper" v-if="visibleView === 'emailSend' && !hideRocket">
     <RocketStartAnimation class="rocket" />
   </div>
   <main>
     <div class="flex justify-center items-center h-screen">
-      <RegisterCard v-if="visibleView === 'register'" @email-send="setEmailVerified" />
+      <RegisterCard @email-send="setEmailVerified" v-if="visibleView === 'register'" />
       <EmailSendCard v-else-if="visibleView === 'emailSend'" />
     </div>
   </main>

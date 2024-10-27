@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { type Table } from '@tanstack/vue-table'
 import type { Booking } from '@/types'
-import { ChevronLeftIcon, ChevronRightIcon, ChevronsLeftIcon, ChevronsRightIcon } from 'lucide-vue-next'
+import { ChevronsRightIcon, ChevronsLeftIcon, ChevronLeftIcon, ChevronRightIcon } from 'lucide-vue-next'
 
 import { Button } from '@/components/ui/button'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'

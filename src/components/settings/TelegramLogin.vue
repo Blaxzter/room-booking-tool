@@ -12,7 +12,7 @@
           Your account is linked to <span class="font-bold">@{{ user.telegram_user_name }}</span>
         </div>
         <CheckIcon class="w-5 h-5 text-success me-5 mt-3" />
-        <Button variant="destructive" size="icon" @click="removeTelegramId">
+        <Button variant="destructive" @click="removeTelegramId" size="icon">
           <TrashIcon class="w-4 h-4" />
         </Button>
       </div>

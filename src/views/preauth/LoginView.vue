@@ -117,8 +117,8 @@ onMounted(async () => {
                 type="button"
                 @click="showPassword = !showPassword"
               >
-                <EyeOff v-if="showPassword" class-name="text-current" :size="18" />
-                <Eye v-else class-name="text-current" :size="18" />
+                <EyeOff v-if="showPassword" className="text-current" :size="18" />
+                <Eye v-else className="text-current" :size="18" />
               </Button>
             </div>
           </div>
@@ -153,7 +153,7 @@ onMounted(async () => {
           </div>
         </CardFooter>
       </Card>
-      <AutoLoginCard v-else :show-checkmark="showCheckmark" :show-cross="showCross" :loading="loading" />
+      <AutoLoginCard v-else :showCheckmark="showCheckmark" :showCross="showCross" :loading="loading" />
     </div>
   </main>
 </template>

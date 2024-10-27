@@ -60,9 +60,9 @@ onMounted(async () => {
         </div>
         <Separator class="my-4" />
         <div class="relative">
-          <CalenderLoader v-if="loading" :height="150" />
+          <CalenderLoader :height="150" v-if="loading" />
           <ScrollArea v-else>
-            <div v-if="bookableObjects && bookableObjects.length > 0" class="flex space-x-4 pb-4 overflow-visible">
+            <div class="flex space-x-4 pb-4 overflow-visible" v-if="bookableObjects && bookableObjects.length > 0">
               <BookableObjectCard
                 v-for="bookableObject in filteredBookableObjectList"
                 :key="bookableObject.name"

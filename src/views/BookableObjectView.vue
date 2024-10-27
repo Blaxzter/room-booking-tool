@@ -44,10 +44,10 @@ onMounted(async () => {
   <template v-else>
     <BookableSideInfo :bookable-object="selectedBookableObject!" :top-nav="false" class="flex sm:hidden flex-grow" />
     <div
-      v-if="selectedBookableObject"
       class="px-1 py-2 h-full md:py-3 md:px-3 grid items-stretch gap-2 md:gap-4 lg:gap-6 lg:grid-cols-[400px_minmax(0,1fr)]"
+      v-if="selectedBookableObject"
     >
-      <BookableSideInfo :bookable-object="selectedBookableObject" class="hidden sm:flex" />
+      <BookableSideInfo :bookableObject="selectedBookableObject" class="hidden sm:flex" />
       <CalenderComponent :top-padding="57" :date="date" />
     </div>
   </template>

@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import LogoImage from '@/components/bits/LogoImage.vue'
 import LoginAnimation from '@/components/login/LoginAnimation.vue'
 import CalenderLoader from '@/components/animations/CalenderLoader.vue'
@@ -26,7 +26,7 @@ defineProps({
     </CardHeader>
     <CardContent class="grid place-items-center pt-0">
       <CalenderLoader v-if="!showCheckmark && !showCross" :height="200" />
-      <LoginAnimation v-else :show-checkmark="showCheckmark" :height="200" />
+      <LoginAnimation :show-checkmark="showCheckmark" :height="200" v-else />
       <CardTitle v-if="showCheckmark"> Authenticated </CardTitle>
       <CardTitle v-else-if="showCross"> Invalid email or password </CardTitle>
       <CardTitle v-else> Logging in </CardTitle>

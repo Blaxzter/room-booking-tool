@@ -1,6 +1,6 @@
 <script setup lang="ts">
 // get the bookable object id from the route
-import { onMounted } from 'vue'
+import { onMounted, ref } from 'vue'
 import { useRoute } from 'vue-router'
 import { storeToRefs } from 'pinia'
 
@@ -36,7 +36,7 @@ onMounted(async () => {
   <template v-else>
     <BookableSideInfo :bookable-object="selectedBookableObject!" :top-nav="false" class="flex sm:hidden flex-grow" />
     <div class="px-1 py-1 h-full md:py-3 md:px-3 grid items-stretch gap-6 lg:grid-cols-[400px_minmax(0,1fr)]">
-      <BookableSideInfo :bookable-object="selectedBookableObject!" class="hidden sm:flex" />
+      <BookableSideInfo :bookableObject="selectedBookableObject!" class="hidden sm:flex" />
       <CalenderComponent :top-padding="0" :date="''" />
     </div>
   </template>

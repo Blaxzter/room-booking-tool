@@ -106,7 +106,7 @@ const rejectInvite = async (group: Group) => {
       class="mr-1 md:mr-4"
       :class="[isInvite ? 'h-12 w-12' : 'w-14 sm:w-20 h-14 sm:h-20']"
     >
-      <AvatarImage v-if="group?.avatar?.id" :src="`${backendUrl}/assets/${group?.avatar?.id}`" :alt="group.name" />
+      <AvatarImage :src="`${backendUrl}/assets/${group?.avatar?.id}`" :alt="group.name" v-if="group?.avatar?.id" />
       <AvatarFallback>
         {{ nameInitials(group.name) }}
       </AvatarFallback>
@@ -167,16 +167,16 @@ const rejectInvite = async (group: Group) => {
           {{ group.description }}
         </div>
       </div>
-      <div v-if="!isInvite" class="flex items-center gap-2">
+      <div class="flex items-center gap-2" v-if="!isInvite">
         <BoxIcon class="w-4 h-4 text-muted-foreground" />
         <template v-if="group?.bookable_objects !== undefined && group.bookable_objects.length > 0">
           <ScrollArea>
             <div class="flex flex-nowrap gap-1 text-nowrap">
               <Badge
-                v-for="object of group.bookable_objects"
-                :key="object.id"
                 variant="secondary"
                 :class="isSelected && 'border border-primary'"
+                v-for="object of group.bookable_objects"
+                :key="object.id"
               >
                 {{ object.bookable_object_id.name }}
               </Badge>
@@ -188,10 +188,10 @@ const rejectInvite = async (group: Group) => {
       </div>
     </div>
     <div class="flex items-center gap-2">
-      <Button v-if="isInvite" variant="ghost" size="icon" @click.stop="acceptInvite(group)">
+      <Button v-if="isInvite" @click.stop="acceptInvite(group)" variant="ghost" size="icon">
         <CheckIcon class="text-success" />
       </Button>
-      <Button v-if="isInvite" variant="ghost" size="icon" @click.stop="rejectInvite(group)">
+      <Button v-if="isInvite" @click.stop="rejectInvite(group)" variant="ghost" size="icon">
         <XIcon class="text-destructive" />
       </Button>
     </div>

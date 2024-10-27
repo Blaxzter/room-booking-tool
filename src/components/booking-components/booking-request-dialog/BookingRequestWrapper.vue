@@ -125,31 +125,31 @@ const isDesktop = useMediaQuery('(min-width: 768px)')
 <template>
   <UseTemplate>
     <StepperComponent v-model="activeStep" :steps="steps">
-      <template #step-0>
+      <template v-slot:step-0>
         <TimeData ref="timeData" :initial-values="stepToValues[0]">
-          <template #footer>
+          <template v-slot:footer>
             <DialogFooter>
-              <Button type="button" @click="nextStep">Next</Button>
+              <Button @click="nextStep" type="button">Next</Button>
             </DialogFooter>
           </template>
         </TimeData>
       </template>
-      <template #step-1>
+      <template v-slot:step-1>
         <ContactData ref="contactData" :initial-values="stepToValues[1]">
-          <template #footer>
+          <template v-slot:footer>
             <DialogFooter>
-              <Button type="button" @click="activeStep--">Back</Button>
-              <Button type="button" @click="nextStep">Next</Button>
+              <Button @click="activeStep--" type="button">Back</Button>
+              <Button @click="nextStep" type="button">Next</Button>
             </DialogFooter>
           </template>
         </ContactData>
       </template>
-      <template #step-2>
+      <template v-slot:step-2>
         <EventData ref="eventData" :initial-values="stepToValues[2]">
-          <template #footer>
+          <template v-slot:footer>
             <DialogFooter>
-              <Button type="button" @click="activeStep--">Back</Button>
-              <Button type="button" @click="nextStep">Create</Button>
+              <Button @click="activeStep--" type="button">Back</Button>
+              <Button @click="nextStep" type="button">Create</Button>
             </DialogFooter>
           </template>
         </EventData>

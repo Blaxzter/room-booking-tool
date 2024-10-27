@@ -9,14 +9,13 @@ import * as z from 'zod'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
-import { FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form'
+import { FormControl, FormField, FormItem, FormLabel, FormMessage, FormDescription } from '@/components/ui/form'
 import type { CreateUserRequest } from '@/types'
 import LogoImage from '@/components/bits/LogoImage.vue'
 
 import { useGlobalSettings } from '@/stores/globalSettings'
 import { storeToRefs } from 'pinia'
 import { Checkbox } from '@/components/ui/checkbox'
-
 const { displayLegal } = storeToRefs(useGlobalSettings())
 
 const signupSchema = z.object({
@@ -77,9 +76,9 @@ const onSubmit = async () => {
       <CardDescription> Enter your information to create an account </CardDescription>
     </CardHeader>
     <CardContent class="max-w-sm m-auto">
-      <form class="grid gap-4" @submit.prevent="onSubmit">
+      <form @submit.prevent="onSubmit" class="grid gap-4">
         <div class="grid grid-cols-2 gap-4">
-          <FormField v-slot="{ componentField }" name="first_name">
+          <FormField name="first_name" v-slot="{ componentField }">
             <FormItem>
               <FormLabel for="first-name">First name*</FormLabel>
               <FormControl class="col-span-3">
@@ -88,7 +87,7 @@ const onSubmit = async () => {
               </FormControl>
             </FormItem>
           </FormField>
-          <FormField v-slot="{ componentField }" name="last_name">
+          <FormField name="last_name" v-slot="{ componentField }">
             <FormItem>
               <FormLabel for="last-name">Last name*</FormLabel>
               <FormControl class="col-span-3">
@@ -98,7 +97,7 @@ const onSubmit = async () => {
             </FormItem>
           </FormField>
         </div>
-        <FormField v-slot="{ componentField }" name="email">
+        <FormField name="email" v-slot="{ componentField }">
           <FormItem>
             <FormLabel for="email">Email</FormLabel>
             <FormControl class="col-span-3">
@@ -107,7 +106,7 @@ const onSubmit = async () => {
             </FormControl>
           </FormItem>
         </FormField>
-        <FormField v-slot="{ componentField }" name="password">
+        <FormField name="password" v-slot="{ componentField }">
           <FormItem>
             <FormLabel for="password">Password</FormLabel>
             <FormControl class="col-span-3">

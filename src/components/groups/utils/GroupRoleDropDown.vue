@@ -36,7 +36,7 @@ const roles = [
   <div v-if="disabled" class="flex items-center me-1.5 border py-1.5 px-3 rounded">
     <span>{{ localRole.charAt(0).toUpperCase() + localRole.slice(1) }}</span>
   </div>
-  <Popover v-else v-model:open="open" class="relative">
+  <Popover v-model:open="open" class="relative" v-else>
     <PopoverTrigger as-child>
       <Button variant="outline">
         {{ localRole.charAt(0).toUpperCase() + localRole.slice(1) }}
@@ -50,10 +50,10 @@ const roles = [
           <CommandEmpty>No roles found.</CommandEmpty>
           <CommandGroup>
             <CommandItem
-              v-for="r in roles"
-              :key="r.value"
               :value="r.value"
+              :key="r.value"
               class="space-y-1 flex flex-col items-start px-4 py-2 cursor-pointer"
+              v-for="r in roles"
               @select="
                 () => {
                   localRole = r.value

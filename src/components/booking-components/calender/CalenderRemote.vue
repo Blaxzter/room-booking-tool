@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ChevronLeft, ChevronRight } from 'lucide-vue-next'
+import { ChevronRight, ChevronLeft } from 'lucide-vue-next'
 import { Button } from '@/components/ui/button'
 
 // define emits for prev and next
@@ -8,10 +8,10 @@ const emits = defineEmits(['prev', 'next'])
 
 <template>
   <div class="flex gap-0.5">
-    <Button variant="secondary" size="icon" @click="emits('prev')">
+    <Button @click="emits('prev')" variant="secondary" size="icon">
       <ChevronLeft />
     </Button>
-    <Button variant="secondary" size="icon" @click="emits('next')">
+    <Button @click="emits('next')" variant="secondary" size="icon">
       <ChevronRight />
     </Button>
   </div>

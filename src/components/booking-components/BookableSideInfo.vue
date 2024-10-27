@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { computed, type PropType, ref } from 'vue'
-import { CopyIcon, PlusCircledIcon } from '@radix-icons/vue'
+import { PlusCircledIcon, CopyIcon } from '@radix-icons/vue'
 import { useRoute } from 'vue-router'
 
 import { Button } from '@/components/ui/button'
@@ -49,9 +49,9 @@ defineEmits(['createBookableObject'])
 
 <template>
   <div
-    v-if="bookableObject"
     class="flex-row lg:flex-col lg:space-y-4"
     :class="[!topNav ? 'hidden rounded-lg border bg-card' : '']"
+    v-if="bookableObject"
   >
     <div class="flex flex-row p-2 lg:p-4 lg:flex-col lg:space-y-4">
       <BookingCardSplashImage
@@ -79,11 +79,11 @@ defineEmits(['createBookableObject'])
     >
       <div class="lg:flex-grow"></div>
       <div class="flex gap-2 flex-row">
-        <Button :size="topNav ? 'icon' : 'default'" @click="openEventDialog = true">
+        <Button @click="openEventDialog = true" :size="topNav ? 'icon' : 'default'">
           <PlusCircledIcon class="h-6 w-6 sm:h-4 sm:w-4" />
           <span class="hidden sm:inline ms-2">Create Booking</span>
         </Button>
-        <Button v-if="!isPublicView" variant="ghost" @click="copySharingLink">
+        <Button @click="copySharingLink" variant="ghost" v-if="!isPublicView">
           <CopyIcon class="h-6 w-6 sm:h-4 sm:w-4" />
           <span class="hidden sm:inline ms-2">Copy Sharing Link</span>
         </Button>

@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed, onBeforeMount, type PropType, ref } from 'vue'
+import { computed, ref, type PropType, onBeforeMount } from 'vue'
 import { useForm } from 'vee-validate'
 import { toTypedSchema } from '@vee-validate/zod'
 import * as z from 'zod'
@@ -14,7 +14,6 @@ import NameFade from '@/components/utils/NameFade.vue'
 import { bookableObjectRandomsLower } from '@/assets/ts/constants'
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from '@/components/ui/collapsible'
 import type { BookableObject } from '@/types'
-
 interface InitialValues {
   is_internal: boolean
   confirm_booking_required: boolean
@@ -119,7 +118,7 @@ defineExpose({ getValues, validate })
             />/{{ values.uniqueId }}</span
           >
           <CollapsibleTrigger>
-            <Button size="sm" variant="ghost" type="button" @click="copyLink">
+            <Button size="sm" variant="ghost" @click="copyLink" type="button">
               <CopyIcon class="h-4 w-4" />
             </Button>
           </CollapsibleTrigger>
@@ -151,7 +150,7 @@ defineExpose({ getValues, validate })
         <FormField v-slot="{ componentField }" name="confirm_role">
           <FormItem>
             <FormLabel>Confirm Role</FormLabel>
-            <Select v-bind="componentField" @update:model-value="$emit('update', 'confirm_role', values.confirm_role)">
+            <Select v-bind="componentField" @update:modelValue="$emit('update', 'confirm_role', values.confirm_role)">
               <FormControl>
                 <SelectTrigger>
                   <SelectValue placeholder="Select a role" />

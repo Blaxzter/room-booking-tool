@@ -2,7 +2,7 @@
 import { computed, ref } from 'vue'
 
 import { Button } from '@/components/ui/button'
-import { Calendar, Menu } from 'lucide-vue-next'
+import { Menu, Calendar } from 'lucide-vue-next'
 import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet'
 
 import GroupSwitcher from '@/components/groups/GroupSwitcher.vue'

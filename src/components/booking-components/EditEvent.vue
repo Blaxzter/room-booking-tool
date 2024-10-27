@@ -5,7 +5,7 @@ import { storeToRefs } from 'pinia'
 import { useRoute } from 'vue-router'
 
 // import icons
-import { CheckIcon, LoaderIcon, TrashIcon } from 'lucide-vue-next'
+import { CheckIcon, TrashIcon, LoaderIcon } from 'lucide-vue-next'
 
 import { Button } from '@/components/ui/button'
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog'
@@ -16,7 +16,7 @@ import { Input } from '@/components/ui/input'
 
 import { useRequests } from '@/stores/requests'
 import { useGroups } from '@/stores/groups'
-import type { Booking } from '@/types'
+import type { BookableObject, Booking } from '@/types'
 import { useBookableObjects } from '@/stores/bookableObjects'
 
 const { approveRequest, rejectRequest } = useRequests()
@@ -112,7 +112,7 @@ watch(
 
 <template>
   <UseTemplate>
-    <div v-if="event" class="px-4 flex gap-2 flex-col">
+    <div class="px-4 flex gap-2 flex-col" v-if="event">
       <div>
         <div class="flex gap-3">
           <h3 class="text-md font-semibold">Status:</h3>
@@ -141,8 +141,8 @@ watch(
       </div>
       <div class="flex flex-col gap-2">
         <h3
-          v-if="event.mail || event.phone || event.display_name || event.booking_display_name"
           class="text-md font-semibold"
+          v-if="event.mail || event.phone || event.display_name || event.booking_display_name"
         >
           Contact Information
         </h3>
@@ -151,24 +151,24 @@ watch(
           class="ps-3 flex flex-col gap-2 border-l-2 -mt-2.5 pt-2.5"
         >
           <div
-            v-if="event.display_name || event.booking_display_name"
             class="grid w-full max-w-sm items-center gap-1.5"
+            v-if="event.display_name || event.booking_display_name"
           >
             <Label class="text-muted-foreground">Title:</Label>
-            <Input v-if="event.display_name" v-model="event.display_name" readonly />
-            <Input v-else v-model="event.booking_display_name" readonly />
+            <Input v-model="event.display_name" v-if="event.display_name" readonly />
+            <Input v-model="event.booking_display_name" v-else readonly />
           </div>
-          <div v-if="event.mail" class="grid w-full max-w-sm items-center gap-1.5">
+          <div class="grid w-full max-w-sm items-center gap-1.5" v-if="event.mail">
             <Label class="text-muted-foreground">Email:</Label>
             <Input v-model="event.mail" readonly type="email" />
           </div>
-          <div v-if="event.phone" class="grid w-full max-w-sm items-center gap-1.5">
+          <div class="grid w-full max-w-sm items-center gap-1.5" v-if="event.phone">
             <Label class="text-muted-foreground">Phone:</Label>
             <Input v-model="event.phone" readonly type="tel" />
           </div>
         </div>
 
-        <div v-if="event.description" class="grid w-full max-w-sm items-center gap-1.5">
+        <div class="grid w-full max-w-sm items-center gap-1.5" v-if="event.description">
           <Label class="text-md font-semibold">Description</Label>
           <Textarea v-model="event.description" readonly />
         </div>
