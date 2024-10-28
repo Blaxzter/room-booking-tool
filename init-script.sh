@@ -1,7 +1,8 @@
 #!/bin/sh
 
 # Define the HOST_URL variable; default to 'http://directus:8055' if not set
-HOST_URL=${HOST_URL:-http://localhost:8055}
+# HOST_URL=${HOST_URL:-http://localhost:8055}
+HOST_URL=${HOST_URL:-http://directus:8055}
 
 echo "Waiting for Directus to be available... ($HOST_URL)"
 until $(curl --output /dev/null --silent --head --fail "$HOST_URL/server/health"); do
@@ -23,7 +24,7 @@ if [ "$COLLECTION_EXISTS" = "null" ]; then
     echo "Initialization needed, running directus-sync push..."
 
     # Run directus-sync push to sync your schema and data
-    npx directus-sync push -u "$HOST_URL" -e "$ADMIN_EMAIL" -p "$ADMIN_PASSWORD"
+    npx directus-sync@2.2.0 push -u "$HOST_URL" -e "$ADMIN_EMAIL" -p "$ADMIN_PASSWORD"
 
     # Check if DEMO_MODE is enabled
     if [ "$DEMO_MODE" = "true" ]; then

@@ -49,10 +49,11 @@ services:
       - directus-net
       # - nginx-net
     healthcheck:
-      test: [ "CMD", "curl", "-f", "http://localhost:8055/server/health" ]
-      interval: 30s
-      timeout: 10s
-      retries: 5
+      test: wget --no-verbose --tries=1 --spider http://0.0.0.0:8055/server/health || exit 1
+      start_period: 15s
+      interval: 15s
+      timeout: 15s
+      retries: 3
     environment:
       KEY: "${KEY}"
       SECRET: "${SECRET}"
