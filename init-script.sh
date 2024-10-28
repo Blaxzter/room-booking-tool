@@ -34,14 +34,21 @@ if [ "$COLLECTION_EXISTS" = "null" ]; then
         TOKEN=$(curl -s -X POST -d "email=$ADMIN_EMAIL&password=$ADMIN_PASSWORD" \
           "$HOST_URL/auth/login" | jq -r '.data.access_token')
 
-        # Replace 'demo_role_id' with your actual demo role ID
-        DEMO_ROLE_ID='demo_role_id'
-        USER_ID=1  # Replace with the actual user ID
+        # curl http://localhost:8055/roles and get the array element with name "name": "DemoUser", then get the "id" value
+        DEMO_ROLE_RESPONSE=$(curl -s -H "Authorization: Bearer $TOKEN" \
+                  "$HOST_URL/roles?fields=id&filter[name][_eq]=DemoUser")
 
-        # Update the user's role to 'demo'
-        curl -s -X PATCH -H "Authorization: Bearer $TOKEN" -H "Content-Type: application/json" \
-          -d '{"role": "'$DEMO_ROLE_ID'"}' \
-          "$HOST_URL/users/$USER_ID"
+        DEMO_ROLE_ID=$(echo "$DEMO_ROLE_RESPONSE" | jq -r '.data[0].id')
+
+        if [ -z "$DEMO_ROLE_ID" ] || [ "$DEMO_ROLE_ID" = "null" ]; then
+            echo "Demo role 'DemoUser' not found. Please ensure the role exists."
+            exit 1
+        fi
+
+        echo "Demo role ID: $DEMO_ROLE_ID"
+
+        # following set the default user
+
     fi
 
     echo "Initialization complete."
