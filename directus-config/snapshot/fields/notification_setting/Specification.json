@@ -18,8 +18,8 @@
     "sort": 3,
     "special": [
       "alias",
-      "group",
-      "no-data"
+      "no-data",
+      "group"
     ],
     "translations": null,
     "validation": null,

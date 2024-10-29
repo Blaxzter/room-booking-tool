@@ -9,25 +9,25 @@
     "display_options": {
       "choices": [
         {
-          "text": "$t:published",
-          "value": "published",
+          "background": "var(--theme--primary-background)",
           "color": "var(--theme--primary)",
           "foreground": "var(--theme--primary)",
-          "background": "var(--theme--primary-background)"
+          "text": "$t:published",
+          "value": "published"
         },
         {
-          "text": "$t:draft",
-          "value": "draft",
+          "background": "var(--theme--background-normal)",
           "color": "var(--theme--foreground)",
           "foreground": "var(--theme--foreground)",
-          "background": "var(--theme--background-normal)"
+          "text": "$t:draft",
+          "value": "draft"
         },
         {
-          "text": "$t:archived",
-          "value": "archived",
+          "background": "var(--theme--warning-background)",
           "color": "var(--theme--warning)",
           "foreground": "var(--theme--warning)",
-          "background": "var(--theme--warning-background)"
+          "text": "$t:archived",
+          "value": "archived"
         }
       ],
       "showAsDot": true
@@ -40,19 +40,19 @@
     "options": {
       "choices": [
         {
+          "color": "var(--theme--primary)",
           "text": "$t:published",
-          "value": "published",
-          "color": "var(--theme--primary)"
+          "value": "published"
         },
         {
+          "color": "var(--theme--foreground)",
           "text": "$t:draft",
-          "value": "draft",
-          "color": "var(--theme--foreground)"
+          "value": "draft"
         },
         {
+          "color": "var(--theme--warning)",
           "text": "$t:archived",
-          "value": "archived",
-          "color": "var(--theme--warning)"
+          "value": "archived"
         }
       ]
     },
@@ -75,6 +75,7 @@
     "numeric_scale": null,
     "is_nullable": false,
     "is_unique": false,
+    "is_indexed": false,
     "is_primary_key": false,
     "is_generated": false,
     "generation_expression": null,

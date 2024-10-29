@@ -15,19 +15,19 @@
     "options": {
       "choices": [
         {
+          "icon": "nest_multi_room",
           "text": "Room",
-          "value": "room",
-          "icon": "nest_multi_room"
+          "value": "room"
         },
         {
+          "icon": "sports_rugby",
           "text": "Object",
-          "value": "object",
-          "icon": "sports_rugby"
+          "value": "object"
         },
         {
+          "icon": "exercise",
           "text": "Equipment",
-          "value": "equipment",
-          "icon": "exercise"
+          "value": "equipment"
         }
       ]
     },
@@ -50,6 +50,7 @@
     "numeric_scale": null,
     "is_nullable": true,
     "is_unique": false,
+    "is_indexed": false,
     "is_primary_key": false,
     "is_generated": false,
     "generation_expression": null,
