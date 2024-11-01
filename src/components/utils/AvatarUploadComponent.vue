@@ -180,7 +180,7 @@ const backendUrl = inject('backendUrl')
 </template>
 
 <style lang="scss">
-@import '@/assets/css/colors.scss';
+@use '@/assets/css/colors.scss';
 
 //noinspection CssUnusedSymbol
 .vue-avatar-cropper-demo {

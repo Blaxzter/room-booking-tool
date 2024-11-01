@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { defineEmits, ref, watch } from 'vue'
+import { ref, watch } from 'vue'
 import { createReusableTemplate, useMediaQuery } from '@vueuse/core'
 import type { CreateBookingRequest } from '@/assets/ts/queries/bookings'
 

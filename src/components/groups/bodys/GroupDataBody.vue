@@ -208,5 +208,5 @@ const isDisabled = computed(() => {
 </template>
 
 <style lang="scss">
-@import '../../../../node_modules/emoji-mart-vue-fast/css/emoji-mart.css';
+@use '../../../../node_modules/emoji-mart-vue-fast/css/emoji-mart.css';
 </style>

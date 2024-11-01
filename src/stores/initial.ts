@@ -1,4 +1,4 @@
-import { ref } from 'vue'
+import { ref, watch } from 'vue'
 import { defineStore, storeToRefs } from 'pinia'
 
 import {
@@ -26,12 +26,13 @@ import { useNotificationSetting } from '@/stores/notificationSettings'
 import type { Group } from '@/types'
 import type { AxiosResponse } from 'axios'
 import axios from 'axios'
+import { useGlobalSettings } from '@/stores/globalSettings'
 
 export const useInitialDataStore = defineStore('initial', () => {
   const { toast } = useToast()
 
   const { client } = useUser()
-  const { user } = storeToRefs(useUser())
+  const { user, isAuthenticated } = storeToRefs(useUser())
 
   const { setGroups } = useGroups()
   const { setBookableObjects, selectBookableObject, addBookableObject } = useBookableObjects()
@@ -47,6 +48,9 @@ export const useInitialDataStore = defineStore('initial', () => {
   }
 
   const fetchDashboardViewData = async () => {
+
+    const { client } = useUser()
+
     init_loading.value = true
     try {
       const selectedGroup = getSelectedGroup()

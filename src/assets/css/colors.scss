@@ -2,7 +2,7 @@
 @use "sass:color";
 
 @function luminance($color) {
-  $rgb: red($color) * 0.2126 + green($color) * 0.7152 + blue($color) * 0.0722;
+  $rgb: color.channel($color, "red", $space: rgb) * 0.2126 + color.channel($color, "green", $space: rgb) * 0.7152 + color.channel($color, "blue", $space: rgb) * 0.0722;
   @return math.div($rgb, 255);
 }
 
@@ -26,9 +26,9 @@
 
 
 @function random_pastel() {
-  $r: random(255);
-  $g: random(255);
-  $b: random(255);
+  $r: math.random(255);
+  $g: math.random(255);
+  $b: math.random(255);
 
   // mix white
   $r: math.div($r + 255, 2);

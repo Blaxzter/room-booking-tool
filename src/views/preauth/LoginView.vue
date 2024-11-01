@@ -160,5 +160,5 @@ onMounted(async () => {
 
 <style lang="scss">
 // import checkmark from '@/assets/css/login.scss'
-@import '@/assets/css/login';
+@use '@/assets/css/login';
 </style>

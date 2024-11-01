@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed, type PropType, ref } from 'vue'
+import { computed, type PropType, ref, onMounted, inject } from 'vue'
 import { PlusCircledIcon, CopyIcon } from '@radix-icons/vue'
 import { useRoute } from 'vue-router'
 
@@ -10,6 +10,7 @@ import BookingCardSplashImage from '@/components/home/BookingCardSplashImage.vue
 
 import { breakpointsTailwind, useBreakpoints } from '@vueuse/core'
 import BookingRequestWrapper from '@/components/booking-components/booking-request-dialog/BookingRequestWrapper.vue'
+import processImage from '@/assets/ts/image-utils'
 
 const props = defineProps({
   bookableObject: { type: Object as PropType<BookableObject>, default: undefined },
@@ -45,6 +46,26 @@ const copySharingLink = () => {
 }
 
 defineEmits(['createBookableObject'])
+
+// TODO create a composable from this fuction
+const backendUrl = inject('backendUrl')
+const idToColor = ref(new Map<string, string>())
+const imageLoading = ref(false)
+const getImageColor = async (image_id: string) => {
+  imageLoading.value = true
+  return await processImage(`${backendUrl}/assets/${image_id}`).then((color) => {
+    idToColor.value.set(image_id, color)
+    imageLoading.value = false
+    return color
+  })
+}
+
+onMounted(() => {
+  console.log(props.bookableObject?.image)
+  if (props.bookableObject?.image) {
+    getImageColor(props.bookableObject?.image.id)
+  }
+})
 </script>
 
 <template>
@@ -60,7 +81,9 @@ defineEmits(['createBookableObject'])
         :image_id="bookableObject.image.id"
         :rounded="true"
         :height="imageHeight"
+        :loading="imageLoading"
         class="me-2 lg:me-0"
+        :style="`background-color:` + (idToColor.get(bookableObject.image.id) ?? 'white')"
       />
       <div class="overflow-hidden">
         <div class="sm:text-2xl text-sm" :class="{ 'text-nowrap text-l': topNav }">{{ bookableObject?.name }}</div>

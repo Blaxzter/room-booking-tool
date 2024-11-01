@@ -12,9 +12,17 @@ export default defineConfig({
   css: {
     postcss: {
       plugins: [tailwind(), autoprefixer()]
+    },
+    preprocessorOptions: {
+      scss: {
+        api: 'modern-compiler' // or "modern"
+      }
     }
   },
-  plugins: [vue(), VueDevTools()],
+  plugins: [vue(), VueDevTools({
+    launchEditor: 'webstorm',
+    enabled: false
+  })],
   resolve: {
     alias: {
       '@': fileURLToPath(new URL('./src', import.meta.url))
