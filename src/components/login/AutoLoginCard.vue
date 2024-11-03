@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import LogoImage from '@/components/bits/LogoImage.vue'
 import LoginAnimation from '@/components/login/LoginAnimation.vue'
 import CalenderLoader from '@/components/animations/CalenderLoader.vue'

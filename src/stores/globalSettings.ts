@@ -20,14 +20,15 @@ export const useGlobalSettings = defineStore('globalSettings', () => {
 
   watch([isAuthenticated], async () => {
     if (isAuthenticated.value) {
-      const { getDemoUser } = useGlobalSettings()
-      await getDemoUser()
+      const { getDemoUserRole } = useGlobalSettings()
+      await getDemoUserRole()
     }
   })
 
-  const getDemoUser = async () => {
+  const getDemoUserRole = async () => {
     const { client, user } = useUser()
 
+    // Permissions in backend are set so only demo role is returned
     const demoRole = await client.request(
       readRoles({
         fields: ['*']
@@ -46,7 +47,7 @@ export const useGlobalSettings = defineStore('globalSettings', () => {
     displayLegal,
     fetchGlobalSetting,
     demoDialogOpen,
-    getDemoUser,
+    getDemoUserRole,
     isDemoUser
   }
 })
