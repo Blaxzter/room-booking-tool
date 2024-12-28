@@ -1,5 +1,3 @@
-version: "3"
-
 networks:
   directus-net:
   # Only required when running behind a reverse proxy like nginx-proxy: I use this one https://github.com/evertramos/nginx-proxy-automation?tab=readme-ov-file
@@ -18,9 +16,9 @@ services:
       - directus-net
     restart: always
     environment:
-      POSTGRES_USER: "${POSTGRES_USER}"
-      POSTGRES_PASSWORD: "${POSTGRES_PASSWORD}"
-      POSTGRES_DB: "${POSTGRES_DB}"
+      POSTGRES_USER: '${POSTGRES_USER}'
+      POSTGRES_PASSWORD: '${POSTGRES_PASSWORD}'
+      POSTGRES_DB: '${POSTGRES_DB}'
     ports:
       - 64831:5432
 
@@ -55,76 +53,60 @@ services:
       timeout: 15s
       retries: 3
     environment:
-      KEY: "${KEY}"
-      SECRET: "${SECRET}"
-      WEBSOCKETS_ENABLED: "true"
-      SCHEMA_SYNC: "BOTH"
+      KEY: '${KEY}'
+      SECRET: '${SECRET}'
+      WEBSOCKETS_ENABLED: 'true'
+      SCHEMA_SYNC: 'BOTH'
 
-      DB_CLIENT: "pg"
-      DB_HOST: "database"
-      DB_PORT: "5432"
-      DB_DATABASE: "${DB_DATABASE}"
-      DB_USER: "${DB_USER}"
-      DB_PASSWORD: "${DB_PASSWORD}"
+      DB_CLIENT: 'pg'
+      DB_HOST: 'database'
+      DB_PORT: '5432'
+      DB_DATABASE: '${DB_DATABASE}'
+      DB_USER: '${DB_USER}'
+      DB_PASSWORD: '${DB_PASSWORD}'
 
-      CACHE_ENABLED: "false"
-      CACHE_STORE: "redis"
-      REDIS: "redis://cache:6379"
-      IMPORT_IP_DENY_LIST: ""
+      CACHE_ENABLED: 'false'
+      CACHE_STORE: 'redis'
+      REDIS: 'redis://cache:6379'
+      IMPORT_IP_DENY_LIST: ''
 
-      ADMIN_EMAIL: "${ADMIN_EMAIL}"
-      ADMIN_PASSWORD: "${ADMIN_PASSWORD}"
+      ADMIN_EMAIL: '${ADMIN_EMAIL}'
+      ADMIN_PASSWORD: '${ADMIN_PASSWORD}'
 
-      PUBLIC_URL: "${PUBLIC_URL}"
-      FRONTEND_URL: "${FRONTEND_URL}"
-      FLOWS_ENV_ALLOW_LIST: "FRONTEND_URL, PUBLIC_URL, TELEGRAM_URL"
-      USER_REGISTER_URL_ALLOW_LIST: "${FRONTEND_URL}/verify-email"
-      USER_INVITE_URL_ALLOW_LIST: "${FRONTEND_URL}/invite"
-      PASSWORD_RESET_URL_ALLOW_LIST: "${FRONTEND_URL}/reset-password"
+      PUBLIC_URL: '${PUBLIC_URL}'
+      FRONTEND_URL: '${FRONTEND_URL}'
+      FLOWS_ENV_ALLOW_LIST: 'FRONTEND_URL, PUBLIC_URL, TELEGRAM_URL'
+      USER_REGISTER_URL_ALLOW_LIST: '${FRONTEND_URL}/verify-email'
+      USER_INVITE_URL_ALLOW_LIST: '${FRONTEND_URL}/invite'
+      PASSWORD_RESET_URL_ALLOW_LIST: '${FRONTEND_URL}/reset-password'
 
       # CORS FOR LOCALHOST
-      CORS_ENABLED: "true"
-      CORS_ORIGIN: "${CORS_ORIGIN}"
-      CORS_METHODS: "GET, POST, PUT, PATCH, DELETE, OPTIONS"
-      CORS_ALLOWED_HEADERS: "Content-Type, Authorization, X-Requested-With"
-      CORS_EXPOSED_HEADERS: "Content-Range, X-Content-Range"
+      CORS_ENABLED: 'true'
+      CORS_ORIGIN: '${CORS_ORIGIN}'
+      CORS_METHODS: 'GET, POST, PUT, PATCH, DELETE, OPTIONS'
+      CORS_ALLOWED_HEADERS: 'Content-Type, Authorization, X-Requested-With'
+      CORS_EXPOSED_HEADERS: 'Content-Range, X-Content-Range'
 
-      EMAIL_TEMPLATES_PATH: "/directus/email-templates/"
+      EMAIL_TEMPLATES_PATH: '/directus/email-templates/'
 
       # Email Stuff
-      EMAIL_VERIFY_SETUP: "${EMAIL_VERIFY_SETUP}"
-      EMAIL_FROM: "${EMAIL_FROM}"
-      EMAIL_TRANSPORT: "${EMAIL_TRANSPORT}"
-      EMAIL_SMTP_HOST: "${EMAIL_SMTP_HOST}"
-      EMAIL_SMTP_PORT: "${EMAIL_SMTP_PORT}"
-      EMAIL_SMTP_USER: "${EMAIL_SMTP_USER}"
-      EMAIL_SMTP_PASSWORD: "${EMAIL_SMTP_PASSWORD}"
-      EMAIL_SMTP_POOL: "${EMAIL_SMTP_POOL}"
-      EMAIL_SMTP_SECURE: "${EMAIL_SMTP_SECURE}"
-      EMAIL_SMTP_IGNORE_TLS: "${EMAIL_SMTP_IGNORE_TLS}"
-      EMAIL_SMTP_NAME: "${EMAIL_SMTP_NAME}"
+      EMAIL_VERIFY_SETUP: '${EMAIL_VERIFY_SETUP}'
+      EMAIL_FROM: '${EMAIL_FROM}'
+      EMAIL_TRANSPORT: '${EMAIL_TRANSPORT}'
+      EMAIL_SMTP_HOST: '${EMAIL_SMTP_HOST}'
+      EMAIL_SMTP_PORT: '${EMAIL_SMTP_PORT}'
+      EMAIL_SMTP_USER: '${EMAIL_SMTP_USER}'
+      EMAIL_SMTP_PASSWORD: '${EMAIL_SMTP_PASSWORD}'
+      EMAIL_SMTP_POOL: '${EMAIL_SMTP_POOL}'
+      EMAIL_SMTP_SECURE: '${EMAIL_SMTP_SECURE}'
+      EMAIL_SMTP_IGNORE_TLS: '${EMAIL_SMTP_IGNORE_TLS}'
+      EMAIL_SMTP_NAME: '${EMAIL_SMTP_NAME}'
 
-      VIRTUAL_HOST: "${PUBLIC_URL}"
-      LETSENCRYPT_HOST: "${PUBLIC_URL}"
-      LETSENCRYPT_EMAIL: "${LETSENCRYPT_EMAIL}"
+      VIRTUAL_HOST: '${PUBLIC_URL}'
+      LETSENCRYPT_HOST: '${PUBLIC_URL}'
+      LETSENCRYPT_EMAIL: '${LETSENCRYPT_EMAIL}'
 
       TELEGRAM_URL: localhost:12543
-
-  init:
-    build:
-      context: .
-      dockerfile: Dockerfile.init
-    depends_on:
-      directus:
-        condition: service_healthy
-    networks:
-      - directus-net
-    environment:
-      ADMIN_EMAIL: "${ADMIN_EMAIL}"
-      ADMIN_PASSWORD: "${ADMIN_PASSWORD}"
-      DEMO_MODE: "${DEMO_MODE}"
-    volumes:
-      - ./:/usr/src/app
 
 #  booki-tool-telegram-bot:
 #    build:
@@ -162,7 +144,6 @@ services:
 #      LETSENCRYPT_EMAIL: "${LETSENCRYPT_EMAIL}"
 #    ports:
 #      - 8001:80
-
 
 volumes:
   postgres_data:
