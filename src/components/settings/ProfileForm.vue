@@ -5,9 +5,17 @@ import { toTypedSchema } from '@vee-validate/zod'
 import * as z from 'zod'
 
 import { useUser } from '@/stores/user'
+import { useGlobalSettings } from '@/stores/globalSettings'
 
 import { Input } from '@/components/ui/input'
-import { FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form'
+import {
+  FormControl,
+  FormDescription,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage
+} from '@/components/ui/form'
 import { Button } from '@/components/ui/button'
 import { Label } from '@/components/ui/label'
 import { useToast } from '@/components/ui/toast/use-toast'
@@ -19,6 +27,7 @@ import type { UpdateUserRequest } from '@/types'
 const { toast } = useToast()
 const { updateUserData } = useUser()
 const { user } = storeToRefs(useUser())
+const { isDemoUser } = storeToRefs(useGlobalSettings())
 
 const profileFormSchema = toTypedSchema(
   z.object({
@@ -72,21 +81,39 @@ const { handleSubmit } = useForm({
     email: user.value?.email ?? '',
     first_name: user.value?.first_name ?? '',
     last_name: user.value?.last_name ?? '',
-    display_name: user.value?.display_name ?? user.value?.first_name + ' ' + user.value?.last_name ?? ''
+    display_name:
+      user.value?.display_name ??
+      user.value?.first_name + ' ' + user.value?.last_name ??
+      ''
   }
 })
 
 const avatarUpload = ref()
 const avatarChanged = ref(false)
 
-const onSubmit = handleSubmit(async (values) => {
+const updateAvatar = async (values: any) => {
+  if (isDemoUser.value) {
+    toast({
+      title: 'Demo Mode',
+      description: 'Avatar updates are disabled in demo mode.',
+      variant: 'destructive'
+    })
+    return values
+  }
+
   if (avatarUpload.value && avatarChanged.value) {
     const avatar = await avatarUpload.value.uploadImage()
     if (avatar) {
       values.avatar = avatar
     }
   }
-  await updateUserData(values as UpdateUserRequest).then(
+  return values
+}
+
+const onSubmit = handleSubmit(async (values) => {
+  const updatedValues = await updateAvatar(values)
+
+  await updateUserData(updatedValues as UpdateUserRequest).then(
     () => {
       toast({
         title: 'Profile updated',
@@ -106,7 +133,7 @@ const onSubmit = handleSubmit(async (values) => {
 </script>
 
 <template>
-  <form class="space-y-8" @submit="onSubmit">
+  <form class="space-y-8" @submit.prevent="onSubmit">
     <div class="grid gap-4">
       <Label>Display Image</Label>
       <AvatarUploadComponent
@@ -118,18 +145,26 @@ const onSubmit = handleSubmit(async (values) => {
         :initAvatar="getAvatarString(user.avatar)"
         @avatar-updated="avatarChanged = true"
         @avatar-cleared="avatarChanged = true"
+        :disabled="isDemoUser"
       />
-      <div class="text-sm text-muted-foreground">Upload a new image to change your profile picture.</div>
+      <div class="text-sm text-muted-foreground">
+        Upload a new image to change your profile picture.
+      </div>
     </div>
 
     <FormField v-slot="{ componentField }" name="display_name">
       <FormItem>
         <FormLabel>Displayname</FormLabel>
         <FormControl>
-          <Input type="text" placeholder="Display Name" v-bind="componentField" />
+          <Input
+            type="text"
+            placeholder="Display Name"
+            v-bind="componentField"
+          />
         </FormControl>
         <FormDescription>
-          This is the name that will be displayed publicly when you approve a booking.
+          This is the name that will be displayed publicly when you approve a
+          booking.
         </FormDescription>
         <FormMessage />
       </FormItem>
@@ -139,10 +174,15 @@ const onSubmit = handleSubmit(async (values) => {
       <FormItem>
         <FormLabel>Email</FormLabel>
         <FormControl>
-          <Input type="text" placeholder="Your email address" v-bind="componentField" />
+          <Input
+            type="text"
+            placeholder="Your email address"
+            v-bind="componentField"
+          />
         </FormControl>
         <FormDescription>
-          This is the email address that will be displayed and to which we are sending emails to.
+          This is the email address that will be displayed and to which we are
+          sending emails to.
         </FormDescription>
         <FormMessage />
       </FormItem>
@@ -150,11 +190,19 @@ const onSubmit = handleSubmit(async (values) => {
 
     <div class="flex gap-4">
       <div class="flex-grow">
-        <FormField v-slot="{ componentField }" name="first_name" class="flex-grow">
+        <FormField
+          v-slot="{ componentField }"
+          name="first_name"
+          class="flex-grow"
+        >
           <FormItem>
             <FormLabel>Firstname</FormLabel>
             <FormControl>
-              <Input type="text" placeholder="Firstname" v-bind="componentField" />
+              <Input
+                type="text"
+                placeholder="Firstname"
+                v-bind="componentField"
+              />
             </FormControl>
             <FormDescription> Your first name. </FormDescription>
             <FormMessage />
@@ -162,11 +210,19 @@ const onSubmit = handleSubmit(async (values) => {
         </FormField>
       </div>
       <div class="flex-grow">
-        <FormField v-slot="{ componentField }" name="last_name" class="flex-grow">
+        <FormField
+          v-slot="{ componentField }"
+          name="last_name"
+          class="flex-grow"
+        >
           <FormItem>
             <FormLabel>Lastname</FormLabel>
             <FormControl>
-              <Input type="text" placeholder="Lastname" v-bind="componentField" />
+              <Input
+                type="text"
+                placeholder="Lastname"
+                v-bind="componentField"
+              />
             </FormControl>
             <FormDescription> Your last name. </FormDescription>
             <FormMessage />

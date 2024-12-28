@@ -73,7 +73,19 @@ export const useBookings = defineStore('bookings', () => {
     booking.bookable_object_id = `${selectedBookableObject.value.id}`
     booking.secret_edit_key = uuidv4()
 
-    const result = await client.request(createItem('booking', booking))
+    let result
+
+    try {
+      result = await client.request(createItem('booking', booking))
+    } catch (error: any) {
+      console.log(error)
+      toast({
+        title: 'Error creating bookable object',
+        description: error?.errors?.[0]?.message,
+        variant: 'destructive'
+      })
+      throw error
+    }
 
     // Add the secret edit key to the local user store to allow editing of unlogged in users
     if (result.secret_edit_key) {

@@ -10234,6 +10234,379 @@
         ]
       }
     },
+    "/comments": {
+      "get": {
+        "tags": [
+          "Comments"
+        ],
+        "operationId": "getComments",
+        "summary": "List Comments",
+        "description": "List the comments.",
+        "security": [
+          {
+            "Auth": []
+          }
+        ],
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/Fields"
+          },
+          {
+            "$ref": "#/components/parameters/Limit"
+          },
+          {
+            "$ref": "#/components/parameters/Offset"
+          },
+          {
+            "$ref": "#/components/parameters/Page"
+          },
+          {
+            "$ref": "#/components/parameters/Sort"
+          },
+          {
+            "$ref": "#/components/parameters/Filter"
+          },
+          {
+            "$ref": "#/components/parameters/Search"
+          },
+          {
+            "$ref": "#/components/parameters/Meta"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/components/schemas/Comments"
+                      }
+                    },
+                    "meta": {
+                      "$ref": "#/components/schemas/x-metadata"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/UnauthorizedError"
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "Comments"
+        ],
+        "operationId": "createComment",
+        "summary": "Create a Comment",
+        "description": "Create a new comment.",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/Fields"
+          },
+          {
+            "$ref": "#/components/parameters/Meta"
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": [
+                  "collection",
+                  "item",
+                  "comment"
+                ],
+                "properties": {
+                  "collection": {
+                    "type": "string",
+                    "description": "Which collection this collection comment is for.",
+                    "example": "projects"
+                  },
+                  "item": {
+                    "type": "string",
+                    "example": "81dfa7e0-56d2-471f-b96a-1cf8a62bdf28"
+                  },
+                  "comment": {
+                    "type": "string",
+                    "example": "A new comment"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "$ref": "#/components/schemas/Comments"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/UnauthorizedError"
+          }
+        }
+      },
+      "patch": {
+        "summary": "Update Multiple Comments",
+        "description": "Update multiple comments at the same time.",
+        "tags": [
+          "Comments"
+        ],
+        "operationId": "updateComments",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/Fields"
+          },
+          {
+            "$ref": "#/components/parameters/Limit"
+          },
+          {
+            "$ref": "#/components/parameters/Meta"
+          },
+          {
+            "$ref": "#/components/parameters/Offset"
+          },
+          {
+            "$ref": "#/components/parameters/Sort"
+          },
+          {
+            "$ref": "#/components/parameters/Filter"
+          },
+          {
+            "$ref": "#/components/parameters/Search"
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "keys": {
+                    "type": "array",
+                    "items": {
+                      "type": "string"
+                    }
+                  },
+                  "data": {
+                    "type": "object",
+                    "required": [
+                      "collection"
+                    ],
+                    "properties": {
+                      "collection": {
+                        "type": "string",
+                        "description": "Which collection this collection comment is for.",
+                        "example": "projects"
+                      },
+                      "item": {
+                        "type": "string",
+                        "example": "81dfa7e0-56d2-471f-b96a-1cf8a62bdf28"
+                      },
+                      "comment": {
+                        "type": "string",
+                        "example": "A new comment"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/components/schemas/Comments"
+                      }
+                    },
+                    "meta": {
+                      "$ref": "#/components/schemas/x-metadata"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/UnauthorizedError"
+          }
+        }
+      },
+      "delete": {
+        "summary": "Delete Multiple Comments",
+        "description": "Delete multiple existing comments.",
+        "tags": [
+          "Comments"
+        ],
+        "operationId": "deleteComments",
+        "responses": {
+          "200": {
+            "description": "Successful request"
+          },
+          "401": {
+            "$ref": "#/components/responses/UnauthorizedError"
+          }
+        }
+      }
+    },
+    "/comments/{id}": {
+      "get": {
+        "tags": [
+          "Comments"
+        ],
+        "operationId": "getComment",
+        "summary": "Retrieve a Comment",
+        "description": "Retrieve a single comment by unique identifier.",
+        "security": [
+          {
+            "Auth": []
+          }
+        ],
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/Fields"
+          },
+          {
+            "$ref": "#/components/parameters/Meta"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "$ref": "#/components/schemas/Comments"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/UnauthorizedError"
+          }
+        }
+      },
+      "patch": {
+        "tags": [
+          "Comments"
+        ],
+        "operationId": "updateComment",
+        "summary": "Update a Comment",
+        "description": "Update an existing comment.",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/Fields"
+          },
+          {
+            "$ref": "#/components/parameters/Meta"
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": [
+                  "collection"
+                ],
+                "properties": {
+                  "collection": {
+                    "type": "string",
+                    "description": "Which collection this comment is for.",
+                    "example": "projects"
+                  },
+                  "item": {
+                    "type": "string",
+                    "example": "81dfa7e0-56d2-471f-b96a-1cf8a62bdf28"
+                  },
+                  "comment": {
+                    "type": "string",
+                    "example": "An updated comment"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "$ref": "#/components/schemas/Comments"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/UnauthorizedError"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFoundError"
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "Comments"
+        ],
+        "operationId": "deleteComment",
+        "summary": "Delete a Comment",
+        "description": "Delete an existing comment.",
+        "security": [
+          {
+            "Auth": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful request"
+          },
+          "401": {
+            "$ref": "#/components/responses/UnauthorizedError"
+          }
+        }
+      }
+    },
     "/items/settings": {
       "post": {
         "summary": "Create an Item",
@@ -10619,379 +10992,6 @@
             }
           }
         ]
-      }
-    },
-    "/comments": {
-      "get": {
-        "tags": [
-          "Comments"
-        ],
-        "operationId": "getComments",
-        "summary": "List Comments",
-        "description": "List the comments.",
-        "security": [
-          {
-            "Auth": []
-          }
-        ],
-        "parameters": [
-          {
-            "$ref": "#/components/parameters/Fields"
-          },
-          {
-            "$ref": "#/components/parameters/Limit"
-          },
-          {
-            "$ref": "#/components/parameters/Offset"
-          },
-          {
-            "$ref": "#/components/parameters/Page"
-          },
-          {
-            "$ref": "#/components/parameters/Sort"
-          },
-          {
-            "$ref": "#/components/parameters/Filter"
-          },
-          {
-            "$ref": "#/components/parameters/Search"
-          },
-          {
-            "$ref": "#/components/parameters/Meta"
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "Successful request",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "properties": {
-                    "data": {
-                      "type": "array",
-                      "items": {
-                        "$ref": "#/components/schemas/Comments"
-                      }
-                    },
-                    "meta": {
-                      "$ref": "#/components/schemas/x-metadata"
-                    }
-                  }
-                }
-              }
-            }
-          },
-          "401": {
-            "$ref": "#/components/responses/UnauthorizedError"
-          }
-        }
-      },
-      "post": {
-        "tags": [
-          "Comments"
-        ],
-        "operationId": "createComment",
-        "summary": "Create a Comment",
-        "description": "Create a new comment.",
-        "parameters": [
-          {
-            "$ref": "#/components/parameters/Fields"
-          },
-          {
-            "$ref": "#/components/parameters/Meta"
-          }
-        ],
-        "requestBody": {
-          "content": {
-            "application/json": {
-              "schema": {
-                "type": "object",
-                "required": [
-                  "collection",
-                  "item",
-                  "comment"
-                ],
-                "properties": {
-                  "collection": {
-                    "type": "string",
-                    "description": "Which collection this collection comment is for.",
-                    "example": "projects"
-                  },
-                  "item": {
-                    "type": "string",
-                    "example": "81dfa7e0-56d2-471f-b96a-1cf8a62bdf28"
-                  },
-                  "comment": {
-                    "type": "string",
-                    "example": "A new comment"
-                  }
-                }
-              }
-            }
-          }
-        },
-        "responses": {
-          "200": {
-            "description": "Successful request",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "properties": {
-                    "data": {
-                      "$ref": "#/components/schemas/Comments"
-                    }
-                  }
-                }
-              }
-            }
-          },
-          "401": {
-            "$ref": "#/components/responses/UnauthorizedError"
-          }
-        }
-      },
-      "patch": {
-        "summary": "Update Multiple Comments",
-        "description": "Update multiple comments at the same time.",
-        "tags": [
-          "Comments"
-        ],
-        "operationId": "updateComments",
-        "parameters": [
-          {
-            "$ref": "#/components/parameters/Fields"
-          },
-          {
-            "$ref": "#/components/parameters/Limit"
-          },
-          {
-            "$ref": "#/components/parameters/Meta"
-          },
-          {
-            "$ref": "#/components/parameters/Offset"
-          },
-          {
-            "$ref": "#/components/parameters/Sort"
-          },
-          {
-            "$ref": "#/components/parameters/Filter"
-          },
-          {
-            "$ref": "#/components/parameters/Search"
-          }
-        ],
-        "requestBody": {
-          "content": {
-            "application/json": {
-              "schema": {
-                "type": "object",
-                "properties": {
-                  "keys": {
-                    "type": "array",
-                    "items": {
-                      "type": "string"
-                    }
-                  },
-                  "data": {
-                    "type": "object",
-                    "required": [
-                      "collection"
-                    ],
-                    "properties": {
-                      "collection": {
-                        "type": "string",
-                        "description": "Which collection this collection comment is for.",
-                        "example": "projects"
-                      },
-                      "item": {
-                        "type": "string",
-                        "example": "81dfa7e0-56d2-471f-b96a-1cf8a62bdf28"
-                      },
-                      "comment": {
-                        "type": "string",
-                        "example": "A new comment"
-                      }
-                    }
-                  }
-                }
-              }
-            }
-          }
-        },
-        "responses": {
-          "200": {
-            "description": "Successful request",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "properties": {
-                    "data": {
-                      "type": "array",
-                      "items": {
-                        "$ref": "#/components/schemas/Comments"
-                      }
-                    },
-                    "meta": {
-                      "$ref": "#/components/schemas/x-metadata"
-                    }
-                  }
-                }
-              }
-            }
-          },
-          "401": {
-            "$ref": "#/components/responses/UnauthorizedError"
-          }
-        }
-      },
-      "delete": {
-        "summary": "Delete Multiple Comments",
-        "description": "Delete multiple existing comments.",
-        "tags": [
-          "Comments"
-        ],
-        "operationId": "deleteComments",
-        "responses": {
-          "200": {
-            "description": "Successful request"
-          },
-          "401": {
-            "$ref": "#/components/responses/UnauthorizedError"
-          }
-        }
-      }
-    },
-    "/comments/{id}": {
-      "get": {
-        "tags": [
-          "Comments"
-        ],
-        "operationId": "getComment",
-        "summary": "Retrieve a Comment",
-        "description": "Retrieve a single comment by unique identifier.",
-        "security": [
-          {
-            "Auth": []
-          }
-        ],
-        "parameters": [
-          {
-            "$ref": "#/components/parameters/Fields"
-          },
-          {
-            "$ref": "#/components/parameters/Meta"
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "Successful request",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "properties": {
-                    "data": {
-                      "$ref": "#/components/schemas/Comments"
-                    }
-                  }
-                }
-              }
-            }
-          },
-          "401": {
-            "$ref": "#/components/responses/UnauthorizedError"
-          }
-        }
-      },
-      "patch": {
-        "tags": [
-          "Comments"
-        ],
-        "operationId": "updateComment",
-        "summary": "Update a Comment",
-        "description": "Update an existing comment.",
-        "parameters": [
-          {
-            "$ref": "#/components/parameters/Fields"
-          },
-          {
-            "$ref": "#/components/parameters/Meta"
-          }
-        ],
-        "requestBody": {
-          "content": {
-            "application/json": {
-              "schema": {
-                "type": "object",
-                "required": [
-                  "collection"
-                ],
-                "properties": {
-                  "collection": {
-                    "type": "string",
-                    "description": "Which collection this comment is for.",
-                    "example": "projects"
-                  },
-                  "item": {
-                    "type": "string",
-                    "example": "81dfa7e0-56d2-471f-b96a-1cf8a62bdf28"
-                  },
-                  "comment": {
-                    "type": "string",
-                    "example": "An updated comment"
-                  }
-                }
-              }
-            }
-          }
-        },
-        "responses": {
-          "200": {
-            "description": "Successful request",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "properties": {
-                    "data": {
-                      "$ref": "#/components/schemas/Comments"
-                    }
-                  }
-                }
-              }
-            }
-          },
-          "401": {
-            "$ref": "#/components/responses/UnauthorizedError"
-          },
-          "404": {
-            "$ref": "#/components/responses/NotFoundError"
-          }
-        }
-      },
-      "delete": {
-        "tags": [
-          "Comments"
-        ],
-        "operationId": "deleteComment",
-        "summary": "Delete a Comment",
-        "description": "Delete an existing comment.",
-        "security": [
-          {
-            "Auth": []
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "Successful request"
-          },
-          "401": {
-            "$ref": "#/components/responses/UnauthorizedError"
-          }
-        }
       }
     },
     "/items/bookable_object": {
@@ -11534,13 +11534,13 @@
       "x-collection": "staticpages"
     },
     {
-      "name": "ItemsSettings",
-      "x-collection": "settings"
-    },
-    {
       "name": "Comments",
       "description": "Comments can be added to items.",
       "x-collection": "directus_comments"
+    },
+    {
+      "name": "ItemsSettings",
+      "x-collection": "settings"
     },
     {
       "name": "ItemsBookableObject",
@@ -13867,20 +13867,6 @@
         },
         "x-collection": "staticpages"
       },
-      "ItemsSettings": {
-        "type": "object",
-        "properties": {
-          "id": {
-            "nullable": false,
-            "type": "integer"
-          },
-          "display_legal": {
-            "nullable": true,
-            "type": "boolean"
-          }
-        },
-        "x-collection": "settings"
-      },
       "Comments": {
         "type": "object",
         "properties": {
@@ -13951,6 +13937,30 @@
           }
         },
         "x-collection": "directus_comments"
+      },
+      "ItemsSettings": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "nullable": false,
+            "type": "integer"
+          },
+          "display_legal": {
+            "nullable": true,
+            "type": "boolean"
+          },
+          "require_email_verification": {
+            "nullable": true,
+            "description": "If this field is set, a new user doesn't require email verification.",
+            "type": "boolean"
+          },
+          "no_user_mode": {
+            "nullable": true,
+            "description": "If this setting is set the user will be redirected from the login view to the home screen directly and see all the content without user filter.",
+            "type": "boolean"
+          }
+        },
+        "x-collection": "settings"
       },
       "ItemsBookableObject": {
         "type": "object",
@@ -14040,6 +14050,18 @@
           "capacity": {
             "nullable": true,
             "type": "integer"
+          },
+          "user_created": {
+            "nullable": true,
+            "oneOf": [
+              {
+                "type": "string",
+                "format": "uuid"
+              },
+              {
+                "$ref": "#/components/schemas/Users"
+              }
+            ]
           },
           "group": {
             "nullable": true,

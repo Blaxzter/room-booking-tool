@@ -35,6 +35,7 @@ RUN corepack enable
 USER node
 
 RUN pnpm install directus-extension-sync
+RUN pnpm install @flickdawist/custom_error_handler
 
 # Copy any additional resources like email templates
 COPY ./email-templates/ /directus/email-templates/

@@ -3,19 +3,39 @@ import { computed, type PropType, ref, onBeforeMount } from 'vue'
 import { useForm } from 'vee-validate'
 import { toTypedSchema } from '@vee-validate/zod'
 import * as z from 'zod'
+import { storeToRefs } from 'pinia'
 
-import { FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form'
+import {
+  FormControl,
+  FormDescription,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage
+} from '@/components/ui/form'
 import { Button } from '@/components/ui/button'
-import { Select, SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
+import {
+  Select,
+  SelectContent,
+  SelectGroup,
+  SelectItem,
+  SelectTrigger,
+  SelectValue
+} from '@/components/ui/select'
 
 import NameFade from '@/components/utils/NameFade.vue'
-import { bookableObjectRandoms, bookableObjectRandomsLower } from '@/assets/ts/constants'
+import {
+  bookableObjectRandoms,
+  bookableObjectRandomsLower
+} from '@/assets/ts/constants'
 import { Label } from '@/components/ui/label'
 import AvatarUploadComponent from '@/components/utils/AvatarUploadComponent.vue'
 
 import type { BookableObject } from '@/types'
 import { useGroups } from '@/stores/groups'
 import { useBookableObjects } from '@/stores/bookableObjects'
+import { useGlobalSettings } from '@/stores/globalSettings'
+const { isDemoUser } = storeToRefs(useGlobalSettings())
 
 interface InitialValues {
   splash_image_object: Blob
@@ -103,13 +123,19 @@ defineExpose({ getValues, validate, upload })
         @avatar-updated="updateBookableObjectImage(false)"
         @avatar-cleared="updateBookableObjectImage(true)"
         :add-clear-request="!!bookableObject"
+        :disabled="isDemoUser"
       />
       <div class="text-sm text-muted-foreground">Upload an splash image.</div>
     </div>
     <FormField v-slot="{ componentField }" name="object_type">
       <FormItem>
-        <FormLabel>Choose type of <NameFade :messages="bookableObjectRandoms" /></FormLabel>
-        <Select v-bind="componentField" @update:modelValue="$emit('update', 'type', values.object_type)">
+        <FormLabel
+          >Choose type of <NameFade :messages="bookableObjectRandoms"
+        /></FormLabel>
+        <Select
+          v-bind="componentField"
+          @update:modelValue="$emit('update', 'type', values.object_type)"
+        >
           <FormControl>
             <SelectTrigger>
               <SelectValue />
@@ -117,13 +143,20 @@ defineExpose({ getValues, validate, upload })
           </FormControl>
           <SelectContent>
             <SelectGroup>
-              <SelectItem v-for="objectType in objectTypes" :key="objectType.id" :value="objectType.id">
+              <SelectItem
+                v-for="objectType in objectTypes"
+                :key="objectType.id"
+                :value="objectType.id"
+              >
                 {{ objectType.name }}
               </SelectItem>
             </SelectGroup>
           </SelectContent>
         </Select>
-        <FormDescription> Choose the type of <NameFade :messages="bookableObjectRandomsLower" />. </FormDescription>
+        <FormDescription>
+          Choose the type of
+          <NameFade :messages="bookableObjectRandomsLower" />.
+        </FormDescription>
         <FormMessage />
       </FormItem>
     </FormField>

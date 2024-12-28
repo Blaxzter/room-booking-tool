@@ -198,6 +198,28 @@
     "_syncId": "7f53dd18-b651-4f92-84c9-3af16cfae9ec"
   },
   {
+    "name": "Limit Creation Amount for user in Demo Mode",
+    "icon": "bolt",
+    "color": null,
+    "description": "This flow checks on creation (bookable object, group, bookings how many the user already has.",
+    "status": "active",
+    "trigger": "event",
+    "accountability": "all",
+    "options": {
+      "type": "filter",
+      "scope": [
+        "items.create"
+      ],
+      "collections": [
+        "bookable_object",
+        "booking",
+        "group"
+      ]
+    },
+    "operation": "fc2314ed-952c-432f-8f45-dfa1d76d443d",
+    "_syncId": "86ce965b-f3f0-4f40-9fe6-0b91d65c7343"
+  },
+  {
     "name": "Create Unique ID",
     "icon": "bolt",
     "color": null,

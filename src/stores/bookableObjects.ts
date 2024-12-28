@@ -143,7 +143,19 @@ export const useBookableObjects = defineStore('bookableObjects', () => {
       bookableObject.group = []
     }
     bookableObject.status = 'published'
-    const result = await client.request(createItem('bookable_object', bookableObject))
+    let result;
+    try {
+      result = await client.request(createItem('bookable_object', bookableObject))
+    } catch (error: any) {
+      console.log(error)
+      toast({
+        title: 'Error creating bookable object',
+        description: error?.errors?.[0]?.message,
+        variant: 'destructive'
+      })
+      throw error
+    }
+
     // check if result.image is string and replace with { id: string } (yes it can be string)
     if (result.image && typeof result.image === 'string') {
       result.image = { id: result.image }

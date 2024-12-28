@@ -77,7 +77,7 @@ onMounted(async () => {
       <div class="h-full overflow-hidden flex-grow">
         <ScrollArea class="max-h-full overflow-y-scroll">
           <div class="flex-1 md:max-w-2xl mb-5">
-            <div class="space-y-6">
+            <div class="space-y-6 ps-1">
               <Component :is="PageComponent" />
             </div>
           </div>

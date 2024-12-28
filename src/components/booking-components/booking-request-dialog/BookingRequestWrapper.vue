@@ -83,9 +83,13 @@ const createBooking = async () => {
   }
 
   const { createBooking } = useBookings()
-  const createdEvent = await createBooking(createObject as CreateBookingRequest)
+  try {
+    const createdEvent = await createBooking(createObject as CreateBookingRequest)
+    emit('created', createdEvent)
+  } catch (e) {
+    console.error("test")
+  }
   open.value = false
-  emit('created', createdEvent)
 }
 
 const nextStep = async () => {

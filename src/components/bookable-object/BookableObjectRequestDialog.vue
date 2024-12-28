@@ -73,8 +73,17 @@ const nextStep = async () => {
     steptoValues[activeStep.value] = valRes.values
     if (activeStep.value < steps.length - 1) activeStep.value++
     else {
-      await createObject()
-      open.value = false
+      try {
+        await createObject()
+      } finally {
+        open.value = false
+        // reset values
+        steptoValues[0] = {}
+        steptoValues[1] = {}
+        steptoValues[2] = {}
+
+        activeStep.value = 0
+      }
     }
   }
 }

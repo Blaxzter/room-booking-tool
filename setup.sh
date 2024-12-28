@@ -71,8 +71,6 @@ TOKEN=$(curl -s -X POST -H "Content-Type: application/json" \
   -d '{"email": "'"$ADMIN_EMAIL"'", "password": "'"$ADMIN_PASSWORD"'"}' \
   "$HOST_URL/auth/login" | jq -r '.data.access_token')
 
-echo "${TOKEN}"
-
 # Check if initialization is needed
 COLLECTION_EXISTS=$(curl -s -H "Authorization: Bearer $TOKEN" \
   "$HOST_URL/collections/bookable_object" | jq -r '.data')

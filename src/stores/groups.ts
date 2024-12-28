@@ -13,6 +13,7 @@ import type {
   GetInviteQueryResponse
 } from '@/assets/ts/queries/initial_data'
 import { getInviteQuery } from '@/assets/ts/queries/invites'
+import { toast } from '@/components/ui/toast'
 
 export const useGroups = defineStore('group', () => {
   const { setSelectedGroup, getSelectedGroup } = useLocalUser()
@@ -64,7 +65,20 @@ export const useGroups = defineStore('group', () => {
         role: 'admin'
       }
     ]
-    const result = await client.request(createItem('group', group))
+
+    let result
+    try {
+      result = await client.request(createItem('group', group))
+    } catch (error: any) {
+      console.log(error)
+      toast({
+        title: 'Error creating bookable object',
+        description: error?.errors?.[0]?.message,
+        variant: 'destructive'
+      })
+      throw error
+    }
+
     // cast result to Group
     const newGroupWithData = await fetchGroupWithData(result.id)
     addGroup(newGroupWithData!)

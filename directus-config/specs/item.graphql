@@ -135,8 +135,8 @@ type Subscription {
   group_mutated(event: EventEnum): group_mutated
   directus_access_mutated(event: EventEnum): directus_access_mutated
   staticpages_mutated(event: EventEnum): staticpages_mutated
-  settings_mutated(event: EventEnum): settings_mutated
   directus_comments_mutated(event: EventEnum): directus_comments_mutated
+  settings_mutated(event: EventEnum): settings_mutated
   bookable_object_mutated(event: EventEnum): bookable_object_mutated
 }
 
@@ -212,6 +212,7 @@ type bookable_object {
   information_shared: Boolean
   confirm_role: String
   capacity: Int
+  user_created(filter: directus_users_filter, sort: [String], limit: Int, offset: Int, page: Int, search: String): directus_users
   group(filter: bookable_object_group_filter, sort: [String], limit: Int, offset: Int, page: Int, search: String): [bookable_object_group]
   group_func: count_functions
 }
@@ -249,6 +250,7 @@ type bookable_object_aggregated_count {
   information_shared: Int
   confirm_role: Int
   capacity: Int
+  user_created: Int
   group: Int
 }
 
@@ -1157,6 +1159,14 @@ type notification_setting_mutated {
 type settings {
   id: ID!
   display_legal: Boolean
+
+  """If this field is set, a new user doesn't require email verification."""
+  require_email_verification: Boolean
+
+  """
+  If this setting is set the user will be redirected from the login view to the home screen directly and see all the content without user filter.
+  """
+  no_user_mode: Boolean
 }
 
 type settings_mutated {
@@ -1213,6 +1223,7 @@ type version_bookable_object {
   information_shared: Boolean
   confirm_role: String
   capacity: Int
+  user_created: JSON
   group: JSON
 }
 
@@ -1309,6 +1320,14 @@ type version_notification_setting {
 type version_settings {
   id: ID
   display_legal: Boolean
+
+  """If this field is set, a new user doesn't require email verification."""
+  require_email_verification: Boolean
+
+  """
+  If this setting is set the user will be redirected from the login view to the home screen directly and see all the content without user filter.
+  """
+  no_user_mode: Boolean
 }
 
 """"""
@@ -1355,6 +1374,7 @@ input bookable_object_filter {
   information_shared: boolean_filter_operators
   confirm_role: string_filter_operators
   capacity: number_filter_operators
+  user_created: directus_users_filter
   group: bookable_object_group_filter
   group_func: count_function_filter_operators
   _and: [bookable_object_filter]
@@ -1432,6 +1452,7 @@ input create_bookable_object_input {
   information_shared: Boolean
   confirm_role: String
   capacity: Int
+  user_created: create_directus_users_input
   group: [create_bookable_object_group_input]
 }
 
@@ -2091,6 +2112,7 @@ input update_bookable_object_input {
   information_shared: Boolean
   confirm_role: String
   capacity: Int
+  user_created: update_directus_users_input
   group: [update_bookable_object_group_input]
 }
 
@@ -2287,6 +2309,14 @@ input update_notification_setting_input {
 input update_settings_input {
   id: ID
   display_legal: Boolean
+
+  """If this field is set, a new user doesn't require email verification."""
+  require_email_verification: Boolean
+
+  """
+  If this setting is set the user will be redirected from the login view to the home screen directly and see all the content without user filter.
+  """
+  no_user_mode: Boolean
 }
 
 input update_staticpages_input {
