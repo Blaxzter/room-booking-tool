@@ -6,6 +6,30 @@ networks:
   #     name: nginx-net
 
 services:
+#  frontend:
+#    image: blaxzter/bookitool-frontend:0.1.24
+#    depends_on:
+#      - directus
+#    restart: "unless-stopped"
+#    networks:
+#      - directus-net
+##      - nginx-net
+#    build:
+#      context: ./
+#      dockerfile: Dockerfile.frontend
+#    env_file:
+#      - .env
+#    environment:
+#      VITE_BACKEND_URL: https://api.bookitool.net
+#      VITE_FRONTEND_URL: https://bookitool.net
+#
+#      # Only required when running behind a reverse proxy like nginx-proxy
+#      VIRTUAL_HOST: "${VIRTUAL_HOST}"
+#      LETSENCRYPT_HOST: "${LETSENCRYPT_HOST}"
+#      LETSENCRYPT_EMAIL: "${LETSENCRYPT_EMAIL}"
+#    ports:
+#      - 8001:80
+
   database:
     image: postgis/postgis:13-master
     # Required when running on platform other than amd64, like Apple M1/M2:
@@ -115,8 +139,8 @@ services:
 #      TELEGRAM_BOT_TOKEN: "${TELEGRAM_BOT_TOKEN}"
 #      PORT: 3000
 #
-#      VIRTUAL_HOST: "${TELEGRAM_URL}"
-#      LETSENCRYPT_HOST: "${TELEGRAM_URL}"
+#      VIRTUAL_HOST: "${TELEGRAM_VIRTUAL_HOST}"
+#      LETSENCRYPT_HOST: "${TELEGRAM_VIRTUAL_HOST}"
 #      LETSENCRYPT_EMAIL: "${LETSENCRYPT_EMAIL}"
 #    ports:
 #      - "12000:3000"
@@ -124,26 +148,6 @@ services:
 #    networks:
 #      - directus-net
 #      # - nginx-net
-
-#  frontend:
-#    depends_on:
-#      - directus
-#    restart: "unless-stopped"
-#    networks:
-#      - directus-net
-##      - nginx-net
-#    build:
-#      context: ./
-#      dockerfile: Dockerfile.frontend
-#    env_file:
-#      - .env
-#    environment:
-#      # Only required when running behind a reverse proxy like nginx-proxy
-#      VIRTUAL_HOST: "${VIRTUAL_HOST}"
-#      LETSENCRYPT_HOST: "${LETSENCRYPT_HOST}"
-#      LETSENCRYPT_EMAIL: "${LETSENCRYPT_EMAIL}"
-#    ports:
-#      - 8001:80
 
 volumes:
   postgres_data:
