@@ -4,6 +4,8 @@ import { DrawerContent, DrawerDescription, DrawerFooter, DrawerHeader, DrawerTit
 import { Button } from '@/components/ui/button'
 import GroupDataCard from '@/components/groups/bodys/GroupDataBody.vue'
 
+defineEmits(['created', 'close'])
+
 defineProps({
   showDialog: {
     type: Boolean,

@@ -8,8 +8,21 @@ import { toTypedSchema } from '@vee-validate/zod'
 import * as z from 'zod'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
-import { FormControl, FormField, FormItem, FormLabel, FormMessage, FormDescription } from '@/components/ui/form'
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle
+} from '@/components/ui/card'
+import {
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+  FormDescription
+} from '@/components/ui/form'
 import type { CreateUserRequest } from '@/types'
 import LogoImage from '@/components/bits/LogoImage.vue'
 
@@ -21,14 +34,27 @@ const { displayLegal } = storeToRefs(useGlobalSettings())
 const signupSchema = z.object({
   first_name: z.string().optional(),
   last_name: z.string().optional(),
-  email: z.string().email('Email must be valid').min(1, { message: 'Email is required' }),
-  legal: z.boolean().refine((value) => value === true, { message: 'You must agree to the terms and conditions' }),
+  email: z
+    .string()
+    .email('Email must be valid')
+    .min(1, { message: 'Email is required' }),
+  legal: displayLegal.value
+    ? z
+        .boolean()
+        .refine((value) => value === true, {
+          message: 'You must agree to the terms and conditions'
+        })
+    : z.boolean().optional(),
   password: z
     .string()
     .min(8, { message: 'Password must be at least 8 characters long' })
     .regex(/[0-9]/, { message: 'Password must contain at least one number' })
-    .regex(/[A-Z]/, { message: 'Password must contain at least one uppercase letter' })
-    .regex(/[@$!%*?&#]/, { message: 'Password must contain at least one special character' })
+    .regex(/[A-Z]/, {
+      message: 'Password must contain at least one uppercase letter'
+    })
+    .regex(/[@$!%*?&#]/, {
+      message: 'Password must contain at least one special character'
+    })
 })
 
 const { values, validate } = useForm({
@@ -62,18 +88,24 @@ const onSubmit = async () => {
 </script>
 
 <template>
-  <Card class="rounded-none h-full w-full sm:max-w-sm sm:h-auto sm:rounded-xl place-content-center">
+  <Card
+    class="rounded-none h-full w-full sm:max-w-sm sm:h-auto sm:rounded-xl place-content-center"
+  >
     <CardHeader class="max-w-sm m-auto">
       <CardTitle>
         <div class="flex items-center gap-4 mb-3">
           <LogoImage />
           <div class="text-3xl font-bold">
             <div>BookiTool</div>
-            <div class="text-2xl font-normal text-muted-foreground">Sign Up</div>
+            <div class="text-2xl font-normal text-muted-foreground">
+              Sign Up
+            </div>
           </div>
         </div>
       </CardTitle>
-      <CardDescription> Enter your information to create an account </CardDescription>
+      <CardDescription>
+        Enter your information to create an account
+      </CardDescription>
     </CardHeader>
     <CardContent class="max-w-sm m-auto">
       <form @submit.prevent="onSubmit" class="grid gap-4">
@@ -116,8 +148,14 @@ const onSubmit = async () => {
           </FormItem>
         </FormField>
         <template v-if="displayLegal">
-          <FormField v-slot="{ value, handleChange }" type="checkbox" name="legal">
-            <FormItem class="flex flex-row items-start gap-x-3 space-y-0 rounded-md">
+          <FormField
+            v-slot="{ value, handleChange }"
+            type="checkbox"
+            name="legal"
+          >
+            <FormItem
+              class="flex flex-row items-start gap-x-3 space-y-0 rounded-md"
+            >
               <FormControl>
                 <Checkbox :checked="value" @update:checked="handleChange" />
               </FormControl>
@@ -125,16 +163,22 @@ const onSubmit = async () => {
                 <FormLabel>I agree to the terms and conditions</FormLabel>
                 <FormDescription>
                   By signing up, you agree to our
-                  <router-link to="/terms-of-service" class="underline">Terms of Service</router-link>
+                  <router-link to="/terms-of-service" class="underline"
+                    >Terms of Service</router-link
+                  >
                   and
-                  <router-link to="/privacy" class="underline">Privacy Policy</router-link>
+                  <router-link to="/privacy" class="underline"
+                    >Privacy Policy</router-link
+                  >
                 </FormDescription>
                 <FormMessage />
               </div>
             </FormItem>
           </FormField>
         </template>
-        <Button type="submit" class="w-full mt-3" :loading="loading"> Create an account </Button>
+        <Button type="submit" class="w-full mt-3" :loading="loading">
+          Create an account
+        </Button>
       </form>
       <div class="mt-4 text-center text-sm max-w-sm m-auto">
         Already have an account?

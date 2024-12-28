@@ -7,14 +7,13 @@ import { polyfillCountryFlagEmojis } from 'country-flag-emoji-polyfill'
 import dayjs from 'dayjs'
 import weekOfYear from 'dayjs/plugin/weekOfYear'
 import isToday from 'dayjs/plugin/isToday'
+import App from './App.vue'
+import router from './router'
 
 polyfillCountryFlagEmojis()
 
 dayjs.extend(weekOfYear)
 dayjs.extend(isToday)
-
-import App from './App.vue'
-import router from './router'
 
 const app = createApp(App)
 

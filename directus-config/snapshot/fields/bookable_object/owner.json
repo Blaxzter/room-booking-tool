@@ -5,8 +5,10 @@
   "meta": {
     "collection": "bookable_object",
     "conditions": null,
-    "display": null,
-    "display_options": null,
+    "display": "related-values",
+    "display_options": {
+      "template": "{{first_name}} {{last_name}} ({{email}})"
+    },
     "field": "owner",
     "group": null,
     "hidden": false,
@@ -36,6 +38,7 @@
     "numeric_scale": null,
     "is_nullable": true,
     "is_unique": false,
+    "is_indexed": false,
     "is_primary_key": false,
     "is_generated": false,
     "generation_expression": null,

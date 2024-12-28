@@ -6,7 +6,12 @@
     "collection": "booking",
     "conditions": [
       {
+        "hidden": true,
         "name": "Show end date when not full day",
+        "options": {
+          "includeSeconds": false,
+          "use24": true
+        },
         "rule": {
           "_and": [
             {
@@ -15,11 +20,6 @@
               }
             }
           ]
-        },
-        "hidden": true,
-        "options": {
-          "includeSeconds": false,
-          "use24": true
         }
       }
     ],
@@ -50,6 +50,7 @@
     "numeric_scale": null,
     "is_nullable": true,
     "is_unique": false,
+    "is_indexed": false,
     "is_primary_key": false,
     "is_generated": false,
     "generation_expression": null,

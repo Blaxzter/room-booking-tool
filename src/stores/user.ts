@@ -1,4 +1,4 @@
-import { computed, ref, h } from 'vue'
+import { computed, h, ref } from 'vue'
 import { defineStore } from 'pinia'
 import {
   authentication,
@@ -8,19 +8,19 @@ import {
   type AuthenticationMode,
   type AuthenticationStorage,
   createDirectus,
+  deleteFile,
+  deleteUser,
   type DirectusClient,
   type DirectusUser,
   graphql,
   type GraphqlClient,
   type Query,
   readMe,
+  registerUser,
+  registerUserVerify,
   rest,
   type RestClient,
-  updateUser,
-  registerUser,
-  deleteUser,
-  registerUserVerify,
-  deleteFile
+  updateUser
 } from '@directus/sdk'
 import type { CreateUserRequest, Group, MySchema, UpdateUserRequest, User } from '@/types'
 import router from '@/router'
@@ -32,8 +32,7 @@ import { useGlobal } from '@/stores/global'
 import { useGroups } from '@/stores/groups'
 import { useBookings } from '@/stores/booking'
 import { useBookableObjects } from '@/stores/bookableObjects'
-import { ToastAction } from '@/components/ui/toast'
-import { toast } from '@/components/ui/toast'
+import { toast, ToastAction } from '@/components/ui/toast'
 
 export type MyDirectusClient = DirectusClient<MySchema> &
   AuthenticationClient<MySchema> &
@@ -202,9 +201,7 @@ export const useUser = defineStore('user', () => {
 
     // Check if access token exists and expires_at is more than 5 minutes from now
     if (access_token && expires_at && currentTime < expires_at - 5 * 60 * 1000) {
-      user.value = JSON.parse(localStorage.getItem('user') || '{}')
       // Access token exists and doesn't expire in the next 5 minutes
-      authenticated.value = true
       auth_data.value = {
         access_token: access_token as string,
         refresh_token: storage.get('refresh_token') as string,
@@ -212,6 +209,7 @@ export const useUser = defineStore('user', () => {
         expires_at: expires_at
       }
       await getCurrentUserData()
+      authenticated.value = true
       return true
     } else {
       // Access token exist, has expired, or expires in less than 5 minutes
@@ -301,7 +299,6 @@ export const useUser = defineStore('user', () => {
   }
 
   const addTelegramId = async (telegram_user_id: string | null, telegram_user_name: string | null) => {
-    /* @ts-ignore */
     await client.request(updateUser(user.value.id, { telegram_user_id, telegram_user_name })).then(
       (result) => {
         user.value = result as unknown as User

@@ -1,4 +1,4 @@
-import { ref } from 'vue'
+import { ref, watch } from 'vue'
 import { defineStore, storeToRefs } from 'pinia'
 
 import {
@@ -24,8 +24,8 @@ import _ from 'lodash'
 import { useToast } from '@/components/ui/toast/use-toast'
 import { useNotificationSetting } from '@/stores/notificationSettings'
 import type { Group } from '@/types'
-import axios from 'axios'
 import type { AxiosResponse } from 'axios'
+import axios from 'axios'
 
 export const useInitialDataStore = defineStore('initial', () => {
   const { toast } = useToast()
@@ -47,6 +47,9 @@ export const useInitialDataStore = defineStore('initial', () => {
   }
 
   const fetchDashboardViewData = async () => {
+
+    const { client } = useUser()
+
     init_loading.value = true
     try {
       const selectedGroup = getSelectedGroup()
@@ -91,7 +94,7 @@ export const useInitialDataStore = defineStore('initial', () => {
         console.log(bookable_object_id, res.data.bookings)
         setBookings(bookable_object_id, res.data.bookings)
       })
-      .catch((error) => {
+      .catch(() => {
         toast({
           title: 'Error',
           description: 'No bookable object found'

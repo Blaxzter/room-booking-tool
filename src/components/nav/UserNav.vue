@@ -15,6 +15,7 @@ import { Button } from '@/components/ui/button'
 import { useDark, useToggle } from '@vueuse/core'
 import { onMounted, ref } from 'vue'
 import { storeToRefs } from 'pinia'
+import { MailIcon } from 'lucide-vue-next'
 import { useUser } from '@/stores/user'
 import router from '@/router'
 import DarkscreenToggle from '@/components/animations/DarkscreenToggle.vue'
@@ -44,8 +45,8 @@ onMounted(async () => {
 })
 
 import { useGlobalSettings } from '@/stores/globalSettings'
-import { Checkbox } from '@/components/ui/checkbox'
-const { displayLegal } = storeToRefs(useGlobalSettings())
+const { displayLegal, isDemoUser, demoDialogOpen  } = storeToRefs(useGlobalSettings())
+
 </script>
 
 <template>
@@ -87,6 +88,13 @@ const { displayLegal } = storeToRefs(useGlobalSettings())
           <DropdownMenuShortcut>⌘S</DropdownMenuShortcut>
         </DropdownMenuItem>
       </DropdownMenuGroup>
+      <template v-if="isDemoUser">
+        <DropdownMenuSeparator />
+        <DropdownMenuItem class="cursor-pointer" @click="demoDialogOpen = true">
+          <MailIcon class="mr-2 h-4 w-4" />
+          Request Full Access
+        </DropdownMenuItem>
+      </template>
       <DropdownMenuSeparator />
       <DropdownMenuItem @click="logout" class="cursor-pointer">
         Log out

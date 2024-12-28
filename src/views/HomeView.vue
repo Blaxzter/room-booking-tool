@@ -17,6 +17,7 @@ import NameFade from '@/components/utils/NameFade.vue'
 
 import { bookableObjectRandoms } from '@/assets/ts/constants'
 import NotFoundAnimation from '@/components/animations/NotFoundAnimation.vue'
+import DemoModeOverlay from '@/components/utils/DemoModeOverlay.vue'
 
 const router = useRouter()
 
@@ -40,6 +41,7 @@ onMounted(async () => {
 </script>
 
 <template>
+  <DemoModeOverlay :show-trigger="false" identifier="2" />
   <div class="flex flex-col">
     <div class="col-span-3 lg:col-span-4">
       <div class="h-full px-4 py-6 lg:px-8">

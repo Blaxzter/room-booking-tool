@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { computed, inject } from 'vue'
 import { cn } from '@/lib/utils'
+import CalenderLoader from '@/components/animations/CalenderLoader.vue'
 
 const props = defineProps<{
   image_id: string
@@ -9,6 +10,7 @@ const props = defineProps<{
   width?: number
   height?: number
   rounded?: boolean
+  loading?: boolean
 }>()
 
 const computedWidth = computed(() => {
@@ -38,10 +40,17 @@ const backendUrl = inject('backendUrl')
 
 <template>
   <img
+    v-if="image_id && !loading"
     :src="`${backendUrl}/assets/${image_id}`"
     :alt="alt_name ?? 'Splash Image'"
     :width="computedWidth"
     :height="computedHeight"
     :class="cn('object-cover transition-all hover:scale-105', aspectClass, rounded && 'rounded-lg')"
   />
+  <div
+    v-else
+    :class="cn('h-auto w-auto object-cover bg-secondary content-center', aspectClass)"
+    :style="`background-color:` + (loading ? 'white' : 'transparent')">
+    <CalenderLoader :height="100" />
+  </div>
 </template>

@@ -7,7 +7,14 @@ import { storeToRefs } from 'pinia'
 import _ from 'lodash'
 
 import { randomGroupName } from '@/assets/ts/constants'
-import { FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form'
+import {
+  FormControl,
+  FormDescription,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage
+} from '@/components/ui/form'
 
 import { Label } from '@/components/ui/label'
 import { Input } from '@/components/ui/input'
@@ -19,7 +26,9 @@ import EmojiPicker from '@/components/utils/EmojiPicker.vue'
 import { useGroups } from '@/stores/groups'
 import type { Group, GroupDirectusUser, User } from '@/types'
 import { useUser } from '@/stores/user'
+import { useGlobalSettings } from '@/stores/globalSettings'
 const { user } = storeToRefs(useUser())
+const { isDemoUser } = storeToRefs(useGlobalSettings())
 
 const { toast } = useToast()
 
@@ -52,7 +61,9 @@ const profileFormSchema = toTypedSchema(
       }),
     description: z
       .string()
-      .max(160, { message: 'Group description must not be longer than 160 characters.' })
+      .max(160, {
+        message: 'Group description must not be longer than 160 characters.'
+      })
       .optional(),
     emoji: z.string().optional(),
     avatar: z
@@ -126,7 +137,9 @@ const updateGroupAvatar = async (isDelete: boolean) => {
       await deleteAvatar(props.group)
     }
     if (!isDelete) {
-      await updateGroup('avatar', { id: await avatarUpload.value.uploadImage() })
+      await updateGroup('avatar', {
+        id: await avatarUpload.value.uploadImage()
+      })
     }
   }
 }
@@ -143,7 +156,10 @@ const userRole = computed(() => {
 })
 
 const isDisabled = computed(() => {
-  return props.group !== undefined && userRole.value !== 'admin'
+  return (
+    (props.group !== undefined && userRole.value !== 'admin') ||
+    isDemoUser.value
+  )
 })
 </script>
 
@@ -161,14 +177,24 @@ const isDisabled = computed(() => {
             :add-clear-request="!!group"
             :disabled="isDisabled"
           />
-          <div class="text-sm text-gray-500 mt-3" v-if="!isDisabled">Upload an Image</div>
+          <div class="text-sm text-gray-500 mt-3" v-if="!isDisabled">
+            Upload an Image
+          </div>
         </div>
 
-        <div class="mx-1 sm:mx-5" :class="[!isDisabled ? 'mb-7' : 'mb-1']">or</div>
+        <div class="mx-1 sm:mx-5" :class="[!isDisabled ? 'mb-7' : 'mb-1']">
+          or
+        </div>
 
         <div class="flex flex-col items-center w-[120px]">
-          <EmojiPicker v-model="selectedEmoji" @select="updateGroup('emoji', selectedEmoji)" :disabled="isDisabled" />
-          <div class="text-sm text-gray-500 mt-3" v-if="!isDisabled">Select an Emoji</div>
+          <EmojiPicker
+            v-model="selectedEmoji"
+            @select="updateGroup('emoji', selectedEmoji)"
+            :disabled="isDisabled"
+          />
+          <div class="text-sm text-gray-500 mt-3" v-if="!isDisabled">
+            Select an Emoji
+          </div>
         </div>
       </div>
     </div>
@@ -184,7 +210,9 @@ const isDisabled = computed(() => {
             :disabled="isDisabled"
           />
         </FormControl>
-        <FormDescription> This is the name of the group that will be displayed to users. </FormDescription>
+        <FormDescription>
+          This is the name of the group that will be displayed to users.
+        </FormDescription>
         <FormMessage />
       </FormItem>
     </FormField>
@@ -199,7 +227,10 @@ const isDisabled = computed(() => {
             :disabled="isDisabled"
           />
         </FormControl>
-        <FormDescription> This is a short description of the group that will be displayed to users. </FormDescription>
+        <FormDescription>
+          This is a short description of the group that will be displayed to
+          users.
+        </FormDescription>
         <FormMessage />
       </FormItem>
     </FormField>
@@ -208,5 +239,5 @@ const isDisabled = computed(() => {
 </template>
 
 <style lang="scss">
-@import '../../../../node_modules/emoji-mart-vue-fast/css/emoji-mart.css';
+@use '../../../../node_modules/emoji-mart-vue-fast/css/emoji-mart.css';
 </style>

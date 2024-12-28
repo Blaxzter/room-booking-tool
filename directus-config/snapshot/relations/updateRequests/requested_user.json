@@ -1,0 +1,25 @@
+{
+  "collection": "updateRequests",
+  "field": "requested_user",
+  "related_collection": "directus_users",
+  "meta": {
+    "junction_field": null,
+    "many_collection": "updateRequests",
+    "many_field": "requested_user",
+    "one_allowed_collections": null,
+    "one_collection": "directus_users",
+    "one_collection_field": null,
+    "one_deselect_action": "nullify",
+    "one_field": null,
+    "sort_field": null
+  },
+  "schema": {
+    "table": "updateRequests",
+    "column": "requested_user",
+    "foreign_key_table": "directus_users",
+    "foreign_key_column": "id",
+    "constraint_name": "updaterequests_requested_user_foreign",
+    "on_update": "NO ACTION",
+    "on_delete": "SET NULL"
+  }
+}

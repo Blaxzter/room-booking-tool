@@ -47,7 +47,7 @@ const bookableObjectView = computed(() => {
         :top-nav="true"
         class="flex sm:hidden flex-grow"
       />
-      <div class="sm:block md:hidden ms-2 sm:ms-3" v-show="width > 640 || !showSearch" v-if="showHeaderExtra">
+      <div v-show="width > 640 || !showSearch" v-if="showHeaderExtra" class="sm:block md:hidden ms-2 sm:ms-3">
         <GroupSwitcher />
       </div>
       <div
@@ -56,11 +56,11 @@ const bookableObjectView = computed(() => {
       >
         <template v-if="showHeaderExtra">
           <Input
+            v-model="searchString"
             type="search"
             placeholder="Search..."
             class="ms-2 sm:ms-3 hidden sm:block lg:w-[300px]"
             :style="{ display: showSearch ? 'block' : 'none' }"
-            v-model="searchString"
           />
           <Button variant="outline" size="icon" class="sm:hidden flex-shrink-0" @click="toggleSearch">
             <Search class="w-4 h-4" />

@@ -110,7 +110,7 @@ router.beforeEach(async (to, from, next) => {
     } else {
       next() // Proceed to the next route
     }
-  } catch (error) {
+  } catch {
     setRedirect(to.fullPath)
     next({ name: 'login' })
   }

@@ -3,7 +3,7 @@ import { inject, onMounted, ref, computed } from 'vue'
 import { cn } from '@/lib/utils'
 import { isMobile } from 'mobile-device-detect'
 
-import RandomEmoji from '@/components/utils/Emoji.vue'
+import RandomEmoji from '@/components/utils/EmojiComponent.vue'
 import BookableObjectMenuButton from '@/components/bookable-object/BookableObjectMenuButton.vue'
 import BookingCardSplashImage from '@/components/home/BookingCardSplashImage.vue'
 import processImage from '@/assets/ts/image-utils'
@@ -27,9 +27,12 @@ const open = ref(false)
 
 // map of bookable object ids to colors
 const idToColor = ref(new Map<string, string>())
+const imageLoading = ref(false)
 const getImageColor = async (image_id: string) => {
+  imageLoading.value = true
   return await processImage(`${backendUrl}/assets/${image_id}`).then((color) => {
     idToColor.value.set(image_id, color)
+    imageLoading.value = false
     return color
   })
 }
@@ -53,13 +56,14 @@ onMounted(() => {
     @mouseover="mouseover = true"
     @mouseleave="mouseover = false"
   >
-    <div class="overflow-hidden rounded-md relative">
+    <div class="overflow-hidden rounded-md relative ">
       <BookingCardSplashImage
         v-if="bookableObject.image"
         :alt_name="bookableObject.name"
         :image_id="bookableObject.image.id"
         :width="width"
         :height="height"
+        :loading="imageLoading"
         :aspectRatio="aspectRatio"
         :style="`background-color:` + (idToColor.get(bookableObject.image.id) ?? 'white')"
       />
@@ -102,5 +106,5 @@ onMounted(() => {
 </template>
 
 <style>
-@import '@/assets/css/colors.scss';
+@use '@/assets/css/colors.scss';
 </style>

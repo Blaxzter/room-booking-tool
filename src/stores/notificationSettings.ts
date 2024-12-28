@@ -5,7 +5,7 @@ import { defineStore, storeToRefs } from 'pinia'
 import type { BookableObject, Group, NotificationSetting } from '@/types'
 import { useUser } from '@/stores/user'
 import { useToast } from '@/components/ui/toast'
-import { deleteItem, updateItem, createItem } from '@directus/sdk'
+import { createItem, deleteItem, updateItem } from '@directus/sdk'
 import { gNotificationRequest, type NotificationSettingsGetRequest } from '@/assets/ts/queries/notificationSettings'
 
 export const useNotificationSetting = defineStore('notificationSetting', () => {

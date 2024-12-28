@@ -1,8 +1,10 @@
 <script setup lang="ts">
 import { DropdownMenu, DropdownMenuContent, DropdownMenuTrigger } from '@/components/ui/dropdown-menu'
-import RandomEmoji from '@/components/utils/Emoji.vue'
+import RandomEmoji from '@/components/utils/EmojiComponent.vue'
+import { Emoji, EmojiIndex, Picker } from 'emoji-mart-vue-fast/src'
+import data from 'emoji-mart-vue-fast/data/all.json'
 
-const props = defineProps({
+defineProps({
   disabled: {
     type: Boolean,
     default: false
@@ -10,9 +12,6 @@ const props = defineProps({
 })
 const emits = defineEmits(['select'])
 
-// @ts-ignore
-import { Emoji, Picker, EmojiIndex } from 'emoji-mart-vue-fast/src'
-import data from 'emoji-mart-vue-fast/data/all.json'
 const emojiIndex = new EmojiIndex(data, { exclude: ['flags'] })
 
 const selectedEmoji = defineModel()
@@ -25,8 +24,8 @@ const selectEmoji = (emoji: Emoji) => {
 
 <template>
   <div
-    class="border border-gray-200 rounded-full cursor-not-allowed mt-1 w-[5rem] h-[5rem] flex items-center justify-center"
     v-if="disabled"
+    class="border border-gray-200 rounded-full cursor-not-allowed mt-1 w-[5rem] h-[5rem] flex items-center justify-center"
   >
     <emoji v-if="selectedEmoji" :data="emojiIndex" :emoji="selectedEmoji" :size="50" :native="true" />
     <RandomEmoji v-else :size="50" @select="selectEmoji" />

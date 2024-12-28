@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { defineEmits, ref, watch } from 'vue'
+import { ref, watch } from 'vue'
 import { createReusableTemplate, useMediaQuery } from '@vueuse/core'
 import type { CreateBookingRequest } from '@/assets/ts/queries/bookings'
 
@@ -83,9 +83,13 @@ const createBooking = async () => {
   }
 
   const { createBooking } = useBookings()
-  const createdEvent = await createBooking(createObject as CreateBookingRequest)
+  try {
+    const createdEvent = await createBooking(createObject as CreateBookingRequest)
+    emit('created', createdEvent)
+  } catch (e) {
+    console.error("test")
+  }
   open.value = false
-  emit('created', createdEvent)
 }
 
 const nextStep = async () => {

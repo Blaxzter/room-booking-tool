@@ -59,7 +59,7 @@ onMounted(() => {
 <style lang="scss">
 .rocket {
   position: fixed;
-  bottom: 0px;
+  bottom: 0;
   left: 50%;
   transform: translateX(-50%);
 }

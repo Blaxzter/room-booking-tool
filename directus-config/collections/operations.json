@@ -83,6 +83,46 @@
     "_syncId": "9f597ac7-a21f-45c6-a52a-9d9edee5e252"
   },
   {
+    "name": "Condition",
+    "key": "condition_ah7ge",
+    "type": "condition",
+    "position_x": 39,
+    "position_y": 18,
+    "options": {
+      "filter": {
+        "$last": {
+          "ret": {
+            "_eq": true
+          }
+        }
+      }
+    },
+    "resolve": null,
+    "reject": "ca9dd07b-3af5-40e7-9e9f-4de0320c5e09",
+    "flow": "86ce965b-f3f0-4f40-9fe6-0b91d65c7343",
+    "_syncId": "7b632d6f-9e7c-4551-9ae3-ed999a063574"
+  },
+  {
+    "name": "Condition",
+    "key": "condition_zkxsr",
+    "type": "condition",
+    "position_x": 3,
+    "position_y": 19,
+    "options": {
+      "filter": {
+        "$last": {
+          "ret": {
+            "_eq": true
+          }
+        }
+      }
+    },
+    "resolve": "f7f1835f-3bd2-48c6-8045-01cd6fd580cd",
+    "reject": "47bd9d30-ea85-4512-8e98-6d0a2abcbddf",
+    "flow": "67797215-97a3-4e68-8191-547fcae7a23d",
+    "_syncId": "f2d46747-f944-4715-8282-6c75a9d62b3a"
+  },
+  {
     "name": "create random string",
     "key": "create_random_string",
     "type": "exec",
@@ -95,6 +135,60 @@
     "reject": null,
     "flow": "0c5d8064-2bf3-4284-b88b-23eeac843879",
     "_syncId": "2656a256-78dd-40f6-9c90-1719cf7fc81f"
+  },
+  {
+    "name": "Read Data",
+    "key": "created_user_messages",
+    "type": "item-read",
+    "position_x": 20,
+    "position_y": 1,
+    "options": {
+      "collection": "updateRequests",
+      "query": {
+        "filter": {
+          "requested_user": {
+            "_eq": "{{$accountability.user}}"
+          }
+        }
+      },
+      "permissions": "$full"
+    },
+    "resolve": "11bbd442-066c-4035-ad57-8938008b1701",
+    "reject": null,
+    "flow": "67797215-97a3-4e68-8191-547fcae7a23d",
+    "_syncId": "63f054fe-8ea3-4261-be30-beb05113bf5e"
+  },
+  {
+    "name": "Throw Custom Error",
+    "key": "custom_error_y_hp8th_hpwx_cre4m",
+    "type": "custom_error_yHp8thHPWX",
+    "position_x": 56,
+    "position_y": 18,
+    "options": {
+      "errorCode": "403",
+      "message": "No more elements allowed in Demo Mode",
+      "statusCode": "403"
+    },
+    "resolve": null,
+    "reject": null,
+    "flow": "86ce965b-f3f0-4f40-9fe6-0b91d65c7343",
+    "_syncId": "ca9dd07b-3af5-40e7-9e9f-4de0320c5e09"
+  },
+  {
+    "name": "Throw Custom Error",
+    "key": "custom_error_y_hp8th_hpwx_lwzlw",
+    "type": "custom_error_yHp8thHPWX",
+    "position_x": 24,
+    "position_y": 36,
+    "options": {
+      "errorCode": "400",
+      "message": "User already has a request",
+      "statusCode": "400"
+    },
+    "resolve": null,
+    "reject": null,
+    "flow": "67797215-97a3-4e68-8191-547fcae7a23d",
+    "_syncId": "47bd9d30-ea85-4512-8e98-6d0a2abcbddf"
   },
   {
     "name": "Transform Payload",
@@ -301,6 +395,20 @@
     "_syncId": "af7553b6-824a-4b1e-bbad-b3ef56fd976b"
   },
   {
+    "name": "Run Script",
+    "key": "exec_hjrz2",
+    "type": "exec",
+    "position_x": 38,
+    "position_y": 1,
+    "options": {
+      "code": "module.exports = async function(data) {\n\t\n    if (data.created_user_messages?.length >= 1) {\n        return { \"ret\": false }\n    }\n    \n\treturn { \"ret\": true }\n}"
+    },
+    "resolve": "f2d46747-f944-4715-8282-6c75a9d62b3a",
+    "reject": null,
+    "flow": "67797215-97a3-4e68-8191-547fcae7a23d",
+    "_syncId": "11bbd442-066c-4035-ad57-8938008b1701"
+  },
+  {
     "name": "Filter for personal email notification",
     "key": "exec_m7q4f",
     "type": "exec",
@@ -500,6 +608,28 @@
     "_syncId": "8ce93c59-fd25-49dd-b4b9-3b6adcae3a44"
   },
   {
+    "name": "Read Data",
+    "key": "get_user_data",
+    "type": "item-read",
+    "position_x": 3,
+    "position_y": 18,
+    "options": {
+      "collection": "{{$trigger.collection}}",
+      "query": {
+        "filter": {
+          "user_created": {
+            "_eq": "{{$accountability.user}}"
+          }
+        }
+      },
+      "permissions": "$full"
+    },
+    "resolve": "55b5a32a-12c6-4ca2-8194-1e9b37bc9d47",
+    "reject": null,
+    "flow": "86ce965b-f3f0-4f40-9fe6-0b91d65c7343",
+    "_syncId": "4fe1d22a-2f99-4ebe-8778-50fb3f0be7e3"
+  },
+  {
     "name": "Get User Data",
     "key": "get_user_data",
     "type": "item-read",
@@ -661,6 +791,40 @@
     "_syncId": "95909f9c-3986-457e-8798-734f87112ead"
   },
   {
+    "name": "Run Script",
+    "key": "isDemoUser",
+    "type": "exec",
+    "position_x": 37,
+    "position_y": 1,
+    "options": {
+      "code": "module.exports = async function(data) {\n    const demoRole = data.read_roles;\n    return demoRole.name == 'DemoUser'\n}\n"
+    },
+    "resolve": "4fe1d22a-2f99-4ebe-8778-50fb3f0be7e3",
+    "reject": null,
+    "flow": "86ce965b-f3f0-4f40-9fe6-0b91d65c7343",
+    "_syncId": "52b87bf1-f889-4f21-be04-cec84a427fdd"
+  },
+  {
+    "name": "Create Data",
+    "key": "item_create_ghfmc",
+    "type": "item-create",
+    "position_x": 24,
+    "position_y": 19,
+    "options": {
+      "collection": "updateRequests",
+      "permissions": "$full",
+      "payload": {
+        "requested_user": "{{ $accountability.user }}",
+        "message": "{{ $trigger.body.message }}",
+        "contactEmail": "{{ $trigger.body.contactEmail }}"
+      }
+    },
+    "resolve": "d289da34-14f7-4935-9cfa-052fc7d35781",
+    "reject": null,
+    "flow": "67797215-97a3-4e68-8191-547fcae7a23d",
+    "_syncId": "f7f1835f-3bd2-48c6-8045-01cd6fd580cd"
+  },
+  {
     "name": "Read Data",
     "key": "item_read_02occ",
     "type": "item-read",
@@ -767,6 +931,34 @@
     "reject": null,
     "flow": "6cf2633a-b5df-4d08-9a1c-e28b631aff31",
     "_syncId": "0a85ab5d-9a17-42ff-bb7c-1a71c5eae56b"
+  },
+  {
+    "name": "Log to Console",
+    "key": "log_t3i80",
+    "type": "log",
+    "position_x": 19,
+    "position_y": 1,
+    "options": {
+      "message": "{{ $env }}"
+    },
+    "resolve": null,
+    "reject": null,
+    "flow": "07b1a050-11cb-4d9e-82d0-95ac300911a0",
+    "_syncId": "291931be-588d-411d-a888-ff46edef2301"
+  },
+  {
+    "name": "Log to Console",
+    "key": "log_xav8q",
+    "type": "log",
+    "position_x": 39,
+    "position_y": 46,
+    "options": {
+      "message": "{{$last}}"
+    },
+    "resolve": null,
+    "reject": null,
+    "flow": "86ce965b-f3f0-4f40-9fe6-0b91d65c7343",
+    "_syncId": "89f0dafd-3215-45e1-af34-85804631408b"
   },
   {
     "name": "Send Email",
@@ -969,6 +1161,22 @@
     "_syncId": "6f56c9f7-3f5f-423b-bed0-7b35859c94b5"
   },
   {
+    "name": "Read Data",
+    "key": "read_roles",
+    "type": "item-read",
+    "position_x": 19,
+    "position_y": 1,
+    "options": {
+      "collection": "directus_roles",
+      "permissions": "$full",
+      "key": "{{$accountability.role}}"
+    },
+    "resolve": "52b87bf1-f889-4f21-be04-cec84a427fdd",
+    "reject": null,
+    "flow": "86ce965b-f3f0-4f40-9fe6-0b91d65c7343",
+    "_syncId": "fc2314ed-952c-432f-8f45-dfa1d76d443d"
+  },
+  {
     "name": "Trigger Flow",
     "key": "relevant_user_data",
     "type": "trigger",
@@ -1120,6 +1328,22 @@
     "_syncId": "56905575-ebb4-4bda-b831-8aaf2a6867f4"
   },
   {
+    "name": "Send Notification To Admin",
+    "key": "send_notification_to_admin",
+    "type": "mail",
+    "position_x": 42,
+    "position_y": 19,
+    "options": {
+      "to": "{{ $env.ADMIN_EMAIL }}",
+      "subject": "New User Request",
+      "body": "A new user requested upgrade to member.\n\nUser Data:\n{{ $trigger.body }}"
+    },
+    "resolve": null,
+    "reject": null,
+    "flow": "67797215-97a3-4e68-8191-547fcae7a23d",
+    "_syncId": "d289da34-14f7-4935-9cfa-052fc7d35781"
+  },
+  {
     "name": "Send Request to Telegram Bot",
     "key": "send_request_to_telegram_bot",
     "type": "request",
@@ -1127,13 +1351,27 @@
     "position_y": 19,
     "options": {
       "method": "POST",
-      "url": "https://telegram.bookitool.net/send-booking-request-notification",
+      "url": "{{$env.TELEGRAM_URL}}/send-booking-request-notification",
       "body": "{{ $last }}"
     },
     "resolve": null,
     "reject": null,
     "flow": "16a1c30b-f4f7-474e-b178-9afd03d90c3f",
     "_syncId": "08ffb7f8-faa5-445d-968f-38a3b7890f16"
+  },
+  {
+    "name": "Run Script",
+    "key": "stop_execution",
+    "type": "exec",
+    "position_x": 21,
+    "position_y": 18,
+    "options": {
+      "code": "module.exports = async function(data) {\n    if (!data.isDemoUser)\n        return {\"ret\": true};\n    \n\tif (data.get_user_data?.length >= 3) {\n        return {\"ret\": false};\n    }\n\treturn {\"ret\": true};\n}"
+    },
+    "resolve": "7b632d6f-9e7c-4551-9ae3-ed999a063574",
+    "reject": null,
+    "flow": "86ce965b-f3f0-4f40-9fe6-0b91d65c7343",
+    "_syncId": "55b5a32a-12c6-4ca2-8194-1e9b37bc9d47"
   },
   {
     "name": "Prepare Telegram Data",

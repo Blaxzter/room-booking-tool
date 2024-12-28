@@ -3,11 +3,18 @@ import { computed, inject, onMounted, ref, watch } from 'vue'
 import { uploadFiles } from '@directus/sdk'
 
 import { UploadIcon, XIcon, TrashIcon } from 'lucide-vue-next'
-// @ts-ignore
+// @ts-expect-error
 import AvatarCropper from 'vue-avatar-cropper'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
-
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger
+} from '@/components/ui/tooltip'
 import { useUser } from '@/stores/user'
+import { useGlobalSettings } from '@/stores/globalSettings'
+import { storeToRefs } from 'pinia'
 import type { ShowAlertFunction } from '@/plugins/alert-dialog-plugin'
 const { client } = useUser()
 
@@ -113,9 +120,18 @@ const avatarCssVars = computed(() => {
   }
 })
 
+const { isDemoUser } = storeToRefs(useGlobalSettings())
+
+const tooltipMessage = computed(() => {
+  if (isDemoUser.value) return 'Image upload is disabled in demo mode'
+  if (props.disabled) return 'You do not have permission to change this image'
+  return ''
+})
+
 // on mouted set the avatar
 onMounted(() => {
-  if (props.initAvatar) avatar.value = `${backendUrl}/assets/${props.initAvatar}`
+  if (props.initAvatar)
+    avatar.value = `${backendUrl}/assets/${props.initAvatar}`
 })
 
 watch(
@@ -142,28 +158,60 @@ const backendUrl = inject('backendUrl')
       width: `calc(${props.height * (isSquare ? 0.75 : 1)}rem + 25px)`
     }"
   >
-    <div v-if="(toBeUploadedImage || avatar) && !disabled" class="absolute end-[-5px] top-[-5px]">
-      <XIcon class="w-4 h-4 cursor-pointer hover:opacity-75" @click="clearImage" />
-    </div>
-    <Avatar
-      class="hover:opacity-75"
-      :class="[`pastel-color-${random}`, disabled ? 'cursor-not-allowed' : 'cursor-pointer ']"
-      :style="{
-        width: `${props.height * (isSquare ? 0.75 : 1)}rem`,
-        height: `${props.height}rem`
-      }"
-      :shape="isSquare ? 'square' : 'circle'"
-      @click="
-        () => {
-          if (!disabled) showCropper = true
-        }
-      "
+    <div
+      v-if="(toBeUploadedImage || avatar) && !disabled"
+      class="absolute end-[-5px] top-[-5px]"
     >
-      <AvatarImage :src="avatar" />
-      <AvatarFallback>
-        <UploadIcon class="w-8 h-8" />
-      </AvatarFallback>
-    </Avatar>
+      <XIcon
+        class="w-4 h-4 cursor-pointer hover:opacity-75"
+        @click="clearImage"
+      />
+    </div>
+
+    <template v-if="disabled">
+      <div @click.stop.prevent>
+        <TooltipProvider>
+          <Tooltip>
+            <TooltipTrigger>
+              <Avatar
+                :class="[`pastel-color-${random}`, 'cursor-not-allowed']"
+                :style="{
+                  width: `${props.height * (isSquare ? 0.75 : 1)}rem`,
+                  height: `${props.height}rem`
+                }"
+                :shape="isSquare ? 'square' : 'circle'"
+              >
+                <AvatarImage :src="avatar" />
+                <AvatarFallback>
+                  <UploadIcon class="w-8 h-8" />
+                </AvatarFallback>
+              </Avatar>
+            </TooltipTrigger>
+            <TooltipContent>
+              {{ tooltipMessage }}
+            </TooltipContent>
+          </Tooltip>
+        </TooltipProvider>
+      </div>
+    </template>
+
+    <template v-else>
+      <Avatar
+        class="hover:opacity-75 cursor-pointer"
+        :class="[`pastel-color-${random}`]"
+        :style="{
+          width: `${props.height * (isSquare ? 0.75 : 1)}rem`,
+          height: `${props.height}rem`
+        }"
+        :shape="isSquare ? 'square' : 'circle'"
+        @click="showCropper = true"
+      >
+        <AvatarImage :src="avatar" />
+        <AvatarFallback>
+          <UploadIcon class="w-8 h-8" />
+        </AvatarFallback>
+      </Avatar>
+    </template>
 
     <avatar-cropper
       :style="avatarCssVars"
@@ -180,7 +228,7 @@ const backendUrl = inject('backendUrl')
 </template>
 
 <style lang="scss">
-@import '@/assets/css/colors.scss';
+@use '@/assets/css/colors.scss';
 
 //noinspection CssUnusedSymbol
 .vue-avatar-cropper-demo {

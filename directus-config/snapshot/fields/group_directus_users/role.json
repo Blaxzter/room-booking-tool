@@ -15,19 +15,19 @@
     "options": {
       "choices": [
         {
+          "icon": "person_2",
           "text": "Member",
-          "value": "member",
-          "icon": "person_2"
+          "value": "member"
         },
         {
+          "icon": "admin_panel_settings",
           "text": "Admin",
-          "value": "admin",
-          "icon": "admin_panel_settings"
+          "value": "admin"
         },
         {
+          "icon": "eyeglasses",
           "text": "Viewer",
-          "value": "viewer",
-          "icon": "eyeglasses"
+          "value": "viewer"
         }
       ],
       "icon": "roller_skating",
@@ -52,6 +52,7 @@
     "numeric_scale": null,
     "is_nullable": true,
     "is_unique": false,
+    "is_indexed": false,
     "is_primary_key": false,
     "is_generated": false,
     "generation_expression": null,
