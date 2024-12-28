@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { onBeforeMount, ref } from 'vue'
+import { inject, onBeforeMount, ref } from 'vue'
 import { Button } from '@/components/ui/button'
 import { storeToRefs } from 'pinia'
 import {
@@ -11,14 +11,23 @@ import {
   DialogTitle,
 } from '@/components/ui/dialog'
 import { Textarea } from '@/components/ui/textarea'
+import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { Checkbox  } from '@/components/ui/checkbox'
 
 import { useGlobalSettings } from '@/stores/globalSettings'
+import { useUser } from '@/stores/user'
 
 const { isDemoUser, demoDialogOpen } = storeToRefs(useGlobalSettings())
+const { user } = storeToRefs(useUser())
 
 const dontShowAgain = ref(false)
+const message = ref('')
+const contactEmail = ref(user.value?.email)
+const error_message = ref('')
+const error_message_contact = ref('')
+
+defineEmits(['close', 'created'])
 
 // Prop that shows the Dialog Trigger
 const props = defineProps({
@@ -34,13 +43,11 @@ const props = defineProps({
 
 const dontShowAgainChange = () => {
   dontShowAgain.value = !dontShowAgain.value
-  console.log('storeDontShowAgain, dontShowAgain.value:', dontShowAgain.value)
   localStorage.setItem('dontShowAgainDemoMode', dontShowAgain.value.toString())
 }
 
 // On mounted
 onBeforeMount(async () => {
-  console.log('isDemoUser.value:', isDemoUser.value)
   // check local storage for the dontShowAgain value
   const dontShowAgainValue = localStorage.getItem('dontShowAgainDemoMode')
   dontShowAgain.value = dontShowAgainValue === 'true'
@@ -49,27 +56,104 @@ onBeforeMount(async () => {
   demoDialogOpen.value = props.startOpen && isDemoUser.value
   if (props.startOpen && isDemoUser.value && dontShowAgain.value) {
     demoDialogOpen.value = false
-    console.log('demoDialogOpen.value:', demoDialogOpen.value)
   }
 })
+
+import { useToast } from '@/components/ui/toast'
+
+import axios from 'axios'
+import type { AxiosResponse } from 'axios'
+const backendUrl = inject('backendUrl')
+
+const validateEmail = () => {
+  return String(contactEmail.value)
+    .toLowerCase()
+    .match(
+      /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|.(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
+    );
+}
+
+const sendMemberRequest = async () => {
+  const { toast } = useToast()
+  let isError = false
+  if (message.value.length <= 10) {
+    error_message.value = 'Please enter a message with at least 10 characters'
+    isError = true
+  }
+
+  if (!validateEmail()) {
+    error_message_contact.value = 'Please enter a valid email address';
+    isError = true
+  }
+
+  if (isError) {
+    return
+  }
+
+  await axios
+    .post(`${backendUrl}/flows/trigger/67797215-97a3-4e68-8191-547fcae7a23d`, {
+      message: message.value,
+      contactEmail: contactEmail.value,
+    }, {
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${localStorage.getItem('access_token')}`,
+      },
+    })
+    .then(async (res: AxiosResponse<any>) => {
+      console.log('res:', res)
+      if (res.data.name === "DirectusError") {
+        toast({
+          title: 'Error',
+          description: res.data.code === '400' ? 'User already created a request.' : 'An error occurred while sending the request',
+          variant: 'destructive',
+        })
+        return
+      }
+      toast({
+        title: 'Request sent',
+        description: 'Your request has been sent to the admin',
+        variant: 'success',
+      })
+    }).catch((err) => {
+      console.error('err:', err)
+      toast({
+        title: 'Error',
+        description: 'An error occurred while sending the request',
+        variant: 'destructive',
+      })
+    })
+  demoDialogOpen.value = false
+}
+
 </script>
 
 <template>
   <Dialog v-model:open="demoDialogOpen" v-if="isDemoUser" >
     <DialogContent class="sm:max-w-[425px]">
-      <DialogHeader class="flex justify-between items-center">
-        <div>
-          <DialogTitle>Demo Mode Active</DialogTitle>
-          <DialogDescription>
-            You are currently in demo mode, which provides limited access to features. To unlock full functionality, please request full membership.
-          </DialogDescription>
-        </div>
+      <DialogHeader>
+        <DialogTitle>Demo Mode Active</DialogTitle>
+        <DialogDescription>
+          You are currently in demo mode, which provides limited access to features. To unlock full functionality, please request full membership.
+        </DialogDescription>
       </DialogHeader>
+      <div class="items-center">
+        <Label for="contactEmail">
+          Contact Email
+        </Label>
+        <Input id="contactEmail" type="email" v-model="contactEmail" />
+        <div class="text-destructive text-sm mt-2" v-if="error_message_contact">
+          {{ error_message_contact }}
+        </div>
+      </div>
       <div class="items-center">
         <Label for="message">
           Message
         </Label>
-        <Textarea id="message" placeholder="Describe your request..." class="col-span-3" />
+        <Textarea id="message" placeholder="Describe your request..." class="col-span-3" v-model="message" />
+        <div class="text-destructive text-sm mt-2" v-if="error_message">
+          {{ error_message }}
+        </div>
       </div>
       <div class="flex items-center space-x-2">
         <Label for="demo-checkbox" class="flex items-center space-x-1">
@@ -85,7 +169,7 @@ onBeforeMount(async () => {
 
       <DialogFooter class="flex justify-between">
 
-        <Button type="submit">
+        <Button type="submit" @click="sendMemberRequest">
           Send Member Request
         </Button>
       </DialogFooter>

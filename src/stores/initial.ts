@@ -26,13 +26,12 @@ import { useNotificationSetting } from '@/stores/notificationSettings'
 import type { Group } from '@/types'
 import type { AxiosResponse } from 'axios'
 import axios from 'axios'
-import { useGlobalSettings } from '@/stores/globalSettings'
 
 export const useInitialDataStore = defineStore('initial', () => {
   const { toast } = useToast()
 
   const { client } = useUser()
-  const { user, isAuthenticated } = storeToRefs(useUser())
+  const { user } = storeToRefs(useUser())
 
   const { setGroups } = useGroups()
   const { setBookableObjects, selectBookableObject, addBookableObject } = useBookableObjects()

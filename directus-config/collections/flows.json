@@ -14,6 +14,18 @@
     "_syncId": "02e58232-c941-4098-b1dc-ca303a3856e6"
   },
   {
+    "name": "test",
+    "icon": "bolt",
+    "color": null,
+    "description": null,
+    "status": "active",
+    "trigger": "webhook",
+    "accountability": "all",
+    "options": {},
+    "operation": "291931be-588d-411d-a888-ff46edef2301",
+    "_syncId": "07b1a050-11cb-4d9e-82d0-95ac300911a0"
+  },
+  {
     "name": "Button Create Unique ID",
     "icon": "stylus_laser_pointer",
     "color": null,
@@ -138,6 +150,20 @@
     },
     "operation": "92ae0d98-9df9-4c0a-baba-8e19baf9508a",
     "_syncId": "6226d022-cf33-40c5-91ef-fbcb861fa731"
+  },
+  {
+    "name": "Send Usage Request",
+    "icon": "bolt",
+    "color": null,
+    "description": "Send a email to the directus admin and store the user request in the db.",
+    "status": "active",
+    "trigger": "webhook",
+    "accountability": "all",
+    "options": {
+      "method": "POST"
+    },
+    "operation": "63f054fe-8ea3-4261-be30-beb05113bf5e",
+    "_syncId": "67797215-97a3-4e68-8191-547fcae7a23d"
   },
   {
     "name": "Test Get Data",

@@ -275,6 +275,7 @@ type Subscription {
   directus_comments_mutated(event: EventEnum): directus_comments_mutated
   settings_mutated(event: EventEnum): settings_mutated
   bookable_object_mutated(event: EventEnum): bookable_object_mutated
+  updateRequests_mutated(event: EventEnum): updateRequests_mutated
 }
 
 """The `Boolean` scalar type represents `true` or `false`."""
@@ -1865,6 +1866,25 @@ type staticpages_mutated {
   key: ID!
   event: EventEnum
   data: staticpages
+}
+
+type updateRequests {
+  id: ID!
+  status: String
+  date_created: Date
+  date_created_func: datetime_functions
+  user_updated(filter: directus_users_filter, sort: [String], limit: Int, offset: Int, page: Int, search: String): directus_users
+  date_updated: Date
+  date_updated_func: datetime_functions
+  requested_user(filter: directus_users_filter, sort: [String], limit: Int, offset: Int, page: Int, search: String): directus_users
+  contactEmail: String
+  message: String
+}
+
+type updateRequests_mutated {
+  key: ID!
+  event: EventEnum
+  data: updateRequests
 }
 
 type users_me_tfa_generate_data {
