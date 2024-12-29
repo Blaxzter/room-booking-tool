@@ -31,8 +31,6 @@ type Query {
   staticpages_by_id(id: ID!, version: String): staticpages
   staticpages_aggregated(groupBy: [String], filter: staticpages_filter, limit: Int, offset: Int, page: Int, search: String, sort: [String]): [staticpages_aggregated!]!
   staticpages_by_version(version: String!, id: ID!): version_staticpages
-  settings(version: String): settings
-  settings_by_version(version: String!): version_settings
   bookable_object(filter: bookable_object_filter, sort: [String], limit: Int, offset: Int, page: Int, search: String): [bookable_object!]!
   bookable_object_by_id(id: ID!, version: String): bookable_object
   bookable_object_aggregated(groupBy: [String], filter: bookable_object_filter, limit: Int, offset: Int, page: Int, search: String, sort: [String]): [bookable_object_aggregated!]!
@@ -41,6 +39,8 @@ type Query {
   updateRequests_by_id(id: ID!, version: String): updateRequests
   updateRequests_aggregated(groupBy: [String], filter: updateRequests_filter, limit: Int, offset: Int, page: Int, search: String, sort: [String]): [updateRequests_aggregated!]!
   updateRequests_by_version(version: String!, id: ID!): version_updateRequests
+  settings(version: String): settings
+  settings_by_version(version: String!): version_settings
 }
 
 type Mutation {
@@ -88,13 +88,13 @@ type Mutation {
   update_staticpages_items(filter: staticpages_filter, sort: [String], limit: Int, offset: Int, page: Int, search: String, ids: [ID]!, data: update_staticpages_input!): [staticpages!]!
   update_staticpages_batch(filter: staticpages_filter, sort: [String], limit: Int, offset: Int, page: Int, search: String, data: [update_staticpages_input!]): [staticpages!]!
   update_staticpages_item(id: ID!, data: update_staticpages_input!): staticpages
-  update_settings(data: update_settings_input!): settings
   update_bookable_object_items(filter: bookable_object_filter, sort: [String], limit: Int, offset: Int, page: Int, search: String, ids: [ID]!, data: update_bookable_object_input!): [bookable_object!]!
   update_bookable_object_batch(filter: bookable_object_filter, sort: [String], limit: Int, offset: Int, page: Int, search: String, data: [update_bookable_object_input!]): [bookable_object!]!
   update_bookable_object_item(id: ID!, data: update_bookable_object_input!): bookable_object
   update_updateRequests_items(filter: updateRequests_filter, sort: [String], limit: Int, offset: Int, page: Int, search: String, ids: [ID]!, data: update_updateRequests_input!): [updateRequests!]!
   update_updateRequests_batch(filter: updateRequests_filter, sort: [String], limit: Int, offset: Int, page: Int, search: String, data: [update_updateRequests_input!]): [updateRequests!]!
   update_updateRequests_item(id: ID!, data: update_updateRequests_input!): updateRequests
+  update_settings(data: update_settings_input!): settings
   delete_booking_items(ids: [ID]!): delete_many
   delete_booking_item(id: ID!): delete_one
   delete_group_directus_users_items(ids: [ID]!): delete_many
@@ -147,9 +147,9 @@ type Subscription {
   directus_access_mutated(event: EventEnum): directus_access_mutated
   staticpages_mutated(event: EventEnum): staticpages_mutated
   directus_comments_mutated(event: EventEnum): directus_comments_mutated
-  settings_mutated(event: EventEnum): settings_mutated
   bookable_object_mutated(event: EventEnum): bookable_object_mutated
   updateRequests_mutated(event: EventEnum): updateRequests_mutated
+  settings_mutated(event: EventEnum): settings_mutated
 }
 
 """The `Boolean` scalar type represents `true` or `false`."""
@@ -1179,6 +1179,11 @@ type settings {
   If this setting is set the user will be redirected from the login view to the home screen directly and see all the content without user filter.
   """
   no_user_mode: Boolean
+
+  """
+  If enabled a small "Buy me a coffee" user menu item appears. Server don't pay for them self.
+  """
+  show_buy_me_a_coffee: Boolean
 }
 
 type settings_mutated {
@@ -1387,6 +1392,11 @@ type version_settings {
   If this setting is set the user will be redirected from the login view to the home screen directly and see all the content without user filter.
   """
   no_user_mode: Boolean
+
+  """
+  If enabled a small "Buy me a coffee" user menu item appears. Server don't pay for them self.
+  """
+  show_buy_me_a_coffee: Boolean
 }
 
 """"""
@@ -2399,6 +2409,11 @@ input update_settings_input {
   If this setting is set the user will be redirected from the login view to the home screen directly and see all the content without user filter.
   """
   no_user_mode: Boolean
+
+  """
+  If enabled a small "Buy me a coffee" user menu item appears. Server don't pay for them self.
+  """
+  show_buy_me_a_coffee: Boolean
 }
 
 input update_staticpages_input {

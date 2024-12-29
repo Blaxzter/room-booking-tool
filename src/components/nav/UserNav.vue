@@ -15,7 +15,7 @@ import { Button } from '@/components/ui/button'
 import { useDark, useToggle } from '@vueuse/core'
 import { onMounted, ref } from 'vue'
 import { storeToRefs } from 'pinia'
-import { MailIcon } from 'lucide-vue-next'
+import { MailIcon, LogOutIcon, CogIcon, PersonStandingIcon, SunMoonIcon, CoffeeIcon } from 'lucide-vue-next'
 import { useUser } from '@/stores/user'
 import router from '@/router'
 import DarkscreenToggle from '@/components/animations/DarkscreenToggle.vue'
@@ -45,7 +45,7 @@ onMounted(async () => {
 })
 
 import { useGlobalSettings } from '@/stores/globalSettings'
-const { displayLegal, isDemoUser, demoDialogOpen  } = storeToRefs(useGlobalSettings())
+const { displayLegal, showBuyMeACoffee, isDemoUser, demoDialogOpen  } = storeToRefs(useGlobalSettings())
 
 </script>
 
@@ -69,6 +69,7 @@ const { displayLegal, isDemoUser, demoDialogOpen  } = storeToRefs(useGlobalSetti
       <DropdownMenuSeparator />
       <DropdownMenuGroup>
         <DropdownMenuItem @click="router.push({ name: 'settings', params: { tab: 'profile' } })" class="cursor-pointer">
+          <PersonStandingIcon class="mr-2 h-4 w-4" />
           Profile
           <DropdownMenuShortcut>⇧⌘P</DropdownMenuShortcut>
         </DropdownMenuItem>
@@ -78,28 +79,40 @@ const { displayLegal, isDemoUser, demoDialogOpen  } = storeToRefs(useGlobalSetti
           @mouseenter="toggleDarkmodeAnimation = true"
           @mouseleave="toggleDarkmodeAnimation = false"
         >
+          <SunMoonIcon class="mr-2 h-4 w-4" />
           <span v-if="isDark">Light mode</span>
           <span v-else>Dark mode</span>
           <div class="flex-grow" />
           <DarkscreenToggle :height="30" :toggle-animation="toggleDarkmodeAnimation" />
         </DropdownMenuItem>
         <DropdownMenuItem @click="router.push({ name: 'settings', params: { tab: 'account' } })" class="cursor-pointer">
+          <CogIcon class="mr-2 h-4 w-4" />
           Settings
           <DropdownMenuShortcut>⌘S</DropdownMenuShortcut>
         </DropdownMenuItem>
       </DropdownMenuGroup>
+      <DropdownMenuSeparator v-if="isDemoUser || showBuyMeACoffee" />
       <template v-if="isDemoUser">
-        <DropdownMenuSeparator />
         <DropdownMenuItem class="cursor-pointer" @click="demoDialogOpen = true">
           <MailIcon class="mr-2 h-4 w-4" />
           Request Full Access
         </DropdownMenuItem>
       </template>
+      <template v-if="showBuyMeACoffee">
+        <DropdownMenuItem>
+          <a href="https://www.buymeacoffee.com/fabraham" target="_blank" rel="noopener noreferrer" class="flex">
+            <img src="https://www.buymeacoffee.com/assets/img/BMC-btn-logo.svg" alt="Buy Freddy a coffee" class="buy-me-a-coffee-icon" />
+            Buy me a coffee
+          </a>
+        </DropdownMenuItem>
+      </template>
       <DropdownMenuSeparator />
       <DropdownMenuItem @click="logout" class="cursor-pointer">
+        <LogOutIcon class="mr-2 h-4 w-4" />
         Log out
         <DropdownMenuShortcut>⇧⌘Q</DropdownMenuShortcut>
       </DropdownMenuItem>
+      <DropdownMenuSeparator />
       <div class="text-[10px] text-muted-foreground py-1 text-center" v-if="displayLegal">
         <router-link to="/terms-of-service" class="underline"> Terms of Service </router-link>
         &
@@ -108,3 +121,12 @@ const { displayLegal, isDemoUser, demoDialogOpen  } = storeToRefs(useGlobalSetti
     </DropdownMenuContent>
   </DropdownMenu>
 </template>
+
+<style scoped>
+.buy-me-a-coffee-icon {
+  width: 1rem;
+  height: 1rem;
+  transform: scale(1.8);
+  margin-right: 0.5rem;
+}
+</style>

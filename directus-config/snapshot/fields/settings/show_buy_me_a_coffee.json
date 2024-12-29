@@ -1,0 +1,47 @@
+{
+  "collection": "settings",
+  "field": "show_buy_me_a_coffee",
+  "type": "boolean",
+  "meta": {
+    "collection": "settings",
+    "conditions": null,
+    "display": null,
+    "display_options": null,
+    "field": "show_buy_me_a_coffee",
+    "group": null,
+    "hidden": false,
+    "interface": "boolean",
+    "note": "If enabled a small \"Buy me a coffee\" user menu item appears. Server don't pay for them self.",
+    "options": {
+      "colorOn": "#FEDC00"
+    },
+    "readonly": false,
+    "required": true,
+    "sort": 5,
+    "special": [
+      "cast-boolean"
+    ],
+    "translations": null,
+    "validation": null,
+    "validation_message": null,
+    "width": "full"
+  },
+  "schema": {
+    "name": "show_buy_me_a_coffee",
+    "table": "settings",
+    "data_type": "boolean",
+    "default_value": true,
+    "max_length": null,
+    "numeric_precision": null,
+    "numeric_scale": null,
+    "is_nullable": true,
+    "is_unique": false,
+    "is_indexed": false,
+    "is_primary_key": false,
+    "is_generated": false,
+    "generation_expression": null,
+    "has_auto_increment": false,
+    "foreign_key_table": null,
+    "foreign_key_column": null
+  }
+}

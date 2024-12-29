@@ -12,6 +12,7 @@ export type MySchema = {
 
 export type GlobalSettings = {
   display_legal: boolean
+  show_buy_me_a_coffee: boolean
 }
 
 export type StaticPage = {

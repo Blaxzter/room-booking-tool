@@ -18,7 +18,7 @@ fi
 if [ ! -f "./.env" ]; then
     echo "📥 Downloading .env.example..."
     curl -o config.env https://raw.githubusercontent.com/Blaxzter/room-booking-tool/refs/heads/main/.env.example
-    
+
     # Rename .env.example to .env
     mv .env.example .env
 fi
@@ -94,7 +94,8 @@ curl -s -X PATCH -H "Authorization: Bearer $TOKEN" -H "Content-Type: application
   -d "{
     \"display_legal\": $DISPLAY_LEGAL,
     \"require_email_verification\": $REQUIRE_EMAIL_VERIFICATION,
-    \"no_user_mode\": $NO_USER_MODE
+    \"no_user_mode\": $NO_USER_MODE,
+    \"show_buy_me_a_coffee\": $SHOW_BUY_ME_A_COFFEE
   }" \
   "$HOST_URL/items/settings" -o /dev/null
 
