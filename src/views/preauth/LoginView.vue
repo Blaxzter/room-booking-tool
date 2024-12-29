@@ -71,91 +71,97 @@ onMounted(async () => {
 </script>
 
 <template>
-  <BackgroundImage />
-  <main>
-    <div class="flex justify-center items-center h-screen">
-      <Card
-        v-if="!isAuthenticated && !loading"
-        class="rounded-none h-full w-full sm:max-w-sm sm:h-auto sm:rounded-xl place-content-center"
-      >
-        <CardHeader class="max-w-sm m-auto">
-          <CardTitle>
-            <div class="flex items-center gap-4 mb-3">
-              <LogoImage />
-              <div class="text-3xl font-bold">
-                <div>BookiTool</div>
-                <div class="text-2xl font-normal text-muted-foreground">Login</div>
+  <div>
+    <BackgroundImage />
+    <main>
+      <div class="flex justify-center items-center h-screen">
+        <Card
+          v-if="!isAuthenticated && !loading"
+          class="rounded-none h-full w-full sm:max-w-sm sm:h-auto sm:rounded-xl place-content-center"
+        >
+          <CardHeader class="max-w-sm m-auto">
+            <CardTitle>
+              <div class="flex items-center gap-4 mb-3">
+                <LogoImage />
+                <div class="text-3xl font-bold">
+                  <div>BookiTool</div>
+                  <div class="text-2xl font-normal text-muted-foreground">Login</div>
+                </div>
               </div>
-            </div>
-          </CardTitle>
-          <CardDescription> Enter your email below to login to your account. </CardDescription>
-        </CardHeader>
-        <CardContent class="grid gap-4 max-w-sm m-auto">
-          <div class="grid gap-2">
-            <Label for="email">Email</Label>
-            <Input
-              id="email"
-              v-model="email"
-              type="email"
-              :placeholder="randomEmail()"
-              required
-              @keyup.enter="loginWrapper"
-            />
-          </div>
-          <div class="grid gap-2">
-            <Label for="password">Password</Label>
-            <div class="relative w-full max-w-sm items-center">
-              <Input
-                id="password"
-                v-model="password"
-                :type="showPassword ? 'text' : 'password'"
-                required
-                @keyup.enter="loginWrapper"
-              />
-              <Button
-                className="absolute end-1 inset-y-0 flex items-center justify-center px-2"
-                type="button"
-                @click="showPassword = !showPassword"
-              >
-                <EyeOff v-if="showPassword" className="text-current" :size="18" />
-                <Eye v-else className="text-current" :size="18" />
+            </CardTitle>
+            <CardDescription> Enter your email below to login to your account.</CardDescription>
+          </CardHeader>
+          <form>
+            <CardContent class="grid gap-4 max-w-sm m-auto">
+              <div class="grid gap-2">
+                <Label for="email">Email</Label>
+                <Input
+                  id="email"
+                  v-model="email"
+                  type="email"
+                  autocomplete="username"
+                  :placeholder="randomEmail()"
+                  required
+                  @keyup.enter="loginWrapper"
+                />
+              </div>
+              <div class="grid gap-2">
+                <Label for="password">Password</Label>
+                <div class="relative w-full max-w-sm items-center">
+                  <Input
+                    id="password"
+                    v-model="password"
+                    :type="showPassword ? 'text' : 'password'"
+                    autocomplete="current-password"
+                    required
+                    @keyup.enter="loginWrapper"
+                  />
+                  <Button
+                    className="absolute end-1 inset-y-0 flex items-center justify-center px-2"
+                    type="button"
+                    @click="showPassword = !showPassword"
+                  >
+                    <EyeOff v-if="showPassword" className="text-current" :size="18" />
+                    <Eye v-else className="text-current" :size="18" />
+                  </Button>
+                </div>
+              </div>
+
+              <!-- keep logged in -->
+              <div class="flex items-center space-x-2 ms-2">
+                <Checkbox id="keep_logged_in" v-model:checked="keepLoggedIn" />
+                <label
+                  for="keep_logged_in"
+                  class="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+                >
+                  Keep me logged in
+                </label>
+              </div>
+
+              <div v-if="errorMessage" class="flex items-center gap-2 text-red-500">
+                <ChevronRight />
+                {{ errorMessage }}
+              </div>
+            </CardContent>
+            <CardFooter class="flex-col max-w-sm m-auto">
+              <Button class="w-full" type="submit" @click="loginWrapper">
+                <template v-if="loading">
+                  <Loader2 class="w-4 h-4 mr-2 animate-spin" />
+                  Please wait
+                </template>
+                <template v-else> Sign in</template>
               </Button>
-            </div>
-          </div>
-
-          <!-- keep logged in -->
-          <div class="flex items-center space-x-2 ms-2">
-            <Checkbox id="keep_logged_in" v-model:checked="keepLoggedIn" />
-            <label
-              for="keep_logged_in"
-              class="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
-            >
-              Keep me logged in
-            </label>
-          </div>
-
-          <div v-if="errorMessage" class="flex items-center gap-2 text-red-500">
-            <ChevronRight />
-            {{ errorMessage }}
-          </div>
-        </CardContent>
-        <CardFooter class="flex-col max-w-sm m-auto">
-          <Button class="w-full" type="submit" @click="loginWrapper">
-            <template v-if="loading">
-              <Loader2 class="w-4 h-4 mr-2 animate-spin" />
-              Please wait
-            </template>
-            <template v-else> Sign in </template>
-          </Button>
-          <div class="mt-4 text-center text-sm">
-            Don't have an account?
-            <router-link to="/register" class="underline"> Sign up </router-link>
-          </div>
-        </CardFooter>
-      </Card>
-      <AutoLoginCard v-else :showCheckmark="showCheckmark" :showCross="showCross" :loading="loading" />
-    </div>
-  </main>
+              <div class="mt-4 text-center text-sm">
+                Don't have an account?
+                <router-link to="/register" class="underline"> Sign up</router-link>
+              </div>
+            </CardFooter>
+          </form>
+        </Card>
+        <AutoLoginCard v-else :showCheckmark="showCheckmark" :showCross="showCross" :loading="loading" />
+      </div>
+    </main>
+  </div>
 </template>
 
 <style lang="scss">

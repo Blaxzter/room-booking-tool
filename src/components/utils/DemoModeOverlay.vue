@@ -130,18 +130,36 @@ const sendMemberRequest = async () => {
 
 <template>
   <Dialog v-model:open="demoDialogOpen" v-if="isDemoUser" >
-    <DialogContent class="sm:max-w-[425px]">
+    <DialogContent class="sm:max-w-[450px]">
       <DialogHeader>
         <DialogTitle>Demo Mode Active</DialogTitle>
         <DialogDescription>
-          You are currently in demo mode, which provides limited access to features. To unlock full functionality, please request full membership.
+          <div>
+            This is a demo environment with limited capacity:
+          </div>
+          <div>
+            - Up to 3 bookable objects
+          </div>
+          <div>
+            - Up to 3 booking requests
+          </div>
+          <div>
+            - Up to 3 groups
+          </div>
+
+          <div class="mt-2">
+            If you'd like to use this platform personally or for your organization, please reach out for a full account.
+          </div>
         </DialogDescription>
       </DialogHeader>
       <div class="items-center">
         <Label for="contactEmail">
-          Contact Email
+          Your Contact Email
         </Label>
         <Input id="contactEmail" type="email" v-model="contactEmail" />
+        <div class="text-muted-foreground text-sm mt-2">
+          In case we need to contact you regarding your request
+        </div>
         <div class="text-destructive text-sm mt-2" v-if="error_message_contact">
           {{ error_message_contact }}
         </div>
@@ -151,6 +169,9 @@ const sendMemberRequest = async () => {
           Message
         </Label>
         <Textarea id="message" placeholder="Describe your request..." class="col-span-3" v-model="message" />
+        <div class="text-muted-foreground text-sm mt-2">
+          Please describe what you would like to use the platform for.
+        </div>
         <div class="text-destructive text-sm mt-2" v-if="error_message">
           {{ error_message }}
         </div>

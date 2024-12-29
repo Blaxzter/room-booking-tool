@@ -30,28 +30,28 @@ NEW_VERSION="${VERSION_PARTS[0]}.${VERSION_PARTS[1]}.$((VERSION_PARTS[2] + 1))"
 #docker push $REPO_DIRECTUS:latest
 
 # Build and push frontend image
-#docker build -t $REPO_FRONTEND:$VERSION -f $DOCKERFILE_FRONTEND .
-#docker tag $REPO_FRONTEND:$VERSION $REPO_FRONTEND:latest
-#docker push $REPO_FRONTEND:$VERSION
-#docker push $REPO_FRONTEND:latest
+docker build -t $REPO_FRONTEND:$VERSION -f $DOCKERFILE_FRONTEND .
+docker tag $REPO_FRONTEND:$VERSION $REPO_FRONTEND:latest
+docker push $REPO_FRONTEND:$VERSION
+docker push $REPO_FRONTEND:latest
 
 # Build and push telegram image
-cd telegram-bot
-docker build -t $REPO_TELEGRAM:$VERSION -f $DOCKERFILE_TELEGRAM .
-docker tag $REPO_TELEGRAM:$VERSION $REPO_TELEGRAM:latest
-docker push $REPO_TELEGRAM:$VERSION
-docker push $REPO_TELEGRAM:latest
-cd ..
+#cd telegram-bot
+#docker build -t $REPO_TELEGRAM:$VERSION -f $DOCKERFILE_TELEGRAM .
+#docker tag $REPO_TELEGRAM:$VERSION $REPO_TELEGRAM:latest
+#docker push $REPO_TELEGRAM:$VERSION
+#docker push $REPO_TELEGRAM:latest
+#cd ..
 
 # Update the version in version.js
-sed -i "s/export const version = '$VERSION'/export const version = '$NEW_VERSION'/" $VERSION_FILE
+#sed -i "s/export const version = '$VERSION'/export const version = '$NEW_VERSION'/" $VERSION_FILE
 
 # Commit and push the new version to git
-git config --global user.name "Frederic Marvin Abraham"
-git config --global user.email "mail@fabraham.dev"
-git add $VERSION_FILE
-git commit -m "Bump version to $NEW_VERSION"
-git push origin main
-
-echo "Deployed version $VERSION"
-echo "Build, push, and version update completed successfully!"
+#git config --global user.name "Frederic Marvin Abraham"
+#git config --global user.email "mail@fabraham.dev"
+#git add $VERSION_FILE
+#git commit -m "Bump version to $NEW_VERSION"
+#git push origin main
+#
+#echo "Deployed version $VERSION"
+#echo "Build, push, and version update completed successfully!"

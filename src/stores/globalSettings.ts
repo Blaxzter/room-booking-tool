@@ -5,6 +5,7 @@ import { useUser } from '@/stores/user'
 
 export const useGlobalSettings = defineStore('globalSettings', () => {
   const displayLegal: Ref<boolean> = ref(false)
+  const showBuyMeACoffee: Ref<boolean> = ref(true)
   const demoUser: Ref<boolean> = ref(false)
 
   const demoDialogOpen = ref(true)
@@ -15,6 +16,7 @@ export const useGlobalSettings = defineStore('globalSettings', () => {
     const { noAuthClient } = useUser()
     await noAuthClient.request(readSingleton('settings')).then((res) => {
       displayLegal.value = res.display_legal
+      showBuyMeACoffee.value = res.show_buy_me_a_coffee
     })
   }
 
@@ -22,7 +24,7 @@ export const useGlobalSettings = defineStore('globalSettings', () => {
   watch(
     () => user.value,
     async (newValue, oldValue) => {
-      if (newValue && !oldValue) {
+      if (newValue && Object.keys(oldValue).length === 0) {
         const { getDemoUserRole } = useGlobalSettings()
         await getDemoUserRole()
       }
@@ -49,6 +51,7 @@ export const useGlobalSettings = defineStore('globalSettings', () => {
 
   return {
     displayLegal,
+    showBuyMeACoffee,
     fetchGlobalSetting,
     demoDialogOpen,
     getDemoUserRole,
