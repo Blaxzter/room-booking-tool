@@ -8,7 +8,7 @@ REPO_DIRECTUS="blaxzter/bookitool-directus"
 REPO_TELEGRAM="blaxzter/bookitool-telegram-bot"
 DOCKERFILE_DIRECTUS="Dockerfile.directus"
 DOCKERFILE_FRONTEND="Dockerfile.frontend"
-DOCKERFILE_TELEGRAM="./telegram-bot/Dockerfile
+DOCKERFILE_TELEGRAM="Dockerfile"
 
 VERSION_FILE="src/version.ts"
 
@@ -24,22 +24,24 @@ IFS='.' read -r -a VERSION_PARTS <<< "$VERSION"
 NEW_VERSION="${VERSION_PARTS[0]}.${VERSION_PARTS[1]}.$((VERSION_PARTS[2] + 1))"
 
 ## Build and push directus image
-docker build -t $REPO_DIRECTUS:$VERSION -f $DOCKERFILE_DIRECTUS .
-docker tag $REPO_DIRECTUS:$VERSION $REPO_DIRECTUS:latest
-docker push $REPO_DIRECTUS:$VERSION
-docker push $REPO_DIRECTUS:latest
+#docker build -t $REPO_DIRECTUS:$VERSION -f $DOCKERFILE_DIRECTUS .
+#docker tag $REPO_DIRECTUS:$VERSION $REPO_DIRECTUS:latest
+#docker push $REPO_DIRECTUS:$VERSION
+#docker push $REPO_DIRECTUS:latest
 
 # Build and push frontend image
-docker build -t $REPO_FRONTEND:$VERSION -f $DOCKERFILE_FRONTEND .
-docker tag $REPO_FRONTEND:$VERSION $REPO_FRONTEND:latest
-docker push $REPO_FRONTEND:$VERSION
-docker push $REPO_FRONTEND:latest
+#docker build -t $REPO_FRONTEND:$VERSION -f $DOCKERFILE_FRONTEND .
+#docker tag $REPO_FRONTEND:$VERSION $REPO_FRONTEND:latest
+#docker push $REPO_FRONTEND:$VERSION
+#docker push $REPO_FRONTEND:latest
 
 # Build and push telegram image
-docker build -t $REPO_TELEGRAM:$VERSION -f DOCKERFILE_TELEGRAM .
+cd telegram-bot
+docker build -t $REPO_TELEGRAM:$VERSION -f $DOCKERFILE_TELEGRAM .
 docker tag $REPO_TELEGRAM:$VERSION $REPO_TELEGRAM:latest
 docker push $REPO_TELEGRAM:$VERSION
 docker push $REPO_TELEGRAM:latest
+cd ..
 
 # Update the version in version.js
 sed -i "s/export const version = '$VERSION'/export const version = '$NEW_VERSION'/" $VERSION_FILE

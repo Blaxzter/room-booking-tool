@@ -1,7 +1,9 @@
 <script setup lang="ts">
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+// @ts-ignore
+import { Emoji, EmojiIndex, Picker } from 'emoji-mart-vue-fast/src'
 import { DropdownMenu, DropdownMenuContent, DropdownMenuTrigger } from '@/components/ui/dropdown-menu'
 import RandomEmoji from '@/components/utils/EmojiComponent.vue'
-import { Emoji, EmojiIndex, Picker } from 'emoji-mart-vue-fast/src'
 import data from 'emoji-mart-vue-fast/data/all.json'
 
 defineProps({

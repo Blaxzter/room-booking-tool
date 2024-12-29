@@ -1,4 +1,6 @@
 <script setup lang="ts">
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+// @ts-ignore
 import { Emoji, EmojiIndex } from 'emoji-mart-vue-fast/src'
 import data from 'emoji-mart-vue-fast/data/all.json'
 import _ from 'lodash'

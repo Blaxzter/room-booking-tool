@@ -6,7 +6,8 @@ import { useDark } from '@vueuse/core'
 
 const isDark = useDark()
 
-const anim = ref()
+// Just type it as any for now since we're using the wrapper library
+const anim = ref<any>(null)
 
 const currentFrame = ref(0)
 const currentDirection = ref(1)
@@ -18,6 +19,8 @@ const props = defineProps({
 })
 
 onMounted(async () => {
+  if (!anim.value) return
+
   if (isDark.value) {
     currentFrame.value = darkFrame
   }
@@ -25,14 +28,18 @@ onMounted(async () => {
 })
 
 function play() {
+  if (!anim.value) return
+
   currentDirection.value = 1
-  anim.value.setDirection(1) // Ensures the animation plays forward
+  anim.value.setDirection(1)
   anim.value.play()
 }
 
 function stop() {
+  if (!anim.value) return
+
   currentDirection.value = -1
-  anim.value.setDirection(-1) // Optionally reverse the direction on leave
+  anim.value.setDirection(-1)
   anim.value.play()
 }
 
@@ -48,6 +55,8 @@ watch(
 )
 
 const enterFrame = () => {
+  if (!anim.value) return
+
   currentFrame.value += currentDirection.value
   if (currentFrame.value === darkFrame) {
     anim.value.goToAndStop(darkFrame, true)

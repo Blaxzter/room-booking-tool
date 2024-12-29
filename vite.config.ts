@@ -21,12 +21,14 @@ export default defineConfig({
   },
   plugins: [vue(), VueDevTools({
     launchEditor: 'webstorm',
-    enabled: false
   })],
   resolve: {
     alias: {
       '@': fileURLToPath(new URL('./src', import.meta.url))
     }
+  },
+  build: {
+    chunkSizeWarningLimit: 2000 // Adjust the limit as needed
   }
   // build: {
   //   rollupOptions: {

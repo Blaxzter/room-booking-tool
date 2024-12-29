@@ -1,4 +1,4 @@
-import { computed, ref } from 'vue'
+import { computed, ref, type Ref } from 'vue'
 import { defineStore, storeToRefs } from 'pinia'
 
 import type { BookableObject, CreateGroupRequest, Group, GroupInvite, InviteCreateRequest } from '@/types'
@@ -15,7 +15,31 @@ import type {
 import { getInviteQuery } from '@/assets/ts/queries/invites'
 import { toast } from '@/components/ui/toast'
 
-export const useGroups = defineStore('group', () => {
+interface GroupStore {
+  groups: Ref<Group[]>
+  selectedGroupId: Ref<string | undefined>
+  selectedGroup: Ref<Group | undefined>
+  fetchGroupWithData: (group_id: string, with_bookable_objects?: boolean) => Promise<Group | undefined>
+  fetchGroupsWithData: (with_bookable_objects?: boolean) => Promise<Group[]>
+  setGroups: (data: Group[], fetchBookableObjects?: boolean) => Promise<void>
+  addGroup: (group: Group) => void
+  selectGroup: (group: Group, fetchBookableObjects?: boolean) => Promise<void>
+  createGroup: (group: CreateGroupRequest) => Promise<Group | undefined>
+  reset: () => void
+  getInvites: (user_id: string) => Promise<GroupInvite[]>
+  addInvite: (group: Group, inviteRequest: InviteCreateRequest) => Promise<GroupInvite>
+  deleteInvite: (group: Group, invite_id: string, reject: boolean) => Promise<void>
+  deleteGroupUser: (id: string) => Promise<void>
+  deleteGroup: (group_id: string) => Promise<void>
+  deleteAvatar: (group: Group) => Promise<void>
+  updateGroupUser: (id: string, role: string) => Promise<any>
+  addGroupUser: (group_id: string, user_id: string, role: string) => Promise<any>
+  updateGroup: (group_id: string, data: Partial<Group>) => Promise<Group | undefined>
+  addBookableObjectToGroup: (group_id: string, bookable_object: BookableObject) => Promise<void>
+  getUserRoleByBookableObject: (bookable_object?: BookableObject) => number
+}
+
+export const useGroups = defineStore('group', (): GroupStore  => {
   const { setSelectedGroup, getSelectedGroup } = useLocalUser()
   const { fetchBookableObjectsByGroupId, fetchUserBookableObjects } = useBookableObjects()
 
@@ -117,7 +141,7 @@ export const useGroups = defineStore('group', () => {
     const { client } = useUser()
     const newInvite = await client.request(createItem('group_invites', { group_id: group.id, ...inviteRequest }))
     group.invites?.push(newInvite as GroupInvite)
-    return newInvite
+    return newInvite as GroupInvite
   }
 
   const deleteInvite = async (group: Group, invite_id: string, reject: boolean) => {

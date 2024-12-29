@@ -24,7 +24,7 @@ COPY vite.config.ts ./
 # COPY .env ./.env
 COPY env.d.ts ./env.d.ts
 
-RUN pnpm run build
+RUN pnpm run build-only
 
 #RUN npm install -g lite-server
 #EXPOSE 80

@@ -6,29 +6,29 @@ networks:
   #     name: nginx-net
 
 services:
-#  frontend:
-#    image: blaxzter/bookitool-frontend:0.1.24
-#    depends_on:
-#      - directus
-#    restart: "unless-stopped"
-#    networks:
-#      - directus-net
-##      - nginx-net
+  frontend:
+    image: blaxzter/bookitool-frontend:latest
+    depends_on:
+      - directus
+    restart: "unless-stopped"
+    networks:
+      - directus-net
+#      - nginx-net
 #    build:
 #      context: ./
 #      dockerfile: Dockerfile.frontend
-#    env_file:
-#      - .env
-#    environment:
-#      VITE_BACKEND_URL: https://api.bookitool.net
-#      VITE_FRONTEND_URL: https://bookitool.net
-#
-#      # Only required when running behind a reverse proxy like nginx-proxy
-#      VIRTUAL_HOST: "${VIRTUAL_HOST}"
-#      LETSENCRYPT_HOST: "${LETSENCRYPT_HOST}"
-#      LETSENCRYPT_EMAIL: "${LETSENCRYPT_EMAIL}"
-#    ports:
-#      - 8001:80
+    env_file:
+      - .env
+    environment:
+      VITE_BACKEND_URL: "${VITE_BACKEND_URL"
+      VITE_FRONTEND_URL: "${VITE_FRONTEND_URL}"
+
+      # Only required when running behind a reverse proxy like nginx-proxy
+      VIRTUAL_HOST: "${VIRTUAL_HOST}"
+      LETSENCRYPT_HOST: "${LETSENCRYPT_HOST}"
+      LETSENCRYPT_EMAIL: "${LETSENCRYPT_EMAIL}"
+    ports:
+      - 8001:80
 
   database:
     image: postgis/postgis:13-master
@@ -53,10 +53,10 @@ services:
       - directus-net
 
   directus:
-    #    image: blaxzter/bookitool-directus:latest
-    build:
-      context: ./
-      dockerfile: Dockerfile.directus
+    image: blaxzter/bookitool-directus:latest
+    # build:
+    #   context: ./
+    #   dockerfile: Dockerfile.directus
     restart: always
     ports:
       - ${BACKEND_PUBLIC_PORT}:8055
@@ -132,22 +132,22 @@ services:
 
       TELEGRAM_URL: '${TELEGRAM_URL}'
 
-#  booki-tool-telegram-bot:
-#    build:
-#      context: ./telegram-bot/
-#    environment:
-#      TELEGRAM_BOT_TOKEN: "${TELEGRAM_BOT_TOKEN}"
-#      PORT: 3000
-#
-#      VIRTUAL_HOST: "${TELEGRAM_VIRTUAL_HOST}"
-#      LETSENCRYPT_HOST: "${TELEGRAM_VIRTUAL_HOST}"
-#      LETSENCRYPT_EMAIL: "${LETSENCRYPT_EMAIL}"
-#    ports:
-#      - "12000:3000"
-#    restart: always
-#    networks:
-#      - directus-net
-#      # - nginx-net
+  booki-tool-telegram-bot:
+    build:
+      context: ./telegram-bot/
+    environment:
+      TELEGRAM_BOT_TOKEN: "${TELEGRAM_BOT_TOKEN}"
+      PORT: 3000
+
+      VIRTUAL_HOST: "${TELEGRAM_VIRTUAL_HOST}"
+      LETSENCRYPT_HOST: "${TELEGRAM_VIRTUAL_HOST}"
+      LETSENCRYPT_EMAIL: "${LETSENCRYPT_EMAIL}"
+    ports:
+      - "12000:3000"
+    restart: always
+    networks:
+      - directus-net
+      # - nginx-net
 
 volumes:
   postgres_data:

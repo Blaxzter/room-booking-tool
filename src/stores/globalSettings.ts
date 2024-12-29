@@ -33,9 +33,9 @@ export const useGlobalSettings = defineStore('globalSettings', () => {
       readRoles({
         fields: ['*']
       })
-    )
+    ) as unknown[]
 
-    demoUser.value = user.role === demoRole[0]
+    demoUser.value = user.role === (demoRole[0] as string)
     return demoUser.value
   }
 
