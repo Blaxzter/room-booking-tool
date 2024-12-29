@@ -133,13 +133,17 @@ services:
       TELEGRAM_URL: '${TELEGRAM_URL}'
 
   booki-tool-telegram-bot:
-    build:
-      context: ./telegram-bot/
+    image: blaxzter/bookitool-telegram-bot:1.0.0
+    # build:
+    #   context: ./telegram-bot/
     environment:
+      VITE_BACKEND_URL: "${VITE_BACKEND_URL}"
+      TELEGRAM_DIRECTUS_API_KEY: "${TELEGRAM_DIRECTUS_API_KEY}"
       TELEGRAM_BOT_TOKEN: "${TELEGRAM_BOT_TOKEN}"
       PORT: 3000
 
       VIRTUAL_HOST: "${TELEGRAM_VIRTUAL_HOST}"
+      VIRTUAL_PORT: 3000
       LETSENCRYPT_HOST: "${TELEGRAM_VIRTUAL_HOST}"
       LETSENCRYPT_EMAIL: "${LETSENCRYPT_EMAIL}"
     ports:

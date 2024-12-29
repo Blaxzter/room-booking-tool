@@ -9,7 +9,7 @@ export const useGlobalSettings = defineStore('globalSettings', () => {
 
   const demoDialogOpen = ref(true)
 
-  const { isAuthenticated } = storeToRefs(useUser())
+  const { user } = storeToRefs(useUser())
 
   const fetchGlobalSetting = async () => {
     const { noAuthClient } = useUser()
@@ -18,12 +18,16 @@ export const useGlobalSettings = defineStore('globalSettings', () => {
     })
   }
 
-  watch([isAuthenticated], async () => {
-    if (isAuthenticated.value) {
-      const { getDemoUserRole } = useGlobalSettings()
-      await getDemoUserRole()
+
+  watch(
+    () => user.value,
+    async (newValue, oldValue) => {
+      if (newValue && !oldValue) {
+        const { getDemoUserRole } = useGlobalSettings()
+        await getDemoUserRole()
+      }
     }
-  })
+  )
 
   const getDemoUserRole = async () => {
     const { client, user } = useUser()

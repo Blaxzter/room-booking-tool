@@ -188,8 +188,6 @@ export const useUser = defineStore('user', () => {
       .catch((error) => {
         throw new Error(error?.errors?.length > 0 ? error.errors[0].message : 'An error occurred')
       })
-
-    await getCurrentUserData()
   }
 
   const checkAuth = async () => {
