@@ -5,22 +5,28 @@ echo "🚀 Starting Room Booking Tool setup..."
 # Download docker-compose file if it doesn't exist
 if [ ! -f "docker-compose.yml" ]; then
     echo "📥 Downloading docker-compose.yml..."
-    curl -o docker-compose.yml https://raw.githubusercontent.com/Blaxzter/room-booking-tool/refs/heads/main/docker-compose.yml
+    if ! curl -s -o docker-compose.yml https://raw.githubusercontent.com/Blaxzter/room-booking-tool/refs/heads/main/docker-compose.yml; then
+        echo "❌ Failed to download docker-compose.yml"
+        exit 1
+    fi
 fi
 
 # Load configuration from config file
 if [ ! -f "./config.env" ]; then
     echo "📥 Downloading config.env..."
-    curl -o config.env https://raw.githubusercontent.com/Blaxzter/room-booking-tool/refs/heads/main/config.env
+    if ! curl -s -o config.env https://raw.githubusercontent.com/Blaxzter/room-booking-tool/refs/heads/main/config.env; then
+        echo "❌ Failed to download config.env"
+        exit 1
+    fi
 fi
 
 # Load configuration from config file
 if [ ! -f "./.env" ]; then
     echo "📥 Downloading .env.example..."
-    curl -o config.env https://raw.githubusercontent.com/Blaxzter/room-booking-tool/refs/heads/main/.env.example
-
-    # Rename .env.example to .env
-    mv .env.example .env
+    if ! curl -s -o .env https://raw.githubusercontent.com/Blaxzter/room-booking-tool/refs/heads/main/.env.example; then
+        echo "❌ Failed to download .env.example"
+        exit 1
+    fi
 fi
 
 # Load configuration from config file
@@ -39,12 +45,22 @@ if docker-compose ps | grep -q "directus"; then
         echo "✅ Containers are already running, skipping docker-compose up"
     else
         echo "⚠️ Containers exist but not running, starting them..."
-        docker-compose up -d
+        if ! docker-compose up -d; then
+            echo "❌ Failed to start containers"
+            echo "💡 Try running 'docker-compose logs' to see what's wrong"
+            exit 1
+        fi
+        echo "✅ Containers started successfully"
     fi
 else
     # Start containers in detached mode
     echo "🐳 Starting Docker containers..."
-    docker-compose up -d
+    if ! docker-compose up -d; then
+        echo "❌ Failed to start containers"
+        echo "💡 Try running 'docker-compose logs' to see what's wrong"
+        exit 1
+    fi
+    echo "✅ Containers started successfully"
 fi
 
 # Define the HOST_URL variable
@@ -54,14 +70,14 @@ echo "⏳ Waiting for Directus to be available... ($HOST_URL)"
 attempts=0
 max_attempts=10
 
-until $(curl --output /dev/null --silent --head --fail "$HOST_URL/server/health"); do
+until $(curl --output /dev/null --silent --head --fail "$HOST_URL/server/ping"); do
     attempts=$((attempts + 1))
     if [ $attempts -eq $max_attempts ]; then
         echo "❌ Timeout waiting for Directus to start after $max_attempts attempts"
         echo "💡 Try running 'docker-compose logs' to see what's wrong"
         exit 1
     fi
-    printf "Attempt $attempts of $max_attempts..."
+    printf "Attempt $attempts of $max_attempts...\n"
     sleep 5
 done
 
@@ -77,7 +93,7 @@ COLLECTION_EXISTS=$(curl -s -H "Authorization: Bearer $TOKEN" \
 
 if [ "$COLLECTION_EXISTS" = "null" ]; then
     echo "🔧 Initialization needed, running directus-sync push..."
-    npx directus-sync@2.2.0 push -u "$HOST_URL" -e "$ADMIN_EMAIL" -p "$ADMIN_PASSWORD"
+    npx --yes directus-sync@2.2.0 push -u "$HOST_URL" -e "$ADMIN_EMAIL" -p "$ADMIN_PASSWORD"
     echo "✅ Schema initialization complete!"
 fi
 

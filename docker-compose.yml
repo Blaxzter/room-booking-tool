@@ -13,20 +13,20 @@ services:
     restart: "unless-stopped"
     networks:
       - directus-net
-#      - nginx-net
-#    build:
-#      context: ./
-#      dockerfile: Dockerfile.frontend
+    #  - nginx-net
+    #build:
+    #  context: ./
+    #  dockerfile: Dockerfile.frontend
     env_file:
       - .env
     environment:
-      VITE_BACKEND_URL: "${VITE_BACKEND_URL"
+      VITE_BACKEND_URL: "${VITE_BACKEND_URL}"
       VITE_FRONTEND_URL: "${VITE_FRONTEND_URL}"
 
       # Only required when running behind a reverse proxy like nginx-proxy
-      VIRTUAL_HOST: "${VIRTUAL_HOST}"
-      LETSENCRYPT_HOST: "${LETSENCRYPT_HOST}"
-      LETSENCRYPT_EMAIL: "${LETSENCRYPT_EMAIL}"
+      # VIRTUAL_HOST: "${VIRTUAL_HOST}"
+      # LETSENCRYPT_HOST: "${LETSENCRYPT_HOST}"
+      # LETSENCRYPT_EMAIL: "${LETSENCRYPT_EMAIL}"
     ports:
       - 8001:80
 
@@ -61,7 +61,7 @@ services:
     ports:
       - ${BACKEND_PUBLIC_PORT}:8055
     volumes:
-      - ./directus-uploads:/directus/uploads
+      - directus_uploads:/directus/uploads
       # If you want to load extensions from the host
       # - ./extensions:/directus/extensions
     depends_on:
@@ -70,12 +70,6 @@ services:
     networks:
       - directus-net
       # - nginx-net
-    healthcheck:
-      test: wget --no-verbose --tries=1 --spider http://0.0.0.0:8055/server/health || exit 1
-      start_period: 15s
-      interval: 15s
-      timeout: 15s
-      retries: 3
     environment:
       KEY: '${KEY}'
       SECRET: '${SECRET}'
@@ -126,9 +120,9 @@ services:
       EMAIL_SMTP_IGNORE_TLS: '${EMAIL_SMTP_IGNORE_TLS}'
       EMAIL_SMTP_NAME: '${EMAIL_SMTP_NAME}'
 
-      VIRTUAL_HOST: '${PUBLIC_URL}'
-      LETSENCRYPT_HOST: '${PUBLIC_URL}'
-      LETSENCRYPT_EMAIL: '${LETSENCRYPT_EMAIL}'
+      # VIRTUAL_HOST: '${PUBLIC_URL}'
+      # LETSENCRYPT_HOST: '${PUBLIC_URL}'
+      # LETSENCRYPT_EMAIL: '${LETSENCRYPT_EMAIL}'
 
       TELEGRAM_URL: '${TELEGRAM_URL}'
 
@@ -142,10 +136,10 @@ services:
       TELEGRAM_BOT_TOKEN: "${TELEGRAM_BOT_TOKEN}"
       PORT: 3000
 
-      VIRTUAL_HOST: "${TELEGRAM_VIRTUAL_HOST}"
-      VIRTUAL_PORT: 3000
-      LETSENCRYPT_HOST: "${TELEGRAM_VIRTUAL_HOST}"
-      LETSENCRYPT_EMAIL: "${LETSENCRYPT_EMAIL}"
+      # VIRTUAL_HOST: "${TELEGRAM_VIRTUAL_HOST}"
+      # VIRTUAL_PORT: 3000
+      # LETSENCRYPT_HOST: "${TELEGRAM_VIRTUAL_HOST}"
+      # LETSENCRYPT_EMAIL: "${LETSENCRYPT_EMAIL}"
     ports:
       - "12000:3000"
     restart: always
@@ -155,3 +149,4 @@ services:
 
 volumes:
   postgres_data:
+  directus_uploads:
