@@ -28,6 +28,8 @@ COPY --from=builder /app/dist /directus/extensions/public/dist
 COPY --from=builder /app/package.json /directus/extensions/public/package.json
 
 
+# Copy your schema directory
+COPY ./directus-config/ /directus/schema/
 
 # Continue with the normal Directus setup
 USER root

@@ -38,6 +38,29 @@ sed -i 's/\r$//' .env
 source ./.env
 
 # Check if containers are already running
+echo "🤖 Would you like to set up the Telegram bot? (y/N)"
+read -r setup_telegram
+
+if [[ $setup_telegram =~ ^[Yy]$ ]]; then
+    echo "Please enter your Telegram Bot Token:"
+    read -r telegram_token
+    
+    # Update .env file with Telegram token
+    if grep -q "TELEGRAM_BOT_TOKEN=" .env; then
+        sed -i "s|TELEGRAM_BOT_TOKEN=.*|TELEGRAM_BOT_TOKEN=$telegram_token|" .env
+    else
+        echo "TELEGRAM_BOT_TOKEN=$telegram_token" >> .env
+    fi
+    
+    # Set the compose command with telegram profile
+    COMPOSE_CMD="docker-compose --profile telegram up -d"
+else
+    echo "Skipping Telegram bot setup..."
+    # Set the compose command without telegram profile
+    COMPOSE_CMD="docker-compose up -d"
+fi
+
+# Check if containers are already running
 if docker-compose ps | grep -q "directus"; then
     echo "🔍 Found existing containers running..."
     running_status=$(docker inspect --format='{{.State.Running}}' $(docker-compose ps -q directus))
@@ -45,7 +68,7 @@ if docker-compose ps | grep -q "directus"; then
         echo "✅ Containers are already running, skipping docker-compose up"
     else
         echo "⚠️ Containers exist but not running, starting them..."
-        if ! docker-compose up -d; then
+        if ! $COMPOSE_CMD; then
             echo "❌ Failed to start containers"
             echo "💡 Try running 'docker-compose logs' to see what's wrong"
             exit 1
@@ -55,7 +78,7 @@ if docker-compose ps | grep -q "directus"; then
 else
     # Start containers in detached mode
     echo "🐳 Starting Docker containers..."
-    if ! docker-compose up -d; then
+    if ! $COMPOSE_CMD; then
         echo "❌ Failed to start containers"
         echo "💡 Try running 'docker-compose logs' to see what's wrong"
         exit 1
@@ -92,8 +115,12 @@ COLLECTION_EXISTS=$(curl -s -H "Authorization: Bearer $TOKEN" \
   "$HOST_URL/collections/bookable_object" | jq -r '.data')
 
 if [ "$COLLECTION_EXISTS" = "null" ]; then
-    echo "🔧 Initialization needed, running directus-sync push..."
-    npx --yes directus-sync@2.2.0 push -u "$HOST_URL" -e "$ADMIN_EMAIL" -p "$ADMIN_PASSWORD"
+    echo "🔧 Initialization needed, running directus-sync push in container..."
+    if ! docker-compose exec -T directus npx --yes directus-sync@2.2.0 push -u "http://localhost:8055" -e "$ADMIN_EMAIL" -p "$ADMIN_PASSWORD" -d "/directus/schema"; then
+        echo "❌ Schema initialization failed"
+        echo "💡 Try running 'docker-compose logs directus' to see what's wrong"
+        exit 1
+    fi
     echo "✅ Schema initialization complete!"
 fi
 

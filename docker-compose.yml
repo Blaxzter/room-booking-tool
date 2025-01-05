@@ -127,11 +127,13 @@ services:
       TELEGRAM_URL: '${TELEGRAM_URL}'
 
   booki-tool-telegram-bot:
+    profiles:
+      - telegram
     image: blaxzter/bookitool-telegram-bot:1.0.0
     # build:
     #   context: ./telegram-bot/
     environment:
-      VITE_BACKEND_URL: "${VITE_BACKEND_URL}"
+      VITE_BACKEND_URL: "${TELEGRAM_BACKEND_ADDRESS}"
       TELEGRAM_DIRECTUS_API_KEY: "${TELEGRAM_DIRECTUS_API_KEY}"
       TELEGRAM_BOT_TOKEN: "${TELEGRAM_BOT_TOKEN}"
       PORT: 3000
