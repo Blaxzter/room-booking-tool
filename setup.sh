@@ -128,7 +128,7 @@ COLLECTION_EXISTS=$(curl -s -H "Authorization: Bearer $TOKEN" \
 
 if [ "$COLLECTION_EXISTS" = "null" ]; then
     echo "🔧 Initialization needed, running directus-sync push in container..."
-    if ! docker-compose exec -T directus npx --yes directus-sync@2.2.0 push -u "http://127.0.0.1:8055" -e "$ADMIN_EMAIL" -p "$ADMIN_PASSWORD" -d "/directus/schema"; then
+    if ! docker-compose exec -T directus npx --yes directus-sync@2.2.0 push -u "http://127.0.0.1:8055" -e "$ADMIN_EMAIL" -p "$ADMIN_PASSWORD" --dump-path "/directus/schema"; then
         echo "❌ Schema initialization failed"
         echo "💡 Try running 'docker-compose logs directus' to see what's wrong"
         exit 1
