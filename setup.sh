@@ -2,6 +2,25 @@
 
 echo "🚀 Starting Room Booking Tool setup..."
 
+# Download the setup script if being run via curl
+SCRIPT_PATH="$0"
+if [[ "$SCRIPT_PATH" == "bash" ]]; then
+    echo "📥 Downloading setup script..."
+    curl -s -o setup.sh https://raw.githubusercontent.com/Blaxzter/room-booking-tool/refs/heads/main/setup.sh
+    chmod +x setup.sh
+fi
+
+# Parse command line arguments
+SETUP_TELEGRAM=false
+for arg in "$@"; do
+    case $arg in
+        --telegram)
+            SETUP_TELEGRAM=true
+            shift
+            ;;
+    esac
+done
+
 # Download docker-compose file if it doesn't exist
 if [ ! -f "docker-compose.yml" ]; then
     echo "📥 Downloading docker-compose.yml..."
@@ -11,7 +30,7 @@ if [ ! -f "docker-compose.yml" ]; then
     fi
 fi
 
-# Load configuration from config file
+# Load configuration files
 if [ ! -f "./config.env" ]; then
     echo "📥 Downloading config.env..."
     if ! curl -s -o config.env https://raw.githubusercontent.com/Blaxzter/room-booking-tool/refs/heads/main/config.env; then
@@ -20,7 +39,6 @@ if [ ! -f "./config.env" ]; then
     fi
 fi
 
-# Load configuration from config file
 if [ ! -f "./.env" ]; then
     echo "📥 Downloading .env.example..."
     if ! curl -s -o .env https://raw.githubusercontent.com/Blaxzter/room-booking-tool/refs/heads/main/.env.example; then
@@ -29,36 +47,30 @@ if [ ! -f "./.env" ]; then
     fi
 fi
 
-# Load configuration from config file
+# Load configurations
 sed -i 's/\r$//' config.env
 source ./config.env
-
-# Also load configuration from .env file
 sed -i 's/\r$//' .env
 source ./.env
 
-# Check if containers are already running
-echo "🤖 Would you like to set up the Telegram bot? (y/N)"
-read -r setup_telegram
-
-if [[ $setup_telegram =~ ^[Yy]$ ]]; then
+# Handle Telegram setup if --telegram flag is used
+if [ "$SETUP_TELEGRAM" = true ]; then
+    echo "🤖 Setting up Telegram bot..."
     echo "Please enter your Telegram Bot Token:"
     read -r telegram_token
-    
+
     # Update .env file with Telegram token
     if grep -q "TELEGRAM_BOT_TOKEN=" .env; then
         sed -i "s|TELEGRAM_BOT_TOKEN=.*|TELEGRAM_BOT_TOKEN=$telegram_token|" .env
     else
         echo "TELEGRAM_BOT_TOKEN=$telegram_token" >> .env
     fi
-    
-    # Set the compose command with telegram profile
+
     COMPOSE_CMD="docker-compose --profile telegram up -d"
 else
-    echo "Skipping Telegram bot setup..."
-    # Set the compose command without telegram profile
     COMPOSE_CMD="docker-compose up -d"
 fi
+
 
 # Check if containers are already running
 if docker-compose ps | grep -q "directus"; then
@@ -116,7 +128,7 @@ COLLECTION_EXISTS=$(curl -s -H "Authorization: Bearer $TOKEN" \
 
 if [ "$COLLECTION_EXISTS" = "null" ]; then
     echo "🔧 Initialization needed, running directus-sync push in container..."
-    if ! docker-compose exec -T directus npx --yes directus-sync@2.2.0 push -u "http://localhost:8055" -e "$ADMIN_EMAIL" -p "$ADMIN_PASSWORD" -d "/directus/schema"; then
+    if ! docker-compose exec -T directus npx --yes directus-sync@2.2.0 push -u "http://127.0.0.1:8055" -e "$ADMIN_EMAIL" -p "$ADMIN_PASSWORD" -d "/directus/schema"; then
         echo "❌ Schema initialization failed"
         echo "💡 Try running 'docker-compose logs directus' to see what's wrong"
         exit 1
@@ -167,3 +179,10 @@ curl -s -X PATCH -H "Authorization: Bearer $TOKEN" -H "Content-Type: application
   "$HOST_URL/settings" -o /dev/null
 
 echo "🎉 Setup completed successfully!"
+echo
+echo "📱 Frontend is now accessible at: http://localhost:${FRONTEND_PUBLIC_PORT}"
+echo "⚙️ Directus is available at: http://localhost:${BACKEND_PUBLIC_PORT}"
+echo
+echo "💡 To set up Telegram notifications: "
+echo "1. Visit https://github.com/Blaxzter/room-booking-tool#telegram-bot-setup for instructions"
+echo "2. After setting the environment variables run: ./setup.sh --telegram"
