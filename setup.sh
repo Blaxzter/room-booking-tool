@@ -118,7 +118,7 @@ until $(curl --output /dev/null --silent --head --fail "$HOST_URL/server/ping");
     sleep 5
 done
 
-echo "❤️ Checking Directus health..."
+echo "❤️  Check for server health..."
 attempts=0
 max_attempts=5
 
@@ -151,6 +151,72 @@ if [ "$COLLECTION_EXISTS" = "null" ]; then
         exit 1
     fi
     echo "✅ Schema initialization complete!"
+fi
+
+# Set email domain based on server name
+if [ "$NGINX_SERVER_NAME" = "localhost" ]; then
+    EMAIL_DOMAIN="example.com"
+else
+    EMAIL_DOMAIN="$NGINX_SERVER_NAME"
+fi
+
+# Create Bot user if it doesn't exist
+echo "🤖 Checking for Bot user..."
+BOT_USER_FILTER_ENCODED=$(printf 'filter[email][_eq]=telegram@%s' "$EMAIL_DOMAIN" | sed 's/\[/%5B/g; s/\]/%5D/g')
+BOT_USER_RESPONSE=$(curl -s -H "Authorization: Bearer $TOKEN" \
+    "$HOST_URL/users?$BOT_USER_FILTER_ENCODED")
+BOT_USER_ID=$(echo "$BOT_USER_RESPONSE" | jq -r '.data[0].id')
+
+if [ "$BOT_USER_ID" = "null" ] || [ -z "$BOT_USER_ID" ]; then
+    echo "👤 Creating bot user..."
+
+    BOT_ROLE_FILTER_ENCODED=$(printf 'filter[name][_eq]=%s' "bot" | sed 's/\[/%5B/g; s/\]/%5D/g')
+    BOT_ROLE_RESPONSE=$(curl -s -H "Authorization: Bearer $TOKEN" \
+        "$HOST_URL/roles?$BOT_ROLE_FILTER_ENCODED")
+
+    BOT_ROLE_ID=$(echo "$BOT_ROLE_RESPONSE" | jq -r '.data[0].id')
+    if [ "$BOT_ROLE_ID" = "null" ] || [ -z "$BOT_ROLE_ID" ]; then
+        echo "❌ bot role not found. Available roles:"
+        curl -s -H "Authorization: Bearer $TOKEN" "$HOST_URL/roles" | jq -r '.data[] | .name'
+        exit 1
+    fi
+
+    BOT_TOKEN_RESPONSE=$(curl -s -X GET -H "Authorization Bearer $TOKEN" "$HOST_URL/utils/random/string")
+    BOT_TOKEN=$(echo "$BOT_TOKEN_RESPONSE" | jq -r '.data')
+
+    BOT_PASSWORD=$(openssl rand -base64 32)
+
+    # Properly escape the email for JSON
+    BOT_EMAIL="telegram@${EMAIL_DOMAIN}"
+    BOT_USER_PAYLOAD='{
+        "email": "'"$BOT_EMAIL"'",
+        "password": "'"$BOT_PASSWORD"'",
+        "role": "'"$BOT_ROLE_ID"'",
+        "status": "active",
+        "provider": "default",
+        "external_identifier": null,
+        "auth_data": null,
+        "first_name": "Telegram",
+        "last_name": "Bot",
+        "token": "'"$BOT_TOKEN"'"
+    }'
+
+    BOT_USER_RESPONSE=$(curl -s -X POST -H "Authorization: Bearer $TOKEN" \
+        -H "Content-Type: application/json" \
+        -d "$BOT_USER_PAYLOAD" \
+        "$HOST_URL/users")
+
+    BOT_USER_ID=$(echo "$BOT_USER_RESPONSE" | jq -r '.data.id')
+
+    if [ "$BOT_USER_ID" = "null" ] || [ -z "$BOT_USER_ID" ]; then
+        echo "❌ Failed to create bot user. Error:"
+        echo "$BOT_USER_RESPONSE" | jq -r '.errors[] | .message'
+        exit 1
+    fi
+
+    # Update .env file with the bot token
+    echo "📝 Updating .env file with bot token..."
+    sed -i "s/TELEGRAM_DIRECTUS_API_KEY=.*/TELEGRAM_DIRECTUS_API_KEY=$BOT_TOKEN/" .env
 fi
 
 # Configure system settings (runs every time)
