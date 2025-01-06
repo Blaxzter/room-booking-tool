@@ -33,7 +33,7 @@ const darkModeVar = computed(() => {
 
 provide(
   'backendUrl',
-  import.meta.env.DEV ? import.meta.env.VITE_BACKEND_URL || 'http://localhost:8055' : '/api'
+  import.meta.env.DEV ? import.meta.env.VITE_BACKEND_URL || 'http://localhost:8055' : `${window.location.origin}/api`
 )
 provide('showAlertDialog', showAlertDialog)
 

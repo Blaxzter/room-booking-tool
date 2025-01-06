@@ -19,7 +19,7 @@ const fetchStaticPage = async () => {
 
   const backendUrl = import.meta.env.DEV
     ? import.meta.env.VITE_BACKEND_URL || 'http://localhost:8055'
-    : '/api'
+    : `${window.location.origin}/api`
 
   let path = route.path
   // remove leading slash

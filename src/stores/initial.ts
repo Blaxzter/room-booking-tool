@@ -84,7 +84,7 @@ export const useInitialDataStore = defineStore('initial', () => {
 
     const backendUrl = import.meta.env.DEV
       ? import.meta.env.VITE_BACKEND_URL || 'http://localhost:8055'
-      : '/api'
+      : `${window.location.origin}/api`
 
     await axios
       .get(`${backendUrl}/public/${bookable_object_id}`)

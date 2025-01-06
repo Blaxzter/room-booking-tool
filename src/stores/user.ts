@@ -113,7 +113,7 @@ export const useUser = defineStore('user', () => {
   // current window.location.host but with api. prefix instead of www.
   const backendUrl = import.meta.env.DEV
     ? import.meta.env.VITE_BACKEND_URL || 'http://localhost:8055'
-    : '/api'
+    : `${window.location.origin}/api`
 
   const authMode: AuthenticationMode = 'json'
   const authConfig: AuthenticationConfig = {
