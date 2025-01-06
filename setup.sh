@@ -2,14 +2,6 @@
 
 echo "🚀 Starting Room Booking Tool setup..."
 
-# Download the setup script if being run via curl
-SCRIPT_PATH="$0"
-if [[ "$SCRIPT_PATH" == "bash" ]]; then
-    echo "📥 Downloading setup script..."
-    curl -s -o setup.sh https://raw.githubusercontent.com/Blaxzter/room-booking-tool/refs/heads/main/setup.sh
-    chmod +x setup.sh
-fi
-
 # Parse command line arguments
 SETUP_TELEGRAM=false
 for arg in "$@"; do
@@ -20,6 +12,16 @@ for arg in "$@"; do
             ;;
     esac
 done
+
+# Download setup script
+if [ ! -f "setup.sh" ]; then
+    echo "📥 Downloading setup.sh..."
+    if ! curl -s -o setup.sh https://raw.githubusercontent.com/Blaxzter/room-booking-tool/refs/heads/main/setup.sh; then
+        echo "❌ Failed to download setup.sh"
+        exit 1
+    fi
+    chmod +x setup.sh
+fi
 
 # Download docker-compose file if it doesn't exist
 if [ ! -f "docker-compose.yml" ]; then
@@ -116,6 +118,21 @@ until $(curl --output /dev/null --silent --head --fail "$HOST_URL/server/ping");
     sleep 5
 done
 
+echo "❤️ Checking Directus health..."
+attempts=0
+max_attempts=5
+
+until $(curl --output /dev/null --silent --head --fail "$HOST_URL/server/health"); do
+    attempts=$((attempts + 1))
+    if [ $attempts -eq $max_attempts ]; then
+        echo "❌ Timeout waiting for Directus to start after $max_attempts attempts"
+        echo "💡 Try running 'docker-compose logs' to see what's wrong"
+        exit 1
+    fi
+    printf "Attempt $attempts of $max_attempts...\n"
+    sleep 5
+done
+
 echo "✅ Directus is up, obtaining authentication token..."
 
 TOKEN=$(curl -s -X POST -H "Content-Type: application/json" \
@@ -128,7 +145,7 @@ COLLECTION_EXISTS=$(curl -s -H "Authorization: Bearer $TOKEN" \
 
 if [ "$COLLECTION_EXISTS" = "null" ]; then
     echo "🔧 Initialization needed, running directus-sync push in container..."
-    if ! docker-compose exec -T directus npx --yes directus-sync@2.2.0 push -u "http://127.0.0.1:8055" -e "$ADMIN_EMAIL" -p "$ADMIN_PASSWORD" --dump-path "/directus/schema"; then
+    if ! docker-compose exec -T directus npx --yes directus-sync@3.1.6 push -u "http://127.0.0.1:8055" -e "$ADMIN_EMAIL" -p "$ADMIN_PASSWORD" --dump-path "/directus/schema"; then
         echo "❌ Schema initialization failed"
         echo "💡 Try running 'docker-compose logs directus' to see what's wrong"
         exit 1
@@ -182,7 +199,11 @@ echo "🎉 Setup completed successfully!"
 echo
 echo "📱 Frontend is now accessible at: http://localhost:${FRONTEND_PUBLIC_PORT}"
 echo "⚙️ Directus is available at: http://localhost:${BACKEND_PUBLIC_PORT}"
-echo
-echo "💡 To set up Telegram notifications: "
-echo "1. Visit https://github.com/Blaxzter/room-booking-tool#telegram-bot-setup for instructions"
-echo "2. After setting the environment variables run: ./setup.sh --telegram"
+
+if [ "$SETUP_TELEGRAM" = true ]; then
+    echo "🤖 Telegram bot is now set up!"
+else
+    echo "💡 To set up Telegram notifications: "
+    echo "1. Visit https://github.com/Blaxzter/room-booking-tool#telegram-bot-setup for instructions"
+    echo "2. After setting the environment variables run: ./setup.sh --telegram"
+fi

@@ -111,9 +111,10 @@ export const useUser = defineStore('user', () => {
   const typedStorage: AuthenticationStorage = storage as unknown as AuthenticationStorage
 
   // current window.location.host but with api. prefix instead of www.
-  const backendUrl = import.meta.env.VITE_BACKEND_URL
-    ? import.meta.env.VITE_BACKEND_URL
-    : `https://api.${window.location.host}`
+  const backendUrl = import.meta.env.DEV
+    ? import.meta.env.VITE_BACKEND_URL || 'http://localhost:8055'
+    : '/api'
+
   const authMode: AuthenticationMode = 'json'
   const authConfig: AuthenticationConfig = {
     autoRefresh: true,

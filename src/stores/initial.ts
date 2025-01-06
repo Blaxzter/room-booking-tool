@@ -82,9 +82,9 @@ export const useInitialDataStore = defineStore('initial', () => {
   const fetchPublicObjectViewData = async ({ bookable_object_id }: { bookable_object_id: string }) => {
     init_loading.value = true
 
-    const backendUrl = import.meta.env.VITE_BACKEND_URL
-      ? import.meta.env.VITE_BACKEND_URL
-      : `https://api.${window.location.host}`
+    const backendUrl = import.meta.env.DEV
+      ? import.meta.env.VITE_BACKEND_URL || 'http://localhost:8055'
+      : '/api'
 
     await axios
       .get(`${backendUrl}/public/${bookable_object_id}`)

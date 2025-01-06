@@ -44,14 +44,14 @@ docker push $REPO_FRONTEND:latest
 #cd ..
 
 # Update the version in version.js
-#sed -i "s/export const version = '$VERSION'/export const version = '$NEW_VERSION'/" $VERSION_FILE
+sed -i "s/export const version = '$VERSION'/export const version = '$NEW_VERSION'/" $VERSION_FILE
 
 # Commit and push the new version to git
-#git config --global user.name "Frederic Marvin Abraham"
-#git config --global user.email "mail@fabraham.dev"
-#git add $VERSION_FILE
-#git commit -m "chore: Bump version to $NEW_VERSION"
-#git push origin main
-#
-#echo "Deployed version $VERSION"
-#echo "Build, push, and version update completed successfully!"
+git config --global user.name "Frederic Marvin Abraham"
+git config --global user.email "mail@fabraham.dev"
+git add $VERSION_FILE
+git commit -m "chore: Bump version to $NEW_VERSION"
+git push origin main
+
+echo "Deployed version $VERSION"
+echo "Build, push, and version update completed successfully!"

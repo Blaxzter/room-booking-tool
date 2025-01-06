@@ -17,9 +17,9 @@ export interface StaticPageResponse {
 const fetchStaticPage = async () => {
   loading.value = true
 
-  const backendUrl = import.meta.env.VITE_BACKEND_URL
-    ? import.meta.env.VITE_BACKEND_URL
-    : `https://api.${window.location.host}`
+  const backendUrl = import.meta.env.DEV
+    ? import.meta.env.VITE_BACKEND_URL || 'http://localhost:8055'
+    : '/api'
 
   let path = route.path
   // remove leading slash
