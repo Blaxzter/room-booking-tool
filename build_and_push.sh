@@ -50,7 +50,7 @@ docker push $REPO_FRONTEND:latest
 #git config --global user.name "Frederic Marvin Abraham"
 #git config --global user.email "mail@fabraham.dev"
 #git add $VERSION_FILE
-#git commit -m "Bump version to $NEW_VERSION"
+#git commit -m "chore: Bump version to $NEW_VERSION"
 #git push origin main
 #
 #echo "Deployed version $VERSION"
