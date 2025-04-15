@@ -81,7 +81,7 @@ If you prefer to set everything up manually:
 
 4. Initialize Directus schema:
    ```bash
-   docker-compose exec directus npx directus-sync push \
+   npx directus-sync push \
      -u http://localhost:8055 \
      -e your@email.com \
      -p yourpassword

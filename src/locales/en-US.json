@@ -1,0 +1,13 @@
+{
+  "login": {
+    "title": "Login",
+    "description": "Enter your email below to login to your account.",
+    "email": "Email",
+    "password": "Password",
+    "keepLoggedIn": "Keep me logged in",
+    "pleaseWait": "Please wait",
+    "signIn": "Sign in",
+    "noAccount": "Don't have an account?",
+    "signUp": "Sign up"
+  }
+}

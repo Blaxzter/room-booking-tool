@@ -1,17 +1,24 @@
 <script setup lang="ts">
+import { onMounted, ref } from 'vue'
+import router from '@/router'
+import { ChevronRight, Eye, EyeOff, Loader2 } from 'lucide-vue-next'
+
+import { useI18n } from 'vue-i18n'
+import { useUser } from '@/stores/user'
+import { randomEmail } from '@/assets/ts/constants'
+
 import { Button } from '@/components/ui/button'
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
-import { ChevronRight, Eye, EyeOff, Loader2 } from 'lucide-vue-next'
-import { onMounted, ref } from 'vue'
-import { useUser } from '@/stores/user'
-import router from '@/router'
 import { Checkbox } from '@/components/ui/checkbox'
-import { randomEmail } from '@/assets/ts/constants'
+import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card'
+
 import AutoLoginCard from '@/components/login/AutoLoginCard.vue'
 import BackgroundImage from '@/components/bits/BackgroundImage.vue'
 import LogoImage from '@/components/bits/LogoImage.vue'
+import LanguageSwitcher from '@/components/i18n/LanguageSwitcher.vue'
+
+const { t } = useI18n()
 
 const loading = ref(false)
 const showCheckmark = ref(false)
@@ -80,21 +87,24 @@ onMounted(async () => {
           class="rounded-none h-full w-full sm:max-w-sm sm:h-auto sm:rounded-xl place-content-center"
         >
           <CardHeader class="max-w-sm m-auto">
-            <CardTitle>
-              <div class="flex items-center gap-4 mb-3">
-                <LogoImage />
-                <div class="text-3xl font-bold">
-                  <div>BookiTool</div>
-                  <div class="text-2xl font-normal text-muted-foreground">Login</div>
+            <div class="flex justify-between items-start">
+              <CardTitle>
+                <div class="flex items-center gap-4 mb-3">
+                  <LogoImage />
+                  <div class="text-3xl font-bold">
+                    <div>BookiTool</div>
+                    <div class="text-2xl font-normal text-muted-foreground">{{ t('login.title') }}</div>
+                  </div>
                 </div>
-              </div>
-            </CardTitle>
-            <CardDescription> Enter your email below to login to your account.</CardDescription>
+              </CardTitle>
+              <LanguageSwitcher variant="ghost" flagSize="20" />
+            </div>
+            <CardDescription>{{ t('login.description') }}</CardDescription>
           </CardHeader>
           <form>
             <CardContent class="grid gap-4 max-w-sm m-auto">
               <div class="grid gap-2">
-                <Label for="email">Email</Label>
+                <Label for="email">{{ t('login.email') }}</Label>
                 <Input
                   id="email"
                   v-model="email"
@@ -106,7 +116,7 @@ onMounted(async () => {
                 />
               </div>
               <div class="grid gap-2">
-                <Label for="password">Password</Label>
+                <Label for="password">{{ t('login.password') }}</Label>
                 <div class="relative w-full max-w-sm items-center">
                   <Input
                     id="password"
@@ -134,7 +144,7 @@ onMounted(async () => {
                   for="keep_logged_in"
                   class="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
                 >
-                  Keep me logged in
+                  {{ t('login.keepLoggedIn') }}
                 </label>
               </div>
 
@@ -147,13 +157,13 @@ onMounted(async () => {
               <Button class="w-full" type="submit" @click="loginWrapper">
                 <template v-if="loading">
                   <Loader2 class="w-4 h-4 mr-2 animate-spin" />
-                  Please wait
+                  {{ t('login.pleaseWait') }}
                 </template>
-                <template v-else> Sign in</template>
+                <template v-else>{{ t('login.signIn') }}</template>
               </Button>
               <div class="mt-4 text-center text-sm">
-                Don't have an account?
-                <router-link to="/register" class="underline"> Sign up</router-link>
+                {{ t('login.noAccount') }}
+                <router-link to="/register" class="underline">{{ t('login.signUp') }}</router-link>
               </div>
             </CardFooter>
           </form>

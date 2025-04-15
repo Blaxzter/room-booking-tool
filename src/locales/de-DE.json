@@ -1,0 +1,13 @@
+{
+  "login": {
+    "title": "Anmelden",
+    "description": "Geben Sie Ihre E-Mail-Adresse ein, um sich bei Ihrem Konto anzumelden.",
+    "email": "E-Mail",
+    "password": "Passwort",
+    "keepLoggedIn": "Angemeldet bleiben",
+    "pleaseWait": "Bitte warten",
+    "signIn": "Anmelden",
+    "noAccount": "Sie haben noch kein Konto?",
+    "signUp": "Registrieren"
+  }
+}
