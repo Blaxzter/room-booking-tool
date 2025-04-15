@@ -1,7 +1,7 @@
 {
   "login": {
     "title": "Anmelden",
-    "description": "Geben Sie Ihre E-Mail-Adresse ein, um sich bei Ihrem Konto anzumelden.",
+    "description": "Geben Sie Ihre E-Mail ein, um sich in Ihrem Konto anzumelden.",
     "email": "E-Mail",
     "password": "Passwort",
     "keepLoggedIn": "Angemeldet bleiben",
@@ -9,5 +9,224 @@
     "signIn": "Anmelden",
     "noAccount": "Sie haben noch kein Konto?",
     "signUp": "Registrieren"
+  },
+  "register": {
+    "title": "Registrieren",
+    "description": "Geben Sie Ihre Daten ein, um ein Konto zu erstellen",
+    "firstName": "Vorname",
+    "lastName": "Nachname",
+    "email": "E-Mail",
+    "password": "Passwort",
+    "createAccount": "Konto erstellen",
+    "haveAccount": "Sie haben bereits ein Konto?",
+    "signIn": "Anmelden",
+    "legal": {
+      "agree": "Ich stimme den Nutzungsbedingungen zu",
+      "description": "Mit der Registrierung stimmen Sie unseren",
+      "termsOfService": "Nutzungsbedingungen",
+      "and": "und",
+      "privacyPolicy": "Datenschutzrichtlinie"
+    }
+  },
+  "home": {
+    "title": {
+      "your": "Ihre"
+    },
+    "description": "Hier finden Sie alle buchbaren Objekte, auf die Sie innerhalb der ausgewählten Gruppe Zugriff haben.",
+    "noBookableObjects": {
+      "prefix": "Keine buchbaren",
+      "suffix": "gefunden."
+    }
+  },
+  "emailVerification": {
+    "title": "Bestätigungs-E-Mail gesendet",
+    "description": "Bitte überprüfen Sie Ihre E-Mails, um Ihr Konto zu bestätigen.",
+    "backToLogin": "Zurück zur",
+    "login": "Anmeldung"
+  },
+  "verifyEmail": {
+    "process": {
+      "title": "E-Mail wird verifiziert",
+      "description": "Bitte warten Sie, während wir Ihre E-Mail überprüfen.",
+      "wait": "Dies sollte nur wenige Sekunden dauern. Wenn es länger dauert, wenden Sie sich bitte an den Support."
+    },
+    "success": {
+      "title": "E-Mail verifiziert",
+      "description": "Ihre E-Mail wurde verifiziert.",
+      "redirect": "Sie werden in 5 Sekunden automatisch zur Anmeldeseite weitergeleitet. Oder Sie können zurück zur",
+      "login": "Anmeldung",
+      "byClicking": "gehen, indem Sie auf diesen Link klicken."
+    },
+    "errors": {
+      "noToken": {
+        "title": "Kein Token gefunden",
+        "description": "In der URL wurde kein Token gefunden. Bitte überprüfen Sie Ihre E-Mail für den Verifizierungslink."
+      },
+      "invalidToken": {
+        "title": "Ungültiger Token",
+        "description": "Der Token ist ungültig, abgelaufen oder wurde bereits verwendet."
+      }
+    }
+  },
+  "autoLogin": {
+    "title": "Automatische Anmeldung",
+    "loggingIn": "Anmeldung läuft",
+    "authenticated": "Authentifiziert",
+    "invalid": "Ungültige E-Mail oder Passwort"
+  },
+  "common": {
+    "cancel": "Abbrechen",
+    "continue": "Fortfahren",
+    "delete": "Löschen"
+  },
+  "settings": {
+    "title": "Einstellungen",
+    "description": "Verwalten Sie Ihre Kontoeinstellungen und E-Mail-Präferenzen.",
+    "toast": {
+      "title": "Einstellungen aktualisiert"
+    },
+    "telegram": {
+      "title": "Telegram",
+      "description": "Verknüpfen Sie Ihr Telegram-Konto, um Benachrichtigungen zu erhalten",
+      "accountLinked": "Telegram-Konto verknüpft",
+      "linkedTo": "Ihr Konto ist verknüpft mit",
+      "toast": {
+        "linked": "Telegram-Konto erfolgreich verknüpft",
+        "unlinked": "Telegram-Konto erfolgreich getrennt"
+      }
+    },
+    "profile": {
+      "title": "Profil",
+      "description": "So werden Sie von anderen auf der Website gesehen.",
+      "displayImage": "Profilbild",
+      "uploadImageHelp": "Laden Sie ein neues Bild hoch, um Ihr Profilbild zu ändern.",
+      "displayName": "Anzeigename",
+      "displayNamePlaceholder": "Anzeigename",
+      "displayNameHelp": "Dies ist der Name, der öffentlich angezeigt wird, wenn Sie eine Buchung genehmigen.",
+      "email": "E-Mail",
+      "emailPlaceholder": "Ihre E-Mail-Adresse",
+      "emailHelp": "Dies ist die E-Mail-Adresse, die angezeigt wird und an die wir E-Mails senden.",
+      "firstName": "Vorname",
+      "firstNamePlaceholder": "Vorname",
+      "firstNameHelp": "Ihr Vorname.",
+      "lastName": "Nachname",
+      "lastNamePlaceholder": "Nachname",
+      "lastNameHelp": "Ihr Nachname.",
+      "updateButton": "Profil aktualisieren",
+      "validation": {
+        "displayNameMin": "Benutzername muss mindestens 2 Zeichen lang sein.",
+        "displayNameMax": "Benutzername darf nicht länger als 30 Zeichen sein.",
+        "firstNameMin": "Vorname muss mindestens 2 Zeichen lang sein.",
+        "firstNameMax": "Vorname darf nicht länger als 30 Zeichen sein.",
+        "lastNameMin": "Nachname muss mindestens 2 Zeichen lang sein.",
+        "lastNameMax": "Nachname darf nicht länger als 30 Zeichen sein.",
+        "emailRequired": "Bitte wählen Sie eine E-Mail-Adresse aus."
+      },
+      "toast": {
+        "success": {
+          "title": "Profil aktualisiert",
+          "description": "Ihr Profil wurde erfolgreich aktualisiert."
+        },
+        "error": {
+          "title": "Profilaktualisierung fehlgeschlagen"
+        }
+      }
+    },
+    "account": {
+      "title": "Konto",
+      "description": "Aktualisieren Sie Ihre Kontoeinstellungen. Legen Sie Ihre bevorzugte Sprache und Zeitzone fest.",
+      "integrations": "Integrationen",
+      "deleteAccount": {
+        "title": "Konto löschen",
+        "description": "Wenn Sie Ihr Konto löschen, werden alle Ihre Daten dauerhaft von unseren Servern entfernt. Alle von Ihnen erstellten buchbaren Objekte, deren Buchungen und alle von Ihnen erstellten Gruppen werden gelöscht.",
+        "button": "Konto löschen",
+        "confirmation": {
+          "title": "Sind Sie absolut sicher?",
+          "warning": "Diese Aktion kann nicht rückgängig gemacht werden. Dies wird Ihr Konto dauerhaft löschen und Ihre Daten von unseren Servern entfernen.",
+          "typeEmail": "Bitte geben Sie {email} zur Bestätigung ein.",
+          "emailPlaceholder": "Geben Sie Ihre E-Mail ein"
+        }
+      }
+    },
+    "notifications": {
+      "title": "Benachrichtigungen",
+      "description": "Konfigurieren Sie, wie Sie Benachrichtigungen erhalten.",
+      "types": {
+        "email": "E-Mail",
+        "telegram": "Telegram"
+      },
+      "userOverrideHelp": "Diese Einstellung überschreibt alle anderen Einstellungen. Wenn deaktiviert, erhalten Sie keine Benachrichtigungen.",
+      "groups": {
+        "title": "Gruppen",
+        "help": "Das Einstellen von Gruppenbenachrichtigungen deaktiviert alle Benachrichtigungen, wenn Sie eine Benachrichtigung erhalten, weil Sie Teil der Gruppe sind. Wenn Sie Eigentümer eines buchbaren Objekts sind, erhalten Sie weiterhin Benachrichtigungen für dieses Objekt, wenn es unten nicht deaktiviert ist."
+      },
+      "bookableObjects": {
+        "title": "Buchbare Objekte",
+        "help": "Das Einstellen von Benachrichtigungen für buchbare Objekte deaktiviert alle Benachrichtigungen, die vom buchbaren Objekt stammen."
+      },
+      "toast": {
+        "title": "Einstellungen aktualisiert",
+        "description": "{origin} Benachrichtigung ({type}) Einstellungen aktualisiert."
+      }
+    },
+    "demo": {
+      "title": "Demo-Modus",
+      "avatarDisabled": "Profilbild-Updates sind im Demo-Modus deaktiviert."
+    }
+  },
+  "avatar": {
+    "deleteTitle": "Avatar löschen",
+    "deleteConfirmation": "Sind Sie sicher, dass Sie den Avatar löschen möchten?",
+    "demoDisabled": "Bild-Upload ist im Demo-Modus deaktiviert",
+    "noPermission": "Sie haben keine Berechtigung, dieses Bild zu ändern"
+  },
+  "demoMode": {
+    "title": "Demo-Modus aktiv",
+    "description": "Dies ist eine Demo-Umgebung mit begrenzter Kapazität:",
+    "limits": {
+      "objects": "Bis zu 3 buchbare Objekte",
+      "requests": "Bis zu 3 Buchungsanfragen",
+      "groups": "Bis zu 3 Gruppen"
+    },
+    "contactRequest": {
+      "intro": "Wenn Sie diese Plattform persönlich oder für Ihre Organisation nutzen möchten, kontaktieren Sie uns bitte für ein vollwertiges Konto.",
+      "emailLabel": "Ihre Kontakt-E-Mail",
+      "emailHelp": "Falls wir Sie bezüglich Ihrer Anfrage kontaktieren müssen",
+      "messageLabel": "Nachricht",
+      "messagePlaceholder": "Beschreiben Sie Ihre Anfrage...",
+      "messageHelp": "Bitte beschreiben Sie, wofür Sie die Plattform nutzen möchten.",
+      "dontShowAgain": "Nicht mehr anzeigen",
+      "sendRequest": "Mitgliedsanfrage senden",
+      "validation": {
+        "messageLength": "Bitte geben Sie eine Nachricht mit mindestens 10 Zeichen ein",
+        "invalidEmail": "Bitte geben Sie eine gültige E-Mail-Adresse ein"
+      },
+      "toast": {
+        "requestSent": {
+          "title": "Anfrage gesendet",
+          "description": "Ihre Anfrage wurde an den Administrator gesendet"
+        },
+        "error": {
+          "title": "Fehler",
+          "description": "Beim Senden der Anfrage ist ein Fehler aufgetreten",
+          "userExists": "Benutzer hat bereits eine Anfrage erstellt."
+        }
+      }
+    }
+  },
+  "stepper": {
+    "steps": {
+      "basicInfo": "Grundinformationen",
+      "permissions": "Berechtigungen",
+      "additional": "Zusätzliches"
+    },
+    "missingContent": "Fehlender Inhalt für Schritt {index}"
+  },
+  "bookableObjects": {
+    "types": {
+      "singular": ["Raum", "Objekt", "Bereich", "Alles"],
+      "plural": ["Räume", "Objekte", "Bereiche", "Alles"],
+      "lowercase": ["räume", "objekte", "bereiche", "alles"]
+    }
   }
 }

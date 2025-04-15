@@ -1,8 +1,9 @@
 <script setup lang="ts">
+import { ref } from 'vue'
+
 import BackgroundImage from '@/components/bits/BackgroundImage.vue'
 import RegisterCard from '@/components/login/RegisterCard.vue'
 import EmailSendCard from '@/components/login/EmailSendCard.vue'
-import { ref } from 'vue'
 import RocketStartAnimation from '@/components/animations/RocketStartAnimation.vue'
 
 const visibleView = ref('register')

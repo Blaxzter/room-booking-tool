@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { ref, computed } from 'vue'
 import { storeToRefs } from 'pinia'
+import { useI18n } from 'vue-i18n'
 import { useUser } from '@/stores/user'
 
 import {
@@ -18,6 +19,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 
+const { t } = useI18n()
 const { user } = storeToRefs(useUser())
 const inputEmail = ref('')
 const isEmailValid = computed(() => inputEmail.value !== user.value.email)
@@ -29,37 +31,39 @@ const { deleteUserRequest } = useUser()
   <AlertDialog>
     <Card class="w-full mt-80">
       <CardHeader>
-        <CardTitle class="text-xl"> Delete account </CardTitle>
+        <CardTitle class="text-xl">{{ t('settings.account.deleteAccount.title') }}</CardTitle>
         <CardDescription>
-          If you delete your account, all your data will be permanently removed from our servers. All bookable objects
-          that you created, their bookings and all groups you created will be deleted.
+          {{ t('settings.account.deleteAccount.description') }}
         </CardDescription>
       </CardHeader>
       <CardContent>
         <AlertDialogTrigger as-child>
-          <Button type="submit" class="w-full" variant="destructive"> Delete account </Button>
+          <Button type="submit" class="w-full" variant="destructive">{{ t('settings.account.deleteAccount.button') }}</Button>
         </AlertDialogTrigger>
       </CardContent>
     </Card>
 
     <AlertDialogContent>
       <AlertDialogHeader>
-        <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
+        <AlertDialogTitle>{{ t('settings.account.deleteAccount.confirmation.title') }}</AlertDialogTitle>
         <AlertDialogDescription>
           <div class="mb-2">
-            This action cannot be undone. This will permanently delete your account and remove your data from our
-            servers.
+            {{ t('settings.account.deleteAccount.confirmation.warning') }}
           </div>
-          <div>
-            Please type <code class="text-primary">{{ user.email }}</code> to confirm.
+          <div v-html="t('settings.account.deleteAccount.confirmation.typeEmail', { email: `<code class='text-primary'>${user.email}</code>` })">
           </div>
-          <Input type="text" class="w-full mt-4" placeholder="Type your email" v-model="inputEmail" />
+          <Input 
+            type="text" 
+            class="w-full mt-4" 
+            :placeholder="t('settings.account.deleteAccount.confirmation.emailPlaceholder')" 
+            v-model="inputEmail" 
+          />
         </AlertDialogDescription>
       </AlertDialogHeader>
       <AlertDialogFooter>
-        <AlertDialogCancel>Cancel</AlertDialogCancel>
+        <AlertDialogCancel>{{ t('common.cancel') }}</AlertDialogCancel>
         <AlertDialogAction :disabled="isEmailValid" variant="destructive" @click="deleteUserRequest">
-          Continue
+          {{ t('common.continue') }}
         </AlertDialogAction>
       </AlertDialogFooter>
     </AlertDialogContent>

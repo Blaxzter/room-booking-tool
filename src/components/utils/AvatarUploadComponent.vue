@@ -1,9 +1,10 @@
 <script setup lang="ts">
 import { computed, inject, onMounted, ref, watch } from 'vue'
 import { uploadFiles } from '@directus/sdk'
+import { useI18n } from 'vue-i18n'
 
 import { UploadIcon, XIcon, TrashIcon } from 'lucide-vue-next'
-// @ts-expect-error
+// @ts-expect-error - AvatarCropper is not typed
 import AvatarCropper from 'vue-avatar-cropper'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import {
@@ -17,6 +18,7 @@ import { useGlobalSettings } from '@/stores/globalSettings'
 import { storeToRefs } from 'pinia'
 import type { ShowAlertFunction } from '@/plugins/alert-dialog-plugin'
 const { client } = useUser()
+const { t } = useI18n()
 
 const showCropper = ref(false)
 const avatar = ref<string>('')
@@ -84,8 +86,8 @@ const showAlertDialog = inject('showAlertDialog') as ShowAlertFunction
 const clearImage = () => {
   if (props.addClearRequest) {
     showAlertDialog({
-      title: 'Delete Avatar',
-      description: `Are you sure you want to delete the avatar?`,
+      title: t('avatar.deleteTitle'),
+      description: t('avatar.deleteConfirmation'),
       onConfirm: () => {
         avatar.value = ''
         toBeUploadedImage.value = null
@@ -93,7 +95,7 @@ const clearImage = () => {
       },
       confirmIcon: TrashIcon,
       confirmVariant: 'destructive',
-      onConfirmText: 'Delete'
+      onConfirmText: t('common.delete')
     })
   }
 }
@@ -123,8 +125,8 @@ const avatarCssVars = computed(() => {
 const { isDemoUser } = storeToRefs(useGlobalSettings())
 
 const tooltipMessage = computed(() => {
-  if (isDemoUser.value) return 'Image upload is disabled in demo mode'
-  if (props.disabled) return 'You do not have permission to change this image'
+  if (isDemoUser.value) return t('avatar.demoDisabled')
+  if (props.disabled) return t('avatar.noPermission')
   return ''
 })
 

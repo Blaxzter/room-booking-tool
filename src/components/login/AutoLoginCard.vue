@@ -1,8 +1,11 @@
 <script setup lang="ts">
+import { useI18n } from 'vue-i18n'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import LogoImage from '@/components/bits/LogoImage.vue'
 import LoginAnimation from '@/components/login/LoginAnimation.vue'
 import CalenderLoader from '@/components/animations/CalenderLoader.vue'
+
+const { t } = useI18n()
 
 defineProps({
   loading: Boolean,
@@ -19,7 +22,7 @@ defineProps({
           <LogoImage />
           <div class="text-3xl font-bold">
             <div>BookiTool</div>
-            <div class="text-2xl font-normal text-muted-foreground">Autologin</div>
+            <div class="text-2xl font-normal text-muted-foreground">{{ t('autoLogin.title') }}</div>
           </div>
         </div>
       </CardTitle>
@@ -27,9 +30,9 @@ defineProps({
     <CardContent class="grid place-items-center pt-0">
       <CalenderLoader v-if="!showCheckmark && !showCross" :height="200" />
       <LoginAnimation :show-checkmark="showCheckmark" :height="200" v-else />
-      <CardTitle v-if="showCheckmark"> Authenticated </CardTitle>
-      <CardTitle v-else-if="showCross"> Invalid email or password </CardTitle>
-      <CardTitle v-else> Logging in </CardTitle>
+      <CardTitle v-if="showCheckmark">{{ t('autoLogin.authenticated') }}</CardTitle>
+      <CardTitle v-else-if="showCross">{{ t('autoLogin.invalid') }}</CardTitle>
+      <CardTitle v-else>{{ t('autoLogin.loggingIn') }}</CardTitle>
     </CardContent>
   </Card>
 </template>

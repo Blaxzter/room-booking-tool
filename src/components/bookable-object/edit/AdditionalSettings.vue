@@ -13,7 +13,6 @@ import {
   FormLabel,
   FormMessage
 } from '@/components/ui/form'
-import { Button } from '@/components/ui/button'
 import {
   Select,
   SelectContent,
@@ -24,15 +23,12 @@ import {
 } from '@/components/ui/select'
 
 import NameFade from '@/components/utils/NameFade.vue'
-import {
-  bookableObjectRandoms,
-  bookableObjectRandomsLower
-} from '@/assets/ts/constants'
+import { BookableObjectTermType } from '@/composables/useBookableObjectTerms'
+
 import { Label } from '@/components/ui/label'
 import AvatarUploadComponent from '@/components/utils/AvatarUploadComponent.vue'
 
 import type { BookableObject } from '@/types'
-import { useGroups } from '@/stores/groups'
 import { useBookableObjects } from '@/stores/bookableObjects'
 import { useGlobalSettings } from '@/stores/globalSettings'
 const { isDemoUser } = storeToRefs(useGlobalSettings())
@@ -129,9 +125,9 @@ defineExpose({ getValues, validate, upload })
     </div>
     <FormField v-slot="{ componentField }" name="object_type">
       <FormItem>
-        <FormLabel
-          >Choose type of <NameFade :messages="bookableObjectRandoms"
-        /></FormLabel>
+        <FormLabel>
+          Choose type of <NameFade :termType="BookableObjectTermType.PLURAL" />
+        </FormLabel>
         <Select
           v-bind="componentField"
           @update:modelValue="$emit('update', 'type', values.object_type)"
@@ -154,8 +150,7 @@ defineExpose({ getValues, validate, upload })
           </SelectContent>
         </Select>
         <FormDescription>
-          Choose the type of
-          <NameFade :messages="bookableObjectRandomsLower" />.
+          Choose the type of <NameFade :termType="BookableObjectTermType.LOWERCASE" />.
         </FormDescription>
         <FormMessage />
       </FormItem>

@@ -1,7 +1,10 @@
 <script setup lang="ts">
+import { useI18n } from 'vue-i18n'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import EmailConfirmedAnimation from '@/components/animations/EmailConfirmedAnimation.vue'
 import LogoImage from '@/components/bits/LogoImage.vue'
+
+const { t } = useI18n()
 </script>
 
 <template>
@@ -12,17 +15,18 @@ import LogoImage from '@/components/bits/LogoImage.vue'
           <LogoImage />
           <div class="text-3xl font-bold">
             <div>BookiTool</div>
-            <div class="text-2xl font-normal text-muted-foreground">Email Verified</div>
+            <div class="text-2xl font-normal text-muted-foreground">{{ t('verifyEmail.success.title') }}</div>
           </div>
         </div>
       </CardTitle>
-      <CardDescription> Your email has been verified. </CardDescription>
+      <CardDescription>{{ t('verifyEmail.success.description') }}</CardDescription>
     </CardHeader>
     <CardContent class="max-w-sm m-auto">
       <EmailConfirmedAnimation :height="150" />
       <div class="mt-4 text-center text-sm">
-        You will automatically be redirected to the login page in 5 seconds. Or you can go back to
-        <router-link to="/login" class="underline"> login </router-link> by clicking this link.
+        {{ t('verifyEmail.success.redirect') }}
+        <router-link to="/login" class="underline">{{ t('verifyEmail.success.login') }}</router-link>
+        {{ t('verifyEmail.success.byClicking') }}
       </div>
     </CardContent>
   </Card>

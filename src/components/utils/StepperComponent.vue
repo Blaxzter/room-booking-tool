@@ -2,8 +2,23 @@
 import { ref } from 'vue'
 import { TabsContent, TabsList, TabsRoot, TabsTrigger } from 'radix-vue'
 import { CircleIcon, CircleDotIcon, CircleCheckBigIcon } from 'lucide-vue-next'
+import { useI18n } from 'vue-i18n'
 
-const steps = ref(['Basic Info', 'Permissions', 'Additional'])
+// Type annotation for the 't' function
+type TranslateFunction = {
+  (key: string, fallback?: string): string;
+  (key: string, options?: Record<string, any>): string;
+  (key: string, fallback: string, options?: Record<string, any>): string;
+}
+
+const { t } = useI18n() as { t: TranslateFunction }
+
+// Define steps with translation keys
+const steps = ref([
+  { key: 'stepper.steps.basicInfo', default: 'Basic Info' },
+  { key: 'stepper.steps.permissions', default: 'Permissions' },
+  { key: 'stepper.steps.additional', default: 'Additional' }
+])
 
 const activeStep = defineModel({ default: 0, required: true })
 </script>
@@ -24,7 +39,7 @@ const activeStep = defineModel({ default: 0, required: true })
               <CircleCheckBigIcon class="h-6 w-6" v-else />
             </div>
             <div>
-              {{ step }}
+              {{ t(step.key, step.default) }}
             </div>
           </div>
         </TabsTrigger>
@@ -32,7 +47,7 @@ const activeStep = defineModel({ default: 0, required: true })
       </template>
     </TabsList>
     <TabsContent :value="index" v-for="(step, index) in steps" :key="index" class="w-full">
-      <slot :name="`step-${index}`"> Missing content for step {{ index }} </slot>
+      <slot :name="`step-${index}`"> {{ t('stepper.missingContent', { index }) || `Missing content for step ${index}` }} </slot>
     </TabsContent>
   </TabsRoot>
 </template>

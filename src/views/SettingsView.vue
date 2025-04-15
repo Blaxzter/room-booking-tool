@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { computed, onMounted, ref } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
+import { useI18n } from 'vue-i18n'
 
 import { Separator } from '@/components/ui/separator'
 
@@ -13,6 +14,7 @@ import { useInitialDataStore } from '@/stores/initial'
 import { ScrollArea } from '@/components/ui/scroll-area'
 
 const { fetchSettingsViewData } = useInitialDataStore()
+const { t } = useI18n()
 
 const router = useRouter()
 const route = useRoute()
@@ -32,25 +34,25 @@ const pages: Record<string, any> = {
 const title = computed(() => {
   switch (selectedPage.value) {
     case 'profile':
-      return 'Profile'
+      return t('settings.profile.title')
     case 'account':
-      return 'Account'
+      return t('settings.account.title')
     case 'notifications':
-      return 'Notifications'
+      return t('settings.notifications.title')
   }
-  return 'Settings'
+  return t('settings.title')
 })
 
 const description = computed(() => {
   switch (selectedPage.value) {
     case 'profile':
-      return 'This is how others will see you on the site.'
+      return t('settings.profile.description')
     case 'account':
-      return 'Update your account settings. Set your preferred language and timezone.'
+      return t('settings.account.description')
     case 'notifications':
-      return 'Manage your notification settings and set preferences.'
+      return t('settings.notifications.description')
   }
-  return 'Manage your account settings and set e-mail preferences.'
+  return t('settings.description')
 })
 
 const PageComponent = computed(() => pages[selectedPage.value])

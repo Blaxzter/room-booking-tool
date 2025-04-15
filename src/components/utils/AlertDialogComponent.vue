@@ -1,5 +1,8 @@
 <script setup lang="ts">
-import type { PropType } from 'vue'
+import { CheckIcon } from 'lucide-vue-next'
+import { useI18n } from 'vue-i18n'
+import { computed } from 'vue'
+
 import {
   AlertDialog,
   AlertDialogAction,
@@ -10,39 +13,26 @@ import {
   AlertDialogHeader,
   AlertDialogTitle
 } from '@/components/ui/alert-dialog'
-import { CheckIcon } from 'lucide-vue-next'
-import { Button } from '@/components/ui/button'
 
-defineProps({
-  title: {
-    type: String,
-    required: true
-  },
-  description: {
-    type: String,
-    required: true
-  },
-  onConfirm: {
-    type: Function as PropType<(...args: any[]) => void>,
-    required: true
-  },
-  onDismiss: {
-    type: Function as PropType<(...args: any[]) => void>,
-    default: () => () => {}
-  },
-  confirmIcon: {
-    type: Object,
-    default: () => CheckIcon
-  },
-  confirmVariant: {
-    type: String,
-    default: 'destructive'
-  },
-  onConfirmText: {
-    type: String,
-    default: 'Continue'
-  }
+interface Props {
+  title: string;
+  description: string;
+  onConfirm: (...args: any[]) => void;
+  onDismiss?: (...args: any[]) => void;
+  confirmIcon?: any;
+  confirmVariant?: string;
+  onConfirmText?: string;
+}
+
+const props = withDefaults(defineProps<Props>(), {
+  onDismiss: () => () => {},
+  confirmIcon: () => CheckIcon,
+  confirmVariant: 'destructive',
+  onConfirmText: undefined
 })
+
+const { t } = useI18n()
+const confirmText = computed(() => props.onConfirmText ?? t('common.continue'))
 </script>
 
 <template>
@@ -53,12 +43,12 @@ defineProps({
         <AlertDialogDescription>{{ description }}</AlertDialogDescription>
       </AlertDialogHeader>
       <AlertDialogFooter>
-        <AlertDialogCancel @click="onDismiss">Cancel</AlertDialogCancel>
+        <AlertDialogCancel @click="onDismiss">{{ t('common.cancel') }}</AlertDialogCancel>
 
         <AlertDialogAction @click="onConfirm" :varient="confirmVariant">
           <component :is="confirmIcon" class="w-4 h-4 me-2" />
           <slot name="confirm">
-            {{ onConfirmText }}
+            {{ confirmText }}
           </slot>
         </AlertDialogAction>
       </AlertDialogFooter>

@@ -12,15 +12,15 @@ import {
   DrawerTitle,
   DrawerTrigger
 } from '@/components/ui/drawer'
-
 import { Button } from '@/components/ui/button'
+
+import { BookableObjectTermType } from '@/composables/useBookableObjectTerms'
 import NameFade from '@/components/utils/NameFade.vue'
 import StepperComponent from '@/components/utils/StepperComponent.vue'
 import DefaultSettings from '@/components/bookable-object/edit/DefaultSettings.vue'
 import AccessSettings from '@/components/bookable-object/edit/AccessSettings.vue'
 import AdditionalSettings from '@/components/bookable-object/edit/AdditionalSettings.vue'
 
-import { bookableObjectRandomsSingular } from '@/assets/ts/constants'
 import { useBookableObjects } from '@/stores/bookableObjects'
 
 const activeStep = ref(0)
@@ -156,7 +156,7 @@ const isDesktop = useMediaQuery('(min-width: 768px)')
       <DialogHeader class="mb-2">
         <DialogTitle class="fade-transition">
           Create a new
-          <NameFade :messages="bookableObjectRandomsSingular" />
+          <NameFade :termType="BookableObjectTermType.SINGULAR" />
         </DialogTitle>
       </DialogHeader>
       <GridForm />

@@ -11,9 +11,11 @@ import { Select, SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectVa
 import { CopyIcon } from '@radix-icons/vue'
 
 import NameFade from '@/components/utils/NameFade.vue'
-import { bookableObjectRandomsLower } from '@/assets/ts/constants'
+import { BookableObjectTermType } from '@/composables/useBookableObjectTerms'
+
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from '@/components/ui/collapsible'
 import type { BookableObject } from '@/types'
+
 interface InitialValues {
   is_internal: boolean
   confirm_booking_required: boolean
@@ -113,7 +115,7 @@ defineExpose({ getValues, validate })
         <div class="flex items-center justify-between gap-x-2 border rounded px-3 py-0.5 max-w-full">
           <span class="text-xs text-gray-500 truncate overflow-ellipsis"
             >{{ currentHost }}/<NameFade
-              :messages="bookableObjectRandomsLower"
+              :termType="BookableObjectTermType.LOWERCASE"
               @value-changed="visibleMessage = $event"
             />/{{ values.uniqueId }}</span
           >

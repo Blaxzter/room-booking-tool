@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { ref } from 'vue'
+import { useI18n } from 'vue-i18n'
 
 import { useUser } from '@/stores/user'
 import { useForm } from 'vee-validate'
@@ -29,6 +30,8 @@ import LogoImage from '@/components/bits/LogoImage.vue'
 import { useGlobalSettings } from '@/stores/globalSettings'
 import { storeToRefs } from 'pinia'
 import { Checkbox } from '@/components/ui/checkbox'
+
+const { t } = useI18n()
 const { displayLegal } = storeToRefs(useGlobalSettings())
 
 const signupSchema = z.object({
@@ -98,13 +101,13 @@ const onSubmit = async () => {
           <div class="text-3xl font-bold">
             <div>BookiTool</div>
             <div class="text-2xl font-normal text-muted-foreground">
-              Sign Up
+              {{ t('register.title') }}
             </div>
           </div>
         </div>
       </CardTitle>
       <CardDescription>
-        Enter your information to create an account
+        {{ t('register.description') }}
       </CardDescription>
     </CardHeader>
     <CardContent class="max-w-sm m-auto">
@@ -112,7 +115,7 @@ const onSubmit = async () => {
         <div class="grid grid-cols-2 gap-4">
           <FormField name="first_name" v-slot="{ componentField }">
             <FormItem>
-              <FormLabel for="first-name">First name*</FormLabel>
+              <FormLabel for="first-name">{{ t('register.firstName') }}*</FormLabel>
               <FormControl class="col-span-3">
                 <Input id="first-name" v-bind="componentField" />
                 <FormMessage />
@@ -121,7 +124,7 @@ const onSubmit = async () => {
           </FormField>
           <FormField name="last_name" v-slot="{ componentField }">
             <FormItem>
-              <FormLabel for="last-name">Last name*</FormLabel>
+              <FormLabel for="last-name">{{ t('register.lastName') }}*</FormLabel>
               <FormControl class="col-span-3">
                 <Input id="last-name" v-bind="componentField" />
                 <FormMessage />
@@ -131,7 +134,7 @@ const onSubmit = async () => {
         </div>
         <FormField name="email" v-slot="{ componentField }">
           <FormItem>
-            <FormLabel for="email">Email</FormLabel>
+            <FormLabel for="email">{{ t('register.email') }}</FormLabel>
             <FormControl class="col-span-3">
               <Input id="email" type="email" v-bind="componentField" />
               <FormMessage />
@@ -140,7 +143,7 @@ const onSubmit = async () => {
         </FormField>
         <FormField name="password" v-slot="{ componentField }">
           <FormItem>
-            <FormLabel for="password">Password</FormLabel>
+            <FormLabel for="password">{{ t('register.password') }}</FormLabel>
             <FormControl class="col-span-3">
               <Input id="password" type="password" v-bind="componentField" />
               <FormMessage />
@@ -160,16 +163,16 @@ const onSubmit = async () => {
                 <Checkbox :checked="value" @update:checked="handleChange" />
               </FormControl>
               <div class="space-y-1 leading-none">
-                <FormLabel>I agree to the terms and conditions</FormLabel>
+                <FormLabel>{{ t('register.legal.agree') }}</FormLabel>
                 <FormDescription>
-                  By signing up, you agree to our
-                  <router-link to="/terms-of-service" class="underline"
-                    >Terms of Service</router-link
-                  >
-                  and
-                  <router-link to="/privacy" class="underline"
-                    >Privacy Policy</router-link
-                  >
+                  {{ t('register.legal.description') }}
+                  <router-link to="/terms-of-service" class="underline">
+                    {{ t('register.legal.termsOfService') }}
+                  </router-link>
+                  {{ t('register.legal.and') }}
+                  <router-link to="/privacy" class="underline">
+                    {{ t('register.legal.privacyPolicy') }}
+                  </router-link>
                 </FormDescription>
                 <FormMessage />
               </div>
@@ -177,12 +180,14 @@ const onSubmit = async () => {
           </FormField>
         </template>
         <Button type="submit" class="w-full mt-3" :loading="loading">
-          Create an account
+          {{ t('register.createAccount') }}
         </Button>
       </form>
       <div class="mt-4 text-center text-sm max-w-sm m-auto">
-        Already have an account?
-        <router-link to="/login" class="underline"> Sign in </router-link>
+        {{ t('register.haveAccount') }}
+        <router-link to="/login" class="underline"> 
+          {{ t('register.signIn') }} 
+        </router-link>
       </div>
     </CardContent>
   </Card>

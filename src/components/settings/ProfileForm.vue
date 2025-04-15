@@ -3,6 +3,7 @@ import { ref } from 'vue'
 import { useForm } from 'vee-validate'
 import { toTypedSchema } from '@vee-validate/zod'
 import * as z from 'zod'
+import { useI18n } from 'vue-i18n'
 
 import { useUser } from '@/stores/user'
 import { useGlobalSettings } from '@/stores/globalSettings'
@@ -28,6 +29,7 @@ const { toast } = useToast()
 const { updateUserData } = useUser()
 const { user } = storeToRefs(useUser())
 const { isDemoUser } = storeToRefs(useGlobalSettings())
+const { t } = useI18n()
 
 const profileFormSchema = toTypedSchema(
   z.object({
@@ -35,30 +37,30 @@ const profileFormSchema = toTypedSchema(
     display_name: z
       .string()
       .min(2, {
-        message: 'Username must be at least 2 characters.'
+        message: t('settings.profile.validation.displayNameMin')
       })
       .max(30, {
-        message: 'Username must not be longer than 30 characters.'
+        message: t('settings.profile.validation.displayNameMax')
       }),
     first_name: z
       .string()
       .min(2, {
-        message: 'Username must be at least 2 characters.'
+        message: t('settings.profile.validation.firstNameMin')
       })
       .max(30, {
-        message: 'Username must not be longer than 30 characters.'
+        message: t('settings.profile.validation.firstNameMax')
       }),
     last_name: z
       .string()
       .min(2, {
-        message: 'Username must be at least 2 characters.'
+        message: t('settings.profile.validation.lastNameMin')
       })
       .max(30, {
-        message: 'Username must not be longer than 30 characters.'
+        message: t('settings.profile.validation.lastNameMax')
       }),
     email: z
       .string({
-        required_error: 'Please select an email to display.'
+        required_error: t('settings.profile.validation.emailRequired')
       })
       .email()
   })
@@ -94,8 +96,8 @@ const avatarChanged = ref(false)
 const updateAvatar = async (values: any) => {
   if (isDemoUser.value) {
     toast({
-      title: 'Demo Mode',
-      description: 'Avatar updates are disabled in demo mode.',
+      title: t('settings.demo.title'),
+      description: t('settings.demo.avatarDisabled'),
       variant: 'destructive'
     })
     return values
@@ -116,14 +118,14 @@ const onSubmit = handleSubmit(async (values) => {
   await updateUserData(updatedValues as UpdateUserRequest).then(
     () => {
       toast({
-        title: 'Profile updated',
-        description: 'Your profile has been updated successfully.',
+        title: t('settings.profile.toast.success.title'),
+        description: t('settings.profile.toast.success.description'),
         variant: 'success'
       })
     },
     (error) => {
       toast({
-        title: 'Profile update failed',
+        title: t('settings.profile.toast.error.title'),
         description: error.message,
         variant: 'destructive'
       })
@@ -135,7 +137,7 @@ const onSubmit = handleSubmit(async (values) => {
 <template>
   <form class="space-y-8" @submit.prevent="onSubmit">
     <div class="grid gap-4">
-      <Label>Display Image</Label>
+      <Label>{{ t('settings.profile.displayImage') }}</Label>
       <AvatarUploadComponent
         ref="avatarUpload"
         :height="6"
@@ -148,23 +150,22 @@ const onSubmit = handleSubmit(async (values) => {
         :disabled="isDemoUser"
       />
       <div class="text-sm text-muted-foreground">
-        Upload a new image to change your profile picture.
+        {{ t('settings.profile.uploadImageHelp') }}
       </div>
     </div>
 
     <FormField v-slot="{ componentField }" name="display_name">
       <FormItem>
-        <FormLabel>Displayname</FormLabel>
+        <FormLabel>{{ t('settings.profile.displayName') }}</FormLabel>
         <FormControl>
           <Input
             type="text"
-            placeholder="Display Name"
+            :placeholder="t('settings.profile.displayNamePlaceholder')"
             v-bind="componentField"
           />
         </FormControl>
         <FormDescription>
-          This is the name that will be displayed publicly when you approve a
-          booking.
+          {{ t('settings.profile.displayNameHelp') }}
         </FormDescription>
         <FormMessage />
       </FormItem>
@@ -172,17 +173,16 @@ const onSubmit = handleSubmit(async (values) => {
 
     <FormField v-slot="{ componentField }" name="email">
       <FormItem>
-        <FormLabel>Email</FormLabel>
+        <FormLabel>{{ t('settings.profile.email') }}</FormLabel>
         <FormControl>
           <Input
             type="text"
-            placeholder="Your email address"
+            :placeholder="t('settings.profile.emailPlaceholder')"
             v-bind="componentField"
           />
         </FormControl>
         <FormDescription>
-          This is the email address that will be displayed and to which we are
-          sending emails to.
+          {{ t('settings.profile.emailHelp') }}
         </FormDescription>
         <FormMessage />
       </FormItem>
@@ -196,15 +196,15 @@ const onSubmit = handleSubmit(async (values) => {
           class="flex-grow"
         >
           <FormItem>
-            <FormLabel>Firstname</FormLabel>
+            <FormLabel>{{ t('settings.profile.firstName') }}</FormLabel>
             <FormControl>
               <Input
                 type="text"
-                placeholder="Firstname"
+                :placeholder="t('settings.profile.firstNamePlaceholder')"
                 v-bind="componentField"
               />
             </FormControl>
-            <FormDescription> Your first name. </FormDescription>
+            <FormDescription>{{ t('settings.profile.firstNameHelp') }}</FormDescription>
             <FormMessage />
           </FormItem>
         </FormField>
@@ -216,15 +216,15 @@ const onSubmit = handleSubmit(async (values) => {
           class="flex-grow"
         >
           <FormItem>
-            <FormLabel>Lastname</FormLabel>
+            <FormLabel>{{ t('settings.profile.lastName') }}</FormLabel>
             <FormControl>
               <Input
                 type="text"
-                placeholder="Lastname"
+                :placeholder="t('settings.profile.lastNamePlaceholder')"
                 v-bind="componentField"
               />
             </FormControl>
-            <FormDescription> Your last name. </FormDescription>
+            <FormDescription>{{ t('settings.profile.lastNameHelp') }}</FormDescription>
             <FormMessage />
           </FormItem>
         </FormField>
@@ -232,7 +232,7 @@ const onSubmit = handleSubmit(async (values) => {
     </div>
 
     <div class="flex gap-2 justify-start">
-      <Button type="submit"> Update profile </Button>
+      <Button type="submit">{{ t('settings.profile.updateButton') }}</Button>
     </div>
   </form>
 </template>

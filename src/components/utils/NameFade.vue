@@ -6,25 +6,35 @@
 
 <script setup lang="ts">
 import { computed, onMounted, type PropType, ref } from 'vue'
+import { useBookableObjectTerms, BookableObjectTermType } from '@/composables/useBookableObjectTerms'
 
 const props = defineProps({
   messages: {
-    type: Array,
-    required: true
-  } as any as PropType<string[]>
+    type: Array as PropType<string[]>,
+    required: false
+  },
+  termType: {
+    type: String as PropType<BookableObjectTermType>,
+    default: BookableObjectTermType.PLURAL
+  }
 })
 
 const emit = defineEmits(['valueChanged'])
 
+const { getBookableObjectTerms } = useBookableObjectTerms()
 const messageIndex = ref(0)
 
 const currentMessage = computed(() => {
-  return props.messages![messageIndex.value] as string
+  // If messages are provided, use them, otherwise use the internationalized terms
+  const messageList = props.messages || getBookableObjectTerms(props.termType as BookableObjectTermType)
+  return messageList[messageIndex.value] as string
 })
 
 onMounted(() => {
   setInterval(() => {
-    messageIndex.value = (messageIndex.value + 1) % props.messages!.length
+    // If messages are provided, use their length, otherwise use the internationalized terms length
+    const messageList = props.messages || getBookableObjectTerms(props.termType as BookableObjectTermType)
+    messageIndex.value = (messageIndex.value + 1) % messageList.length
     emit('valueChanged', currentMessage.value)
   }, 4000)
 })

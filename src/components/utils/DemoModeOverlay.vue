@@ -14,10 +14,12 @@ import { Textarea } from '@/components/ui/textarea'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { Checkbox  } from '@/components/ui/checkbox'
+import { useI18n } from 'vue-i18n'
 
 import { useGlobalSettings } from '@/stores/globalSettings'
 import { useUser } from '@/stores/user'
 
+const { t } = useI18n()
 const { isDemoUser, demoDialogOpen } = storeToRefs(useGlobalSettings())
 const { user } = storeToRefs(useUser())
 
@@ -77,12 +79,12 @@ const sendMemberRequest = async () => {
   const { toast } = useToast()
   let isError = false
   if (message.value.length <= 10) {
-    error_message.value = 'Please enter a message with at least 10 characters'
+    error_message.value = t('demoMode.contactRequest.validation.messageLength')
     isError = true
   }
 
   if (!validateEmail()) {
-    error_message_contact.value = 'Please enter a valid email address';
+    error_message_contact.value = t('demoMode.contactRequest.validation.invalidEmail')
     isError = true
   }
 
@@ -104,22 +106,22 @@ const sendMemberRequest = async () => {
       console.log('res:', res)
       if (res.data.name === "DirectusError") {
         toast({
-          title: 'Error',
-          description: res.data.code === '400' ? 'User already created a request.' : 'An error occurred while sending the request',
+          title: t('demoMode.contactRequest.toast.error.title'),
+          description: res.data.code === '400' ? t('demoMode.contactRequest.toast.error.userExists') : t('demoMode.contactRequest.toast.error.description'),
           variant: 'destructive',
         })
         return
       }
       toast({
-        title: 'Request sent',
-        description: 'Your request has been sent to the admin',
+        title: t('demoMode.contactRequest.toast.requestSent.title'),
+        description: t('demoMode.contactRequest.toast.requestSent.description'),
         variant: 'success',
       })
     }).catch((err) => {
       console.error('err:', err)
       toast({
-        title: 'Error',
-        description: 'An error occurred while sending the request',
+        title: t('demoMode.contactRequest.toast.error.title'),
+        description: t('demoMode.contactRequest.toast.error.description'),
         variant: 'destructive',
       })
     })
@@ -132,33 +134,33 @@ const sendMemberRequest = async () => {
   <Dialog v-model:open="demoDialogOpen" v-if="isDemoUser" >
     <DialogContent class="sm:max-w-[450px]">
       <DialogHeader>
-        <DialogTitle>Demo Mode Active</DialogTitle>
+        <DialogTitle>{{ t('demoMode.title') }}</DialogTitle>
         <DialogDescription>
           <div>
-            This is a demo environment with limited capacity:
+            {{ t('demoMode.description') }}
           </div>
           <div>
-            - Up to 3 bookable objects
+            - {{ t('demoMode.limits.objects') }}
           </div>
           <div>
-            - Up to 3 booking requests
+            - {{ t('demoMode.limits.requests') }}
           </div>
           <div>
-            - Up to 3 groups
+            - {{ t('demoMode.limits.groups') }}
           </div>
 
           <div class="mt-2">
-            If you'd like to use this platform personally or for your organization, please reach out for a full account.
+            {{ t('demoMode.contactRequest.intro') }}
           </div>
         </DialogDescription>
       </DialogHeader>
       <div class="items-center">
         <Label for="contactEmail">
-          Your Contact Email
+          {{ t('demoMode.contactRequest.emailLabel') }}
         </Label>
         <Input id="contactEmail" type="email" v-model="contactEmail" />
         <div class="text-muted-foreground text-sm mt-2">
-          In case we need to contact you regarding your request
+          {{ t('demoMode.contactRequest.emailHelp') }}
         </div>
         <div class="text-destructive text-sm mt-2" v-if="error_message_contact">
           {{ error_message_contact }}
@@ -166,11 +168,11 @@ const sendMemberRequest = async () => {
       </div>
       <div class="items-center">
         <Label for="message">
-          Message
+          {{ t('demoMode.contactRequest.messageLabel') }}
         </Label>
-        <Textarea id="message" placeholder="Describe your request..." class="col-span-3" v-model="message" />
+        <Textarea id="message" :placeholder="t('demoMode.contactRequest.messagePlaceholder')" class="col-span-3" v-model="message" />
         <div class="text-muted-foreground text-sm mt-2">
-          Please describe what you would like to use the platform for.
+          {{ t('demoMode.contactRequest.messageHelp') }}
         </div>
         <div class="text-destructive text-sm mt-2" v-if="error_message">
           {{ error_message }}
@@ -184,14 +186,13 @@ const sendMemberRequest = async () => {
             :checked="dontShowAgain"
             @update:checked="dontShowAgainChange"
           />
-          <span>Don't show again</span>
+          <span>{{ t('demoMode.contactRequest.dontShowAgain') }}</span>
         </Label>
       </div>
 
       <DialogFooter class="flex justify-between">
-
         <Button type="submit" @click="sendMemberRequest">
-          Send Member Request
+          {{ t('demoMode.contactRequest.sendRequest') }}
         </Button>
       </DialogFooter>
     </DialogContent>

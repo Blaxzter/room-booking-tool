@@ -9,5 +9,224 @@
     "signIn": "Sign in",
     "noAccount": "Don't have an account?",
     "signUp": "Sign up"
+  },
+  "register": {
+    "title": "Sign Up",
+    "description": "Enter your information to create an account",
+    "firstName": "First name",
+    "lastName": "Last name",
+    "email": "Email",
+    "password": "Password",
+    "createAccount": "Create an account",
+    "haveAccount": "Already have an account?",
+    "signIn": "Sign in",
+    "legal": {
+      "agree": "I agree to the terms and conditions",
+      "description": "By signing up, you agree to our",
+      "termsOfService": "Terms of Service",
+      "and": "and",
+      "privacyPolicy": "Privacy Policy"
+    }
+  },
+  "home": {
+    "title": {
+      "your": "Your"
+    },
+    "description": "Here you can find all the bookable objects you have access to within the selected group.",
+    "noBookableObjects": {
+      "prefix": "No bookable",
+      "suffix": "found."
+    }
+  },
+  "emailVerification": {
+    "title": "Verification Email Sent",
+    "description": "Please check your email to verify your account.",
+    "backToLogin": "Go back to",
+    "login": "login"
+  },
+  "verifyEmail": {
+    "process": {
+      "title": "Email is being verified",
+      "description": "Please wait while we verify your email.",
+      "wait": "This should take only a few seconds. If it takes longer, please contact support."
+    },
+    "success": {
+      "title": "Email Verified",
+      "description": "Your email has been verified.",
+      "redirect": "You will automatically be redirected to the login page in 5 seconds. Or you can go back to",
+      "login": "login",
+      "byClicking": "by clicking this link."
+    },
+    "errors": {
+      "noToken": {
+        "title": "No token found",
+        "description": "No token was found in the URL. Please check your email for the verification link."
+      },
+      "invalidToken": {
+        "title": "Invalid token",
+        "description": "The token is invalid, has expired or has already been used."
+      }
+    }
+  },
+  "autoLogin": {
+    "title": "Autologin",
+    "loggingIn": "Logging in",
+    "authenticated": "Authenticated",
+    "invalid": "Invalid email or password"
+  },
+  "common": {
+    "cancel": "Cancel",
+    "continue": "Continue",
+    "delete": "Delete"
+  },
+  "settings": {
+    "title": "Settings",
+    "description": "Manage your account settings and set e-mail preferences.",
+    "toast": {
+      "title": "Settings Updated"
+    },
+    "telegram": {
+      "title": "Telegram",
+      "description": "Link your Telegram account to receive notifications",
+      "accountLinked": "Telegram Account linked",
+      "linkedTo": "Your account is linked to",
+      "toast": {
+        "linked": "Telegram account linked successfully",
+        "unlinked": "Telegram account unlinked successfully"
+      }
+    },
+    "profile": {
+      "title": "Profile",
+      "description": "This is how others will see you on the site.",
+      "displayImage": "Display Image",
+      "uploadImageHelp": "Upload a new image to change your profile picture.",
+      "displayName": "Displayname",
+      "displayNamePlaceholder": "Display Name",
+      "displayNameHelp": "This is the name that will be displayed publicly when you approve a booking.",
+      "email": "Email",
+      "emailPlaceholder": "Your email address",
+      "emailHelp": "This is the email address that will be displayed and to which we are sending emails to.",
+      "firstName": "Firstname",
+      "firstNamePlaceholder": "Firstname",
+      "firstNameHelp": "Your first name.",
+      "lastName": "Lastname",
+      "lastNamePlaceholder": "Lastname",
+      "lastNameHelp": "Your last name.",
+      "updateButton": "Update profile",
+      "validation": {
+        "displayNameMin": "Username must be at least 2 characters.",
+        "displayNameMax": "Username must not be longer than 30 characters.",
+        "firstNameMin": "Username must be at least 2 characters.",
+        "firstNameMax": "Username must not be longer than 30 characters.",
+        "lastNameMin": "Username must be at least 2 characters.",
+        "lastNameMax": "Username must not be longer than 30 characters.",
+        "emailRequired": "Please select an email to display."
+      },
+      "toast": {
+        "success": {
+          "title": "Profile updated",
+          "description": "Your profile has been updated successfully."
+        },
+        "error": {
+          "title": "Profile update failed"
+        }
+      }
+    },
+    "account": {
+      "title": "Account",
+      "description": "Update your account settings. Set your preferred language and timezone.",
+      "integrations": "Integrations",
+      "deleteAccount": {
+        "title": "Delete account",
+        "description": "If you delete your account, all your data will be permanently removed from our servers. All bookable objects that you created, their bookings and all groups you created will be deleted.",
+        "button": "Delete account",
+        "confirmation": {
+          "title": "Are you absolutely sure?",
+          "warning": "This action cannot be undone. This will permanently delete your account and remove your data from our servers.",
+          "typeEmail": "Please type {email} to confirm.",
+          "emailPlaceholder": "Type your email"
+        }
+      }
+    },
+    "notifications": {
+      "title": "Notifications",
+      "description": "Configure how you receive notifications.",
+      "types": {
+        "email": "Email",
+        "telegram": "Telegram"
+      },
+      "userOverrideHelp": "This setting will override all other settings. If disabled, you will not receive any notifications.",
+      "groups": {
+        "title": "Groups",
+        "help": "Setting group notifications will disable all notifications if you are receiving a notification because you are part of the group. If you are owner of a bookable object, you will still receive notifications for that object if not disabled below."
+      },
+      "bookableObjects": {
+        "title": "Bookable Objects",
+        "help": "Setting bookable object notifications will disable all notifications coming from the bookable object."
+      },
+      "toast": {
+        "title": "Settings Updated",
+        "description": "{origin} notification ({type}) settings updated."
+      }
+    },
+    "demo": {
+      "title": "Demo Mode",
+      "avatarDisabled": "Avatar updates are disabled in demo mode."
+    }
+  },
+  "avatar": {
+    "deleteTitle": "Delete Avatar",
+    "deleteConfirmation": "Are you sure you want to delete the avatar?",
+    "demoDisabled": "Image upload is disabled in demo mode",
+    "noPermission": "You do not have permission to change this image"
+  },
+  "demoMode": {
+    "title": "Demo Mode Active",
+    "description": "This is a demo environment with limited capacity:",
+    "limits": {
+      "objects": "Up to 3 bookable objects",
+      "requests": "Up to 3 booking requests",
+      "groups": "Up to 3 groups"
+    },
+    "contactRequest": {
+      "intro": "If you'd like to use this platform personally or for your organization, please reach out for a full account.",
+      "emailLabel": "Your Contact Email",
+      "emailHelp": "In case we need to contact you regarding your request",
+      "messageLabel": "Message",
+      "messagePlaceholder": "Describe your request...",
+      "messageHelp": "Please describe what you would like to use the platform for.",
+      "dontShowAgain": "Don't show again",
+      "sendRequest": "Send Member Request",
+      "validation": {
+        "messageLength": "Please enter a message with at least 10 characters",
+        "invalidEmail": "Please enter a valid email address"
+      },
+      "toast": {
+        "requestSent": {
+          "title": "Request sent",
+          "description": "Your request has been sent to the admin"
+        },
+        "error": {
+          "title": "Error",
+          "description": "An error occurred while sending the request",
+          "userExists": "User already created a request."
+        }
+      }
+    }
+  },
+  "stepper": {
+    "steps": {
+      "basicInfo": "Basic Info",
+      "permissions": "Permissions",
+      "additional": "Additional"
+    },
+    "missingContent": "Missing content for step {index}"
+  },
+  "bookableObjects": {
+    "types": {
+      "singular": ["Room", "Object", "Space", "Anything"],
+      "plural": ["Rooms", "Objects", "Spaces", "Anything"],
+      "lowercase": ["rooms", "objects", "spaces", "anything"]
+    }
   }
 }

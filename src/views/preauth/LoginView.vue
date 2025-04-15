@@ -97,7 +97,7 @@ onMounted(async () => {
                   </div>
                 </div>
               </CardTitle>
-              <LanguageSwitcher variant="ghost" flagSize="20" />
+              <LanguageSwitcher variant="ghost" :flagSize="20" />
             </div>
             <CardDescription>{{ t('login.description') }}</CardDescription>
           </CardHeader>

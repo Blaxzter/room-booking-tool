@@ -2,6 +2,7 @@
 import { computed, onMounted } from 'vue'
 import { storeToRefs } from 'pinia'
 import { useRouter } from 'vue-router'
+import { useI18n } from 'vue-i18n'
 
 import { ScrollArea, ScrollBar } from '@/components/ui/scroll-area'
 import { Separator } from '@/components/ui/separator'
@@ -9,17 +10,17 @@ import { Separator } from '@/components/ui/separator'
 import { useInitialDataStore } from '@/stores/initial'
 import { useBookableObjects } from '@/stores/bookableObjects'
 import { useGlobal } from '@/stores/global'
+import { BookableObjectTermType } from '@/composables/useBookableObjectTerms'
 
 import BookableObjectCard from '@/components/home/BookableObjectCard.vue'
 import CalenderLoader from '@/components/animations/CalenderLoader.vue'
 import BookableObjectRequestDialog from '@/components/bookable-object/BookableObjectRequestDialog.vue'
 import NameFade from '@/components/utils/NameFade.vue'
-
-import { bookableObjectRandoms } from '@/assets/ts/constants'
 import NotFoundAnimation from '@/components/animations/NotFoundAnimation.vue'
 import DemoModeOverlay from '@/components/utils/DemoModeOverlay.vue'
 
 const router = useRouter()
+const { t } = useI18n()
 
 const bookableObjectStore = useBookableObjects()
 
@@ -48,12 +49,12 @@ onMounted(async () => {
         <div class="flex items-center justify-between">
           <div class="space-y-1">
             <h2 class="text-2xl font-semibold tracking-tight">
-              Your
-              <NameFade :messages="bookableObjectRandoms" />
+              {{ t('home.title.your') }}
+              <NameFade :termType="BookableObjectTermType.PLURAL" />
               {{ searchString }}
             </h2>
             <p class="text-sm text-muted-foreground">
-              Here you can find all the bookable objects you have access to within the selected group.
+              {{ t('home.description') }}
             </p>
           </div>
           <div class="ml-auto mr-4">
@@ -86,7 +87,7 @@ onMounted(async () => {
             <div v-else class="mt-3">
               <NotFoundAnimation :height="200" />
               <p class="text-center text-muted-foreground">
-                No bookable <NameFade :messages="bookableObjectRandoms" /> found.
+                {{ t('home.noBookableObjects.prefix') }} <NameFade :termType="BookableObjectTermType.PLURAL" /> {{ t('home.noBookableObjects.suffix') }}
               </p>
             </div>
             <ScrollBar orientation="horizontal" />

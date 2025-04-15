@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import { ref } from 'vue'
 import { storeToRefs } from 'pinia'
+import { useI18n } from 'vue-i18n'
 import { MailIcon, SendIcon } from 'lucide-vue-next'
 
 import { Separator } from '@/components/ui/separator'
@@ -11,9 +11,8 @@ import { useNotificationSetting } from '@/stores/notificationSettings'
 import { useToast } from '@/components/ui/toast'
 
 import type { NotificationSetting } from '@/types'
-import InDevelopment from '@/components/utils/InDevelopment.vue'
-import { ScrollArea } from '@/components/ui/scroll-area'
 
+const { t } = useI18n()
 const {
   notificationSettingsLoading,
   userNotificationSetting,
@@ -25,8 +24,8 @@ const { updateNotificationSetting } = useNotificationSetting()
 type NotificationType = 'email_notification' | 'telegram'
 
 const typeToOrigin: { [key in NotificationType]: string } = {
-  email_notification: 'Email',
-  telegram: 'Telegram'
+  email_notification: t('settings.notifications.types.email'),
+  telegram: t('settings.notifications.types.telegram')
 }
 
 const toggleNotification = async (setting: NotificationSetting, type: NotificationType, origin: string) => {
@@ -42,8 +41,8 @@ const toggleNotification = async (setting: NotificationSetting, type: Notificati
     const { toast } = useToast()
     toast({
       variant: 'success',
-      title: 'Settings Updated',
-      description: `${origin} notification (${typeToOrigin[type]}) settings updated.`
+      title: t('settings.notifications.toast.title'),
+      description: t('settings.notifications.toast.description', { origin, type: typeToOrigin[type] })
     })
   })
 }
@@ -51,8 +50,8 @@ const toggleNotification = async (setting: NotificationSetting, type: Notificati
 
 <template>
   <div>
-    <h3 class="text-lg font-medium">Notifications</h3>
-    <p class="text-sm text-muted-foreground">Configure how you receive notifications.</p>
+    <h3 class="text-lg font-medium">{{ t('settings.notifications.title') }}</h3>
+    <p class="text-sm text-muted-foreground">{{ t('settings.notifications.description') }}</p>
   </div>
   <Separator />
   <div class="space-y-8 relative">
@@ -64,13 +63,13 @@ const toggleNotification = async (setting: NotificationSetting, type: Notificati
           <div class="font-semibold">
             <div class="flex flex-col items-center space-x-1">
               <MailIcon class="h-4 w-4" />
-              <span class="hidden md:inline"> Email </span>
+              <span class="hidden md:inline">{{ t('settings.notifications.types.email') }}</span>
             </div>
           </div>
           <div class="font-semibold">
             <div class="flex flex-col items-center space-x-1">
               <SendIcon class="h-4 w-4" />
-              <span class="hidden md:inline"> Telegram </span>
+              <span class="hidden md:inline">{{ t('settings.notifications.types.telegram') }}</span>
             </div>
           </div>
         </div>
@@ -93,14 +92,13 @@ const toggleNotification = async (setting: NotificationSetting, type: Notificati
           </template>
         </div>
         <div class="text-muted-foreground">
-          This setting will override all other settings. <br />
-          If disabled, you will not receive any notifications.
+          {{ t('settings.notifications.userOverrideHelp') }}
         </div>
 
         <Separator />
 
         <!-- Group Notification Settings -->
-        <div class="font-semibold">Groups</div>
+        <div class="font-semibold">{{ t('settings.notifications.groups.title') }}</div>
         <div class="space-y-0.5 ps-3">
           <div
             v-for="group in notificationSettingsByGroup"
@@ -118,14 +116,12 @@ const toggleNotification = async (setting: NotificationSetting, type: Notificati
           </div>
         </div>
         <div class="text-muted-foreground max-w-[600px]">
-          Setting group notifications will disable all notifications if you are receiving a notification because you are
-          part of the group. If you are owner of a bookable object, you will still receive notifications for that object
-          if not disabled below.
+          {{ t('settings.notifications.groups.help') }}
         </div>
         <Separator />
 
         <!-- Bookable Objects Notification Settings -->
-        <div class="font-semibold">Bookable Objects</div>
+        <div class="font-semibold">{{ t('settings.notifications.bookableObjects.title') }}</div>
         <div class="space-y-0.5 ps-3">
           <div
             v-for="object in notificationSettingsByBookableObject"
@@ -150,7 +146,7 @@ const toggleNotification = async (setting: NotificationSetting, type: Notificati
           </div>
         </div>
         <div class="text-muted-foreground max-w-[500px]">
-          Setting bookable object notifications will disable all notifications coming from the bookable object.
+          {{ t('settings.notifications.bookableObjects.help') }}
         </div>
       </template>
     </div>

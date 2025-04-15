@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { onMounted, ref } from 'vue'
 import router from '@/router'
+import { useI18n } from 'vue-i18n'
 
 import EmailVerifiedCard from '@/components/login/EmailVerifiedCard.vue'
 import BackgroundImage from '@/components/bits/BackgroundImage.vue'
@@ -9,6 +10,7 @@ import { useToast } from '@/components/ui/toast'
 import { useUser } from '@/stores/user'
 import EmailVerificationCard from '@/components/login/EmailVerificationCard.vue'
 
+const { t } = useI18n()
 const visibleView = ref('verification')
 
 onMounted(() => {
@@ -20,8 +22,8 @@ onMounted(() => {
     if (!token) {
       toast({
         variant: 'warning',
-        title: 'No token found',
-        description: 'No token was found in the URL. Please check your email for the verification link.'
+        title: t('verifyEmail.errors.noToken.title'),
+        description: t('verifyEmail.errors.noToken.description')
       })
       router.replace({ name: 'login' })
       return
@@ -37,8 +39,8 @@ onMounted(() => {
       .catch(() => {
         toast({
           variant: 'destructive',
-          title: 'Invalid token',
-          description: 'The token is invalid, has expired or has already been used.'
+          title: t('verifyEmail.errors.invalidToken.title'),
+          description: t('verifyEmail.errors.invalidToken.description')
         })
         router.replace({ name: 'login' })
       })

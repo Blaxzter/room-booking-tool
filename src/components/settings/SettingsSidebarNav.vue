@@ -4,9 +4,11 @@ import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import { Button } from '@/components/ui/button'
 import { useRoute, useRouter } from 'vue-router'
 import { computed, watch } from 'vue'
+import { useI18n } from 'vue-i18n'
 
 const route = useRoute()
 const router = useRouter()
+const { t } = useI18n()
 
 interface Item {
   title: string
@@ -19,15 +21,15 @@ const selectedPage = defineModel<string>({
 
 const sidebarNavItems: Item[] = [
   {
-    title: 'Profile',
+    title: t('settings.profile.title'),
     value: 'profile'
   },
   {
-    title: 'Account',
+    title: t('settings.account.title'),
     value: 'account'
   },
   {
-    title: 'Notifications',
+    title: t('settings.notifications.title'),
     value: 'notifications'
   }
 ]
