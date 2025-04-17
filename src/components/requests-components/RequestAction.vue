@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { storeToRefs } from 'pinia'
 import { CheckIcon, CalendarIcon, XIcon } from 'lucide-vue-next'
+import { useI18n } from 'vue-i18n'
 
 import { Button } from '@/components/ui/button'
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip'
@@ -11,6 +12,7 @@ import { useRouter } from 'vue-router'
 
 const { approveRequest, rejectRequest } = useRequests()
 const { requestLoading } = storeToRefs(useRequests())
+const { t } = useI18n()
 
 defineProps<{
   booking: Booking
@@ -36,7 +38,7 @@ const goToCalender = (booking: Booking) => {
           </Button>
         </TooltipTrigger>
         <TooltipContent>
-          <p>Accept booking</p>
+          <p>{{ t('requestsComponents.requestAction.acceptBooking') }}</p>
         </TooltipContent>
       </Tooltip>
     </TooltipProvider>
@@ -48,7 +50,7 @@ const goToCalender = (booking: Booking) => {
           </Button>
         </TooltipTrigger>
         <TooltipContent>
-          <p>Decline booking</p>
+          <p>{{ t('requestsComponents.requestAction.declineBooking') }}</p>
         </TooltipContent>
       </Tooltip>
     </TooltipProvider>
@@ -60,7 +62,7 @@ const goToCalender = (booking: Booking) => {
           </Button>
         </TooltipTrigger>
         <TooltipContent>
-          <p>Go to calender</p>
+          <p>{{ t('requestsComponents.requestAction.goToCalendar') }}</p>
         </TooltipContent>
       </Tooltip>
     </TooltipProvider>

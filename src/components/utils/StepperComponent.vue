@@ -4,14 +4,7 @@ import { TabsContent, TabsList, TabsRoot, TabsTrigger } from 'radix-vue'
 import { CircleIcon, CircleDotIcon, CircleCheckBigIcon } from 'lucide-vue-next'
 import { useI18n } from 'vue-i18n'
 
-// Type annotation for the 't' function
-type TranslateFunction = {
-  (key: string, fallback?: string): string;
-  (key: string, options?: Record<string, any>): string;
-  (key: string, fallback: string, options?: Record<string, any>): string;
-}
-
-const { t } = useI18n() as { t: TranslateFunction }
+const { t } = useI18n()
 
 // Define steps with translation keys
 const steps = ref([

@@ -2,6 +2,7 @@
 import { computed, type PropType, ref, onMounted, inject } from 'vue'
 import { PlusCircledIcon, CopyIcon } from '@radix-icons/vue'
 import { useRoute } from 'vue-router'
+import { useI18n } from 'vue-i18n'
 
 import { Button } from '@/components/ui/button'
 
@@ -11,6 +12,8 @@ import BookingCardSplashImage from '@/components/home/BookingCardSplashImage.vue
 import { breakpointsTailwind, useBreakpoints } from '@vueuse/core'
 import BookingRequestWrapper from '@/components/booking-components/booking-request-dialog/BookingRequestWrapper.vue'
 import processImage from '@/assets/ts/image-utils'
+
+const { t } = useI18n()
 
 const props = defineProps({
   bookableObject: { type: Object as PropType<BookableObject>, default: undefined },
@@ -104,11 +107,11 @@ onMounted(() => {
       <div class="flex gap-2 flex-row">
         <Button @click="openEventDialog = true" :size="topNav ? 'icon' : 'default'">
           <PlusCircledIcon class="h-6 w-6 sm:h-4 sm:w-4" />
-          <span class="hidden sm:inline ms-2">Create Booking</span>
+          <span class="hidden sm:inline ms-2">{{ t('bookingComponents.bookableSideInfo.createBooking') }}</span>
         </Button>
         <Button @click="copySharingLink" variant="ghost" v-if="!isPublicView">
           <CopyIcon class="h-6 w-6 sm:h-4 sm:w-4" />
-          <span class="hidden sm:inline ms-2">Copy Sharing Link</span>
+          <span class="hidden sm:inline ms-2">{{ t('bookingComponents.bookableSideInfo.copyShareLink') }}</span>
         </Button>
       </div>
       <booking-request-wrapper v-model="openEventDialog" />

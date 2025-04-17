@@ -3,7 +3,8 @@ import { ref, computed, inject } from 'vue'
 import { storeToRefs } from 'pinia'
 import { SendIcon, TrashIcon } from 'lucide-vue-next'
 import _ from 'lodash'
-import { createReusableTemplate, useMediaQuery } from '@vueuse/core'
+import { useMediaQuery } from '@vueuse/core'
+import { useI18n } from 'vue-i18n'
 
 import type { Group, GroupDirectusUser, GroupInvite, User } from '@/types'
 
@@ -19,6 +20,7 @@ import { useUser } from '@/stores/user'
 import type { ShowAlertFunction } from '@/plugins/alert-dialog-plugin'
 
 const { user } = storeToRefs(useUser())
+const { t } = useI18n()
 
 const backendUrl = inject('backendUrl')
 
@@ -119,8 +121,8 @@ const updateUserRole = async (user: GroupDirectusUser, role: string) => {
   await updateGroupUser(user.id, role).then(() => {
     const { toast } = useToast()
     toast({
-      title: 'User role updated',
-      description: `The role has been updated to ${role}.`,
+      title: t('groups.bodys.groupMemberBody.toast.roleUpdated.title'),
+      description: t('groups.bodys.groupMemberBody.toast.roleUpdated.description', { role }),
       variant: 'success'
     })
   })
@@ -133,33 +135,35 @@ const deleteUser = async (user: GroupDirectusUser) => {
   }
 
   showAlertDialog({
-    title: 'Remove user from Group',
-    description: `Are you sure you want to delete the user "${getUser(user).email}" from the group "${props.group.name}"?`,
+    title: t('groups.bodys.groupMemberBody.deleteUser.title'),
+    description: t('groups.bodys.groupMemberBody.deleteUser.description', { 
+      email: getUser(user).email, 
+      groupName: props.group.name 
+    }),
     onConfirm: () => {
       const { deleteGroupUser } = useGroups()
       deleteGroupUser(user.id!).then(() => {
         const { toast } = useToast()
         toast({
-          title: 'User removed',
-          description: `The user has been removed from the group.`,
+          title: t('groups.bodys.groupMemberBody.toast.userRemoved.title'),
+          description: t('groups.bodys.groupMemberBody.toast.userRemoved.description'),
           variant: 'success'
         })
       })
     },
     confirmIcon: TrashIcon,
     confirmVariant: 'destructive',
-    onConfirmText: 'Delete'
+    onConfirmText: t('common.delete')
   })
 }
 
-const [UseTemplate, GridForm] = createReusableTemplate()
 const isDesktop = useMediaQuery('(min-width: 768px)')
 </script>
 
 <template>
   <div class="grid gap-6">
     <div class="flex flex-col gap-2 items-stretch md:justify-between md:flex-row" v-if="!isDisabled">
-      <Input type="email" placeholder="Enter email to invite" v-model="inviteEmail" />
+      <Input type="email" :placeholder="t('groups.bodys.groupMemberBody.emailPlaceholder')" v-model="inviteEmail" />
       <GroupRoleDropDown v-model:role="inviteRole" class="flex-grow" />
       <Button
         variant="secondary"
@@ -167,12 +171,12 @@ const isDesktop = useMediaQuery('(min-width: 768px)')
         class="flex-shrink-0 flex-grow"
         @click="sendInvite"
       >
-        <span class="inline md:hidden">Send invite</span>
+        <span class="inline md:hidden">{{ t('groups.bodys.groupMemberBody.sendInvite') }}</span>
         <SendIcon class="h-5 w-5 ms-2 md:ms-0" />
       </Button>
     </div>
     <div v-if="users.length !== 0">
-      <p class="text-sm text-muted-foreground">Team members</p>
+      <p class="text-sm text-muted-foreground">{{ t('groups.bodys.groupMemberBody.teamMembers') }}</p>
     </div>
     <div class="flex items-center justify-between space-x-4" v-for="c_user in users" :key="c_user.id">
       <div class="flex items-center space-x-4">
@@ -186,7 +190,7 @@ const isDesktop = useMediaQuery('(min-width: 768px)')
         <div>
           <p class="text-sm font-medium leading-none">
             {{ getUser(c_user)?.first_name }} {{ getUser(c_user)?.last_name
-            }}{{ getUser(c_user).id === user.id ? ' (You)' : '' }}
+            }}{{ getUser(c_user).id === user.id ? ` (${t('groups.bodys.groupMemberBody.you')})` : '' }}
           </p>
           <p class="text-sm text-muted-foreground">{{ getUser(c_user)?.email }}</p>
         </div>
@@ -203,7 +207,7 @@ const isDesktop = useMediaQuery('(min-width: 768px)')
       </div>
     </div>
     <div v-if="invites?.length !== 0">
-      <p class="text-sm text-muted-foreground">Invites</p>
+      <p class="text-sm text-muted-foreground">{{ t('groups.bodys.groupMemberBody.invites') }}</p>
     </div>
     <div class="flex items-center justify-between space-x-4" v-for="invite in invites" :key="invite.id">
       <div class="flex items-center space-x-4">
@@ -212,7 +216,7 @@ const isDesktop = useMediaQuery('(min-width: 768px)')
         </Avatar>
         <div>
           <p class="text-sm font-medium leading-none">{{ invite.email }}</p>
-          <p class="text-sm text-muted-foreground">Invited</p>
+          <p class="text-sm text-muted-foreground">{{ t('groups.bodys.groupMemberBody.invited') }}</p>
         </div>
       </div>
       <Button variant="secondary" size="icon" class="flex-shrink-0" @click="deleteInvite(invite)">

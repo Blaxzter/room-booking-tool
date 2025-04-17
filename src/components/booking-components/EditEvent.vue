@@ -16,7 +16,7 @@ import { Input } from '@/components/ui/input'
 
 import { useRequests } from '@/stores/requests'
 import { useGroups } from '@/stores/groups'
-import type { BookableObject, Booking } from '@/types'
+import type { Booking } from '@/types'
 import { useBookableObjects } from '@/stores/bookableObjects'
 
 const { approveRequest, rejectRequest } = useRequests()
@@ -155,22 +155,22 @@ watch(
             v-if="event.display_name || event.booking_display_name"
           >
             <Label class="text-muted-foreground">Title:</Label>
-            <Input v-model="event.display_name" v-if="event.display_name" readonly />
-            <Input v-model="event.booking_display_name" v-else readonly />
+            <Input :model-value="event.display_name" v-if="event.display_name" readonly />
+            <Input :model-value="event.booking_display_name" v-else readonly />
           </div>
           <div class="grid w-full max-w-sm items-center gap-1.5" v-if="event.mail">
             <Label class="text-muted-foreground">Email:</Label>
-            <Input v-model="event.mail" readonly type="email" />
+            <Input :model-value="event.mail" readonly type="email" />
           </div>
           <div class="grid w-full max-w-sm items-center gap-1.5" v-if="event.phone">
             <Label class="text-muted-foreground">Phone:</Label>
-            <Input v-model="event.phone" readonly type="tel" />
+            <Input :model-value="event.phone" readonly type="tel" />
           </div>
         </div>
 
         <div class="grid w-full max-w-sm items-center gap-1.5" v-if="event.description">
           <Label class="text-md font-semibold">Description</Label>
-          <Textarea v-model="event.description" readonly />
+          <Textarea :model-value="event.description" readonly />
         </div>
       </div>
       <!-- Admin stuff -->

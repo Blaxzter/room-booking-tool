@@ -1,7 +1,8 @@
 <script setup lang="ts">
-import { inject, ref } from 'vue'
+import { inject } from 'vue'
 import { storeToRefs } from 'pinia'
 import _ from 'lodash'
+import { useI18n } from 'vue-i18n'
 
 import { UsersIcon, BoxIcon, SendIcon, CheckIcon, XIcon, TrashIcon } from 'lucide-vue-next'
 import { TooltipProvider, Tooltip, TooltipTrigger, TooltipContent } from '@/components/ui/tooltip'
@@ -15,6 +16,8 @@ import { useGroups } from '@/stores/groups'
 import type { ShowAlertFunction } from '@/plugins/alert-dialog-plugin'
 import { useInitialDataStore } from '@/stores/initial'
 import { ScrollArea, ScrollBar } from '@/components/ui/scroll-area'
+
+const { t } = useI18n()
 
 defineProps<{
   group: Group
@@ -73,8 +76,8 @@ const acceptInvite = async (group: Group) => {
 const showAlertDialog = inject('showAlertDialog') as ShowAlertFunction
 const rejectInvite = async (group: Group) => {
   showAlertDialog({
-    title: 'Reject Invite',
-    description: `Are you sure you want to reject the invite for the group "${group.name}"?`,
+    title: t('groups.groupListEntry.rejectInvite.title'),
+    description: t('groups.groupListEntry.rejectInvite.description', { groupName: group.name }),
     onConfirm: async () => {
       // const invite = _.find(group.invites, (i) => (i.user_id as { id: string }).id === user.value.id)
       const invite = (group.invites as { id: string }[])[0]
@@ -87,7 +90,7 @@ const rejectInvite = async (group: Group) => {
     },
     confirmIcon: TrashIcon,
     confirmVariant: 'destructive',
-    onConfirmText: 'Reject'
+    onConfirmText: t('groups.groupListEntry.rejectInvite.confirm')
   })
 }
 </script>
@@ -141,7 +144,7 @@ const rejectInvite = async (group: Group) => {
                     </div>
                   </TooltipTrigger>
                   <TooltipContent>
-                    <p>{{ groupUser(group)?.length }} users in this group</p>
+                    <p>{{ t('groups.groupListEntry.usersInGroup', { count: groupUser(group)?.length }) }}</p>
                   </TooltipContent>
                 </Tooltip>
               </TooltipProvider>
@@ -156,7 +159,7 @@ const rejectInvite = async (group: Group) => {
                     </div>
                   </TooltipTrigger>
                   <TooltipContent>
-                    <p>{{ group.invites?.length }} invites in this group</p>
+                    <p>{{ t('groups.groupListEntry.invitesInGroup', { count: group.invites?.length }) }}</p>
                   </TooltipContent>
                 </Tooltip>
               </TooltipProvider>
@@ -184,7 +187,7 @@ const rejectInvite = async (group: Group) => {
             <ScrollBar orientation="horizontal" />
           </ScrollArea>
         </template>
-        <div v-else class="text-muted-foreground">No objects</div>
+        <div v-else class="text-muted-foreground">{{ t('groups.groupListEntry.noObjects') }}</div>
       </div>
     </div>
     <div class="flex items-center gap-2">

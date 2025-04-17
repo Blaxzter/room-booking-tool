@@ -3,6 +3,7 @@ import { computed, ref, onMounted } from 'vue'
 import { storeToRefs } from 'pinia'
 import { cn } from '@/lib/utils'
 import { breakpointsTailwind, useBreakpoints } from '@vueuse/core'
+import { useI18n } from 'vue-i18n'
 
 import { PencilIcon, HistoryIcon } from 'lucide-vue-next'
 import { useToast } from '@/components/ui/toast'
@@ -13,6 +14,7 @@ import { useUser } from '@/stores/user'
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip'
 import EditEvent from '@/components/booking-components/EditEvent.vue'
 
+const { t } = useI18n()
 const { user } = storeToRefs(useUser())
 
 const { userHasCreatedBooking } = useLocalUser()
@@ -27,9 +29,9 @@ const eventClick = (arg: any) => {
   console.log(arg)
   if (user.value === null || Object.keys(user.value).length === 0 || arg.isPast) {
     toast({
-      title: 'Event Daten',
-      description: `Event: ${arg.event.title} \n Datum: ${arg.event.start} \n Bestätigt: ${
-        arg.event.extendedProps.confirmed ? 'Ja' : 'Nein'
+      title: t('bookingComponents.calender.calenderEventSlot.eventData'),
+      description: `${t('bookingComponents.calender.calenderEventSlot.event')}: ${arg.event.title} \n ${t('bookingComponents.calender.calenderEventSlot.date')}: ${arg.event.start} \n ${t('bookingComponents.calender.calenderEventSlot.confirmed')}: ${
+        arg.event.extendedProps.confirmed ? t('bookingComponents.calender.calenderEventSlot.yes') : t('bookingComponents.calender.calenderEventSlot.no')
       }`
     })
   } else {
@@ -113,7 +115,7 @@ onMounted(() => {
             <div class="ms-0.5">
               {{ arg.event.title }}
             </div>
-            <div v-if="arg.isPast">Past Event</div>
+            <div v-if="arg.isPast">{{ t('bookingComponents.calender.calenderEventSlot.pastEvent') }}</div>
             <div class="flex-grow" />
             <template v-if="!arg.isPast">
               <TooltipProvider v-if="false">
@@ -122,7 +124,7 @@ onMounted(() => {
                     <PencilIcon :size="mobile ? 15 : 20" class="me-2" />
                   </TooltipTrigger>
                   <TooltipContent>
-                    <p>You can edit this event</p>
+                    <p>{{ t('bookingComponents.calender.calenderEventSlot.canEdit') }}</p>
                   </TooltipContent>
                 </Tooltip>
               </TooltipProvider>
@@ -148,7 +150,7 @@ onMounted(() => {
                   <PencilIcon :size="mobile ? 15 : 20" class="me-2" />
                 </TooltipTrigger>
                 <TooltipContent>
-                  <p>You can edit this event</p>
+                  <p>{{ t('bookingComponents.calender.calenderEventSlot.canEdit') }}</p>
                 </TooltipContent>
               </Tooltip>
             </TooltipProvider>
@@ -162,7 +164,7 @@ onMounted(() => {
                   <HistoryIcon :size="mobile ? 15 : 20" />
                 </TooltipTrigger>
                 <TooltipContent>
-                  <p>This event is in the past</p>
+                  <p>{{ t('bookingComponents.calender.calenderEventSlot.isPast') }}</p>
                 </TooltipContent>
               </Tooltip>
             </TooltipProvider>
@@ -189,7 +191,7 @@ onMounted(() => {
                     <PencilIcon :size="mobile ? 15 : 20" class="sm:me-2" />
                   </TooltipTrigger>
                   <TooltipContent>
-                    <p>You can edit this event</p>
+                    <p>{{ t('bookingComponents.calender.calenderEventSlot.canEdit') }}</p>
                   </TooltipContent>
                 </Tooltip>
               </TooltipProvider>
@@ -212,7 +214,7 @@ onMounted(() => {
                   <PencilIcon :size="mobile ? 15 : 20" class="sm:me-2" />
                 </TooltipTrigger>
                 <TooltipContent>
-                  <p>You can edit this event</p>
+                  <p>{{ t('bookingComponents.calender.calenderEventSlot.canEdit') }}</p>
                 </TooltipContent>
               </Tooltip>
             </TooltipProvider>
@@ -235,7 +237,7 @@ onMounted(() => {
                 <PencilIcon :size="20" class="sm:me-2" />
               </TooltipTrigger>
               <TooltipContent>
-                <p>You can edit this event</p>
+                <p>{{ t('bookingComponents.calender.calenderEventSlot.canEdit') }}</p>
               </TooltipContent>
             </Tooltip>
           </TooltipProvider>
@@ -248,14 +250,13 @@ onMounted(() => {
       @close="closeDialog"
       @delete="
         () => {
-          emit('delete', arg.event.id)
+          emit('delete', event.booking_id)
+          closeDialog()
         }
       "
-      @confirmed="
-        () => {
-          confirmed = true
-        }
-      "
+      @edit="closeDialog"
+      v-if="selectedEvent"
+      :can-edit="canEdit"
     />
   </div>
 </template>

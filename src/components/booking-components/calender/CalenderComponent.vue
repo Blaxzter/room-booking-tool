@@ -24,7 +24,9 @@ import BookingRequestWrapper from '@/components/booking-components/booking-reque
 import { useBookings } from '@/stores/booking'
 import type { Booking } from '@/types'
 import CalenderEventSlot from '@/components/booking-components/calender/CalenderEventSlot.vue'
+import { useI18n } from 'vue-i18n'
 
+const { t } = useI18n()
 const { currentBookings } = storeToRefs(useBookings())
 
 const fullCalenderRef = ref<InstanceType<typeof FullCalendar>>()
@@ -63,7 +65,7 @@ const bookingToEvent = ({ booking, editable = false }: { booking: Booking; edita
   const date = dayjs(booking.start_date).format('DD.MM')
 
   // create a alternative name: "Event: 2024-07-18 10:00 - 12:00"
-  const title = `Event: ${date} ${start_time} - ${end_time}`
+  const title = t('bookingComponents.calender.calenderComponent.eventTitleFormat', { date, start_time, end_time })
 
   console.log(booking)
 
@@ -135,15 +137,15 @@ const calendarOptions = {
     // check if arg.start is in the past
     if (dayjs(arg.start).isBefore(dayjs())) {
       toast({
-        title: 'Error',
-        description: 'You cannot create an event in the past',
+        title: t('bookingComponents.calender.calenderComponent.errors.title'),
+        description: t('bookingComponents.calender.calenderComponent.errors.pastEventCreation'),
         variant: 'destructive'
       })
       return
     }
 
     createdTempEvent.value = fullCalenderApi().addEvent({
-      title: 'New Event',
+      title: t('bookingComponents.calender.calenderComponent.newEvent'),
       start: arg.start,
       end: arg.end,
       allDay: arg.allDay,
@@ -247,9 +249,9 @@ onMounted(() => {
       </div>
       <div class="flex-grow"></div>
       <div class="flex items-center gap-2 sm:gap-3 justify-end">
-        <Button @click="selectToday" :variant="isToday ? 'outline' : 'default'">Today</Button>
+        <Button @click="selectToday" :variant="isToday ? 'outline' : 'default'">{{ t('bookingComponents.calender.calenderComponent.today') }}</Button>
         <calender-remote @prev="togglePrev" @next="toggleNext" />
-        <calender-tabs v-model="selectedTab" @update:model-value="switchTab" />
+        <calender-tabs v-model="selectedTab" @update:model-value="switchTab($event as CalendarViewType)" />
       </div>
     </CardHeader>
     <CardContent class="calender-wrapper p-0">

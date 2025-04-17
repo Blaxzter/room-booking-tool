@@ -4,6 +4,7 @@ import { useForm } from 'vee-validate'
 import { toTypedSchema } from '@vee-validate/zod'
 import * as z from 'zod'
 import { storeToRefs } from 'pinia'
+import { useI18n } from 'vue-i18n'
 
 import {
   FormControl,
@@ -32,6 +33,7 @@ import type { BookableObject } from '@/types'
 import { useBookableObjects } from '@/stores/bookableObjects'
 import { useGlobalSettings } from '@/stores/globalSettings'
 const { isDemoUser } = storeToRefs(useGlobalSettings())
+const { t } = useI18n()
 
 interface InitialValues {
   splash_image_object: Blob
@@ -40,9 +42,9 @@ interface InitialValues {
 }
 
 const objectTypes = [
-  { id: 'room', name: 'Room' },
-  { id: 'object', name: 'Object' },
-  { id: 'equipment', name: 'Equipment' }
+  { id: 'room', name: t('bookableObject.edit.additionalSettings.objectTypes.room') },
+  { id: 'object', name: t('bookableObject.edit.additionalSettings.objectTypes.object') },
+  { id: 'equipment', name: t('bookableObject.edit.additionalSettings.objectTypes.equipment') }
 ]
 
 const props = defineProps({
@@ -109,7 +111,7 @@ defineExpose({ getValues, validate, upload })
 <template>
   <form class="grid gap-5 py-4">
     <div class="flex flex-col gap-3">
-      <Label>Display Image</Label>
+      <Label>{{ t('bookableObject.edit.additionalSettings.displayImage') }}</Label>
       <AvatarUploadComponent
         class="self-center"
         ref="avatarUpload"
@@ -121,12 +123,13 @@ defineExpose({ getValues, validate, upload })
         :add-clear-request="!!bookableObject"
         :disabled="isDemoUser"
       />
-      <div class="text-sm text-muted-foreground">Upload an splash image.</div>
+      <div class="text-sm text-muted-foreground">{{ t('bookableObject.edit.additionalSettings.uploadImageHelp') }}</div>
     </div>
     <FormField v-slot="{ componentField }" name="object_type">
       <FormItem>
         <FormLabel>
-          Choose type of <NameFade :termType="BookableObjectTermType.PLURAL" />
+          {{ t('bookableObject.edit.additionalSettings.chooseType') }}
+          <NameFade :termType="BookableObjectTermType.PLURAL" />
         </FormLabel>
         <Select
           v-bind="componentField"
@@ -150,7 +153,8 @@ defineExpose({ getValues, validate, upload })
           </SelectContent>
         </Select>
         <FormDescription>
-          Choose the type of <NameFade :termType="BookableObjectTermType.LOWERCASE" />.
+          {{ t('bookableObject.edit.additionalSettings.chooseTypeDescription') }}
+          <NameFade :termType="BookableObjectTermType.LOWERCASE" />.
         </FormDescription>
         <FormMessage />
       </FormItem>

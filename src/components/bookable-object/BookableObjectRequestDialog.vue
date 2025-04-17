@@ -2,6 +2,7 @@
 import { ref } from 'vue'
 import { PlusCircledIcon, ChevronRightIcon, ChevronLeftIcon, RocketIcon } from '@radix-icons/vue'
 import { createReusableTemplate, useMediaQuery } from '@vueuse/core'
+import { useI18n } from 'vue-i18n'
 
 import { Dialog, DialogContent, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog'
 import {
@@ -23,8 +24,13 @@ import AdditionalSettings from '@/components/bookable-object/edit/AdditionalSett
 
 import { useBookableObjects } from '@/stores/bookableObjects'
 
+const { t } = useI18n()
 const activeStep = ref(0)
-const steps = ['Basic Info', 'Permissions', 'Additional']
+const steps = [
+  t('stepper.steps.basicInfo'),
+  t('stepper.steps.permissions'),
+  t('stepper.steps.additional')
+]
 
 const defaultSettings = ref()
 const accessSettings = ref()
@@ -100,7 +106,7 @@ const isDesktop = useMediaQuery('(min-width: 768px)')
           <template v-slot:footer>
             <DialogFooter>
               <Button @click="nextStep" type="button">
-                Next
+                {{ t('bookableObject.requestDialog.next') }}
                 <ChevronRightIcon class="h-4 w-4 ms-1" />
               </Button>
             </DialogFooter>
@@ -113,10 +119,10 @@ const isDesktop = useMediaQuery('(min-width: 768px)')
             <div class="flex gap-2">
               <Button @click="activeStep--" type="button" class="flex-grow">
                 <ChevronLeftIcon class="h-4 w-4 me-1" />
-                Back
+                {{ t('bookableObject.requestDialog.back') }}
               </Button>
               <Button @click="nextStep" type="button" class="flex-grow">
-                Next
+                {{ t('bookableObject.requestDialog.next') }}
                 <ChevronRightIcon class="h-4 w-4 ms-1" />
               </Button>
             </div>
@@ -129,10 +135,10 @@ const isDesktop = useMediaQuery('(min-width: 768px)')
             <div class="flex gap-2">
               <Button @click="activeStep--" type="button" class="flex-grow">
                 <ChevronLeftIcon class="h-4 w-4 me-1" />
-                Back
+                {{ t('bookableObject.requestDialog.back') }}
               </Button>
               <Button @click="nextStep" type="button" class="flex-grow">
-                Create
+                {{ t('bookableObject.requestDialog.create') }}
                 <RocketIcon class="h-4 w-4 ms-1" />
               </Button>
             </div>
@@ -146,7 +152,7 @@ const isDesktop = useMediaQuery('(min-width: 768px)')
     <DialogTrigger>
       <Button class="hidden sm:flex">
         <PlusCircledIcon class="mr-2 h-4 w-4" />
-        Add new
+        {{ t('bookableObject.requestDialog.addNew') }}
       </Button>
       <Button class="fixed sm:hidden bottom-0 right-0 m-3 h-14 w-14 rounded-2xl z-10" variant="default">
         <PlusCircledIcon class="w-6 h-6" />
@@ -155,7 +161,7 @@ const isDesktop = useMediaQuery('(min-width: 768px)')
     <DialogContent :trap-focus="true">
       <DialogHeader class="mb-2">
         <DialogTitle class="fade-transition">
-          Create a new
+          {{ t('bookableObject.requestDialog.createNew') }}
           <NameFade :termType="BookableObjectTermType.SINGULAR" />
         </DialogTitle>
       </DialogHeader>
@@ -171,8 +177,8 @@ const isDesktop = useMediaQuery('(min-width: 768px)')
     </DrawerTrigger>
     <DrawerContent class="max-h-screen">
       <DrawerHeader class="text-left">
-        <DrawerTitle>Edit profile</DrawerTitle>
-        <DrawerDescription> Make changes to your profile here. Click save when you're done. </DrawerDescription>
+        <DrawerTitle>{{ t('bookableObject.requestDialog.drawer.title') }}</DrawerTitle>
+        <DrawerDescription>{{ t('bookableObject.requestDialog.drawer.description') }}</DrawerDescription>
       </DrawerHeader>
       <div class="p-4 max-h-[60%] overflow-y-auto">
         <GridForm />

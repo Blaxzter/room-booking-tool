@@ -8,6 +8,9 @@ import DataTablePagination from '@/components/requests-components/DataTablePagin
 import type { Booking } from '@/types'
 
 import { valueUpdater } from '@/lib/utils'
+import { useI18n } from 'vue-i18n'
+
+const { t } = useI18n()
 
 const props = defineProps<{
   columns: ColumnDef<Booking, TValue>[]
@@ -69,7 +72,9 @@ const table = useVueTable<Booking>({
           </template>
           <template v-else>
             <TableRow>
-              <TableCell :colspan="columns.length" class="h-24 text-center"> No results. </TableCell>
+              <TableCell :colspan="columns.length" class="h-24 text-center">
+                {{ t('requestsComponents.dataTable.noResults') }}
+              </TableCell>
             </TableRow>
           </template>
         </TableBody>

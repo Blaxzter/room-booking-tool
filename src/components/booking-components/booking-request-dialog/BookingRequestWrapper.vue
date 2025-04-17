@@ -2,6 +2,7 @@
 import { ref, watch } from 'vue'
 import { createReusableTemplate, useMediaQuery } from '@vueuse/core'
 import type { CreateBookingRequest } from '@/assets/ts/queries/bookings'
+import { useI18n } from 'vue-i18n'
 
 import { Dialog, DialogContent, DialogFooter, DialogHeader, DialogTitle } from '@/components/ui/dialog'
 import { Drawer, DrawerContent, DrawerDescription, DrawerHeader, DrawerTitle } from '@/components/ui/drawer'
@@ -42,6 +43,8 @@ const stepToValues = ref<Record<number, any>>({
   1: {},
   2: {}
 })
+
+const { t } = useI18n()
 
 const handleDismiss = () => {
   open.value = false
@@ -86,8 +89,8 @@ const createBooking = async () => {
   try {
     const createdEvent = await createBooking(createObject as CreateBookingRequest)
     emit('created', createdEvent)
-  } catch (e) {
-    console.error("test")
+  } catch (error) {
+    console.error(error)
   }
   open.value = false
 }
@@ -128,12 +131,16 @@ const isDesktop = useMediaQuery('(min-width: 768px)')
 
 <template>
   <UseTemplate>
-    <StepperComponent v-model="activeStep" :steps="steps">
+    <StepperComponent v-model="activeStep" :steps="[
+      t('bookingComponents.bookingRequestDialog.bookingRequestWrapper.steps.time'),
+      t('bookingComponents.bookingRequestDialog.bookingRequestWrapper.steps.contact'),
+      t('bookingComponents.bookingRequestDialog.bookingRequestWrapper.steps.event')
+    ]">
       <template v-slot:step-0>
         <TimeData ref="timeData" :initial-values="stepToValues[0]">
           <template v-slot:footer>
             <DialogFooter>
-              <Button @click="nextStep" type="button">Next</Button>
+              <Button @click="nextStep" type="button">{{ t('bookingComponents.bookingRequestDialog.bookingRequestWrapper.buttons.next') }}</Button>
             </DialogFooter>
           </template>
         </TimeData>
@@ -142,8 +149,8 @@ const isDesktop = useMediaQuery('(min-width: 768px)')
         <ContactData ref="contactData" :initial-values="stepToValues[1]">
           <template v-slot:footer>
             <DialogFooter>
-              <Button @click="activeStep--" type="button">Back</Button>
-              <Button @click="nextStep" type="button">Next</Button>
+              <Button @click="activeStep--" type="button">{{ t('bookingComponents.bookingRequestDialog.bookingRequestWrapper.buttons.back') }}</Button>
+              <Button @click="nextStep" type="button">{{ t('bookingComponents.bookingRequestDialog.bookingRequestWrapper.buttons.next') }}</Button>
             </DialogFooter>
           </template>
         </ContactData>
@@ -152,8 +159,8 @@ const isDesktop = useMediaQuery('(min-width: 768px)')
         <EventData ref="eventData" :initial-values="stepToValues[2]">
           <template v-slot:footer>
             <DialogFooter>
-              <Button @click="activeStep--" type="button">Back</Button>
-              <Button @click="nextStep" type="button">Create</Button>
+              <Button @click="activeStep--" type="button">{{ t('bookingComponents.bookingRequestDialog.bookingRequestWrapper.buttons.back') }}</Button>
+              <Button @click="nextStep" type="button">{{ t('bookingComponents.bookingRequestDialog.bookingRequestWrapper.buttons.create') }}</Button>
             </DialogFooter>
           </template>
         </EventData>
@@ -164,7 +171,7 @@ const isDesktop = useMediaQuery('(min-width: 768px)')
   <Dialog v-if="isDesktop" v-model:open="open" @close="handleClose" @dismiss="handleDismiss">
     <DialogContent :trap-focus="true" class="max-h-full overflow-y-auto">
       <DialogHeader class="mb-2">
-        <DialogTitle class="fade-transition"> Create a Booking </DialogTitle>
+        <DialogTitle class="fade-transition"> {{ t('bookingComponents.bookingRequestDialog.bookingRequestWrapper.title') }} </DialogTitle>
       </DialogHeader>
       <GridForm />
     </DialogContent>
@@ -173,8 +180,8 @@ const isDesktop = useMediaQuery('(min-width: 768px)')
   <Drawer v-else v-model:open="open" @close="handleClose" @dismiss="handleDismiss">
     <DrawerContent class="max-h-screen">
       <DrawerHeader class="text-left">
-        <DrawerTitle>Edit profile</DrawerTitle>
-        <DrawerDescription> Make changes to your profile here. Click save when you're done. </DrawerDescription>
+        <DrawerTitle>{{ t('bookingComponents.bookingRequestDialog.bookingRequestWrapper.drawer.title') }}</DrawerTitle>
+        <DrawerDescription> {{ t('bookingComponents.bookingRequestDialog.bookingRequestWrapper.drawer.description') }} </DrawerDescription>
       </DrawerHeader>
       <div class="p-4 max-h-[60%] overflow-y-auto">
         <GridForm />

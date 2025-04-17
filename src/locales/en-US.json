@@ -228,5 +228,388 @@
       "plural": ["Rooms", "Objects", "Spaces", "Anything"],
       "lowercase": ["rooms", "objects", "spaces", "anything"]
     }
+  },
+  "bookableObject": {
+    "edit": {
+      "accessSettings": {
+        "title": "Access Settings",
+        "publicVisible": {
+          "label": "Public Visible",
+          "description": "Toggle to make the bookable object publicly visible."
+        },
+        "link": {
+          "title": "Link"
+        },
+        "confirmBooking": {
+          "label": "Booking requires confirmation",
+          "description": "If this is set to off, a booking doesn't require confirmation and it gets automatically confirmed."
+        },
+        "confirmRole": {
+          "label": "Confirm Role",
+          "placeholder": "Select a role",
+          "description": "Select the role a group member needs to confirm a booking."
+        },
+        "informationShared": {
+          "label": "Information shared",
+          "description": "Everyone with the sharing link can view booking details."
+        },
+        "roles": {
+          "admin": "Admin",
+          "member": "Member"
+        }
+      },
+      "defaultSettings": {
+        "name": "Name",
+        "nameDescription": "Please enter the name of the bookable object.",
+        "description": "Description",
+        "descriptionDescription": "Please enter the description of the bookable object.",
+        "group": "Group",
+        "groupDescription": "Please select the group of the bookable object.",
+        "pendingChanges": " *"
+      },
+      "additionalSettings": {
+        "displayImage": "Display Image",
+        "uploadImageHelp": "Upload a splash image.",
+        "chooseType": "Choose type of",
+        "chooseTypeDescription": "Choose the type of",
+        "objectTypes": {
+          "room": "Room",
+          "object": "Object",
+          "equipment": "Equipment"
+        }
+      }
+    },
+    "menuButton": {
+      "shareView": "Sharing View",
+      "edit": "Edit",
+      "delete": "Delete",
+      "deleteAlert": {
+        "title": "Delete bookable object",
+        "description": "Are you sure you want to delete this bookable object?",
+        "confirmButton": "Delete"
+      },
+      "deleteToast": {
+        "title": "Bookable object removed",
+        "description": "The bookable object has been removed."
+      }
+    },
+    "requestDialog": {
+      "addNew": "Add new",
+      "createNew": "Create a new",
+      "next": "Next",
+      "back": "Back",
+      "create": "Create",
+      "drawer": {
+        "title": "Edit profile",
+        "description": "Make changes to your profile here. Click save when you're done."
+      }
+    }
+  },
+  "bits": {
+    "backgroundImage": {
+      "credit": "Photo by {photographer} on {platform}"
+    },
+    "groupSelect": {
+      "placeholder": "Select a group",
+      "noGroup": "No Group",
+      "personal": "Personal - {name}"
+    }
+  },
+  "groups": {
+    "groupSwitcher": {
+      "personalAccount": "Personal Account",
+      "groups": "Groups",
+      "searchTeam": "Search team...",
+      "noTeamFound": "No team found.",
+      "createGroup": "Create Group",
+      "manageGroups": "Manage Groups",
+      "selectTeam": "Select a team"
+    },
+    "groupList": {
+      "pendingInvites": "Pending Invites",
+      "yourGroups": "Your Groups",
+      "invitedGroups": "Invited Groups",
+      "noGroups": "You currently don't have any groups and are not a member of any groups."
+    },
+    "groupListEntry": {
+      "rejectInvite": {
+        "title": "Reject Invite",
+        "description": "Are you sure you want to reject the invite for the group \"{groupName}\"?",
+        "confirm": "Reject"
+      },
+      "usersInGroup": "{count} users in this group",
+      "invitesInGroup": "{count} invites in this group",
+      "noObjects": "No objects"
+    },
+    "dialogs": {
+      "groupMember": {
+        "title": "Team Members",
+        "description": "Invite your team members to collaborate."
+      },
+      "newGroupDialog": {
+        "title": "Create group",
+        "description": "Add a new group to manage rooms and other bookable objects.",
+        "drawerTitle": "Create Group",
+        "create": "Create"
+      }
+    },
+    "utils": {
+      "groupRoleDropDown": {
+        "roles": {
+          "viewer": {
+            "name": "Viewer",
+            "description": "Can view."
+          },
+          "member": {
+            "name": "Member",
+            "description": "Can view and edit."
+          },
+          "admin": {
+            "name": "Admin",
+            "description": "Admin-level access to all resources."
+          }
+        },
+        "selectNewRole": "Select new role...",
+        "noRolesFound": "No roles found."
+      }
+    },
+    "cards": {
+      "groupDataCard": {
+        "title": "Group Data",
+        "description": "Edit your group data."
+      },
+      "groupMemberCard": {
+        "title": "Team Members",
+        "description": "Invite your team members to collaborate."
+      }
+    },
+    "bodys": {
+      "groupDataBody": {
+        "groupImage": "Group Image",
+        "uploadImage": "Upload an Image",
+        "or": "or",
+        "selectEmoji": "Select an Emoji",
+        "groupName": "Group name",
+        "groupNameDescription": "This is the name of the group that will be displayed to users.",
+        "description": "Description",
+        "descriptionPlaceholder": "A short description of the group",
+        "descriptionDescription": "This is a short description of the group that will be displayed to users.",
+        "validation": {
+          "nameMin": "Group name must be at least 2 characters.",
+          "nameMax": "Group name must not be longer than 30 characters.",
+          "descriptionMax": "Group description must not be longer than 160 characters."
+        },
+        "toast": {
+          "created": {
+            "title": "Group created",
+            "description": "The group {name} has been created."
+          },
+          "updated": {
+            "title": "Group updated",
+            "description": "The group {name} has been updated."
+          }
+        }
+      },
+      "groupMemberBody": {
+        "emailPlaceholder": "Enter email to invite",
+        "sendInvite": "Send invite",
+        "teamMembers": "Team members",
+        "you": "You",
+        "invites": "Invites",
+        "invited": "Invited",
+        "deleteUser": {
+          "title": "Remove user from Group",
+          "description": "Are you sure you want to delete the user \"{email}\" from the group \"{groupName}\"?"
+        },
+        "toast": {
+          "roleUpdated": {
+            "title": "User role updated",
+            "description": "The role has been updated to {role}."
+          },
+          "userRemoved": {
+            "title": "User removed",
+            "description": "The user has been removed from the group."
+          }
+        }
+      }
+    },
+    "groupView": {
+      "addGroup": "Add Group",
+      "tabs": {
+        "groupInformation": "Group Information",
+        "members": "Members"
+      },
+      "back": "Back",
+      "groupBy": "group by {{email}}",
+      "deleteButton": "Delete Group",
+      "selectGroup": "Select a group to view details.",
+      "deleteGroup": {
+        "title": "Delete Group",
+        "description": "Are you sure you want to delete the group \"{{name}}\"?"
+      }
+    }
+  },
+  "requestsComponents": {
+    "dataTable": {
+      "noResults": "No results."
+    },
+    "dataTablePagination": {
+      "rowsSelected": "{selected} of {total} row(s) selected.",
+      "rowsPerPage": "Rows per page",
+      "page": "Page {current} of {total}",
+      "goToFirstPage": "Go to first page",
+      "goToPreviousPage": "Go to previous page",
+      "goToNextPage": "Go to next page",
+      "goToLastPage": "Go to last page"
+    },
+    "requestAction": {
+      "acceptBooking": "Accept booking",
+      "declineBooking": "Decline booking",
+      "goToCalendar": "Go to calendar"
+    },
+    "column": {
+      "bookableObject": "Bookable Object",
+      "startDate": "Start Date",
+      "duration": "Duration",
+      "fullDay": "Full Day",
+      "contactInformation": "Contact Information",
+      "notAvailable": "N/A",
+      "description": "Description"
+    }
+  },
+  "nav": {
+    "mainNav": {
+      "dashboard": "Dashboard",
+      "requests": "Requests",
+      "bookingTool": "Object Booking Tool",
+      "toggleMenu": "Toggle navigation menu"
+    }
+  },
+  "bookingComponents": {
+    "bookingRequestDialog": {
+      "bookingRequestWrapper": {
+        "steps": {
+          "time": "Time",
+          "contact": "Contact",
+          "event": "Event"
+        },
+        "buttons": {
+          "next": "Next",
+          "back": "Back",
+          "create": "Create"
+        },
+        "title": "Create a Booking",
+        "drawer": {
+          "title": "Edit profile",
+          "description": "Make changes to your profile here. Click save when you're done."
+        }
+      },
+      "contactData": {
+        "name": {
+          "label": "Name",
+          "description": "Please enter the Name that is displayed in the event calender. This could be your full name or a nickname, or the name of the event."
+        },
+        "email": {
+          "label": "E-Mail",
+          "description": "Please enter your email address."
+        },
+        "phone": {
+          "label": "Phone",
+          "description": "Please enter your phone number."
+        },
+        "saveInfo": {
+          "label": "Save Info",
+          "description": "Save your information on this device for future bookings."
+        },
+        "validation": {
+          "nameRequired": "Name is required",
+          "emailOrPhone": "Either email or phone is required"
+        }
+      },
+      "eventData": {
+        "description": {
+          "label": "Description",
+          "description": "Describe the event you are booking"
+        },
+        "legal": {
+          "label": "I agree to the terms and conditions",
+          "description": "By creating a booking, you agree to our",
+          "termsOfService": "Terms of Service",
+          "and": "and",
+          "privacyPolicy": "Privacy Policy"
+        }
+      },
+      "timeData": {
+        "startDate": {
+          "label": "Start Date"
+        },
+        "fullDay": {
+          "label": "Full Day"
+        },
+        "startTime": {
+          "label": "Start Time"
+        },
+        "endTime": {
+          "label": "End Time"
+        },
+        "endsOnAnotherDate": {
+          "label": "Ends on another Date"
+        },
+        "endDate": {
+          "label": "End Date"
+        },
+        "validation": {
+          "startDateRequired": "Start date is required",
+          "startTimeRequired": "Start time is required",
+          "endTimeRequired": "End time is required",
+          "futureDate": "Start date and time must be in the future",
+          "endTimeAfterStart": "End time must be after start time",
+          "endDateAfterStart": "End date must be after start date"
+        }
+      }
+    },
+    "bookableSideInfo": {
+      "createBooking": "Create Booking",
+      "copyShareLink": "Copy Sharing Link"
+    },
+    "calender": {
+      "calenderComponent": {
+        "today": "Today",
+        "newEvent": "New Event",
+        "eventTitleFormat": "Event: {date} {start_time} - {end_time}",
+        "errors": {
+          "title": "Error",
+          "pastEventCreation": "You cannot create an event in the past"
+        }
+      },
+      "calenderRemote": {
+        "prev": "Previous",
+        "next": "Next" 
+      },
+      "calenderTabs": {
+        "month": "Month",
+        "week": "Week",
+        "day": "Day",
+        "list": "List",
+        "selectView": "Select View"
+      },
+      "calenderEventSlot": {
+        "deleteEvent": "Delete Event",
+        "confirmDelete": "Are you sure you want to delete this event?",
+        "eventData": "Event Data",
+        "event": "Event",
+        "date": "Date",
+        "confirmed": "Confirmed",
+        "yes": "Yes",
+        "no": "No",
+        "pastEvent": "Past Event",
+        "canEdit": "You can edit this event",
+        "isPast": "This event is in the past"
+      },
+      "confirmationIcon": {
+        "confirmed": "Confirmed",
+        "notConfirmedYet": "Not confirmed yet"
+      }
+    }
   }
 }

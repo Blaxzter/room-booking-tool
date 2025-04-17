@@ -6,6 +6,7 @@ import { toTypedSchema } from '@vee-validate/zod'
 import { FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form'
 import { Input } from '@/components/ui/input'
 import { Checkbox } from '@/components/ui/checkbox'
+import { useI18n } from 'vue-i18n'
 
 import { MailIcon, PhoneIcon } from 'lucide-vue-next'
 
@@ -20,16 +21,18 @@ const props = defineProps<{
   initialValues: InitialValues
 }>()
 
+const { t } = useI18n()
+
 // Define a custom validation for requiring either email or phone
 const contactSchema = z
   .object({
-    display_name: z.string().min(1, { message: 'Name is required' }),
+    display_name: z.string().min(1, { message: t('bookingComponents.bookingRequestDialog.contactData.validation.nameRequired') }),
     mail: z.string().email().optional(),
     phone: z.string().optional(),
     saveInfo: z.boolean().optional()
   })
   .refine((data) => data.mail || data.phone, {
-    message: 'Either email or phone is required',
+    message: t('bookingComponents.bookingRequestDialog.contactData.validation.emailOrPhone'),
     path: ['mail']
   })
 
@@ -70,20 +73,19 @@ defineExpose({ getValues, validate })
   <form class="grid gap-5 py-4">
     <FormField name="display_name" v-slot="{ componentField }">
       <FormItem>
-        <FormLabel for="name"> Name </FormLabel>
+        <FormLabel for="name"> {{ t('bookingComponents.bookingRequestDialog.contactData.name.label') }} </FormLabel>
         <FormControl>
           <Input id="name" v-bind="componentField" />
           <FormMessage />
         </FormControl>
         <FormDescription class="col-span-4">
-          Please enter the Name that is displayed in the event calender. <br />
-          This could be your full name or a nickname, or the name of the event.
+          {{ t('bookingComponents.bookingRequestDialog.contactData.name.description') }}
         </FormDescription>
       </FormItem>
     </FormField>
     <FormField name="mail" v-slot="{ componentField }">
       <FormItem>
-        <FormLabel for="mail"> E-Mail </FormLabel>
+        <FormLabel for="mail"> {{ t('bookingComponents.bookingRequestDialog.contactData.email.label') }} </FormLabel>
         <FormControl>
           <div class="relative">
             <Input id="mail" v-bind="componentField" class="pl-10" />
@@ -93,12 +95,12 @@ defineExpose({ getValues, validate })
           </div>
           <FormMessage />
         </FormControl>
-        <FormDescription> Please enter your email address. </FormDescription>
+        <FormDescription> {{ t('bookingComponents.bookingRequestDialog.contactData.email.description') }} </FormDescription>
       </FormItem>
     </FormField>
     <FormField name="phone" v-slot="{ componentField }">
       <FormItem>
-        <FormLabel for="phone"> Phone </FormLabel>
+        <FormLabel for="phone"> {{ t('bookingComponents.bookingRequestDialog.contactData.phone.label') }} </FormLabel>
         <FormControl>
           <div class="relative">
             <Input id="phone" v-bind="componentField" class="pl-10" />
@@ -108,7 +110,7 @@ defineExpose({ getValues, validate })
           </div>
           <FormMessage />
         </FormControl>
-        <FormDescription class="col-span-4"> Please enter your phone number. </FormDescription>
+        <FormDescription class="col-span-4"> {{ t('bookingComponents.bookingRequestDialog.contactData.phone.description') }} </FormDescription>
       </FormItem>
     </FormField>
 
@@ -118,8 +120,8 @@ defineExpose({ getValues, validate })
           <Checkbox :checked="value" @update:checked="handleChange" />
         </FormControl>
         <div class="space-y-1 leading-none">
-          <FormLabel for="saveInfo"> Save Info </FormLabel>
-          <FormDescription> Save your information on this device for future bookings. </FormDescription>
+          <FormLabel for="saveInfo"> {{ t('bookingComponents.bookingRequestDialog.contactData.saveInfo.label') }} </FormLabel>
+          <FormDescription> {{ t('bookingComponents.bookingRequestDialog.contactData.saveInfo.description') }} </FormDescription>
           <FormMessage />
         </div>
       </FormItem>

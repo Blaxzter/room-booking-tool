@@ -1,7 +1,8 @@
 <script setup lang="ts">
 import _ from 'lodash'
-import { computed, onBeforeMount, ref, useAttrs, watch } from 'vue'
+import { computed, onBeforeMount, ref, useAttrs } from 'vue'
 import { storeToRefs } from 'pinia'
+import { useI18n } from 'vue-i18n'
 
 import { FormControl } from '@/components/ui/form'
 import {
@@ -18,6 +19,7 @@ import {
 import { useGroups } from '@/stores/groups'
 import { useUser } from '@/stores/user'
 
+const { t } = useI18n()
 const { name } = storeToRefs(useUser())
 const attrs = useAttrs()
 const { selectedGroupId, groups } = storeToRefs(useGroups())
@@ -52,7 +54,7 @@ const getInitialGroup = (): string | undefined => {
 }
 
 const selectedGroupValue = computed(() => {
-  return group.value === '-1' ? `No Group - ${name.value}` : _.find(groups.value, { id: group.value })?.name
+  return group.value === '-1' ? t('bits.groupSelect.personal', { name: name.value }) : _.find(groups.value, { id: group.value })?.name
 })
 
 onBeforeMount(() => {
@@ -65,7 +67,7 @@ onBeforeMount(() => {
   <Select v-model="group" v-bind="$attrs" :disabled="!editable">
     <FormControl>
       <SelectTrigger>
-        <SelectValue placeholder="Select a group" asChild>
+        <SelectValue :placeholder="t('bits.groupSelect.placeholder')" asChild>
           {{ selectedGroupValue }}
         </SelectValue>
       </SelectTrigger>
@@ -73,8 +75,8 @@ onBeforeMount(() => {
     <SelectContent>
       <SelectGroup>
         <SelectItem :value="'-1'">
-          <SelectItemText> No Group </SelectItemText>
-          <div class="text-muted-foreground text-xs">Personal - {{ name }}</div>
+          <SelectItemText>{{ t('bits.groupSelect.noGroup') }}</SelectItemText>
+          <div class="text-muted-foreground text-xs">{{ t('bits.groupSelect.personal', { name: name }) }}</div>
         </SelectItem>
       </SelectGroup>
       <template v-if="groups.length">

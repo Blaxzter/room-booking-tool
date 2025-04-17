@@ -1,13 +1,15 @@
 <script setup lang="ts">
-import { computed, inject, ref } from 'vue'
+import { computed, ref } from 'vue'
 import { storeToRefs } from 'pinia'
 import _ from 'lodash'
+import { useI18n } from 'vue-i18n'
 
 import type { Group, User } from '@/types'
 import { useGroups } from '@/stores/groups'
 import { useUser } from '@/stores/user'
 import GroupListEntry from '@/components/groups/GroupListEntry.vue'
 
+const { t } = useI18n()
 const { groups } = storeToRefs(useGroups())
 
 const { user } = storeToRefs(useUser())
@@ -36,19 +38,19 @@ const pendingGroups = computed(() => {
 
 const groupIterative = ref([
   {
-    title: 'Pending Invites',
+    title: t('groups.groupList.pendingInvites'),
     groups: pendingGroups,
     showRole: false,
     isInvite: true
   },
   {
-    title: 'Your Groups',
+    title: t('groups.groupList.yourGroups'),
     groups: ownedGroups,
     showRole: false,
     isInvite: false
   },
   {
-    title: 'Invited Groups',
+    title: t('groups.groupList.invitedGroups'),
     groups: invitedGroups,
     showRole: true,
     isInvite: false
@@ -83,5 +85,8 @@ defineEmits(['selectGroup'])
         "
       />
     </template>
+  </div>
+  <div class="text-center text-muted-foreground text-sm mb-4" v-else>
+    {{ t('groups.groupList.noGroups') }}
   </div>
 </template>

@@ -1,8 +1,9 @@
 <script setup lang="ts">
-import { computed, type PropType, onBeforeMount, ref, watch } from 'vue'
+import { computed, type PropType, onBeforeMount, ref } from 'vue'
 import { useForm } from 'vee-validate'
 import { toTypedSchema } from '@vee-validate/zod'
 import * as z from 'zod'
+import { useI18n } from 'vue-i18n'
 
 import { FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form'
 import { Input } from '@/components/ui/input'
@@ -13,6 +14,8 @@ import { randomBookableObject } from '@/assets/ts/constants'
 const exampleObject = randomBookableObject()
 
 import type { BookableObject } from '@/types'
+
+const { t } = useI18n()
 
 interface InitialValues {
   name?: string
@@ -88,7 +91,7 @@ defineExpose({ getValues, validate })
   <form class="grid gap-4 pt-4 w-full">
     <FormField v-slot="{ componentField }" name="name">
       <FormItem>
-        <FormLabel>Name {{ pendingChanges.includes('name') && props.bookableObject ? ' *' : '' }}</FormLabel>
+        <FormLabel>{{ t('bookableObject.edit.defaultSettings.name') }}{{ pendingChanges.includes('name') && props.bookableObject ? t('bookableObject.edit.defaultSettings.pendingChanges') : '' }}</FormLabel>
         <FormControl>
           <Input
             type="text"
@@ -114,15 +117,13 @@ defineExpose({ getValues, validate })
             v-bind="componentField"
           />
         </FormControl>
-        <FormDescription> Please enter the name of the bookable object. </FormDescription>
+        <FormDescription>{{ t('bookableObject.edit.defaultSettings.nameDescription') }}</FormDescription>
         <FormMessage />
       </FormItem>
     </FormField>
     <FormField v-slot="{ componentField }" name="description">
       <FormItem>
-        <FormLabel
-          >Description {{ pendingChanges.includes('description') && props.bookableObject ? ' *' : '' }}</FormLabel
-        >
+        <FormLabel>{{ t('bookableObject.edit.defaultSettings.description') }}{{ pendingChanges.includes('description') && props.bookableObject ? t('bookableObject.edit.defaultSettings.pendingChanges') : '' }}</FormLabel>
         <FormControl>
           <Textarea
             :placeholder="exampleObject.description"
@@ -147,15 +148,15 @@ defineExpose({ getValues, validate })
             v-bind="componentField"
           />
         </FormControl>
-        <FormDescription> Please enter the description of the bookable object. </FormDescription>
+        <FormDescription>{{ t('bookableObject.edit.defaultSettings.descriptionDescription') }}</FormDescription>
         <FormMessage />
       </FormItem>
     </FormField>
     <FormField v-slot="{ componentField }" name="groupId">
       <FormItem>
-        <FormLabel>Group</FormLabel>
+        <FormLabel>{{ t('bookableObject.edit.defaultSettings.group') }}</FormLabel>
         <GroupSelect v-bind="componentField" :include-person="true" :editable="!props.bookableObject" />
-        <FormDescription> Please select the group of the bookable object. </FormDescription>
+        <FormDescription>{{ t('bookableObject.edit.defaultSettings.groupDescription') }}</FormDescription>
         <FormMessage />
       </FormItem>
     </FormField>

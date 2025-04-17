@@ -1,7 +1,10 @@
 <script setup lang="ts">
 import { CheckIcon, CircleHelpIcon } from 'lucide-vue-next'
+import { useI18n } from 'vue-i18n'
 
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip'
+
+const { t } = useI18n()
 
 defineProps({
   confirmed: Boolean,
@@ -20,8 +23,8 @@ defineProps({
         <CircleHelpIcon :size="size" v-else />
       </TooltipTrigger>
       <TooltipContent>
-        <p v-if="confirmed">Confirmed</p>
-        <p v-else>Not confirmed yet</p>
+        <p v-if="confirmed">{{ t('bookingComponents.calender.confirmationIcon.confirmed') }}</p>
+        <p v-else>{{ t('bookingComponents.calender.confirmationIcon.notConfirmedYet') }}</p>
       </TooltipContent>
     </Tooltip>
   </TooltipProvider>

@@ -1,6 +1,7 @@
 <script lang="ts" setup>
 import { inject } from 'vue'
 import { useRouter } from 'vue-router'
+import { useI18n } from 'vue-i18n'
 
 import { EllipsisVertical, LinkIcon, EditIcon, TrashIcon } from 'lucide-vue-next'
 
@@ -17,6 +18,7 @@ import { useToast } from '@/components/ui/toast'
 import type { ShowAlertFunction } from '@/plugins/alert-dialog-plugin'
 
 const router = useRouter()
+const { t } = useI18n()
 
 const open = defineModel({
   type: Boolean,
@@ -33,22 +35,22 @@ const props = defineProps<{
 const showAlertDialog = inject('showAlertDialog') as ShowAlertFunction
 const deleteBookableObject = async () => {
   showAlertDialog({
-    title: 'Delete bookable object',
-    description: 'Are you sure you want to delete this bookable object?',
+    title: t('bookableObject.menuButton.deleteAlert.title'),
+    description: t('bookableObject.menuButton.deleteAlert.description'),
     onConfirm: async () => {
       const { deleteBookableObject } = useBookableObjects()
       await deleteBookableObject(props.bookableObjectId).then(() => {
         const { toast } = useToast()
         toast({
-          title: 'Bookable object removed',
-          description: `The bookable object has been removed.`,
+          title: t('bookableObject.menuButton.deleteToast.title'),
+          description: t('bookableObject.menuButton.deleteToast.description'),
           variant: 'success'
         })
       })
     },
     confirmIcon: TrashIcon,
     confirmVariant: 'destructive',
-    onConfirmText: 'Delete'
+    onConfirmText: t('bookableObject.menuButton.deleteAlert.confirmButton')
   })
 }
 </script>
@@ -68,18 +70,18 @@ const deleteBookableObject = async () => {
           @click.stop="router.push(`/${bookableObjectType}/${bookableObjectUniqueId}`)"
         >
           <LinkIcon class="mr-2 h-4 w-4" />
-          <span>Sharing View</span>
+          <span>{{ t('bookableObject.menuButton.shareView') }}</span>
         </DropdownMenuItem>
         <DropdownMenuItem
           class="hover:cursor-pointer"
           @click.stop="router.push({ name: 'bookable-object-edit', params: { id: bookableObjectId } })"
         >
           <EditIcon class="mr-2 h-4 w-4" />
-          <span>Edit</span>
+          <span>{{ t('bookableObject.menuButton.edit') }}</span>
         </DropdownMenuItem>
         <DropdownMenuItem class="hover:cursor-pointer" @click.stop="deleteBookableObject">
           <TrashIcon class="mr-2 h-4 w-4 text-red-500" />
-          <span>Delete</span>
+          <span>{{ t('bookableObject.menuButton.delete') }}</span>
         </DropdownMenuItem>
       </DropdownMenuGroup>
     </DropdownMenuContent>

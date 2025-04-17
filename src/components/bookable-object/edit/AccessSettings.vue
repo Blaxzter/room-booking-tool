@@ -3,6 +3,7 @@ import { computed, ref, type PropType, onBeforeMount } from 'vue'
 import { useForm } from 'vee-validate'
 import { toTypedSchema } from '@vee-validate/zod'
 import * as z from 'zod'
+import { useI18n } from 'vue-i18n'
 
 import { FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form'
 import { Checkbox } from '@/components/ui/checkbox'
@@ -46,9 +47,11 @@ const formSchema = toTypedSchema(
   })
 )
 
+const { t } = useI18n()
+
 const roles = [
-  { id: 'admin', name: 'Admin' },
-  { id: 'member', name: 'Member' }
+  { id: 'admin', name: t('bookableObject.edit.accessSettings.roles.admin') },
+  { id: 'member', name: t('bookableObject.edit.accessSettings.roles.member') }
 ]
 
 // Copy link stuff
@@ -95,15 +98,15 @@ defineExpose({ getValues, validate })
 
 <template>
   <form class="grid gap-5 py-4">
-    <div class="text-lg font-semibold mb-2">Access Settings</div>
+    <div class="text-lg font-semibold mb-2">{{ t('bookableObject.edit.accessSettings.title') }}</div>
     <FormField v-slot="{ value, handleChange }" name="is_internal">
       <FormItem class="flex flex-row items-start gap-x-3 space-y-0 rounded-md">
         <FormControl>
           <Checkbox :checked="value" @update:checked="handleChange" @click="$emit('update', 'is_internal', !value)" />
         </FormControl>
         <div class="space-y-1 leading-none">
-          <FormLabel>Public Visible</FormLabel>
-          <FormDescription> Toggle to make the bookable object publicly visible. </FormDescription>
+          <FormLabel>{{ t('bookableObject.edit.accessSettings.publicVisible.label') }}</FormLabel>
+          <FormDescription>{{ t('bookableObject.edit.accessSettings.publicVisible.description') }}</FormDescription>
           <FormMessage />
         </div>
       </FormItem>
@@ -111,7 +114,7 @@ defineExpose({ getValues, validate })
 
     <Collapsible v-model:open="values.is_internal">
       <CollapsibleContent>
-        <div>Link</div>
+        <div>{{ t('bookableObject.edit.accessSettings.link.title') }}</div>
         <div class="flex items-center justify-between gap-x-2 border rounded px-3 py-0.5 max-w-full">
           <span class="text-xs text-gray-500 truncate overflow-ellipsis"
             >{{ currentHost }}/<NameFade
@@ -138,9 +141,9 @@ defineExpose({ getValues, validate })
           />
         </FormControl>
         <div class="space-y-1 leading-none">
-          <FormLabel>Booking requires confirmation</FormLabel>
+          <FormLabel>{{ t('bookableObject.edit.accessSettings.confirmBooking.label') }}</FormLabel>
           <FormDescription>
-            If this is set to off, a booking doesnt require confirmation and it gets automatically confirmed.
+            {{ t('bookableObject.edit.accessSettings.confirmBooking.description') }}
           </FormDescription>
           <FormMessage />
         </div>
@@ -151,11 +154,11 @@ defineExpose({ getValues, validate })
       <CollapsibleContent>
         <FormField v-slot="{ componentField }" name="confirm_role">
           <FormItem>
-            <FormLabel>Confirm Role</FormLabel>
+            <FormLabel>{{ t('bookableObject.edit.accessSettings.confirmRole.label') }}</FormLabel>
             <Select v-bind="componentField" @update:modelValue="$emit('update', 'confirm_role', values.confirm_role)">
               <FormControl>
                 <SelectTrigger>
-                  <SelectValue placeholder="Select a role" />
+                  <SelectValue :placeholder="t('bookableObject.edit.accessSettings.confirmRole.placeholder')" />
                 </SelectTrigger>
               </FormControl>
               <SelectContent>
@@ -166,7 +169,7 @@ defineExpose({ getValues, validate })
                 </SelectGroup>
               </SelectContent>
             </Select>
-            <FormDescription> Select the role a group member needs to confirm a booking. </FormDescription>
+            <FormDescription>{{ t('bookableObject.edit.accessSettings.confirmRole.description') }}</FormDescription>
             <FormMessage />
           </FormItem>
         </FormField>
@@ -183,8 +186,8 @@ defineExpose({ getValues, validate })
           />
         </FormControl>
         <div class="space-y-1 leading-none">
-          <FormLabel>Information shared</FormLabel>
-          <FormDescription> Everyone with the sharing link can view booking details. </FormDescription>
+          <FormLabel>{{ t('bookableObject.edit.accessSettings.informationShared.label') }}</FormLabel>
+          <FormDescription>{{ t('bookableObject.edit.accessSettings.informationShared.description') }}</FormDescription>
           <FormMessage />
         </div>
       </FormItem>

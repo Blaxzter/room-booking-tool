@@ -1,4 +1,10 @@
 <script setup lang="ts">
+import { onMounted, ref } from 'vue'
+import { storeToRefs } from 'pinia'
+import { useDark, useToggle } from '@vueuse/core'
+import router from '@/router'
+import { MailIcon, LogOutIcon, CogIcon, PersonStandingIcon, SunMoonIcon } from 'lucide-vue-next'
+
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -9,15 +15,10 @@ import {
   DropdownMenuShortcut,
   DropdownMenuTrigger
 } from '@/components/ui/dropdown-menu'
-
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import { Button } from '@/components/ui/button'
-import { useDark, useToggle } from '@vueuse/core'
-import { onMounted, ref } from 'vue'
-import { storeToRefs } from 'pinia'
-import { MailIcon, LogOutIcon, CogIcon, PersonStandingIcon, SunMoonIcon, CoffeeIcon } from 'lucide-vue-next'
+
 import { useUser } from '@/stores/user'
-import router from '@/router'
 import DarkscreenToggle from '@/components/animations/DarkscreenToggle.vue'
 
 const isDark = useDark()

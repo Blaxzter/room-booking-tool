@@ -228,5 +228,388 @@
       "plural": ["Räume", "Objekte", "Bereiche", "Alles"],
       "lowercase": ["räume", "objekte", "bereiche", "alles"]
     }
+  },
+  "bookableObject": {
+    "edit": {
+      "accessSettings": {
+        "title": "Zugriffseinstellungen",
+        "publicVisible": {
+          "label": "Öffentlich sichtbar",
+          "description": "Aktivieren Sie diese Option, um das buchbare Objekt öffentlich sichtbar zu machen."
+        },
+        "link": {
+          "title": "Link"
+        },
+        "confirmBooking": {
+          "label": "Buchung erfordert Bestätigung",
+          "description": "Wenn diese Option deaktiviert ist, erfordert eine Buchung keine Bestätigung und wird automatisch bestätigt."
+        },
+        "confirmRole": {
+          "label": "Bestätigungsrolle",
+          "placeholder": "Wählen Sie eine Rolle",
+          "description": "Wählen Sie die Rolle, die ein Gruppenmitglied haben muss, um eine Buchung zu bestätigen."
+        },
+        "informationShared": {
+          "label": "Informationen geteilt",
+          "description": "Jeder mit dem Freigabelink kann Buchungsdetails einsehen."
+        },
+        "roles": {
+          "admin": "Administrator",
+          "member": "Mitglied"
+        }
+      },
+      "defaultSettings": {
+        "name": "Name",
+        "nameDescription": "Bitte geben Sie den Namen des buchbaren Objekts ein.",
+        "description": "Beschreibung",
+        "descriptionDescription": "Bitte geben Sie eine Beschreibung des buchbaren Objekts ein.",
+        "group": "Gruppe",
+        "groupDescription": "Bitte wählen Sie die Gruppe des buchbaren Objekts.",
+        "pendingChanges": " *"
+      },
+      "additionalSettings": {
+        "displayImage": "Anzeigebild",
+        "uploadImageHelp": "Laden Sie ein Bild hoch.",
+        "chooseType": "Wählen Sie den Typ von",
+        "chooseTypeDescription": "Wählen Sie den Typ des",
+        "objectTypes": {
+          "room": "Raum",
+          "object": "Objekt",
+          "equipment": "Ausstattung"
+        }
+      }
+    },
+    "menuButton": {
+      "shareView": "Freigabeansicht",
+      "edit": "Bearbeiten",
+      "delete": "Löschen",
+      "deleteAlert": {
+        "title": "Buchbares Objekt löschen",
+        "description": "Sind Sie sicher, dass Sie dieses buchbare Objekt löschen möchten?",
+        "confirmButton": "Löschen"
+      },
+      "deleteToast": {
+        "title": "Buchbares Objekt entfernt",
+        "description": "Das buchbare Objekt wurde entfernt."
+      }
+    },
+    "requestDialog": {
+      "addNew": "Neu hinzufügen",
+      "createNew": "Erstelle einen neuen",
+      "next": "Weiter",
+      "back": "Zurück",
+      "create": "Erstellen",
+      "drawer": {
+        "title": "Profil bearbeiten",
+        "description": "Nehmen Sie hier Änderungen an Ihrem Profil vor. Klicken Sie auf Speichern, wenn Sie fertig sind."
+      }
+    }
+  },
+  "bits": {
+    "backgroundImage": {
+      "credit": "Foto von {photographer} auf {platform}"
+    },
+    "groupSelect": {
+      "placeholder": "Wähle eine Gruppe",
+      "noGroup": "Keine Gruppe",
+      "personal": "Persönlich - {name}"
+    }
+  },
+  "groups": {
+    "groupSwitcher": {
+      "personalAccount": "Dein Konto",
+      "groups": "Gruppen",
+      "searchTeam": "Team suchen...",
+      "noTeamFound": "Kein Team gefunden.",
+      "createGroup": "Gruppe erstellen",
+      "manageGroups": "Gruppen verwalten",
+      "selectTeam": "Team auswählen"
+    },
+    "groupList": {
+      "pendingInvites": "Ausstehende Einladungen",
+      "yourGroups": "Ihre Gruppen",
+      "invitedGroups": "Eingeladene Gruppen",
+      "noGroups": "Sie haben derzeit keine Gruppen und sind nicht Mitglied in irgendwelchen Gruppen."
+    },
+    "groupListEntry": {
+      "rejectInvite": {
+        "title": "Einladung ablehnen",
+        "description": "Sind Sie sicher, dass Sie die Einladung für die Gruppe \"{groupName}\" ablehnen möchten?",
+        "confirm": "Ablehnen"
+      },
+      "usersInGroup": "{count} Benutzer in dieser Gruppe",
+      "invitesInGroup": "{count} Einladungen in dieser Gruppe",
+      "noObjects": "Keine Objekte"
+    },
+    "dialogs": {
+      "groupMember": {
+        "title": "Teammitglieder",
+        "description": "Laden Sie Ihre Teammitglieder zur Zusammenarbeit ein."
+      },
+      "newGroupDialog": {
+        "title": "Gruppe erstellen",
+        "description": "Fügen Sie eine neue Gruppe hinzu, um Räume und andere buchbare Objekte zu verwalten.",
+        "drawerTitle": "Gruppe erstellen",
+        "create": "Erstellen"
+      }
+    },
+    "utils": {
+      "groupRoleDropDown": {
+        "roles": {
+          "viewer": {
+            "name": "Betrachter",
+            "description": "Kann ansehen."
+          },
+          "member": {
+            "name": "Mitglied",
+            "description": "Kann ansehen und bearbeiten."
+          },
+          "admin": {
+            "name": "Administrator",
+            "description": "Administrator-Zugriff auf alle Ressourcen."
+          }
+        },
+        "selectNewRole": "Neue Rolle auswählen...",
+        "noRolesFound": "Keine Rollen gefunden."
+      }
+    },
+    "cards": {
+      "groupDataCard": {
+        "title": "Gruppendaten",
+        "description": "Bearbeiten Sie Ihre Gruppendaten."
+      },
+      "groupMemberCard": {
+        "title": "Teammitglieder",
+        "description": "Laden Sie Ihre Teammitglieder zur Zusammenarbeit ein."
+      }
+    },
+    "bodys": {
+      "groupDataBody": {
+        "groupImage": "Gruppenbild",
+        "uploadImage": "Bild hochladen",
+        "or": "oder",
+        "selectEmoji": "Emoji auswählen",
+        "groupName": "Gruppenname",
+        "groupNameDescription": "Dies ist der Name der Gruppe, der den Benutzern angezeigt wird.",
+        "description": "Beschreibung",
+        "descriptionPlaceholder": "Eine kurze Beschreibung der Gruppe",
+        "descriptionDescription": "Dies ist eine kurze Beschreibung der Gruppe, die den Benutzern angezeigt wird.",
+        "validation": {
+          "nameMin": "Gruppenname muss mindestens 2 Zeichen lang sein.",
+          "nameMax": "Gruppenname darf nicht länger als 30 Zeichen sein.",
+          "descriptionMax": "Gruppenbeschreibung darf nicht länger als 160 Zeichen sein."
+        },
+        "toast": {
+          "created": {
+            "title": "Gruppe erstellt",
+            "description": "Die Gruppe {name} wurde erstellt."
+          },
+          "updated": {
+            "title": "Gruppe aktualisiert",
+            "description": "Die Gruppe {name} wurde aktualisiert."
+          }
+        }
+      },
+      "groupMemberBody": {
+        "emailPlaceholder": "E-Mail zum Einladen eingeben",
+        "sendInvite": "Einladung senden",
+        "teamMembers": "Teammitglieder",
+        "you": "Du",
+        "invites": "Einladungen",
+        "invited": "Eingeladen",
+        "deleteUser": {
+          "title": "Benutzer aus Gruppe entfernen",
+          "description": "Sind Sie sicher, dass Sie den Benutzer \"{email}\" aus der Gruppe \"{groupName}\" löschen möchten?"
+        },
+        "toast": {
+          "roleUpdated": {
+            "title": "Benutzerrolle aktualisiert",
+            "description": "Die Rolle wurde auf {role} aktualisiert."
+          },
+          "userRemoved": {
+            "title": "Benutzer entfernt",
+            "description": "Der Benutzer wurde aus der Gruppe entfernt."
+          }
+        }
+      }
+    },
+    "groupView": {
+      "addGroup": "Gruppe hinzufügen",
+      "tabs": {
+        "groupInformation": "Gruppeninformationen",
+        "members": "Mitglieder"
+      },
+      "back": "Zurück",
+      "groupBy": "gruppe von {{email}}",
+      "deleteButton": "Gruppe löschen",
+      "selectGroup": "Wählen Sie eine Gruppe aus, um Details anzuzeigen.",
+      "deleteGroup": {
+        "title": "Gruppe löschen",
+        "description": "Sind Sie sicher, dass Sie die Gruppe \"{{name}}\" löschen möchten?"
+      }
+    }
+  },
+  "requestsComponents": {
+    "dataTable": {
+      "noResults": "Keine Ergebnisse."
+    },
+    "dataTablePagination": {
+      "rowsSelected": "{selected} von {total} Zeile(n) ausgewählt.",
+      "rowsPerPage": "Zeilen pro Seite",
+      "page": "Seite {current} von {total}",
+      "goToFirstPage": "Zur ersten Seite",
+      "goToPreviousPage": "Zur vorherigen Seite",
+      "goToNextPage": "Zur nächsten Seite",
+      "goToLastPage": "Zur letzten Seite"
+    },
+    "requestAction": {
+      "acceptBooking": "Buchung akzeptieren",
+      "declineBooking": "Buchung ablehnen",
+      "goToCalendar": "Zum Kalender"
+    },
+    "column": {
+      "bookableObject": "Buchbares Objekt",
+      "startDate": "Startdatum",
+      "duration": "Dauer",
+      "fullDay": "Ganztägig",
+      "contactInformation": "Kontaktinformationen",
+      "notAvailable": "N/A",
+      "description": "Beschreibung"
+    }
+  },
+  "nav": {
+    "mainNav": {
+      "dashboard": "Dashboard",
+      "requests": "Anfragen",
+      "bookingTool": "Objekt Buchungstool",
+      "toggleMenu": "Navigationsmenü umschalten"
+    }
+  },
+  "bookingComponents": {
+    "bookingRequestDialog": {
+      "bookingRequestWrapper": {
+        "steps": {
+          "time": "Zeit",
+          "contact": "Kontakt",
+          "event": "Veranstaltung"
+        },
+        "buttons": {
+          "next": "Weiter",
+          "back": "Zurück",
+          "create": "Erstellen"
+        },
+        "title": "Buchung erstellen",
+        "drawer": {
+          "title": "Profil bearbeiten",
+          "description": "Nehmen Sie hier Änderungen an Ihrem Profil vor. Klicken Sie auf Speichern, wenn Sie fertig sind."
+        }
+      },
+      "contactData": {
+        "name": {
+          "label": "Name",
+          "description": "Bitte geben Sie den Namen ein, der im Veranstaltungskalender angezeigt wird. Dies kann Ihr vollständiger Name, ein Spitzname oder der Name der Veranstaltung sein."
+        },
+        "email": {
+          "label": "E-Mail",
+          "description": "Bitte geben Sie Ihre E-Mail-Adresse ein."
+        },
+        "phone": {
+          "label": "Telefon",
+          "description": "Bitte geben Sie Ihre Telefonnummer ein."
+        },
+        "saveInfo": {
+          "label": "Daten speichern",
+          "description": "Speichern Sie Ihre Informationen auf diesem Gerät für zukünftige Buchungen."
+        },
+        "validation": {
+          "nameRequired": "Name ist erforderlich",
+          "emailOrPhone": "Entweder E-Mail oder Telefon ist erforderlich"
+        }
+      },
+      "eventData": {
+        "description": {
+          "label": "Beschreibung",
+          "description": "Beschreiben Sie die Veranstaltung, die Sie buchen"
+        },
+        "legal": {
+          "label": "Ich stimme den Nutzungsbedingungen zu",
+          "description": "Mit der Erstellung einer Buchung stimmen Sie unseren",
+          "termsOfService": "Nutzungsbedingungen",
+          "and": "und",
+          "privacyPolicy": "Datenschutzrichtlinie"
+        }
+      },
+      "timeData": {
+        "startDate": {
+          "label": "Startdatum"
+        },
+        "fullDay": {
+          "label": "Ganztägig"
+        },
+        "startTime": {
+          "label": "Startzeit"
+        },
+        "endTime": {
+          "label": "Endzeit"
+        },
+        "endsOnAnotherDate": {
+          "label": "Endet an einem anderen Datum"
+        },
+        "endDate": {
+          "label": "Enddatum"
+        },
+        "validation": {
+          "startDateRequired": "Startdatum ist erforderlich",
+          "startTimeRequired": "Startzeit ist erforderlich",
+          "endTimeRequired": "Endzeit ist erforderlich",
+          "futureDate": "Startdatum und -zeit müssen in der Zukunft liegen",
+          "endTimeAfterStart": "Endzeit muss nach der Startzeit liegen",
+          "endDateAfterStart": "Enddatum muss nach dem Startdatum liegen"
+        }
+      }
+    },
+    "bookableSideInfo": {
+      "createBooking": "Buchung erstellen",
+      "copyShareLink": "Freigabelink kopieren"
+    },
+    "calender": {
+      "calenderComponent": {
+        "today": "Heute",
+        "newEvent": "Neuer Termin",
+        "eventTitleFormat": "Termin: {date} {start_time} - {end_time}",
+        "errors": {
+          "title": "Fehler",
+          "pastEventCreation": "Sie können keinen Termin in der Vergangenheit erstellen"
+        }
+      },
+      "calenderRemote": {
+        "prev": "Vorheriger",
+        "next": "Nächster"
+      },
+      "calenderTabs": {
+        "month": "Monat",
+        "week": "Woche",
+        "day": "Tag",
+        "list": "Liste",
+        "selectView": "Ansicht wählen"
+      },
+      "calenderEventSlot": {
+        "deleteEvent": "Termin löschen",
+        "confirmDelete": "Sind Sie sicher, dass Sie diesen Termin löschen möchten?",
+        "eventData": "Termindaten",
+        "event": "Termin",
+        "date": "Datum",
+        "confirmed": "Bestätigt",
+        "yes": "Ja",
+        "no": "Nein",
+        "pastEvent": "Vergangener Termin",
+        "canEdit": "Sie können diesen Termin bearbeiten",
+        "isPast": "Dieser Termin liegt in der Vergangenheit"
+      },
+      "confirmationIcon": {
+        "confirmed": "Bestätigt",
+        "notConfirmedYet": "Noch nicht bestätigt"
+      }
+    }
   }
 }

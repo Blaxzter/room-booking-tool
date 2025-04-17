@@ -5,6 +5,7 @@ import * as z from 'zod'
 import { useForm } from 'vee-validate'
 import { storeToRefs } from 'pinia'
 import _ from 'lodash'
+import { useI18n } from 'vue-i18n'
 
 import { randomGroupName } from '@/assets/ts/constants'
 import {
@@ -31,6 +32,7 @@ const { user } = storeToRefs(useUser())
 const { isDemoUser } = storeToRefs(useGlobalSettings())
 
 const { toast } = useToast()
+const { t } = useI18n()
 
 const emit = defineEmits(['close', 'created'])
 
@@ -54,15 +56,15 @@ const profileFormSchema = toTypedSchema(
     name: z
       .string()
       .min(2, {
-        message: 'Group name must be at least 2 characters.'
+        message: t('groups.bodys.groupDataBody.validation.nameMin')
       })
       .max(30, {
-        message: 'Group name must not be longer than 30 characters.'
+        message: t('groups.bodys.groupDataBody.validation.nameMax')
       }),
     description: z
       .string()
       .max(160, {
-        message: 'Group description must not be longer than 160 characters.'
+        message: t('groups.bodys.groupDataBody.validation.descriptionMax')
       })
       .optional(),
     emoji: z.string().optional(),
@@ -110,8 +112,8 @@ const onSubmit = handleSubmit(async (values) => {
   values.emoji = selectedEmoji.value
   const newGroup = await createGroup(values)
   toast({
-    title: 'Group created',
-    description: `The group ${newGroup?.name} has been created.`
+    title: t('groups.bodys.groupDataBody.toast.created.title'),
+    description: t('groups.bodys.groupDataBody.toast.created.description', { name: newGroup?.name })
   })
   emit('created', newGroup as Group)
 })
@@ -123,8 +125,8 @@ const updateGroup = async (field: keyof Group, value: any) => {
     const { updateGroup } = useGroups()
     await updateGroup(props.group.id, { [field]: value })
     toast({
-      title: 'Group updated',
-      description: `The group ${props.group.name} has been updated.`
+      title: t('groups.bodys.groupDataBody.toast.updated.title'),
+      description: t('groups.bodys.groupDataBody.toast.updated.description', { name: props.group.name })
     })
   }
 }
@@ -166,7 +168,7 @@ const isDisabled = computed(() => {
 <template>
   <form class="space-y-4" @submit="onSubmit">
     <div class="space-y-2">
-      <Label for="name">Group Image</Label>
+      <Label for="name">{{ t('groups.bodys.groupDataBody.groupImage') }}</Label>
       <div class="flex items-center justify-center">
         <div class="mt-1 flex flex-col items-center w-[120px]">
           <AvatarUploadComponent
@@ -178,12 +180,12 @@ const isDisabled = computed(() => {
             :disabled="isDisabled"
           />
           <div class="text-sm text-gray-500 mt-3" v-if="!isDisabled">
-            Upload an Image
+            {{ t('groups.bodys.groupDataBody.uploadImage') }}
           </div>
         </div>
 
         <div class="mx-1 sm:mx-5" :class="[!isDisabled ? 'mb-7' : 'mb-1']">
-          or
+          {{ t('groups.bodys.groupDataBody.or') }}
         </div>
 
         <div class="flex flex-col items-center w-[120px]">
@@ -193,14 +195,14 @@ const isDisabled = computed(() => {
             :disabled="isDisabled"
           />
           <div class="text-sm text-gray-500 mt-3" v-if="!isDisabled">
-            Select an Emoji
+            {{ t('groups.bodys.groupDataBody.selectEmoji') }}
           </div>
         </div>
       </div>
     </div>
     <FormField v-slot="{ componentField }" name="name">
       <FormItem>
-        <FormLabel>Group name</FormLabel>
+        <FormLabel>{{ t('groups.bodys.groupDataBody.groupName') }}</FormLabel>
         <FormControl>
           <Input
             type="text"
@@ -211,25 +213,24 @@ const isDisabled = computed(() => {
           />
         </FormControl>
         <FormDescription>
-          This is the name of the group that will be displayed to users.
+          {{ t('groups.bodys.groupDataBody.groupNameDescription') }}
         </FormDescription>
         <FormMessage />
       </FormItem>
     </FormField>
     <FormField v-slot="{ componentField }" name="description">
       <FormItem>
-        <FormLabel>Description</FormLabel>
+        <FormLabel>{{ t('groups.bodys.groupDataBody.description') }}</FormLabel>
         <FormControl>
           <Textarea
-            placeholder="A short description of the group"
+            :placeholder="t('groups.bodys.groupDataBody.descriptionPlaceholder')"
             v-bind="componentField"
             @blur="updateGroup('description', values.description)"
             :disabled="isDisabled"
           />
         </FormControl>
         <FormDescription>
-          This is a short description of the group that will be displayed to
-          users.
+          {{ t('groups.bodys.groupDataBody.descriptionDescription') }}
         </FormDescription>
         <FormMessage />
       </FormItem>

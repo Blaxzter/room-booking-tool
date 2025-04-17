@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { CalendarDays, CalendarClock, CalendarFold, CalendarRange } from 'lucide-vue-next'
+import { useI18n } from 'vue-i18n'
 
 import { Button } from '@/components/ui/button'
 import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs'
@@ -14,34 +15,35 @@ import {
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip'
 
 import { breakpointsTailwind, useBreakpoints } from '@vueuse/core'
-import { ref } from 'vue'
+import { computed } from 'vue'
 
 export type CalendarViewType = 'dayGridFourWeek' | 'timeGridWeek' | 'timeGridDay' | 'listWeek'
 
 const model = defineModel<CalendarViewType>()
+const { t } = useI18n()
 
-const calenderType = [
+const calenderType = computed(() => [
   {
     value: 'dayGridFourWeek',
-    label: 'Day view',
+    label: t('bookingComponents.calender.calenderTabs.month'),
     icon: CalendarDays
   },
   {
     value: 'timeGridWeek',
-    label: 'Week',
+    label: t('bookingComponents.calender.calenderTabs.week'),
     icon: CalendarClock
   },
   {
     value: 'timeGridDay',
-    label: 'Day Time',
+    label: t('bookingComponents.calender.calenderTabs.day'),
     icon: CalendarRange
   },
   {
     value: 'listWeek',
-    label: 'List',
+    label: t('bookingComponents.calender.calenderTabs.list'),
     icon: CalendarFold
   }
-]
+])
 
 const breakpoints = useBreakpoints(breakpointsTailwind)
 const mobile = breakpoints.smallerOrEqual('lg')
@@ -57,7 +59,7 @@ const mobile = breakpoints.smallerOrEqual('lg')
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent>
-        <DropdownMenuLabel>Select View</DropdownMenuLabel>
+        <DropdownMenuLabel>{{ t('bookingComponents.calender.calenderTabs.selectView') }}</DropdownMenuLabel>
         <DropdownMenuSeparator />
         <DropdownMenuItem
           v-for="type in calenderType"

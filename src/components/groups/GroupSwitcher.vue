@@ -2,6 +2,7 @@
 import { computed, type ComputedRef, inject, ref } from 'vue'
 import { storeToRefs } from 'pinia'
 import _ from 'lodash'
+import { useI18n } from 'vue-i18n'
 
 import { LoaderIcon, Edit2Icon } from 'lucide-vue-next'
 import { CaretSortIcon, CheckIcon, PlusCircledIcon } from '@radix-icons/vue'
@@ -31,6 +32,7 @@ import GroupMemberDialog from '@/components/groups/dialogs/GroupMemberDialog.vue
 
 type GroupsDisplayData = { label: string; teams: Group[] }[]
 
+const { t } = useI18n()
 const groupStore = useGroups()
 const userStore = useUser()
 const { user, avatarId } = storeToRefs(userStore)
@@ -78,7 +80,7 @@ const nameShort = (name: string) => {
 const displayData: ComputedRef<GroupsDisplayData> = computed(() => {
   return [
     {
-      label: 'Personal Account',
+      label: t('groups.groupSwitcher.personalAccount'),
       teams: [
         {
           id: '-1',
@@ -89,7 +91,7 @@ const displayData: ComputedRef<GroupsDisplayData> = computed(() => {
       ]
     },
     {
-      label: 'Groups',
+      label: t('groups.groupSwitcher.groups'),
       teams: _.map(
         groups.value,
         (group: Group): Group => ({
@@ -150,7 +152,7 @@ const created = async (group: Group) => {
           variant="outline"
           role="combobox"
           aria-expanded="true"
-          aria-label="Select a team"
+          :aria-label="t('groups.groupSwitcher.selectTeam')"
           :class="cn('sm:w-[200px] justify-between', $attrs.class ?? '')"
           v-if="selectedTeam"
         >
@@ -176,8 +178,8 @@ const created = async (group: Group) => {
       <PopoverContent class="w-[200px] p-0">
         <Command :filter-function="filterGroups">
           <CommandList>
-            <CommandInput placeholder="Search team..." />
-            <CommandEmpty>No team found.</CommandEmpty>
+            <CommandInput :placeholder="t('groups.groupSwitcher.searchTeam')" />
+            <CommandEmpty>{{ t('groups.groupSwitcher.noTeamFound') }}</CommandEmpty>
             <CommandGroup v-for="group in displayData" :key="group.label" :heading="group.label">
               <CommandItem
                 v-for="team in group.teams"
@@ -218,7 +220,7 @@ const created = async (group: Group) => {
                   "
                 >
                   <PlusCircledIcon class="mr-2 h-5 w-5" />
-                  Create Group
+                  {{ t('groups.groupSwitcher.createGroup') }}
                 </CommandItem>
               </DialogTrigger>
               <CommandItem
@@ -232,7 +234,7 @@ const created = async (group: Group) => {
                 "
               >
                 <Edit2Icon class="mr-2 h-5 w-5" />
-                Manage Groups
+                {{ t('groups.groupSwitcher.manageGroups') }}
               </CommandItem>
             </CommandGroup>
           </CommandList>

@@ -2,12 +2,12 @@
   <form class="grid gap-5 py-4">
     <FormField name="description" v-slot="{ componentField }">
       <FormItem>
-        <FormLabel for="description"> Description </FormLabel>
+        <FormLabel for="description"> {{ t('bookingComponents.bookingRequestDialog.eventData.description.label') }} </FormLabel>
         <FormControl class="col-span-3">
           <Textarea id="description" v-bind="componentField" />
           <FormMessage />
         </FormControl>
-        <FormDescription class="col-span-4"> Describe the event you are booking </FormDescription>
+        <FormDescription class="col-span-4"> {{ t('bookingComponents.bookingRequestDialog.eventData.description.description') }} </FormDescription>
       </FormItem>
     </FormField>
     <template v-if="displayLegal">
@@ -17,12 +17,12 @@
             <Checkbox :checked="value" @update:checked="handleChange" />
           </FormControl>
           <div class="space-y-1 leading-none">
-            <FormLabel>I agree to the terms and conditions</FormLabel>
+            <FormLabel>{{ t('bookingComponents.bookingRequestDialog.eventData.legal.label') }}</FormLabel>
             <FormDescription>
-              By creating a booking, you agree to our
-              <router-link to="/terms-of-service" class="underline">Terms of Service</router-link>
-              and
-              <router-link to="/privacy" class="underline">Privacy Policy</router-link>
+              {{ t('bookingComponents.bookingRequestDialog.eventData.legal.description') }}
+              <router-link to="/terms-of-service" class="underline">{{ t('bookingComponents.bookingRequestDialog.eventData.legal.termsOfService') }}</router-link>
+              {{ t('bookingComponents.bookingRequestDialog.eventData.legal.and') }}
+              <router-link to="/privacy" class="underline">{{ t('bookingComponents.bookingRequestDialog.eventData.legal.privacyPolicy') }}</router-link>
             </FormDescription>
             <FormMessage />
           </div>
@@ -39,11 +39,14 @@ import * as z from 'zod'
 import { toTypedSchema } from '@vee-validate/zod'
 import { FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form'
 import { Textarea } from '@/components/ui/textarea'
+import { useI18n } from 'vue-i18n'
 
 import { useGlobalSettings } from '@/stores/globalSettings'
 import { storeToRefs } from 'pinia'
 import { Checkbox } from '@/components/ui/checkbox'
+
 const { displayLegal } = storeToRefs(useGlobalSettings())
+const { t } = useI18n()
 
 interface InitialValues {
   description: string

@@ -1,19 +1,20 @@
 <script setup lang="ts">
+import _ from 'lodash'
 import { onMounted, ref, computed, inject } from 'vue'
 import { storeToRefs } from 'pinia'
-import { PlusCircledIcon } from '@radix-icons/vue'
-import { TrashIcon, ArrowLeftIcon } from 'lucide-vue-next'
-import _ from 'lodash'
-import { createReusableTemplate, useMediaQuery } from '@vueuse/core'
+import { TrashIcon, ArrowLeftIcon, PlusCircleIcon } from 'lucide-vue-next'
+import { useMediaQuery } from '@vueuse/core'
+import { useI18n } from 'vue-i18n'
 
 import type { Group, User } from '@/types'
 
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import { ScrollArea } from '@/components/ui/scroll-area'
 import { Button } from '@/components/ui/button'
+import { Dialog } from '@/components/ui/dialog'
+import { Drawer } from '@/components/ui/drawer'
 
 import CalenderLoader from '@/components/animations/CalenderLoader.vue'
-
 import GroupList from '@/components/groups/GroupList.vue'
 import GroupMemberCard from '@/components/groups/cards/GroupMemberCard.vue'
 import GroupDataCard from '@/components/groups/cards/GroupDataCard.vue'
@@ -24,11 +25,11 @@ import { useInitialDataStore } from '@/stores/initial'
 import { useGroups } from '@/stores/groups'
 import { useUser } from '@/stores/user'
 
-import { Dialog } from '@/components/ui/dialog'
-import { Drawer } from '@/components/ui/drawer'
+
 import type { ShowAlertFunction } from '@/plugins/alert-dialog-plugin'
 import { breakpointsTailwind, useBreakpoints } from '@vueuse/core'
 
+const { t } = useI18n()
 const { fetchGroupData } = useInitialDataStore()
 const { init_loading } = storeToRefs(useInitialDataStore())
 const { user } = storeToRefs(useUser())
@@ -63,8 +64,8 @@ const deleteGroup = () => {
   }
 
   showAlertDialog({
-    title: 'Delete Group',
-    description: `Are you sure you want to delete the group "${selectedGroup.value.name}"?`,
+    title: t('groups.groupView.deleteGroup.title'),
+    description: t('groups.groupView.deleteGroup.description', { name: selectedGroup.value.name }),
     onConfirm: () => {
       if (!selectedGroup.value) {
         return
@@ -75,7 +76,7 @@ const deleteGroup = () => {
     },
     confirmIcon: TrashIcon,
     confirmVariant: 'destructive',
-    onConfirmText: 'Delete'
+    onConfirmText: t('common.delete')
   })
 }
 
@@ -122,8 +123,8 @@ const groupViewOpen = ref(false)
               @click="() => (showDialog = true)"
             >
               <div class="flex items-center gap-2">
-                <PlusCircledIcon class="w-6 h-6" />
-                Add Group
+                <PlusCircleIcon class="w-6 h-6" />
+                {{ t('groups.groupView.addGroup') }}
               </div>
             </div>
           </div>
@@ -133,12 +134,12 @@ const groupViewOpen = ref(false)
             <Tabs default-value="account">
               <div class="flex justify-between">
                 <TabsList>
-                  <TabsTrigger value="account"> Group Information </TabsTrigger>
-                  <TabsTrigger value="password"> Members </TabsTrigger>
+                  <TabsTrigger value="account"> {{ t('groups.groupView.tabs.groupInformation') }} </TabsTrigger>
+                  <TabsTrigger value="password"> {{ t('groups.groupView.tabs.members') }} </TabsTrigger>
                 </TabsList>
                 <!-- back button -->
                 <Button variant="ghost" class="text-gray-500" @click="groupViewOpen = false" v-if="mobile">
-                  <ArrowLeftIcon class="w-4 h-4 me-1" /> Back
+                  <ArrowLeftIcon class="w-4 h-4 me-1" /> {{ t('groups.groupView.back') }}
                 </Button>
               </div>
               <TabsContent value="account">
@@ -149,17 +150,17 @@ const groupViewOpen = ref(false)
               </TabsContent>
             </Tabs>
             <div class="flex justify-end mt-2" v-if="!isOwner">
-              <span class="text-gray-500 text-sm">group by {{ ownerEmail }}</span>
+              <span class="text-gray-500 text-sm">{{ t('groups.groupView.groupBy', { email: ownerEmail }) }}</span>
             </div>
             <div class="flex justify-end" v-else>
               <Button variant="destructive" class="mt-4" @click="deleteGroup">
                 <TrashIcon class="w-4 h-4 me-1" />
-                Delete Group
+                {{ t('groups.groupView.deleteButton') }}
               </Button>
             </div>
           </template>
           <div v-else class="flex justify-center items-center h-96">
-            <p class="text-lg text-gray-500">Select a group to view details.</p>
+            <p class="text-lg text-gray-500">{{ t('groups.groupView.selectGroup') }}</p>
           </div>
         </ScrollArea>
       </div>

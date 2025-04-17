@@ -9,6 +9,7 @@ import { Input } from '@/components/ui/input'
 import { Switch } from '@/components/ui/switch'
 import { CalendarIcon, Clock10Icon, ClockIcon } from 'lucide-vue-next'
 import { Collapsible, CollapsibleContent } from '@/components/ui/collapsible'
+import { useI18n } from 'vue-i18n'
 
 interface InitialValues {
   startDate: string
@@ -23,12 +24,14 @@ const props = defineProps<{
   initialValues: InitialValues
 }>()
 
+const { t } = useI18n()
+
 const bookingSchema = z
   .object({
-    startDate: z.string().min(1, { message: 'Start date is required' }),
+    startDate: z.string().min(1, { message: t('bookingComponents.bookingRequestDialog.timeData.validation.startDateRequired') }),
     isFullDay: z.boolean().optional(),
-    startTime: z.string().min(1, { message: 'Start time is required' }).optional(),
-    endTime: z.string().min(1, { message: 'End time is required' }).optional(),
+    startTime: z.string().min(1, { message: t('bookingComponents.bookingRequestDialog.timeData.validation.startTimeRequired') }).optional(),
+    endTime: z.string().min(1, { message: t('bookingComponents.bookingRequestDialog.timeData.validation.endTimeRequired') }).optional(),
     isOnAnotherDate: z.boolean().optional(),
     endDate: z.string().optional()
   })
@@ -39,7 +42,7 @@ const bookingSchema = z
       return startDateTime > new Date()
     },
     {
-      message: 'Start date and time must be in the future',
+      message: t('bookingComponents.bookingRequestDialog.timeData.validation.futureDate'),
       path: ['startDate', 'startTime']
     }
   )
@@ -53,7 +56,7 @@ const bookingSchema = z
       return endDateTime > startDateTime
     },
     {
-      message: 'End time must be after start time',
+      message: t('bookingComponents.bookingRequestDialog.timeData.validation.endTimeAfterStart'),
       path: ['endTime']
     }
   ) // make sure if isOnAnotherDate is true, endDate is set and is after startDate
@@ -64,7 +67,7 @@ const bookingSchema = z
       return new Date(`${startDate}`) < new Date(`${endDate}`)
     },
     {
-      message: 'End date must be after start date',
+      message: t('bookingComponents.bookingRequestDialog.timeData.validation.endDateAfterStart'),
       path: ['endDate']
     }
   )
@@ -128,7 +131,7 @@ defineExpose({ getValues, validate })
   <form class="grid gap-5 py-4">
     <FormField v-slot="{ componentField }" name="startDate">
       <FormItem>
-        <FormLabel for="date" class="text-right"> Start Date </FormLabel>
+        <FormLabel for="date" class="text-right"> {{ t('bookingComponents.bookingRequestDialog.timeData.startDate.label') }} </FormLabel>
         <FormControl>
           <div class="relative">
             <Input type="date" id="date" v-bind="componentField" class="pl-10" />
@@ -144,7 +147,7 @@ defineExpose({ getValues, validate })
     <FormField v-slot="{ value, handleChange }" name="isFullDay">
       <FormItem class="flex flex-row items-center gap-x-3 space-y-0 rounded-md" :horizontal="true">
         <div class="space-y-1 leading-none">
-          <FormLabel for="saveInfo"> Full Day </FormLabel>
+          <FormLabel for="saveInfo"> {{ t('bookingComponents.bookingRequestDialog.timeData.fullDay.label') }} </FormLabel>
           <FormMessage />
         </div>
         <FormControl>
@@ -157,7 +160,7 @@ defineExpose({ getValues, validate })
       <CollapsibleContent>
         <FormField v-slot="{ componentField }" name="startTime">
           <FormItem>
-            <FormLabel for="start-time" class="text-right"> Start Time </FormLabel>
+            <FormLabel for="start-time" class="text-right"> {{ t('bookingComponents.bookingRequestDialog.timeData.startTime.label') }} </FormLabel>
             <FormControl>
               <div class="relative">
                 <Input type="time" id="start-time" v-bind="componentField" class="pl-10" />
@@ -172,7 +175,7 @@ defineExpose({ getValues, validate })
 
         <FormField v-slot="{ componentField }" name="endTime">
           <FormItem>
-            <FormLabel for="end-time" class="text-right"> End Time </FormLabel>
+            <FormLabel for="end-time" class="text-right"> {{ t('bookingComponents.bookingRequestDialog.timeData.endTime.label') }} </FormLabel>
             <FormControl>
               <div class="relative">
                 <Input type="time" id="end-time" v-bind="componentField" class="pl-10" />
@@ -190,7 +193,7 @@ defineExpose({ getValues, validate })
     <FormField v-slot="{ value, handleChange }" name="isOnAnotherDate">
       <FormItem class="flex flex-row items-center gap-x-3 space-y-0 rounded-md" :horizontal="true">
         <div class="space-y-1 leading-none">
-          <FormLabel for="saveInfo"> Ends on another Date </FormLabel>
+          <FormLabel for="saveInfo"> {{ t('bookingComponents.bookingRequestDialog.timeData.endsOnAnotherDate.label') }} </FormLabel>
           <FormMessage />
         </div>
         <FormControl>
@@ -203,7 +206,7 @@ defineExpose({ getValues, validate })
       <CollapsibleContent>
         <FormField v-slot="{ componentField }" name="endDate">
           <FormItem>
-            <FormLabel for="end-date" class="text-right"> End Date </FormLabel>
+            <FormLabel for="end-date" class="text-right"> {{ t('bookingComponents.bookingRequestDialog.timeData.endDate.label') }} </FormLabel>
             <FormControl>
               <div class="relative">
                 <Input type="date" id="end-date" v-bind="componentField" class="pl-10" />
