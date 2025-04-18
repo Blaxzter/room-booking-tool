@@ -18,6 +18,7 @@ export type GlobalSettings = {
 export type StaticPage = {
   slug: string
   content: string
+  language: string
 }
 
 export type Booking = {

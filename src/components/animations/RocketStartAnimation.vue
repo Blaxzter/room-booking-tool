@@ -2,7 +2,7 @@
 import { LottieAnimation } from 'lottie-web-vue'
 import rocket from '@/assets/animations/rocketstart.json'
 
-const props = defineProps({
+defineProps({
   height: { type: Number, default: 500 }
 })
 </script>

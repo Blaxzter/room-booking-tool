@@ -1,4 +1,4 @@
-<script setup lang="ts">
+<script lang="ts" setup>
 import { ref } from 'vue'
 import { PlusCircledIcon, ChevronRightIcon, ChevronLeftIcon, RocketIcon } from '@radix-icons/vue'
 import { createReusableTemplate, useMediaQuery } from '@vueuse/core'

@@ -611,5 +611,8 @@
         "notConfirmedYet": "Noch nicht bestätigt"
       }
     }
+  },
+  "notFoundView": {
+    "title": "404 - Nicht gefunden"
   }
 }

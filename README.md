@@ -86,3 +86,13 @@ If you prefer to set everything up manually:
      -e your@email.com \
      -p yourpassword
    ```
+
+## 🔧 Development
+
+To sync the schema between the stored schema:
+```bash
+npx directus-sync pull \
+  -u http://localhost:8055 \
+  -e your@email.com \
+  -p yourpassword
+```

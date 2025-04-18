@@ -1,4 +1,4 @@
-<script setup lang="ts">
+<script lang="ts" setup>
 import { computed, type PropType, ref, onBeforeMount } from 'vue'
 import { useForm } from 'vee-validate'
 import { toTypedSchema } from '@vee-validate/zod'
@@ -33,12 +33,16 @@ import type { BookableObject } from '@/types'
 import { useBookableObjects } from '@/stores/bookableObjects'
 import { useGlobalSettings } from '@/stores/globalSettings'
 const { isDemoUser } = storeToRefs(useGlobalSettings())
-const { t } = useI18n()
+const { t }: { t: (key: string) => string } = useI18n()
 
 interface InitialValues {
   splash_image_object: Blob
   emoji: string
   object_type: string
+}
+
+interface FormValues {
+  object_type?: string
 }
 
 const objectTypes = [
@@ -67,7 +71,7 @@ const formSchema = toTypedSchema(
   })
 )
 
-const { values, validate, setValues } = useForm({
+const { values, validate, setValues } = useForm<FormValues>({
   validationSchema: formSchema
 })
 

@@ -47,9 +47,6 @@
     "theme_light_overrides": null,
     "default_theme_dark": null,
     "theme_dark_overrides": null,
-    "mv_hash": "c74d159bf1d032ec7d368884c8d1f3e90e34129501b706552e798f107108370c",
-    "mv_ts": "2024-04-28T00:34:53.000Z",
-    "mv_locked": false,
     "report_error_url": null,
     "report_bug_url": null,
     "report_feature_url": null,
@@ -57,6 +54,9 @@
     "public_registration_verify_email": true,
     "public_registration_role": "e1e89ce8-c65a-4319-bbfd-bc43321834d6",
     "public_registration_email_filter": null,
+    "mv_hash": "c74d159bf1d032ec7d368884c8d1f3e90e34129501b706552e798f107108370c",
+    "mv_locked": false,
+    "mv_ts": "2024-04-28T00:34:53.000Z",
     "_syncId": "853d3ac3-9fb5-4472-9dc2-783bc09698fd"
   }
 ]

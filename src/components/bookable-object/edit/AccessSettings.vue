@@ -1,4 +1,4 @@
-<script setup lang="ts">
+<script lang="ts" setup>
 import { computed, ref, type PropType, onBeforeMount } from 'vue'
 import { useForm } from 'vee-validate'
 import { toTypedSchema } from '@vee-validate/zod'
@@ -68,7 +68,15 @@ const copyLink = () => {
   navigator.clipboard.writeText(`${window.location.host}/${visibleMessage.value}/${randomString}`)
 }
 
-const { values, validate, setValues } = useForm({
+interface FormValues {
+  is_internal: boolean
+  uniqueId?: string
+  confirm_booking_required: boolean
+  information_shared: boolean
+  confirm_role?: string
+}
+
+const { values, validate, setValues } = useForm<FormValues>({
   validationSchema: formSchema
 })
 

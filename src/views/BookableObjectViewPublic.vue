@@ -1,6 +1,6 @@
 <script setup lang="ts">
 // get the bookable object id from the route
-import { onMounted, ref } from 'vue'
+import { onMounted } from 'vue'
 import { useRoute } from 'vue-router'
 import { storeToRefs } from 'pinia'
 

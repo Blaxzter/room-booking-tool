@@ -1,4 +1,4 @@
-import { ref, watch } from 'vue'
+import { ref } from 'vue'
 import { defineStore, storeToRefs } from 'pinia'
 
 import {
@@ -14,6 +14,7 @@ import {
   settingsViewQuery,
   type SettingsViewResponse
 } from '@/assets/ts/queries/initial_data'
+
 import { useGroups } from '@/stores/groups'
 import { useBookableObjects } from '@/stores/bookableObjects'
 import { useUser } from '@/stores/user'
