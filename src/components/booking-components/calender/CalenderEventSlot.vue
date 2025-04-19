@@ -9,25 +9,28 @@ import { PencilIcon, HistoryIcon } from 'lucide-vue-next'
 import { useToast } from '@/components/ui/toast'
 
 import ConfirmationIcon from '@/components/booking-components/calender/ConfirmationIcon.vue'
-import { useLocalUser } from '@/stores/localUser'
 import { useUser } from '@/stores/user'
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip'
 import EditEvent from '@/components/booking-components/EditEvent.vue'
-
+import { useLocalUser } from '@/stores/localUser'
 const { t } = useI18n()
 const { user } = storeToRefs(useUser())
 
-const { userHasCreatedBooking } = useLocalUser()
 const { toast } = useToast()
 
 const selectedEvent = ref(undefined)
-const canEdit = ref(false)
 
 const eventClick = (arg: any) => {
-  const canPossiblyEdit = userHasCreatedBooking(arg.event.booking_id)
-  // TODO if user is null but canPossiblyEdit is true -> get remaing stuff in the future
-  console.log(arg)
-  if (user.value === null || Object.keys(user.value).length === 0 || arg.isPast) {
+  // Save the isPast value to show in the toast
+  const isPast = arg.isPast
+  
+  const { userHasCreatedBooking } = useLocalUser()
+  const canEdit = userHasCreatedBooking(arg.event.extendedProps.booking_id)
+
+  console.log(canEdit)
+
+  // If no user or past event, just show toast
+  if (!canEdit && (user.value === null || Object.keys(user.value).length === 0 || isPast)) {
     toast({
       title: t('bookingComponents.calender.calenderEventSlot.eventData'),
       description: `${t('bookingComponents.calender.calenderEventSlot.event')}: ${arg.event.title} \n ${t('bookingComponents.calender.calenderEventSlot.date')}: ${arg.event.start} \n ${t('bookingComponents.calender.calenderEventSlot.confirmed')}: ${
@@ -35,8 +38,9 @@ const eventClick = (arg: any) => {
       }`
     })
   } else {
+    // Just pass the event data
+    console.log(arg.event.extendedProps)
     selectedEvent.value = arg.event.extendedProps
-    canEdit.value = canPossiblyEdit
   }
 }
 
@@ -246,6 +250,7 @@ onMounted(() => {
       </div>
     </template>
     <EditEvent
+      v-if="selectedEvent"
       :event="selectedEvent"
       @close="closeDialog"
       @delete="
@@ -254,9 +259,6 @@ onMounted(() => {
           closeDialog()
         }
       "
-      @edit="closeDialog"
-      v-if="selectedEvent"
-      :can-edit="canEdit"
     />
   </div>
 </template>

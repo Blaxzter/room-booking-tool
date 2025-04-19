@@ -186,7 +186,8 @@
     "limits": {
       "objects": "Bis zu 3 buchbare Objekte",
       "requests": "Bis zu 3 Buchungsanfragen",
-      "groups": "Bis zu 3 Gruppen"
+      "groups": "Bis zu 3 Gruppen",
+      "limitReached": "Demo-Limit erreicht: Sie können im Demo-Modus nicht mehr als 3 buchbare Objekte erstellen"
     },
     "contactRequest": {
       "intro": "Wenn Sie diese Plattform persönlich oder für Ihre Organisation nutzen möchten, kontaktieren Sie uns bitte für ein vollwertiges Konto.",
@@ -224,9 +225,24 @@
   },
   "bookableObjects": {
     "types": {
-      "singular": ["Raum", "Objekt", "Bereich", "Alles"],
-      "plural": ["Räume", "Objekte", "Bereiche", "Alles"],
-      "lowercase": ["räume", "objekte", "bereiche", "alles"]
+      "singular": [
+        "Raum",
+        "Objekt",
+        "Bereich",
+        "Alles"
+      ],
+      "plural": [
+        "Räume",
+        "Objekte",
+        "Bereiche",
+        "Alles"
+      ],
+      "lowercase": [
+        "räume",
+        "objekte",
+        "bereiche",
+        "alles"
+      ]
     }
   },
   "bookableObject": {
@@ -235,19 +251,19 @@
         "title": "Zugriffseinstellungen",
         "publicVisible": {
           "label": "Öffentlich sichtbar",
-          "description": "Aktivieren Sie diese Option, um das buchbare Objekt öffentlich sichtbar zu machen."
+          "description": "Schalten Sie um, um das buchbare Objekt öffentlich sichtbar zu machen."
         },
         "link": {
           "title": "Link"
         },
         "confirmBooking": {
           "label": "Buchung erfordert Bestätigung",
-          "description": "Wenn diese Option deaktiviert ist, erfordert eine Buchung keine Bestätigung und wird automatisch bestätigt."
+          "description": "Wenn dies ausgeschaltet ist, erfordert eine Buchung keine Bestätigung und wird automatisch bestätigt."
         },
         "confirmRole": {
           "label": "Bestätigungsrolle",
           "placeholder": "Wählen Sie eine Rolle",
-          "description": "Wählen Sie die Rolle, die ein Gruppenmitglied haben muss, um eine Buchung zu bestätigen."
+          "description": "Wählen Sie die Rolle, die ein Gruppenmitglied benötigt, um eine Buchung zu bestätigen."
         },
         "informationShared": {
           "label": "Informationen geteilt",
@@ -302,6 +318,11 @@
       "drawer": {
         "title": "Profil bearbeiten",
         "description": "Nehmen Sie hier Änderungen an Ihrem Profil vor. Klicken Sie auf Speichern, wenn Sie fertig sind."
+      }
+    },
+    "create": {
+      "error": {
+        "title": "Fehler beim Erstellen des buchbaren Objekts"
       }
     }
   },
@@ -536,7 +557,8 @@
           "description": "Mit der Erstellung einer Buchung stimmen Sie unseren",
           "termsOfService": "Nutzungsbedingungen",
           "and": "und",
-          "privacyPolicy": "Datenschutzrichtlinie"
+          "privacyPolicy": "Datenschutzrichtlinie",
+          "required": "Sie müssen den Nutzungsbedingungen zustimmen"
         }
       },
       "timeData": {
@@ -570,21 +592,22 @@
     },
     "bookableSideInfo": {
       "createBooking": "Buchung erstellen",
-      "copyShareLink": "Freigabelink kopieren"
+      "copyShareLink": "Freigabelink kopieren",
+      "copyShareLinkSuccess": "Erfolgreich in die Zwischenablage kopiert"
     },
     "calender": {
       "calenderComponent": {
         "today": "Heute",
-        "newEvent": "Neuer Termin",
-        "eventTitleFormat": "Termin: {date} {start_time} - {end_time}",
+        "newEvent": "Neues Ereignis",
+        "eventTitleFormat": "Ereignis: {date} {start_time} - {end_time}",
         "errors": {
           "title": "Fehler",
-          "pastEventCreation": "Sie können keinen Termin in der Vergangenheit erstellen"
+          "pastEventCreation": "Sie können kein Ereignis in der Vergangenheit erstellen"
         }
       },
       "calenderRemote": {
-        "prev": "Vorheriger",
-        "next": "Nächster"
+        "prev": "Vorherige",
+        "next": "Nächste"
       },
       "calenderTabs": {
         "month": "Monat",
@@ -594,25 +617,63 @@
         "selectView": "Ansicht wählen"
       },
       "calenderEventSlot": {
-        "deleteEvent": "Termin löschen",
-        "confirmDelete": "Sind Sie sicher, dass Sie diesen Termin löschen möchten?",
-        "eventData": "Termindaten",
-        "event": "Termin",
+        "deleteEvent": "Ereignis löschen",
+        "confirmDelete": "Sind Sie sicher, dass Sie dieses Ereignis löschen möchten?",
+        "eventData": "Ereignisdaten",
+        "event": "Ereignis",
         "date": "Datum",
         "confirmed": "Bestätigt",
         "yes": "Ja",
         "no": "Nein",
-        "pastEvent": "Vergangener Termin",
-        "canEdit": "Sie können diesen Termin bearbeiten",
-        "isPast": "Dieser Termin liegt in der Vergangenheit"
+        "pastEvent": "Vergangenes Ereignis",
+        "canEdit": "Sie können dieses Ereignis bearbeiten",
+        "isPast": "Dieses Ereignis liegt in der Vergangenheit"
       },
       "confirmationIcon": {
         "confirmed": "Bestätigt",
         "notConfirmedYet": "Noch nicht bestätigt"
       }
+    },
+    "create": {
+      "error": {
+        "title": "Fehler beim Erstellen einer neuen Buchung"
+      }
+    },
+    "editEvent": {
+      "status": "Status",
+      "confirmed": "Bestätigt",
+      "notConfirmed": "Nicht bestätigt",
+      "by": "bei",
+      "default": "Objekteinstellung",
+      "loading": "Lädt...",
+      "confirmButton": "Bestätigen",
+      "deleteButton": "Löschen",
+      "rejectButton": "Ablehnen",
+      "contactInformation": "Kontaktinformationen",
+      "title": "Titel",
+      "email": "E-Mail",
+      "phone": "Telefon",
+      "description": "Beschreibung",
+      "eventOn": "Ereignis am",
+      "from": "von",
+      "allDay": "ganztägig",
+      "cancelButton": "Abbrechen",
+      "confirmDeleteMessage": "Sind Sie sicher, dass Sie diese Buchung entfernen möchten?",
+      "confirmDelete": "Löschen Bestätigen"
     }
   },
   "notFoundView": {
     "title": "404 - Nicht gefunden"
+  },
+  "booking": {
+    "delete": {
+      "success": {
+        "title": "Buchung gelöscht",
+        "description": "Die Buchung wurde erfolgreich gelöscht."
+      },
+      "error": {
+        "title": "Fehler löschen Buchung"
+      }
+    }
   }
 }

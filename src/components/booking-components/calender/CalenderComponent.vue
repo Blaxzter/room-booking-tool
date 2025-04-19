@@ -67,8 +67,6 @@ const bookingToEvent = ({ booking, editable = false }: { booking: Booking; edita
   // create a alternative name: "Event: 2024-07-18 10:00 - 12:00"
   const title = t('bookingComponents.calender.calenderComponent.eventTitleFormat', { date, start_time, end_time })
 
-  console.log(booking)
-
   return {
     ...booking,
     booking_id: booking.id,

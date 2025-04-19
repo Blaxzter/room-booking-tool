@@ -12,6 +12,7 @@ import { useGlobalSettings } from '@/stores/globalSettings'
 
 import VersionDisplay from '@/components/utils/VersionDisplay.vue'
 import CalenderLoader from '@/components/animations/CalenderLoader.vue'
+import GlobalDialog from '@/components/GlobalDialog.vue'
 
 const route = useRoute()
 const { init_loading } = storeToRefs(useInitialDataStore())
@@ -52,6 +53,7 @@ onBeforeMount(async () => {
       </div>
     </div>
     <RouterView v-show="!showLoading" />
+    <GlobalDialog />
   </div>
   <Toaster />
   <VersionDisplay class="version-display" />

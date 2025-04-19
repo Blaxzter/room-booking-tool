@@ -10,7 +10,7 @@
         <FormDescription class="col-span-4"> {{ t('bookingComponents.bookingRequestDialog.eventData.description.description') }} </FormDescription>
       </FormItem>
     </FormField>
-    <template v-if="displayLegal">
+    <template v-if="displayLegal && publicBookableObjectId">
       <FormField v-slot="{ value, handleChange }" type="checkbox" name="legal">
         <FormItem class="flex flex-row items-start gap-x-3 space-y-0 rounded-md">
           <FormControl>
@@ -41,15 +41,18 @@ import { FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessa
 import { Textarea } from '@/components/ui/textarea'
 import { useI18n } from 'vue-i18n'
 
+import { useBookings } from '@/stores/booking'
 import { useGlobalSettings } from '@/stores/globalSettings'
 import { storeToRefs } from 'pinia'
 import { Checkbox } from '@/components/ui/checkbox'
 
 const { displayLegal } = storeToRefs(useGlobalSettings())
+const { publicBookableObjectId } = storeToRefs(useBookings())
 const { t } = useI18n()
 
 interface InitialValues {
   description: string
+  legal?: boolean
 }
 
 const props = defineProps<{
@@ -57,13 +60,15 @@ const props = defineProps<{
 }>()
 
 const bookingSchema = z.object({
-  description: z.string().optional()
+  description: z.string().optional(),
+  ...(displayLegal.value && publicBookableObjectId.value ? { legal: z.literal(true, { errorMap: () => ({ message: t('bookingComponents.bookingRequestDialog.eventData.legal.required') }) }) } : {})
 })
 
 const { values, validate } = useForm({
   validationSchema: toTypedSchema(bookingSchema),
   initialValues: {
-    description: props.initialValues.description || ''
+    description: props.initialValues.description || '',
+    ...(displayLegal.value && publicBookableObjectId.value ? { legal: props.initialValues.legal || false } : {})
   }
 })
 

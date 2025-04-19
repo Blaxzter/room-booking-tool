@@ -12,7 +12,7 @@ import {
 import { X } from 'lucide-vue-next'
 import { cn } from '@/lib/utils'
 
-const props = defineProps<DialogContentProps & { class?: HTMLAttributes['class'] }>()
+const props = defineProps<DialogContentProps & { class?: HTMLAttributes['class'], isGlobal?: boolean }>()
 const emits = defineEmits<DialogContentEmits>()
 
 const delegatedProps = computed(() => {
@@ -28,6 +28,7 @@ const forwarded = useForwardPropsEmits(delegatedProps, emits)
   <DialogPortal>
     <DialogOverlay
       class="fixed inset-0 z-50 bg-black/80 data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0"
+      :style="isGlobal ? 'z-index: 1000 !important;' : ''"
     />
     <DialogContent
       v-bind="forwarded"
@@ -37,8 +38,9 @@ const forwarded = useForwardPropsEmits(delegatedProps, emits)
           props.class
         )
       "
+      :style="isGlobal ? 'z-index: 1000 !important;' : ''"
     >
-      <slot />
+      <slot />  
 
       <DialogClose
         class="absolute right-4 top-4 rounded-sm opacity-70 ring-offset-background transition-opacity hover:opacity-100 focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 disabled:pointer-events-none data-[state=open]:bg-accent data-[state=open]:text-muted-foreground"

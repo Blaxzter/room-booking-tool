@@ -24,7 +24,7 @@ export type StaticPage = {
 export type Booking = {
   id: string
   bookable_object_id: BookableObject | string
-  created_user_id: string
+  created_user_id?: string
   start_date: string
   end_date: string
   is_full_day: boolean
@@ -189,9 +189,15 @@ export type CreateUserRequest = {
   password: string
 }
 
+export type CreatedBookingInfo = {
+  secret_edit_key: string
+  event_date: string // ISO string
+  public_booking_id?: string
+}
+
 export type LocalUserData = {
   selected_group?: string
-  created_bookings?: { [id: string]: { [id: string]: string } }
+  created_bookings?: { [userId: string]: { [bookingId: string]: CreatedBookingInfo } }
 }
 
 export interface InviteCreateRequest {

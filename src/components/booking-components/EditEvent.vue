@@ -3,6 +3,7 @@ import { computed, ref, watch } from 'vue'
 import { createReusableTemplate, useMediaQuery } from '@vueuse/core'
 import { storeToRefs } from 'pinia'
 import { useRoute } from 'vue-router'
+import { useI18n } from 'vue-i18n'
 
 // import icons
 import { CheckIcon, TrashIcon, LoaderIcon } from 'lucide-vue-next'
@@ -18,9 +19,16 @@ import { useRequests } from '@/stores/requests'
 import { useGroups } from '@/stores/groups'
 import type { Booking } from '@/types'
 import { useBookableObjects } from '@/stores/bookableObjects'
+import { useLocalUser } from '@/stores/localUser'
+import { useBookings } from '@/stores/booking'
+import { useDialogStore } from '@/stores/dialog'
 
 const { approveRequest, rejectRequest } = useRequests()
 const { requestLoading } = storeToRefs(useRequests())
+const { userHasCreatedBooking } = useLocalUser()
+const { t } = useI18n()
+const { deleteBookingBySecretKey } = useBookings()
+const { selectedBookableObject } = storeToRefs(useBookableObjects())
 
 // Reuse `form` section
 const [UseTemplate, GridForm] = createReusableTemplate()
@@ -35,7 +43,8 @@ const props = defineProps({
 
 const emit = defineEmits(['close', 'delete', 'confirmed'])
 
-const open = ref(false)
+// Initialize open state based on whether event exists
+const open = ref(!!props.event)
 
 const formattedDate = computed(() => {
   if (!props.event) return ''
@@ -75,6 +84,15 @@ const canConfirm = computed(() => {
   return roleValue.value >= roleRequiredForConfirmation.value
 })
 
+const userCreatedBooking = computed(() => {
+  if (!props.event?.booking_id) return false
+  return userHasCreatedBooking(props.event.booking_id)
+})
+
+const canDelete = computed(() => {
+  return userCreatedBooking.value || roleValue.value >= 3
+})
+
 const isConfirmed = ref(false)
 
 const confirmEvent = async () => {
@@ -85,9 +103,33 @@ const confirmEvent = async () => {
 }
 
 const deleteEvent = async () => {
-  await rejectRequest({ id: props?.event?.booking_id, ...props.event } as Booking, true).then(() => {
-    open.value = false
-    emit('delete', props?.event?.booking_id)
+
+
+const dialogStore = useDialogStore()
+
+  // Example usage:
+  dialogStore.show({
+    title: t('bookingComponents.editEvent.confirmDelete'),
+    message: t('bookingComponents.editEvent.confirmDeleteMessage'),
+    type: 'warning',
+    confirmText: t('bookingComponents.editEvent.deleteButton'),
+    cancelText: t('bookingComponents.editEvent.cancelButton'),
+    onConfirm: async () => {
+      // Handle confirmation
+      if (userCreatedBooking.value) {
+        const uniqueId = selectedBookableObject.value?.uniqueId
+        const secretEditKey = props.event?.secret_edit_key
+        if (uniqueId && secretEditKey) {
+          await deleteBookingBySecretKey(uniqueId, secretEditKey)
+          open.value = false
+          emit('delete', props?.event?.booking_id)
+        }
+      } else {
+        await rejectRequest({ id: props?.event?.booking_id, ...props.event } as Booking, true)
+        open.value = false
+        emit('delete', props?.event?.booking_id)
+      }
+    }
   })
 }
 
@@ -99,7 +141,8 @@ watch(
     if (event) {
       isConfirmed.value = event.confirmed
     }
-  }
+  },
+  { immediate: true } // Make sure it runs immediately on mount
 )
 
 watch(
@@ -114,76 +157,61 @@ watch(
   <UseTemplate>
     <div class="px-4 flex gap-2 flex-col" v-if="event">
       <div>
-        <div class="flex gap-3">
-          <h3 class="text-md font-semibold">Status:</h3>
+        <div class="flex gap-3 mb-2">
+          <h3 class="text-md font-semibold">{{ t('bookingComponents.editEvent.status') }}:</h3>
           <div class="flex gap-1">
             <p :class="{ 'text-green-600': isConfirmed, 'text-red-600': !isConfirmed }">
-              {{ isConfirmed ? 'Confirmed' : 'Not Confirmed' }}
+              {{ isConfirmed ? t('bookingComponents.editEvent.confirmed') : t('bookingComponents.editEvent.notConfirmed') }}
             </p>
-            <span class="text-muted-foreground"> by </span>
-            <span class="text-md font-semibold">{{ event.confirmed_by_name || event.confirmed_by?.display_name }}</span>
+            <template v-if="isConfirmed">
+              <span class="text-muted-foreground"> {{ t('bookingComponents.editEvent.by') }} </span>
+              <span class="text-md font-semibold">{{ event.confirmed_by_name || event.confirmed_by?.display_name || t('bookingComponents.editEvent.default') }}</span>
+            </template>
           </div>
         </div>
         <div v-if="requestLoading" class="text-muted-foreground flex">
           <LoaderIcon class="w-4 h-4 me-2 text-muted-foreground animate-spin" />
-          Loading...
+          {{ t('bookingComponents.editEvent.loading') }}
         </div>
-        <div v-else-if="canConfirm && !isConfirmed" class="flex gap-2 mt-2">
-          <Button variant="outline" @click="confirmEvent">
+        <div v-else class="flex gap-2 mt-2">
+          <Button v-if="canConfirm && !isConfirmed" variant="outline" @click="confirmEvent">
             <CheckIcon class="w-4 h-4 me-2 text-green-500" />
-            Confirm
+            {{ t('bookingComponents.editEvent.confirmButton') }}
           </Button>
-          <Button variant="outline" @click="deleteEvent">
+          <Button v-if="canDelete" variant="outline" @click="deleteEvent">
             <TrashIcon class="w-4 h-4 me-2 text-red-500" />
-            Reject
+            {{ isConfirmed || userCreatedBooking ? t('bookingComponents.editEvent.deleteButton') : t('bookingComponents.editEvent.rejectButton') }}
           </Button>
         </div>
       </div>
       <div class="flex flex-col gap-2">
-        <h3
-          class="text-md font-semibold"
-          v-if="event.mail || event.phone || event.display_name || event.booking_display_name"
-        >
-          Contact Information
-        </h3>
-        <div
-          v-if="event.mail || event.phone || event.display_name || event.booking_display_name"
-          class="ps-3 flex flex-col gap-2 border-l-2 -mt-2.5 pt-2.5"
-        >
-          <div
-            class="grid w-full max-w-sm items-center gap-1.5"
-            v-if="event.display_name || event.booking_display_name"
-          >
-            <Label class="text-muted-foreground">Title:</Label>
-            <Input :model-value="event.display_name" v-if="event.display_name" readonly />
-            <Input :model-value="event.booking_display_name" v-else readonly />
+        <template v-if="event.mail || event.phone || event.display_name || event.booking_display_name">
+          <h3 class="text-md font-semibold">
+            {{ t('bookingComponents.editEvent.contactInformation') }}
+          </h3>
+          <div class="ps-3 flex flex-col gap-2 border-l-2 -mt-2.5 pt-2.5">
+            <div
+              class="grid w-full max-w-sm items-center gap-1.5"
+              v-if="event.display_name || event.booking_display_name"
+            >
+              <Label class="text-muted-foreground">{{ t('bookingComponents.editEvent.title') }}:</Label>
+              <Input :model-value="event.display_name" v-if="event.display_name" readonly />
+              <Input :model-value="event.booking_display_name" v-else readonly />
+            </div>
+            <div class="grid w-full max-w-sm items-center gap-1.5" v-if="event.mail">
+              <Label class="text-muted-foreground">{{ t('bookingComponents.editEvent.email') }}:</Label>
+              <Input :model-value="event.mail" readonly type="email" />
+            </div>
+            <div class="grid w-full max-w-sm items-center gap-1.5" v-if="event.phone">
+              <Label class="text-muted-foreground">{{ t('bookingComponents.editEvent.phone') }}:</Label>
+              <Input :model-value="event.phone" readonly type="tel" />
+            </div>
           </div>
-          <div class="grid w-full max-w-sm items-center gap-1.5" v-if="event.mail">
-            <Label class="text-muted-foreground">Email:</Label>
-            <Input :model-value="event.mail" readonly type="email" />
-          </div>
-          <div class="grid w-full max-w-sm items-center gap-1.5" v-if="event.phone">
-            <Label class="text-muted-foreground">Phone:</Label>
-            <Input :model-value="event.phone" readonly type="tel" />
-          </div>
-        </div>
+        </template>
 
         <div class="grid w-full max-w-sm items-center gap-1.5" v-if="event.description">
-          <Label class="text-md font-semibold">Description</Label>
+          <Label class="text-md font-semibold">{{ t('bookingComponents.editEvent.description') }}</Label>
           <Textarea :model-value="event.description" readonly />
-        </div>
-      </div>
-      <!-- Admin stuff -->
-      <div v-if="roleValue >= 3" class="flex flex-col gap-2">
-        <h3 class="text-md font-semibold">Admin</h3>
-        <div class="-mt-2.5 pt-1.5 border-l-2 border-l-red-800 ps-3 flex flex-col gap-2">
-          <div class="text-muted-foreground text-sm">
-            You are able to see these fields because you are an admin of the object
-          </div>
-          <Button variant="outline" @click="deleteEvent">
-            <TrashIcon class="w-4 h-4 me-2 text-red-500" />
-            Delete
-          </Button>
         </div>
       </div>
     </div>
@@ -193,9 +221,9 @@ watch(
     <DialogContent class="sm:max-w-[450px]">
       <DialogHeader>
         <DialogTitle>
-          Event on the {{ formattedDate }}
-          <span v-if="!event?.is_full_day"> from {{ formattedTime }}</span>
-          <b v-else>all day</b>
+          {{ t('bookingComponents.editEvent.eventOn') }} {{ formattedDate }}
+          <span v-if="!event?.is_full_day"> {{ t('bookingComponents.editEvent.from') }} {{ formattedTime }}</span>
+          <b v-else>{{ t('bookingComponents.editEvent.allDay') }}</b>
         </DialogTitle>
       </DialogHeader>
       <GridForm />
@@ -206,9 +234,9 @@ watch(
     <DrawerContent class="max-h-screen">
       <DrawerHeader class="text-left">
         <DrawerTitle>
-          Event on the {{ formattedDate }}
-          <span v-if="!event?.is_full_day"> from {{ formattedTime }}</span>
-          <b v-else>all day</b>
+          {{ t('bookingComponents.editEvent.eventOn') }} {{ formattedDate }}
+          <span v-if="!event?.is_full_day"> {{ t('bookingComponents.editEvent.from') }} {{ formattedTime }}</span>
+          <b v-else>{{ t('bookingComponents.editEvent.allDay') }}</b>
         </DrawerTitle>
       </DrawerHeader>
       <div class="max-h-[80%] overflow-y-auto">
@@ -216,7 +244,7 @@ watch(
       </div>
       <DrawerFooter class="pt-2">
         <DrawerClose as-child>
-          <Button variant="outline"> Cancel </Button>
+          <Button variant="outline"> {{ t('bookingComponents.editEvent.cancelButton') }} </Button>
         </DrawerClose>
       </DrawerFooter>
     </DrawerContent>

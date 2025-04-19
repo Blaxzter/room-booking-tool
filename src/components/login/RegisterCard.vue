@@ -1,12 +1,12 @@
 <script setup lang="ts">
 import { ref } from 'vue'
 import { useI18n } from 'vue-i18n'
-
-import { useUser } from '@/stores/user'
 import { useForm } from 'vee-validate'
 import { toTypedSchema } from '@vee-validate/zod'
-
 import * as z from 'zod'
+import { storeToRefs } from 'pinia'
+
+
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import {
@@ -24,12 +24,13 @@ import {
   FormMessage,
   FormDescription
 } from '@/components/ui/form'
+import { Checkbox } from '@/components/ui/checkbox'
+
+import { useUser } from '@/stores/user'
+import { useGlobalSettings } from '@/stores/globalSettings'
 import type { CreateUserRequest } from '@/types'
 import LogoImage from '@/components/bits/LogoImage.vue'
 
-import { useGlobalSettings } from '@/stores/globalSettings'
-import { storeToRefs } from 'pinia'
-import { Checkbox } from '@/components/ui/checkbox'
 
 const { t } = useI18n()
 const { displayLegal } = storeToRefs(useGlobalSettings())
@@ -150,7 +151,7 @@ const onSubmit = async () => {
             </FormControl>
           </FormItem>
         </FormField>
-        <template v-if="displayLegal">
+        <div v-show="displayLegal">
           <FormField
             v-slot="{ value, handleChange }"
             type="checkbox"
@@ -178,7 +179,7 @@ const onSubmit = async () => {
               </div>
             </FormItem>
           </FormField>
-        </template>
+        </div>
         <Button type="submit" class="w-full mt-3" :loading="loading">
           {{ t('register.createAccount') }}
         </Button>

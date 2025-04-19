@@ -13,11 +13,13 @@ import {
   qGetBookableObjectById,
   userBookableObject
 } from '@/assets/ts/queries/bookable_objects'
+import { useI18n } from 'vue-i18n'
 
 export const useBookableObjects = defineStore('bookableObjects', () => {
   const { client } = useUser()
   const { user } = storeToRefs(useUser())
   const { toast } = useToast()
+  const { t } = useI18n()
   const { selectedGroupId } = storeToRefs(useGroups())
 
   const loading = ref(false)
@@ -148,9 +150,18 @@ export const useBookableObjects = defineStore('bookableObjects', () => {
       result = await client.request(createItem('bookable_object', bookableObject))
     } catch (error: any) {
       console.log(error)
+      
+      // Get error message with internationalization
+      let errorMessage = error?.errors?.[0]?.message
+      
+      // Check for specific error codes
+      if (error?.errors?.[0]?.message === 'NO_ELEMENTS_DEMO_MODE') {
+        errorMessage = t('demoMode.limits.limitReached')
+      }
+      
       toast({
-        title: 'Error creating bookable object',
-        description: error?.errors?.[0]?.message,
+        title: t('bookingComponents.create.error.title', 'Error creating a new booking'),
+        description: errorMessage,
         variant: 'destructive'
       })
       throw error
@@ -251,12 +262,12 @@ export const useBookableObjects = defineStore('bookableObjects', () => {
     bookableObjects,
     selectedBookableObject,
     loading,
+    getBookableObjectBySelectedGroup,
     fetchBookableObjectsByGroupId,
     fetchUserBookableObjects,
     setBookableObjects,
     addBookableObject,
     selectBookableObject,
-    getBookableObjectBySelectedGroup,
     createBookableObject,
     getBookableObjectById,
     deleteBookableObject,

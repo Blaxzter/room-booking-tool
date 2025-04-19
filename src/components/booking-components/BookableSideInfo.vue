@@ -3,6 +3,15 @@ import { computed, type PropType, ref, onMounted, inject } from 'vue'
 import { PlusCircledIcon, CopyIcon } from '@radix-icons/vue'
 import { useRoute } from 'vue-router'
 import { useI18n } from 'vue-i18n'
+import { EllipsisVertical, EditIcon } from 'lucide-vue-next'
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuGroup,
+  DropdownMenuItem,
+  DropdownMenuTrigger
+} from '@/components/ui/dropdown-menu'
+import { useGroups } from '@/stores/groups'
 
 import { Button } from '@/components/ui/button'
 
@@ -12,8 +21,10 @@ import BookingCardSplashImage from '@/components/home/BookingCardSplashImage.vue
 import { breakpointsTailwind, useBreakpoints } from '@vueuse/core'
 import BookingRequestWrapper from '@/components/booking-components/booking-request-dialog/BookingRequestWrapper.vue'
 import processImage from '@/assets/ts/image-utils'
+import { useToast } from '@/components/ui/toast'
 
 const { t } = useI18n()
+const { toast } = useToast()
 
 const props = defineProps({
   bookableObject: { type: Object as PropType<BookableObject>, default: undefined },
@@ -45,6 +56,12 @@ const copySharingLink = () => {
   if (props.bookableObject) {
     const url = `${window.location.origin}/${props.bookableObject.type}/${props.bookableObject.uniqueId}`
     navigator.clipboard.writeText(url)
+
+    toast({
+      title: t('bookingComponents.bookableSideInfo.copyShareLinkSuccess'),
+      variant: 'success',
+      description: url
+    })
   }
 }
 
@@ -62,6 +79,11 @@ const getImageColor = async (image_id: string) => {
     return color
   })
 }
+
+const roleValue = computed(() => {
+  const { getUserRoleByBookableObject } = useGroups()
+  return getUserRoleByBookableObject(props.bookableObject)
+})
 
 onMounted(() => {
   console.log(props.bookableObject?.image)
@@ -104,15 +126,32 @@ onMounted(() => {
       class="flex flex-row justify-end items-center flex-grow lg:items-start lg:flex-col lg:justify-stretch p-2 md:p-4 lg:p-6"
     >
       <div class="lg:flex-grow"></div>
-      <div class="flex gap-2 flex-row">
+      <div class="flex gap-2 flex-row justify-between w-full">
         <Button @click="openEventDialog = true" :size="topNav ? 'icon' : 'default'">
           <PlusCircledIcon class="h-6 w-6 sm:h-4 sm:w-4" />
           <span class="hidden sm:inline ms-2">{{ t('bookingComponents.bookableSideInfo.createBooking') }}</span>
         </Button>
-        <Button @click="copySharingLink" variant="ghost" v-if="!isPublicView">
-          <CopyIcon class="h-6 w-6 sm:h-4 sm:w-4" />
-          <span class="hidden sm:inline ms-2">{{ t('bookingComponents.bookableSideInfo.copyShareLink') }}</span>
-        </Button>
+        <template v-if="!isPublicView">
+          <DropdownMenu>
+            <DropdownMenuTrigger as-child>
+              <Button variant="ghost" size="icon">
+                <EllipsisVertical />
+              </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent>
+              <DropdownMenuGroup>
+                <DropdownMenuItem class="cursor-pointer" @click.stop="copySharingLink">
+                  <CopyIcon class="mr-2 h-4 w-4" />
+                  <span>{{ t('bookingComponents.bookableSideInfo.copyShareLink') }}</span>
+                </DropdownMenuItem>
+                <DropdownMenuItem v-if="roleValue >= 3" class="cursor-pointer" @click.stop="$router.push({ name: 'bookable-object-edit', params: { id: bookableObject.id } })">
+                  <EditIcon class="mr-2 h-4 w-4" />
+                  <span>{{ t('bookableObject.menuButton.edit') }}</span>
+                </DropdownMenuItem>
+              </DropdownMenuGroup>
+            </DropdownMenuContent>
+          </DropdownMenu>
+        </template>
       </div>
       <booking-request-wrapper v-model="openEventDialog" />
     </div>

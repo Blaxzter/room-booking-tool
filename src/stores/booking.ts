@@ -2,6 +2,7 @@ import { computed, ref } from 'vue'
 import { createItem } from '@directus/sdk'
 import { v4 as uuidv4 } from 'uuid'
 import { defineStore, storeToRefs } from 'pinia'
+import { useI18n } from 'vue-i18n'
 
 import { useToast } from '@/components/ui/toast'
 import { useUser } from '@/stores/user'
@@ -14,6 +15,7 @@ import axios, { type AxiosResponse } from 'axios'
 
 export const useBookings = defineStore('bookings', () => {
   const { toast } = useToast()
+  const { t } = useI18n()
   const { client } = useUser()
 
   const publicBookableObjectId = ref<string | undefined>(undefined)
@@ -85,7 +87,7 @@ export const useBookings = defineStore('bookings', () => {
       result = await axios
         .post(`${backendUrl}/public/${publicBookableObjectId.value}/booking`, booking)
         .then((res: AxiosResponse<Booking>) => {
-          return res.data
+          return { ...booking, ...res.data }
         })
       } else {
         result = await client.request(createItem('booking', booking))
@@ -94,16 +96,21 @@ export const useBookings = defineStore('bookings', () => {
       // Add the secret edit key to the local user store to allow editing of unlogged in users
       if (result.secret_edit_key) {
         const { addCreatedBooking } = useLocalUser()
-        addCreatedBooking(result.id, result.secret_edit_key)
+        addCreatedBooking(result.id, result.secret_edit_key, result.start_date, publicBookableObjectId.value || '')
       }
       // cast result to BookableObject
       currentBookings.value.push(result as Booking)
       return result
     } catch (error: any) {
-      console.log(error)
+      let errorMessage = error?.errors?.[0]?.message
+      // Check for specific error codes
+      if (error?.errors?.[0]?.message === 'NO_ELEMENTS_DEMO_MODE') {
+        errorMessage = t('demoMode.limits.limitReached')
+      }
+
       toast({
-        title: 'Error creating bookable object',
-        description: error?.errors?.[0]?.message,
+        title: t('booking.create.error.title', 'Error creating booking'),
+        description: errorMessage,
         variant: 'destructive'
       })
       throw error
@@ -137,6 +144,34 @@ export const useBookings = defineStore('bookings', () => {
     )
   }
 
+  /**
+   * Delete a booking using the public endpoint and secret_edit_key
+   * @param bookableObjectUniqueId - uniqueId of the bookable object
+   * @param secretEditKey - secret_edit_key of the booking
+   */
+  const deleteBookingBySecretKey = async (bookableObjectUniqueId: string, secretEditKey: string) => {
+    try {
+      const backendUrl = import.meta.env.DEV
+        ? import.meta.env.VITE_BACKEND_URL || 'http://localhost:8055'
+        : `${window.location.origin}/api`
+      await axios.delete(`${backendUrl}/public/${bookableObjectUniqueId}/booking`, {
+        data: { secret_edit_key: secretEditKey }
+      })
+      // Optionally remove from local state if needed
+      toast({
+        title: t('booking.delete.success.title', 'Booking deleted'),
+        description: t('booking.delete.success.description', 'The booking was deleted successfully.'),
+        variant: 'success'
+      })
+    } catch (error: any) {
+      toast({
+        title: t('booking.delete.error.title', 'Error deleting booking'),
+        description: error?.response?.data?.error || error.message,
+        variant: 'destructive'
+      })
+      throw error
+    }
+  }
 
   return {
     publicBookableObjectId,
@@ -146,6 +181,7 @@ export const useBookings = defineStore('bookings', () => {
     createBooking,
     setBookings,
     reset,
-    removeBookingById
+    removeBookingById,
+    deleteBookingBySecretKey
   }
 })

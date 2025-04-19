@@ -36,7 +36,7 @@ export const useInitialDataStore = defineStore('initial', () => {
 
   const { setGroups } = useGroups()
   const { setBookableObjects, selectBookableObject, addBookableObject } = useBookableObjects()
-  const { getSelectedGroup } = useLocalUser()
+  const { getSelectedGroup, getCreatedBookings } = useLocalUser()
   const { setBookings } = useBookings()
   const { publicBookableObjectId } = storeToRefs(useBookings())
   const { setRequests } = useRequests()
@@ -88,8 +88,24 @@ export const useInitialDataStore = defineStore('initial', () => {
       ? import.meta.env.VITE_BACKEND_URL || 'http://localhost:8055'
       : `${window.location.origin}/api`
 
+    const createdBookings = getCreatedBookings() || {}
+    console.log(createdBookings)
+    const secretKeys: string[] = []
+    const now = new Date()
+    for (const userId in createdBookings) {
+      for (const bookingId in createdBookings[userId]) {
+        const booking = createdBookings[userId][bookingId]
+        if (booking && booking.event_date && booking.secret_edit_key) {
+          if (new Date(booking.event_date) > now && booking.public_booking_id === bookable_object_id) {
+            secretKeys.push(booking.secret_edit_key)
+          }
+        }
+      }
+    }
+    const secretKeysParam = secretKeys.length > 0 ? `?secret_keys=${encodeURIComponent(secretKeys.join(','))}` : ''
+
     await axios
-      .get(`${backendUrl}/public/${bookable_object_id}`)
+      .get(`${backendUrl}/public/${bookable_object_id}${secretKeysParam}`)
       .then(async (res: AxiosResponse<PublicObjectViewResponse>) => {
         selectBookableObject(res.data.bookableObject)
         addBookableObject(res.data.bookableObject)

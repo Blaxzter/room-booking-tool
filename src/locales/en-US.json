@@ -186,7 +186,8 @@
     "limits": {
       "objects": "Up to 3 bookable objects",
       "requests": "Up to 3 booking requests",
-      "groups": "Up to 3 groups"
+      "groups": "Up to 3 groups",
+      "limitReached": "Demo limit reached: You cannot create more than 3 bookable objects in demo mode"
     },
     "contactRequest": {
       "intro": "If you'd like to use this platform personally or for your organization, please reach out for a full account.",
@@ -224,9 +225,24 @@
   },
   "bookableObjects": {
     "types": {
-      "singular": ["Room", "Object", "Space", "Anything"],
-      "plural": ["Rooms", "Objects", "Spaces", "Anything"],
-      "lowercase": ["rooms", "objects", "spaces", "anything"]
+      "singular": [
+        "Room",
+        "Object",
+        "Space",
+        "Anything"
+      ],
+      "plural": [
+        "Rooms",
+        "Objects",
+        "Spaces",
+        "Anything"
+      ],
+      "lowercase": [
+        "rooms",
+        "objects",
+        "spaces",
+        "anything"
+      ]
     }
   },
   "bookableObject": {
@@ -302,6 +318,11 @@
       "drawer": {
         "title": "Edit profile",
         "description": "Make changes to your profile here. Click save when you're done."
+      }
+    },
+    "create": {
+      "error": {
+        "title": "Error creating bookable object"
       }
     }
   },
@@ -536,7 +557,8 @@
           "description": "By creating a booking, you agree to our",
           "termsOfService": "Terms of Service",
           "and": "and",
-          "privacyPolicy": "Privacy Policy"
+          "privacyPolicy": "Privacy Policy",
+          "required": "You have to agree to the terms and conditions"
         }
       },
       "timeData": {
@@ -570,7 +592,8 @@
     },
     "bookableSideInfo": {
       "createBooking": "Create Booking",
-      "copyShareLink": "Copy Sharing Link"
+      "copyShareLink": "Copy Sharing Link",
+      "copyShareLinkSuccess": "Successfully copied to clipboard"
     },
     "calender": {
       "calenderComponent": {
@@ -584,7 +607,7 @@
       },
       "calenderRemote": {
         "prev": "Previous",
-        "next": "Next" 
+        "next": "Next"
       },
       "calenderTabs": {
         "month": "Month",
@@ -610,9 +633,47 @@
         "confirmed": "Confirmed",
         "notConfirmedYet": "Not confirmed yet"
       }
+    },
+    "create": {
+      "error": {
+        "title": "Error when creating a new booking"
+      }
+    },
+    "editEvent": {
+      "status": "Status",
+      "confirmed": "Confirmed",
+      "notConfirmed": "Not Confirmed",
+      "by": "by",
+      "default": "default",
+      "loading": "Loading...",
+      "confirmButton": "Confirm",
+      "deleteButton": "Delete",
+      "rejectButton": "Reject",
+      "contactInformation": "Contact Information",
+      "title": "Title",
+      "email": "Email",
+      "phone": "Phone",
+      "description": "Description",
+      "eventOn": "Event on the",
+      "from": "from",
+      "allDay": "all day",
+      "cancelButton": "Cancel",
+      "confirmDelete": "Confirm Delete",
+      "confirmDeleteMessage": "Are you sure you want to remove this booking?"
     }
   },
   "notFoundView": {
     "title": "404 - Not Found"
+  },
+  "booking": {
+    "delete": {
+      "success": {
+        "title": "Booking deleted",
+        "description": "The booking was deleted successfully."
+      },
+      "error": {
+        "title": "Error deleting booking"
+      }
+    }
   }
 }
