@@ -69,4 +69,59 @@ export default defineEndpoint((router, { database }) => {
       return res.status(500).send({ error: 'An error occurred while fetching data' })
     }
   })
+
+  // Define a POST route to create a booking request
+  router.post('/:id/booking', async (req, res) => {
+    try {
+      const { id } = req.params
+      const { 
+        start_date, 
+        end_date, 
+        is_full_day,
+        mail,
+        phone,
+        description, 
+        confirmed = false,
+        status,
+        secret_edit_key
+      } = req.body
+
+      // Validate required fields
+      if (!start_date || !end_date || !mail) {
+        return res.status(400).send({ error: 'Missing required fields: start_date, end_date, mail' })
+      }
+
+      // Find the bookable object by uniqueId
+      const bookableObject = await database('public.bookable_object')
+        .select('id')
+        .where({ uniqueId: id })
+        .first()
+
+      if (!bookableObject) {
+        return res.status(404).send({ error: 'Bookable object not found' })
+      }
+
+      // Create the booking request
+      const [newBookingId] = await database('public.booking').insert({
+        bookable_object_id: bookableObject.id,
+        start_date,
+        end_date,
+        is_full_day,
+        mail,
+        phone,
+        description,
+        confirmed,
+        status,
+        secret_edit_key,
+      }).returning('id')
+
+      return res.status(201).send({ 
+        message: 'Booking request created successfully',
+        id: newBookingId
+      })
+    } catch (error) {
+      console.error('Error creating booking request:', error)
+      return res.status(500).send({ error: 'An error occurred while creating the booking request' })
+    }
+  })
 })

@@ -53,10 +53,10 @@ services:
       - directus-net
 
   directus:
-    image: blaxzter/bookitool-directus:latest
-    # build:
-    #   context: ./
-    #   dockerfile: Dockerfile.directus
+    # image: blaxzter/bookitool-directus:latest
+    build:
+      context: ./
+      dockerfile: Dockerfile.directus
     restart: always
     ports:
       - ${BACKEND_PUBLIC_PORT}:8055

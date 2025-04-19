@@ -20,7 +20,7 @@ COPY ./directus-extension/public/ .
 RUN pnpm build
 
 # Stage 2: Directus setup
-FROM directus/directus:11.1.2
+FROM directus/directus:11.6.1
 
 # Copy built extensions from the builder stage
 COPY --from=builder /app/dist /directus/extensions/public/dist

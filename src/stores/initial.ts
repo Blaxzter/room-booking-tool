@@ -38,6 +38,7 @@ export const useInitialDataStore = defineStore('initial', () => {
   const { setBookableObjects, selectBookableObject, addBookableObject } = useBookableObjects()
   const { getSelectedGroup } = useLocalUser()
   const { setBookings } = useBookings()
+  const { publicBookableObjectId } = storeToRefs(useBookings())
   const { setRequests } = useRequests()
   const { setNotificationSettingsExtended } = useNotificationSetting()
 
@@ -92,8 +93,8 @@ export const useInitialDataStore = defineStore('initial', () => {
       .then(async (res: AxiosResponse<PublicObjectViewResponse>) => {
         selectBookableObject(res.data.bookableObject)
         addBookableObject(res.data.bookableObject)
-        console.log(bookable_object_id, res.data.bookings)
         setBookings(bookable_object_id, res.data.bookings)
+        publicBookableObjectId.value = bookable_object_id
       })
       .catch(() => {
         toast({

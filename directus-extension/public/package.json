@@ -2,7 +2,7 @@
 	"name": "public",
 	"description": "Please enter a description for your extension",
 	"icon": "extension",
-	"version": "1.0.0",
+	"version": "1.1.0",
 	"keywords": [
 		"directus",
 		"directus-extension",

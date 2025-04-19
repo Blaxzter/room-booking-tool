@@ -10,11 +10,13 @@ import { useBookableObjects } from '@/stores/bookableObjects'
 import { type BookingRequest, type CreateBookingRequest, getAllBookings } from '@/assets/ts/queries/bookings'
 import type { Booking } from '@/types'
 import { useLocalUser } from '@/stores/localUser'
+import axios, { type AxiosResponse } from 'axios'
 
 export const useBookings = defineStore('bookings', () => {
   const { toast } = useToast()
   const { client } = useUser()
 
+  const publicBookableObjectId = ref<string | undefined>(undefined)
   const loading = ref(false)
   const bookingsPerBookableObjectId = ref<{ [key: string]: Booking[] }>({})
 
@@ -73,10 +75,30 @@ export const useBookings = defineStore('bookings', () => {
     booking.bookable_object_id = `${selectedBookableObject.value.id}`
     booking.secret_edit_key = uuidv4()
 
-    let result
-
     try {
-      result = await client.request(createItem('booking', booking))
+      let result
+      if (publicBookableObjectId.value) {
+        const backendUrl = import.meta.env.DEV
+        ? import.meta.env.VITE_BACKEND_URL || 'http://localhost:8055'
+        : `${window.location.origin}/api`
+  
+      result = await axios
+        .post(`${backendUrl}/public/${publicBookableObjectId.value}/booking`, booking)
+        .then((res: AxiosResponse<Booking>) => {
+          return res.data
+        })
+      } else {
+        result = await client.request(createItem('booking', booking))
+      }
+
+      // Add the secret edit key to the local user store to allow editing of unlogged in users
+      if (result.secret_edit_key) {
+        const { addCreatedBooking } = useLocalUser()
+        addCreatedBooking(result.id, result.secret_edit_key)
+      }
+      // cast result to BookableObject
+      currentBookings.value.push(result as Booking)
+      return result
     } catch (error: any) {
       console.log(error)
       toast({
@@ -87,14 +109,7 @@ export const useBookings = defineStore('bookings', () => {
       throw error
     }
 
-    // Add the secret edit key to the local user store to allow editing of unlogged in users
-    if (result.secret_edit_key) {
-      const { addCreatedBooking } = useLocalUser()
-      addCreatedBooking(result.id, result.secret_edit_key)
-    }
-    // cast result to BookableObject
-    currentBookings.value.push(result as Booking)
-    return result
+
   }
 
   const currentBookings = computed(() => {
@@ -122,7 +137,9 @@ export const useBookings = defineStore('bookings', () => {
     )
   }
 
+
   return {
+    publicBookableObjectId,
     bookingsPerBookableObjectId,
     currentBookings,
     fetchBookableObjectsByGroupId,
