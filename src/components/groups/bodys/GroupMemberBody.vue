@@ -17,7 +17,7 @@ import GroupRoleDropDown from '@/components/groups/utils/GroupRoleDropDown.vue'
 
 import { useGroups } from '@/stores/groups'
 import { useUser } from '@/stores/user'
-import type { ShowAlertFunction } from '@/plugins/alert-dialog-plugin'
+import { useDialogStore } from '@/stores/dialog'
 
 const { user } = storeToRefs(useUser())
 const { t } = useI18n()
@@ -128,21 +128,26 @@ const updateUserRole = async (user: GroupDirectusUser, role: string) => {
   })
 }
 
-const showAlertDialog = inject('showAlertDialog') as ShowAlertFunction
+const dialogStore = useDialogStore()
+
 const deleteUser = async (user: GroupDirectusUser) => {
   if (!props.group || !user.id) {
     return
   }
 
-  showAlertDialog({
+  dialogStore.show({
     title: t('groups.bodys.groupMemberBody.deleteUser.title'),
-    description: t('groups.bodys.groupMemberBody.deleteUser.description', { 
+    message: t('groups.bodys.groupMemberBody.deleteUser.description', { 
       email: getUser(user).email, 
       groupName: props.group.name 
     }),
-    onConfirm: () => {
+    confirmText: t('common.delete'),
+    type: 'error',
+    confirmIcon: TrashIcon,
+    confirmVariant: 'destructive',
+    onConfirm: async () => {
       const { deleteGroupUser } = useGroups()
-      deleteGroupUser(user.id!).then(() => {
+      await deleteGroupUser(user.id!).then(() => {
         const { toast } = useToast()
         toast({
           title: t('groups.bodys.groupMemberBody.toast.userRemoved.title'),
@@ -150,10 +155,7 @@ const deleteUser = async (user: GroupDirectusUser) => {
           variant: 'success'
         })
       })
-    },
-    confirmIcon: TrashIcon,
-    confirmVariant: 'destructive',
-    onConfirmText: t('common.delete')
+    }
   })
 }
 

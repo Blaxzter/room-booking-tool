@@ -1,5 +1,4 @@
 <script lang="ts" setup>
-import { inject } from 'vue'
 import { useRouter } from 'vue-router'
 import { useI18n } from 'vue-i18n'
 
@@ -15,10 +14,11 @@ import {
 } from '@/components/ui/dropdown-menu'
 import { useBookableObjects } from '@/stores/bookableObjects'
 import { useToast } from '@/components/ui/toast'
-import type { ShowAlertFunction } from '@/plugins/alert-dialog-plugin'
+import { useDialogStore } from '@/stores/dialog'
 
 const router = useRouter()
 const { t } = useI18n()
+const dialogStore = useDialogStore()
 
 const open = defineModel({
   type: Boolean,
@@ -32,11 +32,14 @@ const props = defineProps<{
   isInternal?: boolean
 }>()
 
-const showAlertDialog = inject('showAlertDialog') as ShowAlertFunction
 const deleteBookableObject = async () => {
-  showAlertDialog({
+  dialogStore.show({
     title: t('bookableObject.menuButton.deleteAlert.title'),
-    description: t('bookableObject.menuButton.deleteAlert.description'),
+    message: t('bookableObject.menuButton.deleteAlert.description'),
+    confirmText: t('bookableObject.menuButton.deleteAlert.confirmButton'),
+    type: 'error',
+    confirmIcon: TrashIcon,
+    confirmVariant: 'destructive',
     onConfirm: async () => {
       const { deleteBookableObject } = useBookableObjects()
       await deleteBookableObject(props.bookableObjectId).then(() => {
@@ -47,10 +50,7 @@ const deleteBookableObject = async () => {
           variant: 'success'
         })
       })
-    },
-    confirmIcon: TrashIcon,
-    confirmVariant: 'destructive',
-    onConfirmText: t('bookableObject.menuButton.deleteAlert.confirmButton')
+    }
   })
 }
 </script>

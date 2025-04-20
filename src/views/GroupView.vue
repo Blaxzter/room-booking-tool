@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import _ from 'lodash'
-import { onMounted, ref, computed, inject } from 'vue'
+import { onMounted, ref, computed } from 'vue'
 import { storeToRefs } from 'pinia'
 import { TrashIcon, ArrowLeftIcon, PlusCircleIcon } from 'lucide-vue-next'
 import { useMediaQuery } from '@vueuse/core'
@@ -24,9 +24,8 @@ import GroupEditDialog from '@/components/groups/dialogs/GroupMemberDialog.vue'
 import { useInitialDataStore } from '@/stores/initial'
 import { useGroups } from '@/stores/groups'
 import { useUser } from '@/stores/user'
+import { useDialogStore } from '@/stores/dialog'
 
-
-import type { ShowAlertFunction } from '@/plugins/alert-dialog-plugin'
 import { breakpointsTailwind, useBreakpoints } from '@vueuse/core'
 
 const { t } = useI18n()
@@ -49,7 +48,7 @@ const selectedEditGroup = computed(() => {
   return _.find(groups.value, { id: editGroupId.value })
 })
 
-const showAlertDialog = inject('showAlertDialog') as ShowAlertFunction
+const dialogStore = useDialogStore()
 
 const created = (group: Group) => {
   fetchGroupData().then(() => {
@@ -63,20 +62,21 @@ const deleteGroup = () => {
     return
   }
 
-  showAlertDialog({
+  dialogStore.show({
     title: t('groups.groupView.deleteGroup.title'),
-    description: t('groups.groupView.deleteGroup.description', { name: selectedGroup.value.name }),
-    onConfirm: () => {
+    message: t('groups.groupView.deleteGroup.description', { name: selectedGroup.value.name }),
+    confirmText: t('common.delete'),
+    type: 'error',
+    confirmIcon: TrashIcon,
+    confirmVariant: 'destructive',
+    onConfirm: async () => {
       if (!selectedGroup.value) {
         return
       }
       const { deleteGroup } = useGroups()
-      deleteGroup(selectedGroup.value.id)
+      await deleteGroup(selectedGroup.value.id)
       selectedGroup.value = undefined
-    },
-    confirmIcon: TrashIcon,
-    confirmVariant: 'destructive',
-    onConfirmText: t('common.delete')
+    }
   })
 }
 

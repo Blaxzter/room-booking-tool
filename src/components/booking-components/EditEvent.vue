@@ -103,9 +103,7 @@ const confirmEvent = async () => {
 }
 
 const deleteEvent = async () => {
-
-
-const dialogStore = useDialogStore()
+  const dialogStore = useDialogStore()
 
   // Example usage:
   dialogStore.show({
@@ -114,12 +112,15 @@ const dialogStore = useDialogStore()
     type: 'warning',
     confirmText: t('bookingComponents.editEvent.deleteButton'),
     cancelText: t('bookingComponents.editEvent.cancelButton'),
+    confirmIcon: TrashIcon,
+    confirmVariant: 'destructive',
     onConfirm: async () => {
+      console.log('Confirmed')
       // Handle confirmation
-      if (userCreatedBooking.value) {
+      const secretEditKey = props.event?.secret_edit_key
+      if (userCreatedBooking.value && secretEditKey) {
         const uniqueId = selectedBookableObject.value?.uniqueId
-        const secretEditKey = props.event?.secret_edit_key
-        if (uniqueId && secretEditKey) {
+        if (uniqueId) {
           await deleteBookingBySecretKey(uniqueId, secretEditKey)
           open.value = false
           emit('delete', props?.event?.booking_id)

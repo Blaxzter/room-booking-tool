@@ -13,7 +13,11 @@
         <Button variant="outline" @click="handleCancel">
           {{ options?.cancelText || 'Cancel' }}
         </Button>
-        <Button :variant="options?.type === 'error' ? 'destructive' : 'default'" @click="handleConfirm">
+        <Button 
+          :variant="getConfirmButtonVariant()" 
+          @click="handleConfirm"
+        >
+          <component :is="options?.confirmIcon" v-if="options?.confirmIcon" class="h-4 w-4 mr-2" />
           {{ options?.confirmText || 'Confirm' }}
         </Button>
       </DialogFooter>
@@ -37,6 +41,16 @@ import { Button } from '@/components/ui/button'
 
 const dialogStore = useDialogStore()
 const { isOpen, options } = storeToRefs(dialogStore)
+
+const getConfirmButtonVariant = () => {
+  if (options.value?.confirmVariant === 'primary') {
+    return 'default'
+  }
+  if (options.value?.confirmVariant === 'destructive') {
+    return 'destructive'
+  }
+  return options.value?.type === 'error' ? 'destructive' : 'default'
+}
 
 const handleClose = () => {
   dialogStore.hide()

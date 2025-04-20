@@ -4,7 +4,7 @@ import { storeToRefs } from 'pinia'
 import _ from 'lodash'
 import { useI18n } from 'vue-i18n'
 
-import { UsersIcon, BoxIcon, SendIcon, CheckIcon, XIcon, TrashIcon } from 'lucide-vue-next'
+import { UsersIcon, BoxIcon, SendIcon, CheckIcon, XIcon } from 'lucide-vue-next'
 import { TooltipProvider, Tooltip, TooltipTrigger, TooltipContent } from '@/components/ui/tooltip'
 import { Badge } from '@/components/ui/badge'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
@@ -13,11 +13,12 @@ import { Button } from '@/components/ui/button'
 import type { Group, GroupInvite, User } from '@/types'
 import { useUser } from '@/stores/user'
 import { useGroups } from '@/stores/groups'
-import type { ShowAlertFunction } from '@/plugins/alert-dialog-plugin'
+import { useDialogStore } from '@/stores/dialog'
 import { useInitialDataStore } from '@/stores/initial'
 import { ScrollArea, ScrollBar } from '@/components/ui/scroll-area'
 
 const { t } = useI18n()
+const dialogStore = useDialogStore()
 
 defineProps<{
   group: Group
@@ -73,11 +74,14 @@ const acceptInvite = async (group: Group) => {
   }
 }
 
-const showAlertDialog = inject('showAlertDialog') as ShowAlertFunction
 const rejectInvite = async (group: Group) => {
-  showAlertDialog({
+  dialogStore.show({
     title: t('groups.groupListEntry.rejectInvite.title'),
-    description: t('groups.groupListEntry.rejectInvite.description', { groupName: group.name }),
+    message: t('groups.groupListEntry.rejectInvite.description', { groupName: group.name }),
+    confirmText: t('groups.groupListEntry.rejectInvite.confirm'),
+    type: 'error',
+    confirmIcon: XIcon,
+    confirmVariant: 'destructive',
     onConfirm: async () => {
       // const invite = _.find(group.invites, (i) => (i.user_id as { id: string }).id === user.value.id)
       const invite = (group.invites as { id: string }[])[0]
@@ -87,10 +91,7 @@ const rejectInvite = async (group: Group) => {
       } catch (error) {
         console.error('Error rejecting invite:', error)
       }
-    },
-    confirmIcon: TrashIcon,
-    confirmVariant: 'destructive',
-    onConfirmText: t('groups.groupListEntry.rejectInvite.confirm')
+    }
   })
 }
 </script>

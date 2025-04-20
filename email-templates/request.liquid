@@ -5,41 +5,31 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{{ subject }}</title>
     <style>
-        :root {
-            --primary: #5271ff;
-            --primary-dark: #3d5eff;
-            --text: #333333;
-            --text-light: #6b7280;
-            --bg: #ffffff;
-            --border: #e5e7eb;
-            --light-bg: #f9fafb;
-        }
-
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
         }
 
-        body {
+        .wrapper {
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
             line-height: 1.6;
-            color: var(--text);
-            background-color: var(--light-bg);
+            color: #333333;
+            background-color: #f9fafb;
             padding: 20px;
         }
 
         .container {
             max-width: 600px;
             margin: 0 auto;
-            background-color: var(--bg);
+            background-color: #ffffff;
             border-radius: 12px;
             box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
             overflow: hidden;
         }
 
         .header {
-            background-color: var(--primary);
+            background-color: #5271ff;
             padding: 30px 40px;
             text-align: center;
             color: white;
@@ -57,7 +47,7 @@
 
         p {
             margin-bottom: 16px;
-            color: var(--text);
+            color: #333333;
         }
 
         strong {
@@ -71,7 +61,7 @@
         .section-title {
             font-weight: 600;
             margin-bottom: 8px;
-            color: var(--text);
+            color: #333333;
         }
 
         ul {
@@ -89,14 +79,14 @@
             display: grid;
             grid-template-columns: 1fr;
             gap: 8px;
-            background-color: var(--light-bg);
+            background-color: #f9fafb !important;
             padding: 16px;
             border-radius: 8px;
             margin-bottom: 24px;
         }
 
         .description-box {
-            background-color: var(--light-bg);
+            background-color: #f9fafb !important;
             padding: 16px;
             border-radius: 8px;
             margin-bottom: 24px;
@@ -109,8 +99,8 @@
 
         .button {
             display: inline-block;
-            background-color: var(--primary);
-            color: white;
+            background-color: #5271ff !important;
+            color: white !important;
             text-decoration: none;
             padding: 12px 28px;
             border-radius: 8px;
@@ -120,29 +110,38 @@
         }
 
         .button:hover {
-            background-color: var(--primary-dark);
+            background-color: #3d5eff;
         }
 
         .link-fallback {
             text-align: center;
             margin-top: 20px;
             font-size: 14px;
-            color: var(--text-light);
+            color: #6b7280 !important;
         }
 
         .link-fallback a {
-            color: var(--primary);
+            color: #5271ff !important;
             text-decoration: none;
             word-break: break-all;
         }
 
         .footer {
-            background-color: var(--light-bg);
+            background-color: #f9fafb;
             padding: 20px;
             text-align: center;
             font-size: 14px;
-            color: var(--text-light);
-            border-top: 1px solid var(--border);
+            color: #6b7280 !important;
+            border-top: 1px solid #e5e7eb;
+        }
+
+        .logo {
+            max-width: 180px;
+            height: auto;
+            margin-bottom: 15px;
+            display: block;
+            margin-left: auto;
+            margin-right: auto;
         }
 
         @media screen and (max-width: 480px) {
@@ -157,106 +156,110 @@
     </style>
 </head>
 <body>
-<div class="container">
-    <div class="header">
-        <h1>
-            {% if lang == 'de' %}
-                Neue Buchungsanfrage für {{ bookable_object_name }}
-            {% else %}
-                New Booking Request for {{ bookable_object_name }}
-            {% endif %}
-        </h1>
-    </div>
-    <div class="content">
-        {% if lang == 'de' %}
-            <p>Eine neue Buchungsanfrage wurde gestellt.</p>
-            
-            <div class="info-grid">
-                <p><strong>Buchungsname:</strong> {{ display_name | default: "Unbenannte Buchung" }}</p>
-            </div>
-            
-            <div class="section">
-                <h2 class="section-title">Kontaktinformationen:</h2>
-                <div class="info-grid">
-                    <p><strong>E-Mail:</strong> {{ mail }}</p>
-                    <p><strong>Telefon:</strong> {{ phone }}</p>
-                </div>
-            </div>
-            
-            <div class="section">
-                <h2 class="section-title">Veranstaltungsbeschreibung:</h2>
-                <div class="description-box">
-                    <p>{{ description }}</p>
-                </div>
-            </div>
-            
-            <div class="section">
-                <h2 class="section-title">Veranstaltungsdaten:</h2>
-                <div class="info-grid">
-                    <p><strong>Startdatum:</strong> {{ start_date }}</p>
-                    <p><strong>Enddatum:</strong> {{ end_date }}</p>
-                    <p><strong>Ganztägige Veranstaltung:</strong> {{ is_full_day | default: "Nein" }}</p>
-                </div>
-            </div>
-            
-            <div class="button-container">
-                <a href="{{ host }}/requests" class="button">Buchungsanfragen anzeigen</a>
-            </div>
-            
-            <div class="link-fallback">
-                <p>Wenn Sie die Schaltfläche nicht sehen können, besuchen Sie bitte den folgenden Link:</p>
-                <a href="{{ host }}/requests">{{ host }}/requests</a>
-            </div>
-        {% else %}
-            <p>A new booking request has been made.</p>
-            
-            <div class="info-grid">
-                <p><strong>Booking Name:</strong> {{ display_name | default: "Unnamed Booking" }}</p>
-            </div>
-            
-            <div class="section">
-                <h2 class="section-title">Contact Information:</h2>
-                <div class="info-grid">
-                    <p><strong>Email:</strong> {{ mail }}</p>
-                    <p><strong>Phone:</strong> {{ phone }}</p>
-                </div>
-            </div>
-            
-            <div class="section">
-                <h2 class="section-title">Event Description:</h2>
-                <div class="description-box">
-                    <p>{{ description }}</p>
-                </div>
-            </div>
-            
-            <div class="section">
-                <h2 class="section-title">Event Dates:</h2>
-                <div class="info-grid">
-                    <p><strong>Start Date:</strong> {{ start_date }}</p>
-                    <p><strong>End Date:</strong> {{ end_date }}</p>
-                    <p><strong>Full Day Event:</strong> {{ is_full_day | default: "No" }}</p>
-                </div>
-            </div>
-            
-            <div class="button-container">
-                <a href="{{ host }}/requests" class="button">View Booking Requests</a>
-            </div>
-            
-            <div class="link-fallback">
-                <p>If you cannot see the button, please visit the following link:</p>
-                <a href="{{ host }}/requests">{{ host }}/requests</a>
-            </div>
-        {% endif %}
-    </div>
+<div class="wrapper">
+    <div class="container">
+        <div class="header">
+            <img src="{{ host }}/logo.svg" alt="Logo" class="logo">
 
-    <div class="footer">
-        <p>
+            <h1>
+                {% if lang == 'de' %}
+                    Neue Buchungsanfrage für {{ bookable_object_name }}
+                {% else %}
+                    New Booking Request for {{ bookable_object_name }}
+                {% endif %}
+            </h1>
+        </div>
+        <div class="content">
             {% if lang == 'de' %}
-                Vielen Dank für die Nutzung unseres Services!
+                <p>Eine neue Buchungsanfrage wurde gestellt.</p>
+                
+                <div class="info-grid">
+                    <p><strong>Buchungsname:</strong> {{ display_name | default: "Unbenannte Buchung" }}</p>
+                </div>
+                
+                <div class="section">
+                    <h2 class="section-title">Kontaktinformationen:</h2>
+                    <div class="info-grid">
+                        <p><strong>E-Mail:</strong> {{ mail }}</p>
+                        <p><strong>Telefon:</strong> {{ phone }}</p>
+                    </div>
+                </div>
+                
+                <div class="section">
+                    <h2 class="section-title">Veranstaltungsbeschreibung:</h2>
+                    <div class="description-box">
+                        <p>{{ description }}</p>
+                    </div>
+                </div>
+                
+                <div class="section">
+                    <h2 class="section-title">Veranstaltungsdaten:</h2>
+                    <div class="info-grid">
+                        <p><strong>Startdatum:</strong> {{ start_date }}</p>
+                        <p><strong>Enddatum:</strong> {{ end_date }}</p>
+                        <p><strong>Ganztägige Veranstaltung:</strong> {{ is_full_day | default: "Nein" }}</p>
+                    </div>
+                </div>
+                
+                <div class="button-container">
+                    <a href="{{ host }}/requests" class="button">Buchungsanfragen anzeigen</a>
+                </div>
+                
+                <div class="link-fallback">
+                    <p>Wenn Sie die Schaltfläche nicht sehen können, besuchen Sie bitte den folgenden Link:</p>
+                    <a href="{{ host }}/requests">{{ host }}/requests</a>
+                </div>
             {% else %}
-                Thank you for using our service!
+                <p>A new booking request has been made.</p>
+                
+                <div class="info-grid">
+                    <p><strong>Booking Name:</strong> {{ display_name | default: "Unnamed Booking" }}</p>
+                </div>
+                
+                <div class="section">
+                    <h2 class="section-title">Contact Information:</h2>
+                    <div class="info-grid">
+                        <p><strong>Email:</strong> {{ mail }}</p>
+                        <p><strong>Phone:</strong> {{ phone }}</p>
+                    </div>
+                </div>
+                
+                <div class="section">
+                    <h2 class="section-title">Event Description:</h2>
+                    <div class="description-box">
+                        <p>{{ description }}</p>
+                    </div>
+                </div>
+                
+                <div class="section">
+                    <h2 class="section-title">Event Dates:</h2>
+                    <div class="info-grid">
+                        <p><strong>Start Date:</strong> {{ start_date }}</p>
+                        <p><strong>End Date:</strong> {{ end_date }}</p>
+                        <p><strong>Full Day Event:</strong> {{ is_full_day | default: "No" }}</p>
+                    </div>
+                </div>
+                
+                <div class="button-container">
+                    <a href="{{ host }}/requests" class="button">View Booking Requests</a>
+                </div>
+                
+                <div class="link-fallback">
+                    <p>If you cannot see the button, please visit the following link:</p>
+                    <a href="{{ host }}/requests">{{ host }}/requests</a>
+                </div>
             {% endif %}
-        </p>
+        </div>
+
+        <div class="footer">
+            <p>
+                {% if lang == 'de' %}
+                    Vielen Dank für die Nutzung unseres Services!
+                {% else %}
+                    Thank you for using our service!
+                {% endif %}
+            </p>
+        </div>
     </div>
 </div>
 </body>

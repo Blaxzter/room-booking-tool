@@ -16,7 +16,7 @@ import {
 import { useUser } from '@/stores/user'
 import { useGlobalSettings } from '@/stores/globalSettings'
 import { storeToRefs } from 'pinia'
-import type { ShowAlertFunction } from '@/plugins/alert-dialog-plugin'
+import { useDialogStore } from '@/stores/dialog'
 const { client } = useUser()
 const { t } = useI18n()
 
@@ -82,20 +82,22 @@ const selectImage = (copperJsInstance: any) => {
     )
 }
 
-const showAlertDialog = inject('showAlertDialog') as ShowAlertFunction
+const dialogStore = useDialogStore()
+
 const clearImage = () => {
   if (props.addClearRequest) {
-    showAlertDialog({
+    dialogStore.show({
       title: t('avatar.deleteTitle'),
-      description: t('avatar.deleteConfirmation'),
+      message: t('avatar.deleteConfirmation'),
+      confirmText: t('common.delete'),
+      type: 'error',
+      confirmIcon: TrashIcon,
+      confirmVariant: 'destructive',
       onConfirm: () => {
         avatar.value = ''
         toBeUploadedImage.value = null
         emits('avatar-cleared', true)
-      },
-      confirmIcon: TrashIcon,
-      confirmVariant: 'destructive',
-      onConfirmText: t('common.delete')
+      }
     })
   }
 }

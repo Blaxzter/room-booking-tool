@@ -5,25 +5,25 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{{ subject }}</title>
     <style>
-        :root {
-            --primary: #5271ff;
-            --primary-dark: #3d5eff;
-            --text: #333333;
-            --text-light: #6b7280;
-            --bg: #ffffff;
-            --border: #e5e7eb;
-        }
-
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
         }
 
-        body {
+        .logo {
+            max-width: 180px;
+            height: auto;
+            margin-bottom: 15px;
+            display: block;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .wrapper {
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
             line-height: 1.6;
-            color: var(--text);
+            color: #333333;
             background-color: #f9fafb;
             padding: 20px;
         }
@@ -31,14 +31,14 @@
         .container {
             max-width: 600px;
             margin: 0 auto;
-            background-color: var(--bg);
+            background-color: #ffffff;
             border-radius: 12px;
             box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
             overflow: hidden;
         }
 
         .header {
-            background-color: var(--primary);
+            background-color: #5271ff;
             padding: 30px 40px;
             text-align: center;
             color: white;
@@ -56,7 +56,7 @@
 
         p {
             margin-bottom: 16px;
-            color: var(--text);
+            color: #333333 !important;
         }
 
         .button-container {
@@ -66,8 +66,8 @@
 
         .button {
             display: inline-block;
-            background-color: var(--primary);
-            color: white;
+            background-color: #5271ff;
+            color: white !important;
             text-decoration: none;
             padding: 12px 28px;
             border-radius: 8px;
@@ -77,18 +77,18 @@
         }
 
         .button:hover {
-            background-color: var(--primary-dark);
+            background-color: #3d5eff !important;
         }
 
         .link-fallback {
             text-align: center;
             margin-top: 20px;
             font-size: 14px;
-            color: var(--text-light);
+            color: #6b7280 !important;
         }
 
         .link-fallback a {
-            color: var(--primary);
+            color: #5271ff !important;
             text-decoration: none;
             word-break: break-all;
         }
@@ -98,8 +98,8 @@
             padding: 20px;
             text-align: center;
             font-size: 14px;
-            color: var(--text-light);
-            border-top: 1px solid var(--border);
+            color: #6b7280 !important;
+            border-top: 1px solid #e5e7eb;
         }
 
         @media screen and (max-width: 480px) {
@@ -114,47 +114,51 @@
     </style>
 </head>
 <body>
-<div class="container">
-    <div class="header">
-        <h1>
+<div class="wrapper">
+    <div class="container">
+        <div class="header">
+            <img src="{{ host }}/logo.svg" alt="Logo" class="logo">
+
+            <h1>
+                {% if lang == 'de-DE' %}
+                    Sie wurden eingeladen, "{{ group_name }}" beizutreten
+                {% else %}
+                    You are invited to join "{{ group_name }}"
+                {% endif %}
+            </h1>
+        </div>
+        <div class="content">
             {% if lang == 'de-DE' %}
-                Sie wurden eingeladen, "{{ group_name }}" beizutreten
+                <p>{{ inviter }} hat Sie eingeladen, der Gruppe "{{ group_name }}" als {{ role }} beizutreten.</p>
+                <p>Wenn Sie noch kein Konto haben, können Sie eines erstellen, indem Sie auf die Schaltfläche unten klicken.</p>
+                <div class="button-container">
+                    <a href="{{ host }}/groups" class="button">Ihre Einladungen anzeigen</a>
+                </div>
+                <div class="link-fallback">
+                    <p>Wenn Sie die Schaltfläche nicht sehen können, besuchen Sie bitte den folgenden Link:</p>
+                    <a href="{{ host }}/groups">{{ host }}/groups</a>
+                </div>
             {% else %}
-                You are invited to join "{{ group_name }}"
+                <p>{{ inviter }} has invited you to join the group "{{ group_name }}" as a {{ role }}.</p>
+                <p>If you do not have an account, you can create one by clicking the button below.</p>
+                <div class="button-container">
+                    <a href="{{ host }}/groups" class="button">View your invitations</a>
+                </div>
+                <div class="link-fallback">
+                    <p>If you cannot see the button, please visit the following link:</p>
+                    <a href="{{ host }}/groups">{{ host }}/groups</a>
+                </div>
             {% endif %}
-        </h1>
-    </div>
-    <div class="content">
-        {% if lang == 'de-DE' %}
-            <p>{{ inviter }} hat Sie eingeladen, der Gruppe "{{ group_name }}" als {{ role }} beizutreten.</p>
-            <p>Wenn Sie noch kein Konto haben, können Sie eines erstellen, indem Sie auf die Schaltfläche unten klicken.</p>
-            <div class="button-container">
-                <a href="{{ host }}/groups" class="button">Ihre Einladungen anzeigen</a>
-            </div>
-            <div class="link-fallback">
-                <p>Wenn Sie die Schaltfläche nicht sehen können, besuchen Sie bitte den folgenden Link:</p>
-                <a href="{{ host }}/groups">{{ host }}/groups</a>
-            </div>
-        {% else %}
-            <p>{{ inviter }} has invited you to join the group "{{ group_name }}" as a {{ role }}.</p>
-            <p>If you do not have an account, you can create one by clicking the button below.</p>
-            <div class="button-container">
-                <a href="{{ host }}/groups" class="button">View your invitations</a>
-            </div>
-            <div class="link-fallback">
-                <p>If you cannot see the button, please visit the following link:</p>
-                <a href="{{ host }}/groups">{{ host }}/groups</a>
-            </div>
-        {% endif %}
-    </div>
-    <div class="footer">
-        <p>
-            {% if lang == 'de-DE' %}
-                Vielen Dank für die Nutzung unseres Services!
-            {% else %}
-                Thank you for using our service!
-            {% endif %}
-        </p>
+        </div>
+        <div class="footer">
+            <p>
+                {% if lang == 'de-DE' %}
+                    Vielen Dank für die Nutzung unseres Services!
+                {% else %}
+                    Thank you for using our service!
+                {% endif %}
+            </p>
+        </div>
     </div>
 </div>
 </body>

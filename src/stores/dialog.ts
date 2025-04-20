@@ -1,5 +1,6 @@
 import { defineStore } from 'pinia'
 import { ref } from 'vue'
+import type { Component, Ref } from 'vue'
 
 export interface DialogOptions {
   title: string
@@ -7,11 +8,22 @@ export interface DialogOptions {
   confirmText?: string
   cancelText?: string
   type?: 'info' | 'warning' | 'error' | 'success'
+  confirmIcon?: Component
+  confirmVariant?: 'primary' | 'destructive'
   onConfirm?: () => void | Promise<void>
   onCancel?: () => void | Promise<void>
 }
 
-export const useDialogStore = defineStore('dialog', () => {
+interface DialogStore {
+  isOpen: Ref<boolean>
+  options: Ref<DialogOptions | null>
+  show: (dialogOptions: DialogOptions) => void
+  hide: () => void
+  confirm: () => Promise<void>
+  cancel: () => Promise<void>
+}
+
+export const useDialogStore = defineStore('dialog', (): DialogStore => {
   const isOpen = ref(false)
   const options = ref<DialogOptions | null>(null)
 

@@ -1,7 +1,6 @@
 <script setup lang="ts">
 import { computed, onBeforeMount, provide } from 'vue'
 import Toaster from '@/components/ui/toast/Toaster.vue'
-import { showAlertDialog } from '@/plugins/alert-dialog-plugin'
 import { RouterView, useRoute } from 'vue-router'
 
 import { useDark } from '@vueuse/core'
@@ -36,7 +35,6 @@ provide(
   'backendUrl',
   import.meta.env.DEV ? import.meta.env.VITE_BACKEND_URL || 'http://localhost:8055' : `${window.location.origin}/api`
 )
-provide('showAlertDialog', showAlertDialog)
 
 // before mount get initial data
 onBeforeMount(async () => {
