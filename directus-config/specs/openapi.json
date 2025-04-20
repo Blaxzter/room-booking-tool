@@ -3,7 +3,7 @@
   "info": {
     "title": "Dynamic API Specification",
     "description": "This is a dynamically generated API specification for all endpoints existing on the current project.",
-    "version": "11.1.2"
+    "version": "11.6.1"
   },
   "servers": [
     {
@@ -7466,6 +7466,7 @@
                   "type": "object",
                   "properties": {
                     "data": {
+                      "type": "array",
                       "items": {
                         "$ref": "#/components/schemas/ItemsDirectusSyncIDMap"
                       }
@@ -7602,6 +7603,7 @@
                 "schema": {
                   "properties": {
                     "data": {
+                      "type": "array",
                       "items": {
                         "$ref": "#/components/schemas/ItemsDirectusSyncIDMap"
                       }
@@ -7853,6 +7855,7 @@
                   "type": "object",
                   "properties": {
                     "data": {
+                      "type": "array",
                       "items": {
                         "$ref": "#/components/schemas/ItemsStaticpages"
                       }
@@ -7989,6 +7992,7 @@
                 "schema": {
                   "properties": {
                     "data": {
+                      "type": "array",
                       "items": {
                         "$ref": "#/components/schemas/ItemsStaticpages"
                       }
@@ -8198,393 +8202,6 @@
         ]
       }
     },
-    "/items/settings": {
-      "post": {
-        "summary": "Create an Item",
-        "description": "Create a new settings item.",
-        "tags": [
-          "Items",
-          "ItemsSettings"
-        ],
-        "operationId": "createItemsSettings",
-        "parameters": [
-          {
-            "$ref": "#/components/parameters/Meta"
-          }
-        ],
-        "requestBody": {
-          "content": {
-            "application/json": {
-              "schema": {
-                "oneOf": [
-                  {
-                    "type": "array",
-                    "items": {
-                      "$ref": "#/components/schemas/ItemsSettings"
-                    }
-                  },
-                  {
-                    "$ref": "#/components/schemas/ItemsSettings"
-                  }
-                ]
-              }
-            }
-          }
-        },
-        "responses": {
-          "200": {
-            "description": "Successful request",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "properties": {
-                    "data": {
-                      "items": {
-                        "$ref": "#/components/schemas/ItemsSettings"
-                      }
-                    }
-                  }
-                }
-              }
-            }
-          },
-          "401": {
-            "$ref": "#/components/responses/UnauthorizedError"
-          }
-        }
-      },
-      "get": {
-        "summary": "List Items",
-        "description": "List the settings items.",
-        "tags": [
-          "Items",
-          "ItemsSettings"
-        ],
-        "operationId": "readItemsSettings",
-        "security": [
-          {
-            "Auth": []
-          }
-        ],
-        "parameters": [
-          {
-            "$ref": "#/components/parameters/Fields"
-          },
-          {
-            "$ref": "#/components/parameters/Limit"
-          },
-          {
-            "$ref": "#/components/parameters/Meta"
-          },
-          {
-            "$ref": "#/components/parameters/Offset"
-          },
-          {
-            "$ref": "#/components/parameters/Sort"
-          },
-          {
-            "$ref": "#/components/parameters/Filter"
-          },
-          {
-            "$ref": "#/components/parameters/Search"
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "Successful request",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "properties": {
-                    "data": {
-                      "type": "array",
-                      "items": {
-                        "type": "object",
-                        "$ref": "#/components/schemas/ItemsSettings"
-                      }
-                    },
-                    "meta": {
-                      "$ref": "#/components/schemas/x-metadata"
-                    }
-                  }
-                }
-              }
-            }
-          },
-          "401": {
-            "$ref": "#/components/responses/UnauthorizedError"
-          }
-        }
-      },
-      "patch": {
-        "summary": "Update Multiple Items",
-        "description": "Update multiple settings items at the same time.",
-        "tags": [
-          "Items",
-          "ItemsSettings"
-        ],
-        "operationId": "updateItemsSettings",
-        "parameters": [
-          {
-            "$ref": "#/components/parameters/Fields"
-          },
-          {
-            "$ref": "#/components/parameters/Limit"
-          },
-          {
-            "$ref": "#/components/parameters/Meta"
-          },
-          {
-            "$ref": "#/components/parameters/Offset"
-          },
-          {
-            "$ref": "#/components/parameters/Sort"
-          },
-          {
-            "$ref": "#/components/parameters/Filter"
-          },
-          {
-            "$ref": "#/components/parameters/Search"
-          }
-        ],
-        "requestBody": {
-          "content": {
-            "application/json": {
-              "schema": {
-                "oneOf": [
-                  {
-                    "type": "array",
-                    "items": {
-                      "$ref": "#/components/schemas/ItemsSettings"
-                    }
-                  },
-                  {
-                    "$ref": "#/components/schemas/ItemsSettings"
-                  }
-                ]
-              }
-            }
-          }
-        },
-        "responses": {
-          "200": {
-            "description": "Successful request",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "properties": {
-                    "data": {
-                      "items": {
-                        "$ref": "#/components/schemas/ItemsSettings"
-                      }
-                    }
-                  }
-                }
-              }
-            }
-          }
-        }
-      },
-      "delete": {
-        "summary": "Delete Multiple Items",
-        "description": "Delete multiple existing settings items.",
-        "tags": [
-          "Items",
-          "ItemsSettings"
-        ],
-        "operationId": "deleteItemsSettings",
-        "responses": {
-          "200": {
-            "description": "Successful request"
-          },
-          "401": {
-            "$ref": "#/components/responses/UnauthorizedError"
-          }
-        },
-        "parameters": []
-      }
-    },
-    "/items/settings/{id}": {
-      "get": {
-        "summary": "Retrieve an Item",
-        "description": "Retrieve a single settings item by unique identifier.",
-        "tags": [
-          "Items",
-          "ItemsSettings"
-        ],
-        "operationId": "readSingleItemsSettings",
-        "parameters": [
-          {
-            "$ref": "#/components/parameters/Fields"
-          },
-          {
-            "$ref": "#/components/parameters/Meta"
-          },
-          {
-            "$ref": "#/components/parameters/Version"
-          },
-          {
-            "name": "id",
-            "description": "Index of the item.",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "oneOf": [
-                {
-                  "type": "integer",
-                  "description": "Incremental index of the item.",
-                  "example": 1
-                },
-                {
-                  "type": "string",
-                  "description": "Unique identifier of the item.",
-                  "example": "8cbb43fe-4cdf-4991-8352-c461779cec02"
-                }
-              ]
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "Successful request",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "properties": {
-                    "data": {
-                      "type": "object",
-                      "$ref": "#/components/schemas/ItemsSettings"
-                    }
-                  }
-                }
-              }
-            }
-          },
-          "401": {
-            "$ref": "#/components/responses/UnauthorizedError"
-          },
-          "404": {
-            "$ref": "#/components/responses/NotFoundError"
-          }
-        }
-      },
-      "patch": {
-        "summary": "Update an Item",
-        "description": "Update an existing settings item.",
-        "tags": [
-          "Items",
-          "ItemsSettings"
-        ],
-        "operationId": "updateSingleItemsSettings",
-        "parameters": [
-          {
-            "$ref": "#/components/parameters/Fields"
-          },
-          {
-            "$ref": "#/components/parameters/Meta"
-          },
-          {
-            "name": "id",
-            "description": "Index of the item.",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "oneOf": [
-                {
-                  "type": "integer",
-                  "description": "Incremental index of the item.",
-                  "example": 1
-                },
-                {
-                  "type": "string",
-                  "description": "Unique identifier of the item.",
-                  "example": "8cbb43fe-4cdf-4991-8352-c461779cec02"
-                }
-              ]
-            }
-          }
-        ],
-        "requestBody": {
-          "content": {
-            "application/json": {
-              "schema": {
-                "type": "object",
-                "$ref": "#/components/schemas/ItemsSettings"
-              }
-            }
-          }
-        },
-        "responses": {
-          "200": {
-            "description": "Successful request",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "properties": {
-                    "data": {
-                      "type": "object",
-                      "$ref": "#/components/schemas/ItemsSettings"
-                    }
-                  }
-                }
-              }
-            }
-          },
-          "401": {
-            "$ref": "#/components/responses/UnauthorizedError"
-          },
-          "404": {
-            "$ref": "#/components/responses/NotFoundError"
-          }
-        }
-      },
-      "delete": {
-        "summary": "Delete an Item",
-        "description": "Delete an existing settings item.",
-        "tags": [
-          "Items",
-          "ItemsSettings"
-        ],
-        "operationId": "deleteSingleItemsSettings",
-        "responses": {
-          "200": {
-            "description": "Successful request"
-          },
-          "401": {
-            "$ref": "#/components/responses/UnauthorizedError"
-          },
-          "404": {
-            "$ref": "#/components/responses/NotFoundError"
-          }
-        },
-        "parameters": [
-          {
-            "name": "id",
-            "description": "Index of the item.",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "oneOf": [
-                {
-                  "type": "integer",
-                  "description": "Incremental index of the item.",
-                  "example": 1
-                },
-                {
-                  "type": "string",
-                  "description": "Unique identifier of the item.",
-                  "example": "8cbb43fe-4cdf-4991-8352-c461779cec02"
-                }
-              ]
-            }
-          }
-        ]
-      }
-    },
     "/settings": {
       "get": {
         "summary": "Retrieve Settings",
@@ -8714,6 +8331,7 @@
                   "type": "object",
                   "properties": {
                     "data": {
+                      "type": "array",
                       "items": {
                         "$ref": "#/components/schemas/ItemsBookableObject"
                       }
@@ -8850,6 +8468,7 @@
                 "schema": {
                   "properties": {
                     "data": {
+                      "type": "array",
                       "items": {
                         "$ref": "#/components/schemas/ItemsBookableObject"
                       }
@@ -9059,6 +8678,389 @@
         ]
       }
     },
+    "/items/settings": {
+      "post": {
+        "summary": "Create an Item",
+        "description": "Create a new settings item.",
+        "tags": [
+          "Items",
+          "ItemsSettings"
+        ],
+        "operationId": "createItemsSettings",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/Meta"
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "oneOf": [
+                  {
+                    "type": "array",
+                    "items": {
+                      "$ref": "#/components/schemas/ItemsSettings"
+                    }
+                  },
+                  {
+                    "$ref": "#/components/schemas/ItemsSettings"
+                  }
+                ]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "$ref": "#/components/schemas/ItemsSettings"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/UnauthorizedError"
+          }
+        }
+      },
+      "get": {
+        "summary": "List Items",
+        "description": "List the settings items.",
+        "tags": [
+          "Items",
+          "ItemsSettings"
+        ],
+        "operationId": "readItemsSettings",
+        "security": [
+          {
+            "Auth": []
+          }
+        ],
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/Fields"
+          },
+          {
+            "$ref": "#/components/parameters/Limit"
+          },
+          {
+            "$ref": "#/components/parameters/Meta"
+          },
+          {
+            "$ref": "#/components/parameters/Offset"
+          },
+          {
+            "$ref": "#/components/parameters/Sort"
+          },
+          {
+            "$ref": "#/components/parameters/Filter"
+          },
+          {
+            "$ref": "#/components/parameters/Search"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "type": "array",
+                      "items": {
+                        "type": "object"
+                      },
+                      "$ref": "#/components/schemas/ItemsSettings"
+                    },
+                    "meta": {
+                      "$ref": "#/components/schemas/x-metadata"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/UnauthorizedError"
+          }
+        }
+      },
+      "patch": {
+        "summary": "Update Multiple Items",
+        "description": "Update multiple settings items at the same time.",
+        "tags": [
+          "Items",
+          "ItemsSettings"
+        ],
+        "operationId": "updateItemsSettings",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/Fields"
+          },
+          {
+            "$ref": "#/components/parameters/Limit"
+          },
+          {
+            "$ref": "#/components/parameters/Meta"
+          },
+          {
+            "$ref": "#/components/parameters/Offset"
+          },
+          {
+            "$ref": "#/components/parameters/Sort"
+          },
+          {
+            "$ref": "#/components/parameters/Filter"
+          },
+          {
+            "$ref": "#/components/parameters/Search"
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "oneOf": [
+                  {
+                    "type": "array",
+                    "items": {
+                      "$ref": "#/components/schemas/ItemsSettings"
+                    }
+                  },
+                  {
+                    "$ref": "#/components/schemas/ItemsSettings"
+                  }
+                ]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "data": {
+                      "$ref": "#/components/schemas/ItemsSettings"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "summary": "Delete Multiple Items",
+        "description": "Delete multiple existing settings items.",
+        "tags": [
+          "Items",
+          "ItemsSettings"
+        ],
+        "operationId": "deleteItemsSettings",
+        "responses": {
+          "200": {
+            "description": "Successful request"
+          },
+          "401": {
+            "$ref": "#/components/responses/UnauthorizedError"
+          }
+        },
+        "parameters": []
+      }
+    },
+    "/items/settings/{id}": {
+      "get": {
+        "summary": "Retrieve an Item",
+        "description": "Retrieve a single settings item by unique identifier.",
+        "tags": [
+          "Items",
+          "ItemsSettings"
+        ],
+        "operationId": "readSingleItemsSettings",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/Fields"
+          },
+          {
+            "$ref": "#/components/parameters/Meta"
+          },
+          {
+            "$ref": "#/components/parameters/Version"
+          },
+          {
+            "name": "id",
+            "description": "Index of the item.",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "oneOf": [
+                {
+                  "type": "integer",
+                  "description": "Incremental index of the item.",
+                  "example": 1
+                },
+                {
+                  "type": "string",
+                  "description": "Unique identifier of the item.",
+                  "example": "8cbb43fe-4cdf-4991-8352-c461779cec02"
+                }
+              ]
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "type": "object",
+                      "$ref": "#/components/schemas/ItemsSettings"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/UnauthorizedError"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFoundError"
+          }
+        }
+      },
+      "patch": {
+        "summary": "Update an Item",
+        "description": "Update an existing settings item.",
+        "tags": [
+          "Items",
+          "ItemsSettings"
+        ],
+        "operationId": "updateSingleItemsSettings",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/Fields"
+          },
+          {
+            "$ref": "#/components/parameters/Meta"
+          },
+          {
+            "name": "id",
+            "description": "Index of the item.",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "oneOf": [
+                {
+                  "type": "integer",
+                  "description": "Incremental index of the item.",
+                  "example": 1
+                },
+                {
+                  "type": "string",
+                  "description": "Unique identifier of the item.",
+                  "example": "8cbb43fe-4cdf-4991-8352-c461779cec02"
+                }
+              ]
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "$ref": "#/components/schemas/ItemsSettings"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "type": "object",
+                      "$ref": "#/components/schemas/ItemsSettings"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/UnauthorizedError"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFoundError"
+          }
+        }
+      },
+      "delete": {
+        "summary": "Delete an Item",
+        "description": "Delete an existing settings item.",
+        "tags": [
+          "Items",
+          "ItemsSettings"
+        ],
+        "operationId": "deleteSingleItemsSettings",
+        "responses": {
+          "200": {
+            "description": "Successful request"
+          },
+          "401": {
+            "$ref": "#/components/responses/UnauthorizedError"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFoundError"
+          }
+        },
+        "parameters": [
+          {
+            "name": "id",
+            "description": "Index of the item.",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "oneOf": [
+                {
+                  "type": "integer",
+                  "description": "Incremental index of the item.",
+                  "example": 1
+                },
+                {
+                  "type": "string",
+                  "description": "Unique identifier of the item.",
+                  "example": "8cbb43fe-4cdf-4991-8352-c461779cec02"
+                }
+              ]
+            }
+          }
+        ]
+      }
+    },
     "/items/bookable_object_group": {
       "post": {
         "summary": "Create an Item",
@@ -9101,6 +9103,7 @@
                   "type": "object",
                   "properties": {
                     "data": {
+                      "type": "array",
                       "items": {
                         "$ref": "#/components/schemas/ItemsBookableObjectGroup"
                       }
@@ -9237,6 +9240,7 @@
                 "schema": {
                   "properties": {
                     "data": {
+                      "type": "array",
                       "items": {
                         "$ref": "#/components/schemas/ItemsBookableObjectGroup"
                       }
@@ -9488,6 +9492,7 @@
                   "type": "object",
                   "properties": {
                     "data": {
+                      "type": "array",
                       "items": {
                         "$ref": "#/components/schemas/ItemsGroup"
                       }
@@ -9624,6 +9629,7 @@
                 "schema": {
                   "properties": {
                     "data": {
+                      "type": "array",
                       "items": {
                         "$ref": "#/components/schemas/ItemsGroup"
                       }
@@ -9875,6 +9881,7 @@
                   "type": "object",
                   "properties": {
                     "data": {
+                      "type": "array",
                       "items": {
                         "$ref": "#/components/schemas/ItemsBooking"
                       }
@@ -10011,6 +10018,7 @@
                 "schema": {
                   "properties": {
                     "data": {
+                      "type": "array",
                       "items": {
                         "$ref": "#/components/schemas/ItemsBooking"
                       }
@@ -10262,6 +10270,7 @@
                   "type": "object",
                   "properties": {
                     "data": {
+                      "type": "array",
                       "items": {
                         "$ref": "#/components/schemas/ItemsGroupDirectusUsers"
                       }
@@ -10398,6 +10407,7 @@
                 "schema": {
                   "properties": {
                     "data": {
+                      "type": "array",
                       "items": {
                         "$ref": "#/components/schemas/ItemsGroupDirectusUsers"
                       }
@@ -10649,6 +10659,7 @@
                   "type": "object",
                   "properties": {
                     "data": {
+                      "type": "array",
                       "items": {
                         "$ref": "#/components/schemas/ItemsGroupInvites"
                       }
@@ -10785,6 +10796,7 @@
                 "schema": {
                   "properties": {
                     "data": {
+                      "type": "array",
                       "items": {
                         "$ref": "#/components/schemas/ItemsGroupInvites"
                       }
@@ -11036,6 +11048,7 @@
                   "type": "object",
                   "properties": {
                     "data": {
+                      "type": "array",
                       "items": {
                         "$ref": "#/components/schemas/ItemsNotificationSetting"
                       }
@@ -11172,6 +11185,7 @@
                 "schema": {
                   "properties": {
                     "data": {
+                      "type": "array",
                       "items": {
                         "$ref": "#/components/schemas/ItemsNotificationSetting"
                       }
@@ -11423,6 +11437,7 @@
                   "type": "object",
                   "properties": {
                     "data": {
+                      "type": "array",
                       "items": {
                         "$ref": "#/components/schemas/ItemsUpdateRequests"
                       }
@@ -11559,6 +11574,7 @@
                 "schema": {
                   "properties": {
                     "data": {
+                      "type": "array",
                       "items": {
                         "$ref": "#/components/schemas/ItemsUpdateRequests"
                       }
@@ -11896,10 +11912,6 @@
       "x-collection": "staticpages"
     },
     {
-      "name": "ItemsSettings",
-      "x-collection": "settings"
-    },
-    {
       "name": "Settings",
       "description": "Settings control the way the platform works and acts.",
       "x-collection": "directus_settings"
@@ -11907,6 +11919,10 @@
     {
       "name": "ItemsBookableObject",
       "x-collection": "bookable_object"
+    },
+    {
+      "name": "ItemsSettings",
+      "x-collection": "settings"
     },
     {
       "name": "ItemsBookableObjectGroup",
@@ -13120,12 +13136,6 @@
             "example": "328",
             "type": "string"
           },
-          "comment": {
-            "description": "User comment. This will store the comments that show up in the right sidebar of the item edit page in the admin app.",
-            "example": null,
-            "type": "string",
-            "nullable": true
-          },
           "origin": {
             "description": "Origin of the request when the action took place.",
             "example": "https://directus.io",
@@ -13632,7 +13642,12 @@
             "format": "timestamp"
           }
         },
-        "x-collection": "directus_sync_id_map"
+        "x-collection": "directus_sync_id_map",
+        "required": [
+          "table",
+          "sync_id",
+          "local_id"
+        ]
       },
       "ItemsStaticpages": {
         "type": "object",
@@ -13659,36 +13674,10 @@
             "type": "string"
           }
         },
-        "x-collection": "staticpages"
-      },
-      "ItemsSettings": {
-        "type": "object",
-        "properties": {
-          "display_legal": {
-            "nullable": true,
-            "type": "boolean"
-          },
-          "id": {
-            "nullable": false,
-            "type": "integer"
-          },
-          "no_user_mode": {
-            "nullable": true,
-            "description": "If this setting is set the user will be redirected from the login view to the home screen directly and see all the content without user filter.",
-            "type": "boolean"
-          },
-          "require_email_verification": {
-            "nullable": true,
-            "description": "If this field is set, a new user doesn't require email verification.",
-            "type": "boolean"
-          },
-          "show_buy_me_a_coffee": {
-            "nullable": true,
-            "description": "If enabled a small \"Buy me a coffee\" user menu item appears. Server don't pay for them self.",
-            "type": "boolean"
-          }
-        },
-        "x-collection": "settings"
+        "x-collection": "staticpages",
+        "required": [
+          "id"
+        ]
       },
       "Settings": {
         "type": "object",
@@ -13961,6 +13950,9 @@
             "nullable": false,
             "type": "string",
             "format": "timestamp"
+          },
+          "visual_editor_urls": {
+            "nullable": true
           }
         },
         "x-collection": "directus_settings"
@@ -14066,6 +14058,11 @@
               }
             ]
           },
+          "language": {
+            "nullable": false,
+            "description": "This is the language (for now) that is used to send emails in the correct language.",
+            "type": "string"
+          },
           "group": {
             "nullable": true,
             "type": "array",
@@ -14082,6 +14079,35 @@
           }
         },
         "x-collection": "bookable_object"
+      },
+      "ItemsSettings": {
+        "type": "object",
+        "properties": {
+          "display_legal": {
+            "nullable": true,
+            "type": "boolean"
+          },
+          "id": {
+            "nullable": false,
+            "type": "integer"
+          },
+          "no_user_mode": {
+            "nullable": true,
+            "description": "If this setting is set the user will be redirected from the login view to the home screen directly and see all the content without user filter.",
+            "type": "boolean"
+          },
+          "require_email_verification": {
+            "nullable": true,
+            "description": "If this field is set, a new user doesn't require email verification.",
+            "type": "boolean"
+          },
+          "show_buy_me_a_coffee": {
+            "nullable": true,
+            "description": "If enabled a small \"Buy me a coffee\" user menu item appears. Server don't pay for them self.",
+            "type": "boolean"
+          }
+        },
+        "x-collection": "settings"
       },
       "ItemsBookableObjectGroup": {
         "type": "object",
@@ -14355,7 +14381,10 @@
             ]
           }
         },
-        "x-collection": "booking"
+        "x-collection": "booking",
+        "required": [
+          "bookable_object_id"
+        ]
       },
       "ItemsGroupDirectusUsers": {
         "type": "object",
@@ -14433,7 +14462,10 @@
             ]
           }
         },
-        "x-collection": "group_invites"
+        "x-collection": "group_invites",
+        "required": [
+          "group_id"
+        ]
       },
       "ItemsNotificationSetting": {
         "type": "object",

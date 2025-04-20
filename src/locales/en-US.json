@@ -95,6 +95,23 @@
         "unlinked": "Telegram account unlinked successfully"
       }
     },
+    "language": {
+      "title": "Language",
+      "description": "Choose your preferred language for the application interface.",
+      "preferredLanguage": "Preferred Language",
+      "preferredLanguageHelp": "The selected language will be used throughout the application.",
+      "resetToEnglish": "Reset to English",
+      "toast": {
+        "success": {
+          "title": "Language updated",
+          "description": "Your language preference has been updated successfully."
+        },
+        "error": {
+          "title": "Error",
+          "description": "Failed to update language preference"
+        }
+      }
+    },
     "profile": {
       "title": "Profile",
       "description": "This is how others will see you on the site.",
@@ -243,7 +260,49 @@
         "spaces",
         "anything"
       ]
-    }
+    },
+    "examples": [
+      {
+        "name": "Unicorn Ride",
+        "description": "Experience a magical journey through enchanted forests on a majestic unicorn."
+      },
+      {
+        "name": "Time Travel Session",
+        "description": "Book a trip to the past or future with our state-of-the-art time machines."
+      },
+      {
+        "name": "Giant Bubble Soccer",
+        "description": "Enjoy a hilarious game of soccer while encased in a giant inflatable bubble."
+      },
+      {
+        "name": "Gourmet Pizza Class",
+        "description": "Learn to make gourmet pizzas with a world-renowned chef in a fun, interactive class."
+      },
+      {
+        "name": "Skydiving Lesson",
+        "description": "Take the leap and learn how to skydive with our experienced instructors."
+      },
+      {
+        "name": "VR Space Adventure",
+        "description": "Explore distant galaxies and battle aliens in this thrilling virtual reality experience."
+      },
+      {
+        "name": "Underwater Yoga",
+        "description": "Relax and rejuvenate with a serene yoga session beneath the waves."
+      },
+      {
+        "name": "Dragon Training",
+        "description": "Train a friendly dragon and embark on epic adventures together."
+      },
+      {
+        "name": "Chocolate Tasting Tour",
+        "description": "Indulge in a decadent tour of the finest chocolate shops and factories."
+      },
+      {
+        "name": "Mystery Room Escape",
+        "description": "Solve puzzles and find clues to escape from a thrilling mystery room."
+      }
+    ]
   },
   "bookableObject": {
     "edit": {
@@ -286,13 +345,15 @@
       "additionalSettings": {
         "displayImage": "Display Image",
         "uploadImageHelp": "Upload a splash image.",
-        "chooseType": "Choose type of",
+        "chooseType": "Type of",
         "chooseTypeDescription": "Choose the type of",
         "objectTypes": {
           "room": "Room",
           "object": "Object",
           "equipment": "Equipment"
-        }
+        },
+        "language": "Language",
+        "languageDescription": "Choose the preferred language for emails sent to users regarding this item."
       }
     },
     "menuButton": {

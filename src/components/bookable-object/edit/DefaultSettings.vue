@@ -10,12 +10,14 @@ import { Input } from '@/components/ui/input'
 
 import { Textarea } from '@/components/ui/textarea'
 import GroupSelect from '@/components/bits/GroupSelect.vue'
-import { randomBookableObject } from '@/assets/ts/constants'
-const exampleObject = randomBookableObject()
+import { useBookableObjectTerms } from '@/composables/useBookableObjectTerms'
+
+// Initialize the composable
 
 import type { BookableObject } from '@/types'
 
 const { t } = useI18n()
+const { getRandomBookableObject } = useBookableObjectTerms()
 
 interface InitialValues {
   name?: string
@@ -48,6 +50,8 @@ const formSchema = toTypedSchema(
     })
   })
 )
+
+const exampleObject = getRandomBookableObject()
 
 const { values, validate, setValues } = useForm({
   validationSchema: formSchema

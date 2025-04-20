@@ -166,7 +166,7 @@
     "position_y": 18,
     "options": {
       "errorCode": "403",
-      "message": "No more elements allowed in Demo Mode",
+      "message": "NO_ELEMENTS_DEMO_MODE",
       "statusCode": "403"
     },
     "resolve": null,

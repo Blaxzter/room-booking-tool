@@ -30,7 +30,7 @@ import { useUser } from '@/stores/user'
 import { useGlobalSettings } from '@/stores/globalSettings'
 import type { CreateUserRequest } from '@/types'
 import LogoImage from '@/components/bits/LogoImage.vue'
-
+import LanguageSwitcher from '@/components/i18n/LanguageSwitcher.vue'
 
 const { t } = useI18n()
 const { displayLegal } = storeToRefs(useGlobalSettings())
@@ -96,7 +96,7 @@ const onSubmit = async () => {
     class="rounded-none h-full w-full sm:max-w-sm sm:h-auto sm:rounded-xl place-content-center"
   >
     <CardHeader class="max-w-sm m-auto">
-      <CardTitle>
+      <CardTitle class="flex items-start justify-between">
         <div class="flex items-center gap-4 mb-3">
           <LogoImage />
           <div class="text-3xl font-bold">
@@ -106,6 +106,7 @@ const onSubmit = async () => {
             </div>
           </div>
         </div>
+        <LanguageSwitcher variant="ghost" :flagSize="20" />
       </CardTitle>
       <CardDescription>
         {{ t('register.description') }}

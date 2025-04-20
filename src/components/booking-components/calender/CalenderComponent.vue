@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import dayjs from 'dayjs'
 import { storeToRefs } from 'pinia'
-import { computed, onMounted, ref } from 'vue'
+import { computed, onMounted, ref, watch } from 'vue'
 import { CalendarIcon } from 'lucide-vue-next'
 import { useToast } from '@/components/ui/toast'
 
@@ -11,6 +11,9 @@ import timeGridPlugin from '@fullcalendar/timegrid'
 import listPlugin from '@fullcalendar/list'
 import interactionPlugin from '@fullcalendar/interaction'
 import { type CalendarOptions } from '@fullcalendar/core'
+// Import locale files
+import enGBLocale from '@fullcalendar/core/locales/en-gb'
+import deLocale from '@fullcalendar/core/locales/de'
 
 import { EventImpl } from '@fullcalendar/core/internal'
 import { Button } from '@/components/ui/button'
@@ -25,8 +28,10 @@ import { useBookings } from '@/stores/booking'
 import type { Booking } from '@/types'
 import CalenderEventSlot from '@/components/booking-components/calender/CalenderEventSlot.vue'
 import { useI18n } from 'vue-i18n'
+import { useLanguage } from '@/composables/useLanguage'
 
 const { t } = useI18n()
+const { currentLanguage } = useLanguage()
 const { currentBookings } = storeToRefs(useBookings())
 
 const fullCalenderRef = ref<InstanceType<typeof FullCalendar>>()
@@ -87,9 +92,12 @@ const fullCalenderInitialEvents = currentBookings.value.map((booking) => {
   return bookingToEvent({ booking })
 })
 
+const currentLocale = computed(() => currentLanguage.value.code === 'de-DE' ? 'de' : 'en-gb')
+
 const calendarOptions = {
   timeZone: 'local',
-  locale: 'en',
+  locales: [enGBLocale, deLocale],
+  locale: currentLocale.value,
   plugins: [dayGridPlugin, timeGridPlugin, interactionPlugin, listPlugin],
   headerToolbar: false,
   editable: false,
@@ -230,6 +238,13 @@ onMounted(() => {
     if (dayElement) {
       dayElement.classList.add('fc-day-highlight')
     }
+  }
+})
+
+// Watch for language changes and update calendar locale
+watch(currentLocale, (newLocale) => {
+  if (fullCalenderRef.value) {
+    fullCalenderApi().setOption('locale', newLocale)
   }
 })
 

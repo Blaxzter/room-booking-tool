@@ -39,16 +39,23 @@ interface InitialValues {
   splash_image_object: Blob
   emoji: string
   object_type: string
+  language: string
 }
 
 interface FormValues {
   object_type?: string
+  language?: string
 }
 
 const objectTypes = [
   { id: 'room', name: t('bookableObject.edit.additionalSettings.objectTypes.room') },
   { id: 'object', name: t('bookableObject.edit.additionalSettings.objectTypes.object') },
   { id: 'equipment', name: t('bookableObject.edit.additionalSettings.objectTypes.equipment') }
+]
+
+const languages = [
+  { id: 'en', name: 'English', flag: '🇺🇸' },
+  { id: 'de', name: 'Deutsch', flag: '🇩🇪' },
 ]
 
 const props = defineProps({
@@ -67,7 +74,8 @@ const avatarUpload = ref()
 
 const formSchema = toTypedSchema(
   z.object({
-    object_type: z.string().optional()
+    object_type: z.string().optional(),
+    language: z.string().optional()
   })
 )
 
@@ -86,11 +94,13 @@ const upload = async () => {
 onBeforeMount(() => {
   if (props.initialValues) {
     setValues({
-      object_type: props.initialValues.object_type || 'room'
+      object_type: props.initialValues.object_type || 'room',
+      language: props.initialValues.language || 'en'
     })
   } else if (props.bookableObject) {
     setValues({
-      object_type: props.bookableObject.type || 'room'
+      object_type: props.bookableObject.type || 'room',
+      language: props.bookableObject.language || 'en'
     })
   }
 })
@@ -159,6 +169,42 @@ defineExpose({ getValues, validate, upload })
         <FormDescription>
           {{ t('bookableObject.edit.additionalSettings.chooseTypeDescription') }}
           <NameFade :termType="BookableObjectTermType.LOWERCASE" />.
+        </FormDescription>
+        <FormMessage />
+      </FormItem>
+    </FormField>
+
+    <FormField v-slot="{ componentField }" name="language">
+      <FormItem>
+        <FormLabel>
+          {{ t('bookableObject.edit.additionalSettings.language') || 'Language' }}
+        </FormLabel>
+        <Select
+          v-bind="componentField"
+          @update:modelValue="$emit('update', 'language', values.language)"
+        >
+          <FormControl>
+            <SelectTrigger>
+              <SelectValue />
+            </SelectTrigger>
+          </FormControl>
+          <SelectContent>
+            <SelectGroup>
+              <SelectItem
+                v-for="language in languages"
+                :key="language.id"
+                :value="language.id"
+              >
+                <span class="flex items-center gap-2">
+                  <span class="text-xl">{{ language.flag }}</span>
+                  {{ language.name }}
+                </span>
+              </SelectItem>
+            </SelectGroup>
+          </SelectContent>
+        </Select>
+        <FormDescription>
+          {{ t('bookableObject.edit.additionalSettings.languageDescription') || 'Choose the preferred language for emails sent to users regarding this item.' }}
         </FormDescription>
         <FormMessage />
       </FormItem>

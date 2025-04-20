@@ -81,7 +81,7 @@
   },
   "settings": {
     "title": "Einstellungen",
-    "description": "Verwalten Sie Ihre Kontoeinstellungen und E-Mail-Präferenzen.",
+    "description": "Verwalten Sie Ihre Kontoeinstellungen und legen Sie E-Mail-Präferenzen fest.",
     "toast": {
       "title": "Einstellungen aktualisiert"
     },
@@ -93,6 +93,23 @@
       "toast": {
         "linked": "Telegram-Konto erfolgreich verknüpft",
         "unlinked": "Telegram-Konto erfolgreich getrennt"
+      }
+    },
+    "language": {
+      "title": "Sprache",
+      "description": "Wählen Sie Ihre bevorzugte Sprache für die Anwendungsoberfläche.",
+      "preferredLanguage": "Bevorzugte Sprache",
+      "preferredLanguageHelp": "Die ausgewählte Sprache wird in der gesamten Anwendung verwendet.",
+      "resetToEnglish": "Auf Englisch zurücksetzen",
+      "toast": {
+        "success": {
+          "title": "Sprache aktualisiert",
+          "description": "Ihre Spracheinstellung wurde erfolgreich aktualisiert."
+        },
+        "error": {
+          "description": "Die Sprachpräferenz nicht aktualisiert",
+          "title": "Fehler"
+        }
       }
     },
     "profile": {
@@ -229,21 +246,63 @@
         "Raum",
         "Objekt",
         "Bereich",
-        "Alles"
+        "Egal Was"
       ],
       "plural": [
         "Räume",
         "Objekte",
         "Bereiche",
-        "Alles"
+        "Egal Was"
       ],
       "lowercase": [
         "räume",
         "objekte",
         "bereiche",
-        "alles"
+        "egal was"
       ]
-    }
+    },
+    "examples": [
+      {
+        "name": "Einhornritt",
+        "description": "Erleben Sie eine magische Reise durch verzauberte Wälder auf einem majestätischen Einhorn."
+      },
+      {
+        "name": "Zeitreise-Sitzung",
+        "description": "Buchen Sie eine Reise in die Vergangenheit oder Zukunft mit unseren hochmodernen Zeitmaschinen."
+      },
+      {
+        "name": "Riesenblasen-Fußball",
+        "description": "Genießen Sie ein urkomisches Fußballspiel, während Sie in einer riesigen aufblasbaren Blase stecken."
+      },
+      {
+        "name": "Gourmet-Pizza-Kurs",
+        "description": "Lernen Sie, wie man Gourmet-Pizzen mit einem weltbekannten Koch in einem unterhaltsamen, interaktiven Kurs zubereitet."
+      },
+      {
+        "name": "Fallschirmsprung-Lektion",
+        "description": "Wagen Sie den Sprung und lernen Sie, wie man mit unseren erfahrenen Instruktoren Fallschirm springt."
+      },
+      {
+        "name": "VR-Weltraum-Abenteuer",
+        "description": "Erkunden Sie ferne Galaxien und kämpfen Sie gegen Außerirdische in diesem spannenden Virtual-Reality-Erlebnis."
+      },
+      {
+        "name": "Unterwasser-Yoga",
+        "description": "Entspannen und regenerieren Sie sich mit einer ruhigen Yoga-Sitzung unter den Wellen."
+      },
+      {
+        "name": "Drachentraining",
+        "description": "Trainieren Sie einen freundlichen Drachen und begeben Sie sich auf epische Abenteuer."
+      },
+      {
+        "name": "Schokoladen-Verkostungstour",
+        "description": "Genießen Sie eine dekadente Tour durch die besten Schokoladengeschäfte und -fabriken."
+      },
+      {
+        "name": "Mystery-Room-Escape",
+        "description": "Lösen Sie Rätsel und finden Sie Hinweise, um aus einem spannenden Mysterium-Raum zu entkommen."
+      }
+    ]
   },
   "bookableObject": {
     "edit": {
@@ -286,13 +345,15 @@
       "additionalSettings": {
         "displayImage": "Anzeigebild",
         "uploadImageHelp": "Laden Sie ein Bild hoch.",
-        "chooseType": "Wählen Sie den Typ von",
+        "chooseType": "Typ des",
         "chooseTypeDescription": "Wählen Sie den Typ des",
         "objectTypes": {
           "room": "Raum",
           "object": "Objekt",
           "equipment": "Ausstattung"
-        }
+        },
+        "language": "Sprache",
+        "languageDescription": "Wählen Sie die bevorzugte Sprache für E-Mails, die an Benutzer zu diesem Artikel gesendet werden."
       }
     },
     "menuButton": {

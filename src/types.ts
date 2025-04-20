@@ -66,6 +66,7 @@ export type BookableObject = {
   confirm_booking_required?: boolean
   confirm_role?: string
   information_shared?: boolean
+  language?: string
 }
 
 export type CreateBookableObjectRequest = {
@@ -84,6 +85,7 @@ export type CreateBookableObjectRequest = {
   type?: string
   confirm_booking_required?: boolean
   information_shared?: boolean
+  language?: string
 }
 
 export type Group = {

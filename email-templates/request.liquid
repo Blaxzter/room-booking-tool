@@ -1,63 +1,262 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="{{ lang | default: 'en' }}">
 <head>
     <meta charset="UTF-8">
-    <title>New Booking Request</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ subject }}</title>
     <style>
-        body { font-family: Arial, sans-serif; }
-        .container { max-width: 600px; margin: auto; padding: 20px; border: 1px solid #ddd; border-radius: 10px; }
-        .header { text-align: center; margin-bottom: 20px; }
-        .header h1 { margin: 0; }
-        .content { margin-bottom: 20px; }
-        .footer { text-align: center; font-size: 12px; color: #888; }
-        .centered { display: flex; justify-content: center; }
+        :root {
+            --primary: #5271ff;
+            --primary-dark: #3d5eff;
+            --text: #333333;
+            --text-light: #6b7280;
+            --bg: #ffffff;
+            --border: #e5e7eb;
+            --light-bg: #f9fafb;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+            line-height: 1.6;
+            color: var(--text);
+            background-color: var(--light-bg);
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            background-color: var(--bg);
+            border-radius: 12px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+            overflow: hidden;
+        }
+
+        .header {
+            background-color: var(--primary);
+            padding: 30px 40px;
+            text-align: center;
+            color: white;
+        }
+
+        .header h1 {
+            font-size: 22px;
+            font-weight: 600;
+            margin: 0;
+        }
+
+        .content {
+            padding: 40px;
+        }
+
+        p {
+            margin-bottom: 16px;
+            color: var(--text);
+        }
+
+        strong {
+            font-weight: 600;
+        }
+
+        .section {
+            margin-bottom: 24px;
+        }
+
+        .section-title {
+            font-weight: 600;
+            margin-bottom: 8px;
+            color: var(--text);
+        }
+
+        ul {
+            list-style-type: none;
+            margin: 0;
+            padding: 0;
+        }
+
+        li {
+            margin-bottom: 8px;
+            padding-left: 0;
+        }
+
+        .info-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 8px;
+            background-color: var(--light-bg);
+            padding: 16px;
+            border-radius: 8px;
+            margin-bottom: 24px;
+        }
+
+        .description-box {
+            background-color: var(--light-bg);
+            padding: 16px;
+            border-radius: 8px;
+            margin-bottom: 24px;
+        }
+
+        .button-container {
+            text-align: center;
+            margin: 30px 0;
+        }
+
         .button {
             display: inline-block;
-            padding: 10px 20px;
-            font-size: 16px;
-            color: #fff;
-            background-color: #007bff;
+            background-color: var(--primary);
+            color: white;
             text-decoration: none;
-            border-radius: 5px;
-            margin-top: 20px;
+            padding: 12px 28px;
+            border-radius: 8px;
+            font-weight: 500;
+            font-size: 16px;
+            transition: background-color 0.2s;
         }
-        .ii a[href] { color: #ffffff; }
+
         .button:hover {
-            background-color: #0056b3;
+            background-color: var(--primary-dark);
+        }
+
+        .link-fallback {
+            text-align: center;
+            margin-top: 20px;
+            font-size: 14px;
+            color: var(--text-light);
+        }
+
+        .link-fallback a {
+            color: var(--primary);
+            text-decoration: none;
+            word-break: break-all;
+        }
+
+        .footer {
+            background-color: var(--light-bg);
+            padding: 20px;
+            text-align: center;
+            font-size: 14px;
+            color: var(--text-light);
+            border-top: 1px solid var(--border);
+        }
+
+        @media screen and (max-width: 480px) {
+            .header, .content {
+                padding: 20px;
+            }
+            
+            .header h1 {
+                font-size: 18px;
+            }
         }
     </style>
 </head>
 <body>
 <div class="container">
     <div class="header">
-        <h1>New Booking Request for {{ bookable_object_name }}</h1>
+        <h1>
+            {% if lang == 'de' %}
+                Neue Buchungsanfrage für {{ bookable_object_name }}
+            {% else %}
+                New Booking Request for {{ bookable_object_name }}
+            {% endif %}
+        </h1>
     </div>
     <div class="content">
-        <p>A new booking request has been made.</p>
-        <p><strong>Booking Name:</strong> {{ display_name | default: "Unnamed Booking" }}</p>
-        <p><strong>Contact Information:</strong></p>
-        <ul>
-            <li><strong>Email:</strong> {{ mail }}</li>
-            <li><strong>Phone:</strong> {{ phone }}</li>
-        </ul>
-        <p><strong>Event Description:</strong></p>
-        <p>{{ description }}</p>
-        <p><strong>Event Dates:</strong></p>
-        <ul>
-            <li><strong>Start Date:</strong> {{ start_date }}</li>
-            <li><strong>End Date:</strong> {{ end_date }}</li>
-            <li><strong>Full Day Event:</strong> {{ is_full_day | default: "No" }}</li>
-        </ul>
-        <div class="centered">
-            <a href="{{ host }}/requests" class="button">View Booking Requests</a>
-        </div>
-        <p>If you cannot see the button, please visit the following link: <br>
-            <a href="{{ host }}/requests">{{ host }}/requests</a>
-        </p>
+        {% if lang == 'de' %}
+            <p>Eine neue Buchungsanfrage wurde gestellt.</p>
+            
+            <div class="info-grid">
+                <p><strong>Buchungsname:</strong> {{ display_name | default: "Unbenannte Buchung" }}</p>
+            </div>
+            
+            <div class="section">
+                <h2 class="section-title">Kontaktinformationen:</h2>
+                <div class="info-grid">
+                    <p><strong>E-Mail:</strong> {{ mail }}</p>
+                    <p><strong>Telefon:</strong> {{ phone }}</p>
+                </div>
+            </div>
+            
+            <div class="section">
+                <h2 class="section-title">Veranstaltungsbeschreibung:</h2>
+                <div class="description-box">
+                    <p>{{ description }}</p>
+                </div>
+            </div>
+            
+            <div class="section">
+                <h2 class="section-title">Veranstaltungsdaten:</h2>
+                <div class="info-grid">
+                    <p><strong>Startdatum:</strong> {{ start_date }}</p>
+                    <p><strong>Enddatum:</strong> {{ end_date }}</p>
+                    <p><strong>Ganztägige Veranstaltung:</strong> {{ is_full_day | default: "Nein" }}</p>
+                </div>
+            </div>
+            
+            <div class="button-container">
+                <a href="{{ host }}/requests" class="button">Buchungsanfragen anzeigen</a>
+            </div>
+            
+            <div class="link-fallback">
+                <p>Wenn Sie die Schaltfläche nicht sehen können, besuchen Sie bitte den folgenden Link:</p>
+                <a href="{{ host }}/requests">{{ host }}/requests</a>
+            </div>
+        {% else %}
+            <p>A new booking request has been made.</p>
+            
+            <div class="info-grid">
+                <p><strong>Booking Name:</strong> {{ display_name | default: "Unnamed Booking" }}</p>
+            </div>
+            
+            <div class="section">
+                <h2 class="section-title">Contact Information:</h2>
+                <div class="info-grid">
+                    <p><strong>Email:</strong> {{ mail }}</p>
+                    <p><strong>Phone:</strong> {{ phone }}</p>
+                </div>
+            </div>
+            
+            <div class="section">
+                <h2 class="section-title">Event Description:</h2>
+                <div class="description-box">
+                    <p>{{ description }}</p>
+                </div>
+            </div>
+            
+            <div class="section">
+                <h2 class="section-title">Event Dates:</h2>
+                <div class="info-grid">
+                    <p><strong>Start Date:</strong> {{ start_date }}</p>
+                    <p><strong>End Date:</strong> {{ end_date }}</p>
+                    <p><strong>Full Day Event:</strong> {{ is_full_day | default: "No" }}</p>
+                </div>
+            </div>
+            
+            <div class="button-container">
+                <a href="{{ host }}/requests" class="button">View Booking Requests</a>
+            </div>
+            
+            <div class="link-fallback">
+                <p>If you cannot see the button, please visit the following link:</p>
+                <a href="{{ host }}/requests">{{ host }}/requests</a>
+            </div>
+        {% endif %}
     </div>
 
     <div class="footer">
-        <p>Thank you for using our service!</p>
+        <p>
+            {% if lang == 'de' %}
+                Vielen Dank für die Nutzung unseres Services!
+            {% else %}
+                Thank you for using our service!
+            {% endif %}
+        </p>
     </div>
 </div>
 </body>

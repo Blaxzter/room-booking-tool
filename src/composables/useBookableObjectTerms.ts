@@ -43,11 +43,40 @@ export function useBookableObjectTerms() {
     return terms[Math.floor(Math.random() * terms.length)]
   }
   
+  /**
+   * Get all translated bookable object items
+   * @returns An array of translated bookable objects with name and description
+   */
+  const getBookableObjectList = () => {
+    const count = 10 // Based on the constant file having 10 items
+    const result = []
+    
+    for (let i = 0; i < count; i++) {
+      result.push({
+        name: t(`bookableObjects.examples[${i}].name`),
+        description: t(`bookableObjects.examples[${i}].description`)
+      })
+    }
+    
+    return result
+  }
+  
+  /**
+   * Get a random bookable object with translated name and description
+   * @returns A random translated bookable object
+   */
+  const getRandomBookableObject = () => {
+    const list = getBookableObjectList()
+    return list[Math.floor(Math.random() * list.length)]
+  }
+  
   return {
     getBookableObjectTerms,
     singularTerms,
     pluralTerms,
     lowercaseTerms,
-    getRandomTerm
+    getRandomTerm,
+    getBookableObjectList,
+    getRandomBookableObject
   }
 } 

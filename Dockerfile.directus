@@ -38,6 +38,7 @@ USER node
 
 RUN pnpm install directus-extension-sync
 RUN pnpm install @flickdawist/custom_error_handler
+RUN pnpm install directus-extension-system-email-i18n
 
 # Copy any additional resources like email templates
 COPY ./email-templates/ /directus/email-templates/

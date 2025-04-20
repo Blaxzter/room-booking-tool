@@ -1,17 +1,5 @@
 [
   {
-    "collection": "booking",
-    "action": "create",
-    "permissions": null,
-    "validation": null,
-    "presets": null,
-    "fields": [
-      "*"
-    ],
-    "policy": "_sync_default_public_policy",
-    "_syncId": "59377b75-eb9c-4ff4-a111-6bc0a27ae300"
-  },
-  {
     "collection": "directus_files",
     "action": "read",
     "permissions": {},

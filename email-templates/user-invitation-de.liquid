@@ -1,0 +1,38 @@
+{% layout "base" %} {% block content %}
+
+<h1>Sie wurden zu {{ projectName }} eingeladen</h1>
+
+<p style="padding-bottom: 30px">
+  Sie wurden eingeladen, <i>{{ projectName }}</i> beizutreten. Bitte klicken Sie auf
+  den Button unten, um diese Einladung anzunehmen und dem Projekt beizutreten:
+</p>
+
+<a
+  class="button"
+  rel="noopener"
+  target="_blank"
+  href="{{url}}"
+  style="
+    font-size: 16px;
+    font-weight: 600;
+    color: #ffffff;
+    text-decoration: none;
+    display: inline-block;
+    padding: 11px 24px;
+    border-radius: 8px;
+    background: #171717;
+    border: 1px solid #ffffff;
+  "
+>
+  <!--[if mso]>
+    <i style="letter-spacing: 25px; mso-font-width: -100%; mso-text-raise: 30pt"
+      >&nbsp;</i
+    >
+  <![endif]-->
+  <span style="mso-text-raise: 15pt">{{ projectName }} beitreten</span>
+  <!--[if mso]>
+    <i style="letter-spacing: 25px; mso-font-width: -100%">&nbsp;</i>
+  <![endif]-->
+</a>
+
+{% endblock %}

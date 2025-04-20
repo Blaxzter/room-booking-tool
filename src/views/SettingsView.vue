@@ -63,7 +63,7 @@ onMounted(async () => {
 </script>
 
 <template>
-  <div class="space-y-6 p-10 pb-16 h-full max-h-full">
+  <div class="space-y-6 p-2 md:p-5 lg:p-10 pb-16 h-full max-h-full">
     <div class="space-y-0.5">
       <h2 class="text-2xl font-bold tracking-tight">{{ title }}</h2>
       <p class="text-muted-foreground">{{ description }}</p>
@@ -71,7 +71,7 @@ onMounted(async () => {
     <Separator class="my-6" />
     <div
       class="flex flex-col space-y-8 md:flex-row md:space-x-12 md:space-y-0 h-full"
-      style="max-height: calc(100% - 50px)"
+      style="max-height: calc(100% - 74px);"
     >
       <aside class="md:-mx-4 md:w-1/5">
         <SidebarNav v-model="selectedPage" />
@@ -79,7 +79,7 @@ onMounted(async () => {
       <div class="h-full overflow-hidden flex-grow">
         <ScrollArea class="max-h-full overflow-y-scroll">
           <div class="flex-1 md:max-w-2xl mb-5">
-            <div class="space-y-6 ps-1">
+            <div class="space-y-6 ps-1 pe-2 me-n2">
               <Component :is="PageComponent" />
             </div>
           </div>

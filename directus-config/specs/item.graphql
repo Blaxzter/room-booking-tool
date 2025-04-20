@@ -7,12 +7,12 @@ type Query {
   staticpages_by_id(id: ID!, version: String): staticpages
   staticpages_aggregated(groupBy: [String], filter: staticpages_filter, limit: Int, offset: Int, page: Int, search: String, sort: [String]): [staticpages_aggregated!]!
   staticpages_by_version(version: String!, id: ID!): version_staticpages
-  settings(version: String): settings
-  settings_by_version(version: String!): version_settings
   bookable_object(filter: bookable_object_filter, sort: [String], limit: Int, offset: Int, page: Int, search: String): [bookable_object!]!
   bookable_object_by_id(id: ID!, version: String): bookable_object
   bookable_object_aggregated(groupBy: [String], filter: bookable_object_filter, limit: Int, offset: Int, page: Int, search: String, sort: [String]): [bookable_object_aggregated!]!
   bookable_object_by_version(version: String!, id: ID!): version_bookable_object
+  settings(version: String): settings
+  settings_by_version(version: String!): version_settings
   bookable_object_group(filter: bookable_object_group_filter, sort: [String], limit: Int, offset: Int, page: Int, search: String): [bookable_object_group!]!
   bookable_object_group_by_id(id: ID!, version: String): bookable_object_group
   bookable_object_group_aggregated(groupBy: [String], filter: bookable_object_group_filter, limit: Int, offset: Int, page: Int, search: String, sort: [String]): [bookable_object_group_aggregated!]!
@@ -70,10 +70,10 @@ type Mutation {
   update_staticpages_items(filter: staticpages_filter, sort: [String], limit: Int, offset: Int, page: Int, search: String, ids: [ID]!, data: update_staticpages_input!): [staticpages!]!
   update_staticpages_batch(filter: staticpages_filter, sort: [String], limit: Int, offset: Int, page: Int, search: String, data: [update_staticpages_input!]): [staticpages!]!
   update_staticpages_item(id: ID!, data: update_staticpages_input!): staticpages
-  update_settings(data: update_settings_input!): settings
   update_bookable_object_items(filter: bookable_object_filter, sort: [String], limit: Int, offset: Int, page: Int, search: String, ids: [ID]!, data: update_bookable_object_input!): [bookable_object!]!
   update_bookable_object_batch(filter: bookable_object_filter, sort: [String], limit: Int, offset: Int, page: Int, search: String, data: [update_bookable_object_input!]): [bookable_object!]!
   update_bookable_object_item(id: ID!, data: update_bookable_object_input!): bookable_object
+  update_settings(data: update_settings_input!): settings
   update_bookable_object_group_items(filter: bookable_object_group_filter, sort: [String], limit: Int, offset: Int, page: Int, search: String, ids: [ID]!, data: update_bookable_object_group_input!): [bookable_object_group!]!
   update_bookable_object_group_batch(filter: bookable_object_group_filter, sort: [String], limit: Int, offset: Int, page: Int, search: String, data: [update_bookable_object_group_input!]): [bookable_object_group!]!
   update_bookable_object_group_item(id: ID!, data: update_bookable_object_group_input!): bookable_object_group
@@ -140,9 +140,9 @@ type Subscription {
   directus_versions_mutated(event: EventEnum): directus_versions_mutated
   directus_sync_id_map_mutated(event: EventEnum): directus_sync_id_map_mutated
   staticpages_mutated(event: EventEnum): staticpages_mutated
-  settings_mutated(event: EventEnum): settings_mutated
   directus_settings_mutated(event: EventEnum): directus_settings_mutated
   bookable_object_mutated(event: EventEnum): bookable_object_mutated
+  settings_mutated(event: EventEnum): settings_mutated
   bookable_object_group_mutated(event: EventEnum): bookable_object_group_mutated
   group_mutated(event: EventEnum): group_mutated
   booking_mutated(event: EventEnum): booking_mutated
@@ -225,6 +225,11 @@ type bookable_object {
   type: String
   uniqueId: String
   user_created(filter: directus_users_filter, sort: [String], limit: Int, offset: Int, page: Int, search: String): directus_users
+
+  """
+  This is the language (for now) that is used to send emails in the correct language.
+  """
+  language: String
   group(filter: bookable_object_group_filter, sort: [String], limit: Int, offset: Int, page: Int, search: String): [bookable_object_group]
   group_func: count_functions
 }
@@ -263,6 +268,11 @@ type bookable_object_aggregated_count {
   type: Int
   uniqueId: Int
   user_created: Int
+
+  """
+  This is the language (for now) that is used to send emails in the correct language.
+  """
+  language: Int
   group: Int
 }
 
@@ -336,7 +346,7 @@ type booking {
   is_full_day: Boolean
   mail: String
   phone: String
-  secret_edit_key: String
+  secret_edit_key: ID
   start_date: Date
   start_date_func: datetime_functions
   status: String
@@ -441,7 +451,6 @@ type directus_activity {
   user_agent: String
   collection: String!
   item: String!
-  comment: String
   origin: String
   revisions(filter: directus_revisions_filter, sort: [String], limit: Int, offset: Int, page: Int, search: String): [directus_revisions]
   revisions_func: count_functions
@@ -799,6 +808,8 @@ type directus_settings {
   mv_locked: Boolean!
   mv_ts: Date
   mv_ts_func: datetime_functions
+  visual_editor_urls: JSON
+  visual_editor_urls_func: count_functions
 }
 
 type directus_settings_mutated {
@@ -1293,6 +1304,11 @@ type version_bookable_object {
   type: String
   uniqueId: String
   user_created: JSON
+
+  """
+  This is the language (for now) that is used to send emails in the correct language.
+  """
+  language: String
   group: JSON
 }
 
@@ -1323,7 +1339,7 @@ type version_booking {
   is_full_day: Boolean
   mail: String
   phone: String
-  secret_edit_key: String
+  secret_edit_key: ID
   start_date: Date
   status: String
   user_created: JSON
@@ -1462,7 +1478,8 @@ input bookable_object_filter {
   type: string_filter_operators
   uniqueId: string_filter_operators
   user_created: directus_users_filter
-  group: bookable_object_group_filter
+  language: string_filter_operators
+  group: bookable_object_group_quantifier_filter
   group_func: count_function_filter_operators
   _and: [bookable_object_filter]
   _or: [bookable_object_filter]
@@ -1474,6 +1491,17 @@ input bookable_object_group_filter {
   id: number_filter_operators
   _and: [bookable_object_group_filter]
   _or: [bookable_object_group_filter]
+}
+
+""""""
+input bookable_object_group_quantifier_filter {
+  bookable_object_id: bookable_object_filter
+  group_id: group_filter
+  id: number_filter_operators
+  _and: [bookable_object_group_filter]
+  _or: [bookable_object_group_filter]
+  _some: bookable_object_group_filter
+  _none: bookable_object_group_filter
 }
 
 input booking_filter {
@@ -1492,7 +1520,7 @@ input booking_filter {
   is_full_day: boolean_filter_operators
   mail: string_filter_operators
   phone: string_filter_operators
-  secret_edit_key: string_filter_operators
+  secret_edit_key: id_filter_operators
   start_date: date_filter_operators
   start_date_func: datetime_function_filter_operators
   status: string_filter_operators
@@ -1540,6 +1568,11 @@ input create_bookable_object_input {
   type: String
   uniqueId: String
   user_created: create_directus_users_input
+
+  """
+  This is the language (for now) that is used to send emails in the correct language.
+  """
+  language: String
   group: [create_bookable_object_group_input]
 }
 
@@ -1562,7 +1595,7 @@ input create_booking_input {
   is_full_day: Boolean
   mail: String
   phone: String
-  secret_edit_key: String
+  secret_edit_key: ID
   start_date: Date
   status: String
   user_created: create_directus_users_input
@@ -1781,13 +1814,26 @@ input datetime_function_filter_operators {
 }
 
 input directus_access_filter {
-  id: string_filter_operators
+  id: id_filter_operators
   role: directus_roles_filter
   user: directus_users_filter
   policy: directus_policies_filter
   sort: number_filter_operators
   _and: [directus_access_filter]
   _or: [directus_access_filter]
+}
+
+""""""
+input directus_access_quantifier_filter {
+  id: id_filter_operators
+  role: directus_roles_filter
+  user: directus_users_filter
+  policy: directus_policies_filter
+  sort: number_filter_operators
+  _and: [directus_access_filter]
+  _or: [directus_access_filter]
+  _some: directus_access_filter
+  _none: directus_access_filter
 }
 
 input directus_activity_filter {
@@ -1800,16 +1846,15 @@ input directus_activity_filter {
   user_agent: string_filter_operators
   collection: string_filter_operators
   item: string_filter_operators
-  comment: string_filter_operators
   origin: string_filter_operators
-  revisions: directus_revisions_filter
+  revisions: directus_revisions_quantifier_filter
   revisions_func: count_function_filter_operators
   _and: [directus_activity_filter]
   _or: [directus_activity_filter]
 }
 
 input directus_dashboards_filter {
-  id: string_filter_operators
+  id: id_filter_operators
   name: string_filter_operators
   icon: string_filter_operators
   note: string_filter_operators
@@ -1817,14 +1862,14 @@ input directus_dashboards_filter {
   date_created_func: datetime_function_filter_operators
   user_created: directus_users_filter
   color: string_filter_operators
-  panels: directus_panels_filter
+  panels: directus_panels_quantifier_filter
   panels_func: count_function_filter_operators
   _and: [directus_dashboards_filter]
   _or: [directus_dashboards_filter]
 }
 
 input directus_files_filter {
-  id: string_filter_operators
+  id: id_filter_operators
   storage: string_filter_operators
   filename_disk: string_filter_operators
   filename_download: string_filter_operators
@@ -1861,7 +1906,7 @@ input directus_files_filter {
 }
 
 input directus_flows_filter {
-  id: string_filter_operators
+  id: id_filter_operators
   name: string_filter_operators
   icon: string_filter_operators
   color: string_filter_operators
@@ -1875,14 +1920,14 @@ input directus_flows_filter {
   date_created: date_filter_operators
   date_created_func: datetime_function_filter_operators
   user_created: directus_users_filter
-  operations: directus_operations_filter
+  operations: directus_operations_quantifier_filter
   operations_func: count_function_filter_operators
   _and: [directus_flows_filter]
   _or: [directus_flows_filter]
 }
 
 input directus_folders_filter {
-  id: string_filter_operators
+  id: id_filter_operators
   name: string_filter_operators
   parent: directus_folders_filter
   _and: [directus_folders_filter]
@@ -1890,7 +1935,7 @@ input directus_folders_filter {
 }
 
 input directus_operations_filter {
-  id: string_filter_operators
+  id: id_filter_operators
   name: string_filter_operators
   key: string_filter_operators
   type: string_filter_operators
@@ -1908,8 +1953,30 @@ input directus_operations_filter {
   _or: [directus_operations_filter]
 }
 
+""""""
+input directus_operations_quantifier_filter {
+  id: id_filter_operators
+  name: string_filter_operators
+  key: string_filter_operators
+  type: string_filter_operators
+  position_x: number_filter_operators
+  position_y: number_filter_operators
+  options: string_filter_operators
+  options_func: count_function_filter_operators
+  resolve: directus_operations_filter
+  reject: directus_operations_filter
+  flow: directus_flows_filter
+  date_created: date_filter_operators
+  date_created_func: datetime_function_filter_operators
+  user_created: directus_users_filter
+  _and: [directus_operations_filter]
+  _or: [directus_operations_filter]
+  _some: directus_operations_filter
+  _none: directus_operations_filter
+}
+
 input directus_panels_filter {
-  id: string_filter_operators
+  id: id_filter_operators
   dashboard: directus_dashboards_filter
   name: string_filter_operators
   icon: string_filter_operators
@@ -1930,6 +1997,31 @@ input directus_panels_filter {
   _or: [directus_panels_filter]
 }
 
+""""""
+input directus_panels_quantifier_filter {
+  id: id_filter_operators
+  dashboard: directus_dashboards_filter
+  name: string_filter_operators
+  icon: string_filter_operators
+  color: string_filter_operators
+  show_header: boolean_filter_operators
+  note: string_filter_operators
+  type: string_filter_operators
+  position_x: number_filter_operators
+  position_y: number_filter_operators
+  width: number_filter_operators
+  height: number_filter_operators
+  options: string_filter_operators
+  options_func: count_function_filter_operators
+  date_created: date_filter_operators
+  date_created_func: datetime_function_filter_operators
+  user_created: directus_users_filter
+  _and: [directus_panels_filter]
+  _or: [directus_panels_filter]
+  _some: directus_panels_filter
+  _none: directus_panels_filter
+}
+
 input directus_permissions_filter {
   id: number_filter_operators
   collection: string_filter_operators
@@ -1946,8 +2038,27 @@ input directus_permissions_filter {
   _or: [directus_permissions_filter]
 }
 
+""""""
+input directus_permissions_quantifier_filter {
+  id: number_filter_operators
+  collection: string_filter_operators
+  action: string_filter_operators
+  permissions: string_filter_operators
+  permissions_func: count_function_filter_operators
+  validation: string_filter_operators
+  validation_func: count_function_filter_operators
+  presets: string_filter_operators
+  presets_func: count_function_filter_operators
+  fields: string_filter_operators
+  policy: directus_policies_filter
+  _and: [directus_permissions_filter]
+  _or: [directus_permissions_filter]
+  _some: directus_permissions_filter
+  _none: directus_permissions_filter
+}
+
 input directus_policies_filter {
-  id: string_filter_operators
+  id: id_filter_operators
   name: string_filter_operators
   icon: string_filter_operators
   description: string_filter_operators
@@ -1955,11 +2066,11 @@ input directus_policies_filter {
   enforce_tfa: boolean_filter_operators
   admin_access: boolean_filter_operators
   app_access: boolean_filter_operators
-  permissions: directus_permissions_filter
+  permissions: directus_permissions_quantifier_filter
   permissions_func: count_function_filter_operators
-  users: directus_access_filter
+  users: directus_access_quantifier_filter
   users_func: count_function_filter_operators
-  roles: directus_access_filter
+  roles: directus_access_quantifier_filter
   roles_func: count_function_filter_operators
   _and: [directus_policies_filter]
   _or: [directus_policies_filter]
@@ -1980,20 +2091,57 @@ input directus_revisions_filter {
   _or: [directus_revisions_filter]
 }
 
+""""""
+input directus_revisions_quantifier_filter {
+  id: number_filter_operators
+  activity: directus_activity_filter
+  collection: string_filter_operators
+  item: string_filter_operators
+  data: string_filter_operators
+  data_func: count_function_filter_operators
+  delta: string_filter_operators
+  delta_func: count_function_filter_operators
+  parent: directus_revisions_filter
+  version: directus_versions_filter
+  _and: [directus_revisions_filter]
+  _or: [directus_revisions_filter]
+  _some: directus_revisions_filter
+  _none: directus_revisions_filter
+}
+
 input directus_roles_filter {
-  id: string_filter_operators
+  id: id_filter_operators
   name: string_filter_operators
   icon: string_filter_operators
   description: string_filter_operators
   parent: directus_roles_filter
-  children: directus_roles_filter
+  children: directus_roles_quantifier_filter
   children_func: count_function_filter_operators
-  policies: directus_access_filter
+  policies: directus_access_quantifier_filter
   policies_func: count_function_filter_operators
-  users: directus_users_filter
+  users: directus_users_quantifier_filter
   users_func: count_function_filter_operators
   _and: [directus_roles_filter]
   _or: [directus_roles_filter]
+}
+
+""""""
+input directus_roles_quantifier_filter {
+  id: id_filter_operators
+  name: string_filter_operators
+  icon: string_filter_operators
+  description: string_filter_operators
+  parent: directus_roles_filter
+  children: directus_roles_quantifier_filter
+  children_func: count_function_filter_operators
+  policies: directus_access_quantifier_filter
+  policies_func: count_function_filter_operators
+  users: directus_users_quantifier_filter
+  users_func: count_function_filter_operators
+  _and: [directus_roles_filter]
+  _or: [directus_roles_filter]
+  _some: directus_roles_filter
+  _none: directus_roles_filter
 }
 
 input directus_sync_id_map_filter {
@@ -2008,7 +2156,7 @@ input directus_sync_id_map_filter {
 }
 
 input directus_users_filter {
-  id: string_filter_operators
+  id: id_filter_operators
   first_name: string_filter_operators
   last_name: string_filter_operators
   email: string_filter_operators
@@ -2042,18 +2190,66 @@ input directus_users_filter {
   display_name: string_filter_operators
   telegram_user_id: string_filter_operators
   telegram_user_name: string_filter_operators
-  Groups: group_directus_users_filter
+  Groups: group_directus_users_quantifier_filter
   Groups_func: count_function_filter_operators
-  Invites: group_invites_filter
+  Invites: group_invites_quantifier_filter
   Invites_func: count_function_filter_operators
-  policies: directus_access_filter
+  policies: directus_access_quantifier_filter
   policies_func: count_function_filter_operators
   _and: [directus_users_filter]
   _or: [directus_users_filter]
 }
 
+""""""
+input directus_users_quantifier_filter {
+  id: id_filter_operators
+  first_name: string_filter_operators
+  last_name: string_filter_operators
+  email: string_filter_operators
+  password: hash_filter_operators
+  location: string_filter_operators
+  title: string_filter_operators
+  description: string_filter_operators
+  tags: string_filter_operators
+  tags_func: count_function_filter_operators
+  avatar: directus_files_filter
+  language: string_filter_operators
+  tfa_secret: hash_filter_operators
+  status: string_filter_operators
+  role: directus_roles_filter
+  token: hash_filter_operators
+  last_access: date_filter_operators
+  last_access_func: datetime_function_filter_operators
+  last_page: string_filter_operators
+  provider: string_filter_operators
+  external_identifier: string_filter_operators
+  auth_data: string_filter_operators
+  auth_data_func: count_function_filter_operators
+  email_notifications: boolean_filter_operators
+  appearance: string_filter_operators
+  theme_dark: string_filter_operators
+  theme_light: string_filter_operators
+  theme_light_overrides: string_filter_operators
+  theme_light_overrides_func: count_function_filter_operators
+  theme_dark_overrides: string_filter_operators
+  theme_dark_overrides_func: count_function_filter_operators
+  display_name: string_filter_operators
+  telegram_user_id: string_filter_operators
+  telegram_user_name: string_filter_operators
+  Groups: group_directus_users_quantifier_filter
+  Groups_func: count_function_filter_operators
+  Invites: group_invites_quantifier_filter
+  Invites_func: count_function_filter_operators
+  policies: directus_access_quantifier_filter
+  policies_func: count_function_filter_operators
+  _and: [directus_users_filter]
+  _or: [directus_users_filter]
+  _some: directus_users_filter
+  _none: directus_users_filter
+}
+
 input directus_versions_filter {
-  id: string_filter_operators
+  id: id_filter_operators
   key: string_filter_operators
   name: string_filter_operators
   collection: string_filter_operators
@@ -2091,6 +2287,18 @@ input group_directus_users_filter {
   _or: [group_directus_users_filter]
 }
 
+""""""
+input group_directus_users_quantifier_filter {
+  directus_users_id: directus_users_filter
+  group_id: group_filter
+  id: number_filter_operators
+  role: string_filter_operators
+  _and: [group_directus_users_filter]
+  _or: [group_directus_users_filter]
+  _some: group_directus_users_filter
+  _none: group_directus_users_filter
+}
+
 input group_filter {
   avatar: directus_files_filter
   date_created: date_filter_operators
@@ -2106,11 +2314,11 @@ input group_filter {
   status: string_filter_operators
   user_created: directus_users_filter
   user_updated: directus_users_filter
-  bookable_objects: bookable_object_group_filter
+  bookable_objects: bookable_object_group_quantifier_filter
   bookable_objects_func: count_function_filter_operators
-  invites: group_invites_filter
+  invites: group_invites_quantifier_filter
   invites_func: count_function_filter_operators
-  users: group_directus_users_filter
+  users: group_directus_users_quantifier_filter
   users_func: count_function_filter_operators
   _and: [group_filter]
   _or: [group_filter]
@@ -2126,7 +2334,42 @@ input group_invites_filter {
   _or: [group_invites_filter]
 }
 
+""""""
+input group_invites_quantifier_filter {
+  email: string_filter_operators
+  group_id: group_filter
+  id: number_filter_operators
+  role: string_filter_operators
+  user_id: directus_users_filter
+  _and: [group_invites_filter]
+  _or: [group_invites_filter]
+  _some: group_invites_filter
+  _none: group_invites_filter
+}
+
 input hash_filter_operators {
+  _null: Boolean
+  _nnull: Boolean
+  _empty: Boolean
+  _nempty: Boolean
+}
+
+input id_filter_operators {
+  _eq: ID
+  _neq: ID
+  _contains: ID
+  _icontains: ID
+  _ncontains: ID
+  _starts_with: ID
+  _nstarts_with: ID
+  _istarts_with: ID
+  _nistarts_with: ID
+  _ends_with: ID
+  _nends_with: ID
+  _iends_with: ID
+  _niends_with: ID
+  _in: [ID]
+  _nin: [ID]
   _null: Boolean
   _nnull: Boolean
   _empty: Boolean
@@ -2161,7 +2404,7 @@ input number_filter_operators {
 
 input staticpages_filter {
   content: string_filter_operators
-  id: string_filter_operators
+  id: id_filter_operators
   slug: string_filter_operators
   status: string_filter_operators
   language: string_filter_operators
@@ -2218,6 +2461,11 @@ input update_bookable_object_input {
   type: String
   uniqueId: String
   user_created: update_directus_users_input
+
+  """
+  This is the language (for now) that is used to send emails in the correct language.
+  """
+  language: String
   group: [update_bookable_object_group_input]
 }
 
@@ -2240,7 +2488,7 @@ input update_booking_input {
   is_full_day: Boolean
   mail: String
   phone: String
-  secret_edit_key: String
+  secret_edit_key: ID
   start_date: Date
   status: String
   user_created: update_directus_users_input

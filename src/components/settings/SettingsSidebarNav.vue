@@ -19,7 +19,7 @@ const selectedPage = defineModel<string>({
   default: 'profile'
 })
 
-const sidebarNavItems: Item[] = [
+const sidebarNavItems = computed<Item[]>(() => [
   {
     title: t('settings.profile.title'),
     value: 'profile'
@@ -32,7 +32,7 @@ const sidebarNavItems: Item[] = [
     title: t('settings.notifications.title'),
     value: 'notifications'
   }
-]
+])
 
 const selectPage = (value: string) => {
   selectedPage.value = value
@@ -50,7 +50,7 @@ watch(currentPage, (value) => {
   <nav class="hidden md:flex flex-col space-x-0 space-y-1">
     <Button
       v-for="item in sidebarNavItems"
-      :key="item.title"
+      :key="item.value"
       as="a"
       @click="selectPage(item.value)"
       variant="ghost"

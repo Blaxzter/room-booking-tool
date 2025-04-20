@@ -98,56 +98,60 @@ const toggleNotification = async (setting: NotificationSetting, type: Notificati
         <Separator />
 
         <!-- Group Notification Settings -->
-        <div class="font-semibold">{{ t('settings.notifications.groups.title') }}</div>
-        <div class="space-y-0.5 ps-3">
-          <div
-            v-for="group in notificationSettingsByGroup"
-            :key="group.id"
-            class="grid grid-cols-[1fr_50px_50px] md:grid-cols-[1fr_100px_100px] gap-4 items-center place-items-center"
-          >
-            <template v-if="group.group_id && typeof group.group_id !== 'string'">
-              <div class="place-self-start">{{ group.group_id.name }}</div>
-              <Checkbox
-                :checked="group.email_notification"
-                @update:checked="toggleNotification(group, 'email_notification', `Group ${group.group_id.name}`)"
-              />
-              <Checkbox :checked="group.telegram" @update:checked="toggleNotification(group, 'telegram', 'User')" />
-            </template>
+        <template v-if="Object.keys(notificationSettingsByGroup).length > 0">
+          <div class="font-semibold">{{ t('settings.notifications.groups.title') }}</div>
+          <div class="space-y-0.5 ps-3">
+            <div
+              v-for="group in Object.values(notificationSettingsByGroup)"
+              :key="group.id"
+              class="grid grid-cols-[1fr_50px_50px] md:grid-cols-[1fr_100px_100px] gap-4 items-center place-items-center"
+            >
+              <template v-if="group.group_id && typeof group.group_id !== 'string'">
+                <div class="place-self-start">{{ group.group_id.name }}</div>
+                <Checkbox
+                  :checked="group.email_notification"
+                  @update:checked="toggleNotification(group, 'email_notification', `Group ${group.group_id.name}`)"
+                />
+                <Checkbox :checked="group.telegram" @update:checked="toggleNotification(group, 'telegram', 'User')" />
+              </template>
+            </div>
           </div>
-        </div>
-        <div class="text-muted-foreground max-w-[600px]">
-          {{ t('settings.notifications.groups.help') }}
-        </div>
-        <Separator />
+          <div class="text-muted-foreground max-w-[600px]">
+            {{ t('settings.notifications.groups.help') }}
+          </div>
+          <Separator />
+        </template>
 
         <!-- Bookable Objects Notification Settings -->
-        <div class="font-semibold">{{ t('settings.notifications.bookableObjects.title') }}</div>
-        <div class="space-y-0.5 ps-3">
-          <div
-            v-for="object in notificationSettingsByBookableObject"
-            :key="object.id"
-            class="grid grid-cols-[1fr_50px_50px] md:grid-cols-[1fr_100px_100px] gap-4 items-center place-items-center"
-          >
-            <template v-if="object.bookable_object_id && typeof object.bookable_object_id !== 'string'">
-              <div class="place-self-start">{{ object.bookable_object_id.name }}</div>
-              <Checkbox
-                :checked="object.email_notification"
-                @update:checked="
-                  toggleNotification(object, 'email_notification', `Bookable Object ${object.bookable_object_id.name}`)
-                "
-              />
-              <Checkbox
-                :checked="object.telegram"
-                @update:checked="
-                  toggleNotification(object, 'telegram', `Bookable Object ${object.bookable_object_id.name}`)
-                "
-              />
-            </template>
+        <template v-if="Object.keys(notificationSettingsByBookableObject).length > 0">
+          <div class="font-semibold">{{ t('settings.notifications.bookableObjects.title') }}</div>
+          <div class="space-y-0.5 ps-3">
+            <div
+              v-for="object in Object.values(notificationSettingsByBookableObject)"
+              :key="object.id"
+              class="grid grid-cols-[1fr_50px_50px] md:grid-cols-[1fr_100px_100px] gap-4 items-center place-items-center"
+            >
+              <template v-if="object.bookable_object_id && typeof object.bookable_object_id !== 'string'">
+                <div class="place-self-start">{{ object.bookable_object_id.name }}</div>
+                <Checkbox
+                  :checked="object.email_notification"
+                  @update:checked="
+                    toggleNotification(object, 'email_notification', `Bookable Object ${object.bookable_object_id.name}`)
+                  "
+                />
+                <Checkbox
+                  :checked="object.telegram"
+                  @update:checked="
+                    toggleNotification(object, 'telegram', `Bookable Object ${object.bookable_object_id.name}`)
+                  "
+                />
+              </template>
+            </div>
           </div>
-        </div>
-        <div class="text-muted-foreground max-w-[500px]">
-          {{ t('settings.notifications.bookableObjects.help') }}
-        </div>
+          <div class="text-muted-foreground max-w-[500px]">
+            {{ t('settings.notifications.bookableObjects.help') }}
+          </div>
+        </template>
       </template>
     </div>
   </div>

@@ -33,6 +33,7 @@ import { useGroups } from '@/stores/groups'
 import { useBookings } from '@/stores/booking'
 import { useBookableObjects } from '@/stores/bookableObjects'
 import { toast, ToastAction } from '@/components/ui/toast'
+import { useI18n } from 'vue-i18n'
 
 export type MyDirectusClient = DirectusClient<MySchema> &
   AuthenticationClient<MySchema> &
@@ -43,6 +44,7 @@ export type NoAuthDirectusClient = DirectusClient<MySchema> & RestClient<MySchem
 
 export const useUser = defineStore('user', () => {
   const authenticated = ref(false)
+  const { locale } = useI18n()
 
   const _keep_logged_in = ref(localStorage.getItem('keep_logged_in') === 'true')
   const auth_data = ref({} as AuthenticationData)
@@ -135,6 +137,10 @@ export const useUser = defineStore('user', () => {
 
   const getCurrentUserData = async () => {
     user.value = await client.request<User>(readMe())
+
+    // use i18n to set the language
+    locale.value = user.value.language
+
     // write to local storage
     localStorage.setItem('user', JSON.stringify(user.value))
     if (user.value?.Invites && user.value.Invites.length > 0) {
