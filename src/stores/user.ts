@@ -42,6 +42,18 @@ export type MyDirectusClient = DirectusClient<MySchema> &
 
 export type NoAuthDirectusClient = DirectusClient<MySchema> & RestClient<MySchema> & GraphqlClient<MySchema>
 
+export class AuthError extends Error {
+  code?: string;
+  originalError?: any;
+
+  constructor(message: string, code?: string, originalError?: any) {
+    super(message);
+    this.name = 'AuthError';
+    this.code = code;
+    this.originalError = originalError;
+  }
+}
+
 export const useUser = defineStore('user', () => {
   const authenticated = ref(false)
   const { locale } = useI18n()
@@ -139,39 +151,45 @@ export const useUser = defineStore('user', () => {
     user.value = await client.request<User>(readMe())
 
     // use i18n to set the language
-    locale.value = user.value.language
+    if (user.value.language) {
+      locale.value = user.value.language
+    }
 
     // write to local storage
     localStorage.setItem('user', JSON.stringify(user.value))
-    if (user.value?.Invites && user.value.Invites.length > 0) {
-      const { getInvites } = useGroups()
-      await getInvites(user.value.id).then((invites) => {
-        if (invites.length > 0) {
-          invites.forEach((invite) => {
-            if (invite.group_id) {
-              toast({
-                title: 'Invites',
-                description: `You have been invited to join ${(invite.group_id as Group).name}`,
-                variant: 'default',
-                duration: 20000,
-                action: h(
-                  ToastAction,
-                  {
-                    altText: 'View',
-                    onClick: () => {
-                      router.push({ name: 'groups' })
+
+    // check if user has invites
+    setTimeout(async () => {
+      if (user.value?.Invites && user.value.Invites.length > 0) {
+        const { getInvites } = useGroups()
+        await getInvites(user.value.id).then((invites) => {
+          if (invites.length > 0) {
+            invites.forEach((invite) => {
+              if (invite.group_id) {
+                toast({
+                  title: 'Invites',
+                  description: `You have been invited to join ${(invite.group_id as Group).name}`,
+                  variant: 'default',
+                  duration: 20000,
+                  action: h(
+                    ToastAction,
+                    {
+                      altText: 'View',
+                      onClick: () => {
+                        router.push({ name: 'groups' })
+                      }
+                    },
+                    {
+                      default: () => 'View'
                     }
-                  },
-                  {
-                    default: () => 'View'
-                  }
-                )
-              })
-            }
-          })
-        }
-      })
-    }
+                  )
+                })
+              }
+            })
+          }
+        })
+      }
+    }, 2000)
 
     return user.value
   }
@@ -193,7 +211,18 @@ export const useUser = defineStore('user', () => {
         authenticated.value = true
       })
       .catch((error) => {
-        throw new Error(error?.errors?.length > 0 ? error.errors[0].message : 'An error occurred')
+        if (error?.errors?.length > 0) {
+          const serverError = error.errors[0];
+          const errorCode = serverError.extensions?.code;
+          
+          throw new AuthError(
+            serverError.message, 
+            errorCode, 
+            error
+          );
+        } else {
+          throw new AuthError('An error occurred');
+        }
       })
   }
 

@@ -8,7 +8,16 @@
     "pleaseWait": "Please wait",
     "signIn": "Sign in",
     "noAccount": "Don't have an account?",
-    "signUp": "Sign up"
+    "signUp": "Sign up",
+    "emailRequired": "Email is required",
+    "passwordRequired": "Password is required",
+    "errors": {
+      "invalidCredentials": "Invalid email or password",
+      "accountLocked": "Your account has been locked",
+      "accountDisabled": "Your account has been disabled",
+      "generic": "Login error: {0}",
+      "unknown": "An unknown error occurred. Please try again later."
+    }
   },
   "register": {
     "title": "Sign Up",
@@ -78,6 +87,17 @@
     "cancel": "Cancel",
     "continue": "Continue",
     "delete": "Delete"
+  },
+  "requests": {
+    "actions": {
+      "approved": "Request approved",
+      "revoked": "Request revoked",
+      "removed": "Request removed",
+      "rejected": "Request rejected",
+      "error": "An error occured when updating the booking state",
+      "unauthorized": "You are not authorized to update this booking",
+      "reject_error": "An error occured when removing the request"
+    }
   },
   "settings": {
     "title": "Settings",
@@ -302,7 +322,11 @@
         "name": "Mystery Room Escape",
         "description": "Solve puzzles and find clues to escape from a thrilling mystery room."
       }
-    ]
+    ],
+    "actions": {
+      "unauthorized": "You are not authorized to update this bookable object",
+      "update_error": "An error occured when updating the bookable object"
+    }
   },
   "bookableObject": {
     "edit": {
@@ -720,7 +744,10 @@
       "allDay": "all day",
       "cancelButton": "Cancel",
       "confirmDelete": "Confirm Delete",
-      "confirmDeleteMessage": "Are you sure you want to remove this booking?"
+      "confirmDeleteMessage": "Are you sure you want to remove this booking?",
+      "confirmRevokeMessage": "Are you sure you want to revoke the previously approved event?",
+      "confirmRevoke": "Revoke confirmation",
+      "revokeButton": "Revoke"
     }
   },
   "notFoundView": {

@@ -8,7 +8,16 @@
     "pleaseWait": "Bitte warten",
     "signIn": "Anmelden",
     "noAccount": "Sie haben noch kein Konto?",
-    "signUp": "Registrieren"
+    "signUp": "Registrieren",
+    "emailRequired": "E -Mail ist erforderlich",
+    "passwordRequired": "Passwort ist erforderlich",
+    "errors": {
+      "invalidCredentials": "Ungültige E-Mail oder Passwort",
+      "accountLocked": "Ihr Konto wurde gesperrt",
+      "accountDisabled": "Ihr Konto wurde deaktiviert",
+      "generic": "Anmeldefehler: {0}",
+      "unknown": "Ein unbekannter Fehler ist aufgetreten. Bitte versuchen Sie es später erneut."
+    }
   },
   "register": {
     "title": "Registrieren",
@@ -78,6 +87,16 @@
     "cancel": "Abbrechen",
     "continue": "Fortfahren",
     "delete": "Löschen"
+  },
+  "requests": {
+    "actions": {
+      "approved": "Anfrage genehmigt",
+      "revoked": "Anfrage widerrufen",
+      "removed": "Anfrage entfernt",
+      "rejected": "Anfrage abgelehnt",
+      "error": "Bei der Aktualisierung des Buchungszustands trat ein Fehler auf",
+      "reject_error": "Bei der Entfernung der Anforderung trat ein Fehler auf"
+    }
   },
   "settings": {
     "title": "Einstellungen",
@@ -302,7 +321,11 @@
         "name": "Mystery-Room-Escape",
         "description": "Lösen Sie Rätsel und finden Sie Hinweise, um aus einem spannenden Mysterium-Raum zu entkommen."
       }
-    ]
+    ],
+    "actions": {
+      "unauthorized": "Sie sind nicht berechtigt, dieses buchbare Objekt zu aktualisieren",
+      "update_error": "Bei der Aktualisierung des buchbaren Objekts trat ein Fehler auf"
+    }
   },
   "bookableObject": {
     "edit": {
@@ -720,7 +743,10 @@
       "allDay": "ganztägig",
       "cancelButton": "Abbrechen",
       "confirmDeleteMessage": "Sind Sie sicher, dass Sie diese Buchung entfernen möchten?",
-      "confirmDelete": "Löschen Bestätigen"
+      "confirmDelete": "Löschen Bestätigen",
+      "confirmRevokeMessage": "Sind Sie sicher, dass Sie die zuvor genehmigte Veranstaltung widerrufen möchten?",
+      "confirmRevoke": "Bestätigung widerrufen",
+      "revokeButton": "Widerrufen"
     }
   },
   "notFoundView": {

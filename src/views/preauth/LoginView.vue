@@ -31,10 +31,36 @@ const password = ref('')
 const errorMessage = ref('')
 const keepLoggedIn = ref(false)
 const showPassword = ref(false)
+const emailError = ref('')
+const passwordError = ref('')
 
 const { login, isAuthenticated, getRedirect } = useUser()
 
+const validateForm = () => {
+  let isValid = true
+  
+  // Reset error messages
+  emailError.value = ''
+  passwordError.value = ''
+  
+  if (!email.value.trim()) {
+    emailError.value = t('login.emailRequired', 'Email is required')
+    isValid = false
+  }
+  
+  if (!password.value) {
+    passwordError.value = t('login.passwordRequired', 'Password is required')
+    isValid = false
+  }
+  
+  return isValid
+}
+
 const loginWrapper = async () => {
+  if (!validateForm()) {
+    return
+  }
+  
   loading.value = true
   errorMessage.value = ''
 
@@ -59,7 +85,25 @@ const loginWrapper = async () => {
         showCross.value = false
         loading.value = false
       }, 1000)
-      errorMessage.value = error.message
+      
+      console.log(error.message)
+
+      // Handle error response with proper i18n
+      if (error.code) {
+        // We're dealing with an AuthError with a code
+        // Map error codes to i18n keys
+        const errorKeys: Record<string, string> = {
+          'INVALID_CREDENTIALS': 'login.errors.invalidCredentials',
+          'ACCOUNT_LOCKED': 'login.errors.accountLocked',
+          'ACCOUNT_DISABLED': 'login.errors.accountDisabled'
+          // Add more error code mappings as needed
+        };
+        
+        errorMessage.value = t(errorKeys[error.code] || 'login.errors.generic', error.message);
+      } else {
+        // Generic error fallback
+        errorMessage.value = error.message ? t('login.errors.generic', error.message) : t('login.errors.unknown');
+      }
     })
 }
 
@@ -101,7 +145,7 @@ onMounted(async () => {
             </div>
             <CardDescription>{{ t('login.description') }}</CardDescription>
           </CardHeader>
-          <form>
+          <form @submit.prevent="loginWrapper">
             <CardContent class="grid gap-4 max-w-sm m-auto">
               <div class="grid gap-2">
                 <Label for="email">{{ t('login.email') }}</Label>
@@ -112,8 +156,10 @@ onMounted(async () => {
                   autocomplete="username"
                   :placeholder="randomEmail()"
                   required
+                  :class="{ 'border-red-500': emailError }"
                   @keyup.enter="loginWrapper"
                 />
+                <p v-if="emailError" class="text-sm text-red-500 mt-1">{{ emailError }}</p>
               </div>
               <div class="grid gap-2">
                 <Label for="password">{{ t('login.password') }}</Label>
@@ -124,6 +170,7 @@ onMounted(async () => {
                     :type="showPassword ? 'text' : 'password'"
                     autocomplete="current-password"
                     required
+                    :class="{ 'border-red-500': passwordError }"
                     @keyup.enter="loginWrapper"
                   />
                   <Button
@@ -135,6 +182,7 @@ onMounted(async () => {
                     <Eye v-else className="text-current" :size="18" />
                   </Button>
                 </div>
+                <p v-if="passwordError" class="text-sm text-red-500 mt-1">{{ passwordError }}</p>
               </div>
 
               <!-- keep logged in -->
@@ -154,7 +202,7 @@ onMounted(async () => {
               </div>
             </CardContent>
             <CardFooter class="flex-col max-w-sm m-auto">
-              <Button class="w-full" type="submit" @click="loginWrapper">
+              <Button class="w-full" type="submit">
                 <template v-if="loading">
                   <Loader2 class="w-4 h-4 mr-2 animate-spin" />
                   {{ t('login.pleaseWait') }}

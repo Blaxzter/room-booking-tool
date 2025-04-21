@@ -85,6 +85,12 @@ const roleValue = computed(() => {
   return getUserRoleByBookableObject(props.bookableObject)
 })
 
+const showMenuButton = computed(() => {
+  if (isPublicView.value) return false
+  if (props.bookableObject?.is_internal) return roleValue.value >= 3
+  return roleValue.value >= 3
+})
+
 onMounted(() => {
   console.log(props.bookableObject?.image)
   if (props.bookableObject?.image) {
@@ -131,7 +137,7 @@ onMounted(() => {
           <PlusCircledIcon class="h-6 w-6 sm:h-4 sm:w-4" />
           <span class="hidden sm:inline ms-2">{{ t('bookingComponents.bookableSideInfo.createBooking') }}</span>
         </Button>
-        <template v-if="!isPublicView">
+        <template v-if="showMenuButton">
           <DropdownMenu>
             <DropdownMenuTrigger as-child>
               <Button variant="ghost" size="icon">
@@ -140,7 +146,7 @@ onMounted(() => {
             </DropdownMenuTrigger>
             <DropdownMenuContent>
               <DropdownMenuGroup>
-                <DropdownMenuItem class="cursor-pointer" @click.stop="copySharingLink">
+                <DropdownMenuItem class="cursor-pointer" @click.stop="copySharingLink" v-if="bookableObject.is_internal && roleValue >= 3">
                   <CopyIcon class="mr-2 h-4 w-4" />
                   <span>{{ t('bookingComponents.bookableSideInfo.copyShareLink') }}</span>
                 </DropdownMenuItem>

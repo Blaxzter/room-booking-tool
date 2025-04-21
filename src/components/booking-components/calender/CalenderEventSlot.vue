@@ -20,6 +20,29 @@ const { toast } = useToast()
 
 const selectedEvent = ref(undefined)
 
+const props = defineProps({
+  arg: {
+    type: Object,
+    required: true
+  }
+})
+
+const emit = defineEmits(['delete'])
+
+const confirmed = ref(false)
+
+const breakpoints = useBreakpoints(breakpointsTailwind)
+const mobile = breakpoints.smallerOrEqual('md')
+
+const updateConfirmed = (state: boolean) => {
+  confirmed.value = state
+}
+
+
+const event = computed(() => {
+  return { ...props.arg.event.extendedProps, confirmed: confirmed.value }
+})
+
 const eventClick = (arg: any) => {
   // Save the isPast value to show in the toast
   const isPast = arg.isPast
@@ -38,36 +61,21 @@ const eventClick = (arg: any) => {
       }`
     })
   } else {
+    console.log('confirmed', confirmed.value)
+    console.log('arg.event.extendedProps', arg.event.extendedProps)
     // Just pass the event data
-    console.log(arg.event.extendedProps)
-    selectedEvent.value = arg.event.extendedProps
+    selectedEvent.value = { ...arg.event.extendedProps, confirmed: confirmed.value }
   }
 }
 
-const props = defineProps({
-  arg: {
-    type: Object,
-    required: true
-  }
-})
-
-const emit = defineEmits(['delete'])
-
-const event = computed(() => {
-  return props.arg.event.extendedProps
-})
-
-const confirmed = ref(false)
 
 const closeDialog = () => {
   selectedEvent.value = undefined
 }
 
-const breakpoints = useBreakpoints(breakpointsTailwind)
-const mobile = breakpoints.smallerOrEqual('md')
 
 onMounted(() => {
-  confirmed.value = event.value.confirmed
+  confirmed.value = props.arg.event.extendedProps.confirmed
 })
 </script>
 
@@ -252,6 +260,7 @@ onMounted(() => {
     <EditEvent
       v-if="selectedEvent"
       :event="selectedEvent"
+      @updateConfirmed="updateConfirmed"
       @close="closeDialog"
       @delete="
         () => {

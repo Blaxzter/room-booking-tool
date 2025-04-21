@@ -6,7 +6,7 @@ import { useRoute } from 'vue-router'
 import { useI18n } from 'vue-i18n'
 
 // import icons
-import { CheckIcon, TrashIcon, LoaderIcon } from 'lucide-vue-next'
+import { CheckIcon, TrashIcon, LoaderIcon, XIcon } from 'lucide-vue-next'
 
 import { Button } from '@/components/ui/button'
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog'
@@ -23,7 +23,7 @@ import { useLocalUser } from '@/stores/localUser'
 import { useBookings } from '@/stores/booking'
 import { useDialogStore } from '@/stores/dialog'
 
-const { approveRequest, rejectRequest } = useRequests()
+const { updateBookingApprovalState, rejectRequest } = useRequests()
 const { requestLoading } = storeToRefs(useRequests())
 const { userHasCreatedBooking } = useLocalUser()
 const { t } = useI18n()
@@ -41,7 +41,7 @@ const props = defineProps({
   }
 })
 
-const emit = defineEmits(['close', 'delete', 'confirmed'])
+const emit = defineEmits(['close', 'delete', 'updateConfirmed'])
 
 // Initialize open state based on whether event exists
 const open = ref(!!props.event)
@@ -96,9 +96,37 @@ const canDelete = computed(() => {
 const isConfirmed = ref(false)
 
 const confirmEvent = async () => {
-  await approveRequest({ id: props?.event?.booking_id, ...props.event } as Booking).then(() => {
+  await updateBookingApprovalState({ id: props?.event?.booking_id, ...props.event } as Booking, true).then(() => {
     isConfirmed.value = true
-    emit('confirmed', props?.event?.booking_id)
+    emit('updateConfirmed', true)
+  }).catch((error) => {
+    console.error(error)
+  })
+}
+
+const revokeConfirmation = async () => {
+  const dialogStore = useDialogStore()
+
+  dialogStore.show({
+    title: t('bookingComponents.editEvent.confirmRevoke', "Revoke confirmation"),
+    message: t('bookingComponents.editEvent.confirmRevokeMessage', "Are you sure you want to revoke the previously approved event?"),
+    type: 'warning',
+    confirmText: t('bookingComponents.editEvent.revokeButton', "Revoke"),
+    cancelText: t('bookingComponents.editEvent.cancelButton'),
+    confirmIcon: XIcon,
+    confirmVariant: 'destructive',
+    onConfirm: async () => {
+      await updateBookingApprovalState({
+        id: props?.event?.booking_id,
+        ...props.event,
+      } as Booking, false).then(() => {
+        // Update local state
+        isConfirmed.value = false
+        emit('updateConfirmed', false)
+      }).catch((error) => {
+        console.error(error)
+      })
+    }
   })
 }
 
@@ -115,7 +143,6 @@ const deleteEvent = async () => {
     confirmIcon: TrashIcon,
     confirmVariant: 'destructive',
     onConfirm: async () => {
-      console.log('Confirmed')
       // Handle confirmation
       const secretEditKey = props.event?.secret_edit_key
       if (userCreatedBooking.value && secretEditKey) {
@@ -126,9 +153,12 @@ const deleteEvent = async () => {
           emit('delete', props?.event?.booking_id)
         }
       } else {
-        await rejectRequest({ id: props?.event?.booking_id, ...props.event } as Booking, true)
-        open.value = false
-        emit('delete', props?.event?.booking_id)
+        await rejectRequest({ id: props?.event?.booking_id, ...props.event } as Booking, true).then(() => {
+          open.value = false
+          emit('delete', props?.event?.booking_id)
+        }).catch((error) => {
+          console.error(error)
+        })
       }
     }
   })
@@ -178,6 +208,10 @@ watch(
           <Button v-if="canConfirm && !isConfirmed" variant="outline" @click="confirmEvent">
             <CheckIcon class="w-4 h-4 me-2 text-green-500" />
             {{ t('bookingComponents.editEvent.confirmButton') }}
+          </Button>
+          <Button v-if="canConfirm && isConfirmed" variant="outline" @click="revokeConfirmation">
+            <XIcon class="w-4 h-4 me-2 text-amber-500" />
+            {{ t('bookingComponents.editEvent.revokeButton') }}
           </Button>
           <Button v-if="canDelete" variant="outline" @click="deleteEvent">
             <TrashIcon class="w-4 h-4 me-2 text-red-500" />

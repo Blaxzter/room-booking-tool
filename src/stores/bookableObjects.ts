@@ -233,8 +233,20 @@ export const useBookableObjects = defineStore('bookableObjects', () => {
     const { client } = useUser()
     // Do not send update to backend if data is avatar: { id: undefined }
     if (!(Object.keys(data).length === 1 && Object.keys(data)[0] === 'image' && data.image?.id === undefined)) {
-      await client.request(updateItem('bookable_object', bookable_object_id, data))
+      await client.request(updateItem('bookable_object', bookable_object_id, data)).catch((error) => {
+        if (error?.errors?.length > 0) {
+          const serverError = error.errors[0];
+          if (serverError.extensions.code === 'FORBIDDEN') {
+            toast({ variant: 'destructive', title: t('bookableObjects.actions.unauthorized', 'You are not authorized to update this bookable object') })
+          }
+          else {
+            toast({ variant: 'destructive', title: t('bookableObjects.actions.update_error', 'An error occured when updating the bookable object') })
+          }
+        }
+        throw error
+      })
     }
+
 
     if (selectedBookableObject.value?.id === bookable_object_id) {
       Object.assign(selectedBookableObject.value, data)

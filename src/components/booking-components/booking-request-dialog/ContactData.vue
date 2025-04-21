@@ -7,6 +7,8 @@ import { FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessa
 import { Input } from '@/components/ui/input'
 import { Checkbox } from '@/components/ui/checkbox'
 import { useI18n } from 'vue-i18n'
+import { useUser } from '@/stores/user'
+import { storeToRefs } from 'pinia'
 
 import { MailIcon, PhoneIcon } from 'lucide-vue-next'
 
@@ -21,7 +23,7 @@ const props = defineProps<{
   initialValues: InitialValues
 }>()
 
-const { t } = useI18n()
+const { t } = useI18n<{ message: Record<string, string> }>()
 
 // Define a custom validation for requiring either email or phone
 const contactSchema = z
@@ -58,12 +60,33 @@ const getValues = () => {
 }
 
 onMounted(() => {
-  // Load saved data from local storage
+  // Use data with the following precedence:
+  // 1. Local storage (saved data from previous booking)
+  // 2. Current user data
+  // 3. Initial values from props
+
+  // First try to use saved data from local storage
   const savedData = localStorage.getItem('contactData')
   if (savedData) {
     const parsedData = JSON.parse(savedData)
     setValues(parsedData)
+    return
   }
+
+  // Then try to use current user data
+  const { user } = storeToRefs(useUser())
+  if (user.value && user.value.id) {
+    // The user is logged in, use their data
+    setValues({
+      display_name: user.value.display_name || `${user.value.first_name} ${user.value.last_name}`.trim(),
+      mail: user.value.email || '',
+      phone: '',  // User type doesn't seem to have a phone field
+      saveInfo: false
+    })
+    return
+  }
+
+  // Otherwise defaults from props will be used
 })
 
 defineExpose({ getValues, validate })

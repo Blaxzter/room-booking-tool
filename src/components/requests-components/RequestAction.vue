@@ -10,7 +10,7 @@ import type { BookableObject, Booking } from '@/types'
 import { useRequests } from '@/stores/requests'
 import { useRouter } from 'vue-router'
 
-const { approveRequest, rejectRequest } = useRequests()
+const { updateBookingApprovalState, rejectRequest } = useRequests()
 const { requestLoading } = storeToRefs(useRequests())
 const { t } = useI18n()
 
@@ -33,7 +33,7 @@ const goToCalender = (booking: Booking) => {
     <TooltipProvider>
       <Tooltip>
         <TooltipTrigger as-child>
-          <Button variant="outline" size="icon" @click="approveRequest(booking)" :loading="requestLoading">
+          <Button variant="outline" size="icon" @click="updateBookingApprovalState(booking, true)" :loading="requestLoading">
             <CheckIcon class="w-4 h-4" />
           </Button>
         </TooltipTrigger>
