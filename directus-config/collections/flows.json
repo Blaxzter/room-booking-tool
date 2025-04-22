@@ -54,14 +54,15 @@
     "options": {
       "type": "filter",
       "scope": [
-        "items.update"
+        "items.update",
+        "items.delete"
       ],
       "collections": [
         "booking"
       ],
-      "return": "$all"
+      "return": "$last"
     },
-    "operation": null,
+    "operation": "e7c7fd44-2112-4663-bb36-69c2f0f6ab2d",
     "_syncId": "1014e550-527c-4df1-b236-b332ea554308"
   },
   {
@@ -319,5 +320,26 @@
     },
     "operation": "e870eeeb-4cde-46b4-8feb-3227ae19fe74",
     "_syncId": "c839f261-5b75-4242-9410-d18ec39be9cf"
+  },
+  {
+    "name": "Add lang to user registration",
+    "icon": "bolt",
+    "color": null,
+    "description": null,
+    "status": "active",
+    "trigger": "event",
+    "accountability": "all",
+    "options": {
+      "type": "filter",
+      "scope": [
+        "items.create"
+      ],
+      "collections": [
+        "directus_users"
+      ],
+      "return": "$last"
+    },
+    "operation": "8125f443-3ffc-4708-a2ed-cc7c203ecc84",
+    "_syncId": "ca896c6a-aea9-4443-9f6e-4d63b6b318aa"
   }
 ]

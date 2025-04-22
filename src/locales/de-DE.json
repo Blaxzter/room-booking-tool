@@ -206,24 +206,24 @@
       }
     },
     "demo": {
-      "title": "Demo-Modus",
-      "avatarDisabled": "Profilbild-Updates sind im Demo-Modus deaktiviert."
+      "title": "Eingeschränkter Zugriff",
+      "avatarDisabled": "Profilbild-Updates sind im eingeschränkten Zugriff deaktiviert."
     }
   },
   "avatar": {
     "deleteTitle": "Avatar löschen",
     "deleteConfirmation": "Sind Sie sicher, dass Sie den Avatar löschen möchten?",
-    "demoDisabled": "Bild-Upload ist im Demo-Modus deaktiviert",
+    "demoDisabled": "Bild-Upload ist im eingeschränkten Zugriff deaktiviert",
     "noPermission": "Sie haben keine Berechtigung, dieses Bild zu ändern"
   },
   "demoMode": {
-    "title": "Demo-Modus aktiv",
-    "description": "Dies ist eine Demo-Umgebung mit begrenzter Kapazität:",
+    "title": "Eingeschränkter Zugriff",
+    "description": "Sie nutzen derzeit eine eingeschränkte Version mit begrenzter Kapazität:",
     "limits": {
       "objects": "Bis zu 3 buchbare Objekte",
       "requests": "Bis zu 3 Buchungsanfragen",
       "groups": "Bis zu 3 Gruppen",
-      "limitReached": "Demo-Limit erreicht: Sie können im Demo-Modus nicht mehr als 3 buchbare Objekte erstellen"
+      "limitReached": "Limit erreicht: Für vollständigen Zugriff und mehr Funktionen kontaktieren Sie uns bitte"
     },
     "contactRequest": {
       "intro": "Wenn Sie diese Plattform persönlich oder für Ihre Organisation nutzen möchten, kontaktieren Sie uns bitte für ein vollwertiges Konto.",

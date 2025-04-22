@@ -207,24 +207,24 @@
       }
     },
     "demo": {
-      "title": "Demo Mode",
-      "avatarDisabled": "Avatar updates are disabled in demo mode."
+      "title": "Restricted Access",
+      "avatarDisabled": "Avatar updates are disabled in restricted access mode."
     }
   },
   "avatar": {
     "deleteTitle": "Delete Avatar",
     "deleteConfirmation": "Are you sure you want to delete the avatar?",
-    "demoDisabled": "Image upload is disabled in demo mode",
+    "demoDisabled": "Image upload is disabled in restricted access mode",
     "noPermission": "You do not have permission to change this image"
   },
   "demoMode": {
-    "title": "Demo Mode Active",
-    "description": "This is a demo environment with limited capacity:",
+    "title": "Restricted Access",
+    "description": "This is a restricted access environment with limited capacity:",
     "limits": {
       "objects": "Up to 3 bookable objects",
       "requests": "Up to 3 booking requests",
       "groups": "Up to 3 groups",
-      "limitReached": "Demo limit reached: You cannot create more than 3 bookable objects in demo mode"
+      "limitReached": "Limit reached: For full access and more features, please contact us"
     },
     "contactRequest": {
       "intro": "If you'd like to use this platform personally or for your organization, please reach out for a full account.",

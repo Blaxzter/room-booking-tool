@@ -106,6 +106,7 @@ services:
       CORS_EXPOSED_HEADERS: 'Content-Range, X-Content-Range'
 
       EMAIL_TEMPLATES_PATH: '/directus/email-templates/'
+      I18N_EMAIL_SUBJECTS: ${I18N_EMAIL_SUBJECTS}
 
       # Email Stuff
       EMAIL_VERIFY_SETUP: '${EMAIL_VERIFY_SETUP}'

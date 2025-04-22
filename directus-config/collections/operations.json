@@ -31,6 +31,22 @@
     "_syncId": "45216128-382b-4525-954a-ea13fedc0c26"
   },
   {
+    "name": "Read Data",
+    "key": "bookable_object",
+    "type": "item-read",
+    "position_x": 37,
+    "position_y": 1,
+    "options": {
+      "permissions": "$full",
+      "collection": "bookable_object",
+      "key": "{{ booking.bookable_object_id }}"
+    },
+    "resolve": "a3673461-e030-4e3f-9613-3bbafb2dc309",
+    "reject": null,
+    "flow": "1014e550-527c-4df1-b236-b332ea554308",
+    "_syncId": "fa3198a3-838c-4f02-b255-54c490870c6a"
+  },
+  {
     "name": "Bookable Object Notification Settings",
     "key": "bookable_object_notification_setting",
     "type": "item-read",
@@ -61,6 +77,42 @@
     "reject": null,
     "flow": "77f42aee-c6f7-4b12-9dc5-fb62b9f17bfb",
     "_syncId": "bf2da71b-a3d6-4ddd-b45d-d46247efb4fd"
+  },
+  {
+    "name": "Read Data",
+    "key": "booking",
+    "type": "item-read",
+    "position_x": 19,
+    "position_y": 1,
+    "options": {
+      "key": "{{ $trigger.keys }}",
+      "collection": "booking",
+      "permissions": "$full"
+    },
+    "resolve": "fa3198a3-838c-4f02-b255-54c490870c6a",
+    "reject": null,
+    "flow": "1014e550-527c-4df1-b236-b332ea554308",
+    "_syncId": "e7c7fd44-2112-4663-bb36-69c2f0f6ab2d"
+  },
+  {
+    "name": "Condition",
+    "key": "condition_60uq0",
+    "type": "condition",
+    "position_x": 23,
+    "position_y": 19,
+    "options": {
+      "filter": {
+        "$last": {
+          "ret": {
+            "_eq": "true"
+          }
+        }
+      }
+    },
+    "resolve": "7e9461cd-1c3b-4523-abd0-8dd8d8ea081f",
+    "reject": "2aa2780d-664e-4c29-8b58-df1d194b6dd7",
+    "flow": "1014e550-527c-4df1-b236-b332ea554308",
+    "_syncId": "690e10bc-2419-49bc-92b1-f2f726ccdbce"
   },
   {
     "name": "Condition",
@@ -191,6 +243,22 @@
     "_syncId": "47bd9d30-ea85-4512-8e98-6d0a2abcbddf"
   },
   {
+    "name": "Throw Custom Error",
+    "key": "custom_error_y_hp8th_hpwx_patys",
+    "type": "custom_error_yHp8thHPWX",
+    "position_x": 41,
+    "position_y": 35,
+    "options": {
+      "message": "NOT_AUTHORIZED_ROLE_MISMATCH",
+      "errorCode": "403",
+      "statusCode": "403"
+    },
+    "resolve": null,
+    "reject": null,
+    "flow": "1014e550-527c-4df1-b236-b332ea554308",
+    "_syncId": "2aa2780d-664e-4c29-8b58-df1d194b6dd7"
+  },
+  {
     "name": "Transform Payload",
     "key": "data",
     "type": "transform",
@@ -246,6 +314,7 @@
         "end_date": "{{ $trigger.payload.end_date }}",
         "is_full_day": "{{ $trigger.payload.is_full_day }}",
         "bookable_object_name": "{{ read_bookable_object.name }}",
+        "lang": "{{ read_bookable_object.language }}",
         "host": "{{ $env.FRONTEND_URL }}"
       }
     },
@@ -479,6 +548,34 @@
     "_syncId": "b6b4a3ca-02d2-4bc5-ba3a-02b8423b4812"
   },
   {
+    "name": "Run Script",
+    "key": "exec_wk7ul",
+    "type": "exec",
+    "position_x": 26,
+    "position_y": 2,
+    "options": {
+      "code": "module.exports = async function(data) {\n    // Get the first_name field which contains our JSON data\n    const jsonString = data.$trigger.payload.first_name;\n    \n    try {\n        // Parse the JSON string\n        const parsedData = JSON.parse(jsonString);\n        \n        return {\n            ...data.$trigger.payload,\n            first_name: parsedData.first, // Extract first name from parsed JSON\n            last_name: parsedData.last,   // Extract last name from parsed JSON\n            language: data.$trigger.payload.last_name      // Assuming language is stored in last_name field\n        };\n    } catch (error) {\n        // If JSON parsing fails, return default values\n        console.error(\"Error parsing JSON:\", error);\n        return {\n            ...data.$trigger.payload,\n            language: \"en-US\" // Default language\n        };\n    }\n}"
+    },
+    "resolve": null,
+    "reject": null,
+    "flow": "ca896c6a-aea9-4443-9f6e-4d63b6b318aa",
+    "_syncId": "8125f443-3ffc-4708-a2ed-cc7c203ecc84"
+  },
+  {
+    "name": "Run Script",
+    "key": "exec_yenxj",
+    "type": "exec",
+    "position_x": 41,
+    "position_y": 19,
+    "options": {
+      "code": "module.exports = async function(data) {\n\treturn data.$trigger.payload;\n}"
+    },
+    "resolve": null,
+    "reject": null,
+    "flow": "1014e550-527c-4df1-b236-b332ea554308",
+    "_syncId": "7e9461cd-1c3b-4523-abd0-8dd8d8ea081f"
+  },
+  {
     "name": "final_user_data",
     "key": "final_user_data",
     "type": "item-read",
@@ -673,7 +770,7 @@
       "query": {
         "filter": {
           "email": {
-            "_eq": "{{ $trigger.payload.email }}"
+            "_icontains": "{{ $trigger.payload.email }}"
           }
         }
       },
@@ -789,6 +886,49 @@
     "reject": null,
     "flow": "6226d022-cf33-40c5-91ef-fbcb861fa731",
     "_syncId": "1fcb1781-d8c0-4c35-bace-1832062d3c42"
+  },
+  {
+    "name": "Read Data",
+    "key": "group_user",
+    "type": "item-read",
+    "position_x": 73,
+    "position_y": 1,
+    "options": {
+      "permissions": "$full",
+      "collection": "group_directus_users",
+      "query": {
+        "filter": {
+          "directus_users_id": {
+            "_eq": "{{ $accountability.user }}"
+          }
+        }
+      }
+    },
+    "resolve": "dfe25628-1cba-472b-af76-1d4b4d9da534",
+    "reject": null,
+    "flow": "1014e550-527c-4df1-b236-b332ea554308",
+    "_syncId": "70c7cbce-80da-4413-91d8-fdfd0992d49e"
+  },
+  {
+    "name": "Read Data",
+    "key": "groups",
+    "type": "item-read",
+    "position_x": 55,
+    "position_y": 1,
+    "options": {
+      "collection": "bookable_object_group",
+      "query": {
+        "filter": {
+          "bookable_object_id": {
+            "_eq": "{{ booking.bookable_object_id }}"
+          }
+        }
+      }
+    },
+    "resolve": "70c7cbce-80da-4413-91d8-fdfd0992d49e",
+    "reject": null,
+    "flow": "1014e550-527c-4df1-b236-b332ea554308",
+    "_syncId": "a3673461-e030-4e3f-9613-3bbafb2dc309"
   },
   {
     "name": "Run Script",
@@ -1257,6 +1397,20 @@
     "_syncId": "e5922ab3-0a8b-4851-b04c-1dbe94e39046"
   },
   {
+    "name": "Run Script",
+    "key": "ret_data",
+    "type": "exec",
+    "position_x": 5,
+    "position_y": 19,
+    "options": {
+      "code": "module.exports = async function(data) {\n  const bookableObject = data.bookable_object;\n  const groups = data.groups;\n  const groupUsers = data.group_user;\n  \n  // Check if admin confirmation is required for this bookable object\n  if (bookableObject.confirm_booking_required && bookableObject.confirm_role === 'admin') {\n    // Get all group IDs associated with this bookable object\n    const bookableObjectGroupIds = groups.map(group => group.group_id);\n    \n    // Check if the user is an admin in any of the required groups\n    const isUserAdminInRequiredGroup = groupUsers.some(groupUser => {\n      return (\n        bookableObjectGroupIds.includes(groupUser.group_id) && \n        groupUser.role === 'admin'\n      );\n    });\n    \n    // If the user is not an admin in any of the required groups, throw an exception\n    if (!isUserAdminInRequiredGroup) {\n      return { \"ret\": \"false\" };\n    }\n  }\n  \n  // If we reach here, the user is allowed to proceed with the update\n  return { \"ret\": \"true\" };\n}"
+    },
+    "resolve": "690e10bc-2419-49bc-92b1-f2f726ccdbce",
+    "reject": null,
+    "flow": "1014e550-527c-4df1-b236-b332ea554308",
+    "_syncId": "dfe25628-1cba-472b-af76-1d4b4d9da534"
+  },
+  {
     "name": "Send Email New",
     "key": "Send_Email_New",
     "type": "mail",
@@ -1288,21 +1442,6 @@
     "reject": null,
     "flow": "a52be475-3045-450e-b763-0acb11b45451",
     "_syncId": "a6812360-0075-40e6-bb25-1846add1833e"
-  },
-  {
-    "name": "Send emails",
-    "key": "send_emails",
-    "type": "trigger",
-    "position_x": 39,
-    "position_y": 20,
-    "options": {
-      "flow": "16a1c30b-f4f7-474e-b178-9afd03d90c3f",
-      "payload": "{{ $last }}"
-    },
-    "resolve": null,
-    "reject": null,
-    "flow": "33453e1c-94df-4088-b23b-07d010fc950d",
-    "_syncId": "34fe36b6-0f16-453d-b875-bc1f05d1024a"
   },
   {
     "name": "Send Invite",
@@ -1360,6 +1499,21 @@
     "_syncId": "08ffb7f8-faa5-445d-968f-38a3b7890f16"
   },
   {
+    "name": "Send telegram notification",
+    "key": "send_telegram_notification",
+    "type": "trigger",
+    "position_x": 39,
+    "position_y": 20,
+    "options": {
+      "flow": "16a1c30b-f4f7-474e-b178-9afd03d90c3f",
+      "payload": "{{ $last }}"
+    },
+    "resolve": null,
+    "reject": null,
+    "flow": "33453e1c-94df-4088-b23b-07d010fc950d",
+    "_syncId": "34fe36b6-0f16-453d-b875-bc1f05d1024a"
+  },
+  {
     "name": "Run Script",
     "key": "stop_execution",
     "type": "exec",
@@ -1390,7 +1544,7 @@
         "start_date": "{{ $trigger.data.start_date }}",
         "end_date": "{{ $trigger.data.end_date }}",
         "is_full_day": "{{ $trigger.data.is_full_day }}",
-        "bookable_object_name": "{{ $trigger.data.bookable_object_name }}",
+        "bookable_object_name": "{{ $trigger.data.lang }}",
         "host": "{{ $env.FRONTEND_URL }}"
       }
     },
@@ -1416,6 +1570,7 @@
         "end_date": "{{ $trigger.payload.end_date }}",
         "is_full_day": "{{ $trigger.payload.is_full_day }}",
         "bookable_object_name": "{{ read_bookable_object.name }}",
+        "lang": "{{ read_bookable_object.language }}",
         "host": "{{ $env.FRONTEND_URL }}"
       }
     },

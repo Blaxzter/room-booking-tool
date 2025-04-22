@@ -671,7 +671,8 @@
       "type",
       "is_internal",
       "location",
-      "group"
+      "group",
+      "language"
     ],
     "policy": "5caaaed4-a3c0-47a5-88e7-30bec774393e",
     "_syncId": "f2c82f35-2d43-4cfc-8182-3e1c632ef94d"
@@ -1754,7 +1755,8 @@
       "type",
       "is_internal",
       "location",
-      "group"
+      "group",
+      "language"
     ],
     "policy": "dc8c100b-2d62-46fc-8a7c-2258836cc93a",
     "_syncId": "3f857f64-76fe-4c4c-a93c-5b099a507b64"

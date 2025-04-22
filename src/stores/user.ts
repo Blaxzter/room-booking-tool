@@ -311,13 +311,22 @@ export const useUser = defineStore('user', () => {
 
   const createUserRequest = async (data: CreateUserRequest) => {
     const registerClient = createDirectus(backendUrl).with(rest())
+    const lang = locale.value
     await registerClient.request(
       registerUser(data.email, data.password, {
-        first_name: data.first_name,
-        last_name: data.last_name,
+        first_name: JSON.stringify({first: data.first_name, last: data.last_name}),
+        last_name: lang,
         verification_url: `${window.location.protocol}//${window.location.host}/verify-email`
       })
     )
+
+    // await axios.post(`${backendUrl}/users/register`, {
+    //   email: `${data.email}@de-DE`,
+    //   password: data.password,
+    //   first_name: data.first_name,
+    //   last_name: data.last_name,
+    //   verification_url: `${window.location.protocol}//${window.location.host}/verify-email`
+    // })
   }
 
   const deleteUserRequest = async () => {
@@ -363,7 +372,18 @@ export const useUser = defineStore('user', () => {
   const name = computed(() => (hasName.value ? userName.value : email.value))
   const avatar = computed(() => `${backendUrl}/assets/${user.value?.avatar}`)
   const avatarId = computed(() => user.value?.avatar ?? '')
-  const avatarFallback = computed(() => user.value?.first_name?.charAt(0) + user.value?.last_name?.charAt(0))
+  const avatarFallback = computed(() => {
+    if (user.value?.first_name && user.value?.last_name) {
+      return user.value?.first_name?.charAt(0) + user.value?.last_name?.charAt(0)
+    }
+    if (user.value?.first_name) {
+      return user.value.first_name.substring(0, 2).toUpperCase()
+    }
+    if (user.value?.email) {
+      return user.value.email.substring(0, 2).toUpperCase()
+    }
+    return 'US'
+  })
 
   return {
     client,

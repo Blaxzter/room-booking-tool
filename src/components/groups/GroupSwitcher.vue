@@ -57,9 +57,9 @@ const nameInitials = (name: string) => {
   }
   const [firstName, lastName] = name.split(' ')
   if (firstName && lastName) {
-    return `${firstName.charAt(0)}${lastName.charAt(0)}`
+    return `${firstName.charAt(0)}${lastName.charAt(0)}`.toUpperCase()
   }
-  return name.charAt(0) + name.charAt(1)
+  return `${name.charAt(0)}${name.charAt(1)}`.toUpperCase()
 }
 
 const nameShort = (name: string) => {
@@ -158,7 +158,7 @@ const created = async (group: Group) => {
         >
           <Avatar class="mr-2 h-5 w-5" v-if="!selectedTeam.emoji || selectedTeam?.avatar?.id">
             <AvatarImage :src="`${backendUrl}/assets/${selectedTeam?.avatar?.id}`" :alt="selectedTeam.name" />
-            <AvatarFallback>
+            <AvatarFallback class="text-xs">
               {{ nameInitials(selectedTeam.name) }}
             </AvatarFallback>
           </Avatar>
