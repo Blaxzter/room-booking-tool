@@ -8,6 +8,9 @@
     "build": "run-p type-check \"build-only {@}\" --",
     "preview": "vite preview",
     "build-only": "vite build",
+    "build:ssg": "node scripts/pre-render-static-pages.js && vite-ssg build",
+    "generate": "node scripts/pre-render-static-pages.js && vite-ssg build",
+    "pre-render": "node scripts/pre-render-static-pages.js",
     "type-check": "vue-tsc --build --force",
     "lint": "eslint .",
     "format": "prettier --write src/"
@@ -64,6 +67,7 @@
     "@vue/eslint-config-typescript": "^14.2.0",
     "@vue/tsconfig": "^0.5.1",
     "autoprefixer": "^10.4.20",
+    "critters": "^0.0.25",
     "eslint": "^9.17.0",
     "eslint-config-prettier": "^9.1.0",
     "eslint-plugin-prettier": "^5.2.1",
@@ -77,6 +81,7 @@
     "typescript-eslint": "^8.18.2",
     "vite": "^5.4.11",
     "vite-plugin-vue-devtools": "^7.6.8",
+    "vite-ssg": "^26.1.1",
     "vue-eslint-parser": "^9.4.3",
     "vue-tsc": "^2.2.0"
   }

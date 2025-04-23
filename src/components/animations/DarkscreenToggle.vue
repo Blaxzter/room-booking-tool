@@ -66,15 +66,26 @@ const enterFrame = () => {
 </script>
 
 <template>
-  <LottieAnimation
-    ref="anim"
-    :animation-data="darkmode"
-    :auto-play="false"
-    :loop="false"
-    :speed="3"
-    :style="{ height: `${props.height}px` }"
-    @enterFrame="enterFrame"
-  />
+  <ClientOnly>
+    <LottieAnimation
+      ref="anim"
+      :animation-data="darkmode"
+      :auto-play="false"
+      :loop="false"
+      :speed="3"
+      :style="{ height: `${props.height}px` }"
+      @enterFrame="enterFrame"
+    />
+    
+    <template #placeholder>
+      <div :style="{ height: `${props.height}px`, width: `${props.height}px` }" 
+           class="flex items-center justify-center rounded-full border">
+        <div class="text-xs">
+          {{ isDark ? '🌙' : '☀️' }}
+        </div>
+      </div>
+    </template>
+  </ClientOnly>
 </template>
 
 <style scoped></style>

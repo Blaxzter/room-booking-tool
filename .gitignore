@@ -33,3 +33,5 @@ coverage
 /uploads/
 /directus-uploads/
 directus-sync.config.cjs.prod
+
+.vite-ssg-temp

@@ -1,6 +1,6 @@
 <script setup lang="ts">
-// before mount get the client and get the static page that matches the route from backend
-import { onBeforeMount, ref } from 'vue'
+// Support both dynamic fetching and pre-rendered content
+import { onBeforeMount, ref, inject } from 'vue'
 import axios, { type AxiosResponse } from 'axios'
 import { useRoute } from 'vue-router'
 import router from '@/router'
@@ -12,11 +12,37 @@ const page = ref<StaticPage | null>(null)
 const loading = ref(false)
 const { locale } = useI18n()
 
+// Try to get pre-rendered static pages from SSG
+const staticPages = inject<Record<string, Record<string, StaticPage>> | null>('staticPages', null)
+
 export interface StaticPageResponse {
   data: StaticPage[]
 }
 
 const fetchStaticPage = async () => {
+  // If we have pre-rendered static pages from SSG, use them
+  if (staticPages) {
+    let path = route.path
+    if (path.charAt(0) === '/') {
+      path = path.slice(1)
+    }
+    
+    const language = locale.value.split('-')[0]
+    
+    // Try to get page in current language
+    if (staticPages[path] && staticPages[path][language]) {
+      page.value = staticPages[path][language]
+      return
+    }
+    
+    // Fallback to any available language
+    if (staticPages[path]) {
+      page.value = Object.values(staticPages[path])[0]
+      return
+    }
+  }
+  
+  // If no pre-rendered content or page not found, fall back to dynamic loading
   loading.value = true
 
   const backendUrl = import.meta.env.DEV

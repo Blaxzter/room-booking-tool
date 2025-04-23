@@ -1,6 +1,6 @@
 import './assets/main.scss'
 
-import { createApp } from 'vue'
+import { createApp as createVueApp } from 'vue'
 import { createI18n } from 'vue-i18n'
 import { createPinia } from 'pinia'
 import { polyfillCountryFlagEmojis } from 'country-flag-emoji-polyfill'
@@ -10,15 +10,11 @@ import weekOfYear from 'dayjs/plugin/weekOfYear'
 import isToday from 'dayjs/plugin/isToday'
 import App from './App.vue'
 import router from './router'
+import ClientOnly from './components/utils/ClientOnly.vue'
 
 // Import your message files
 import enUS from './locales/en-US.json'
 import deDE from './locales/de-DE.json' // Add languages as needed
-
-polyfillCountryFlagEmojis()
-
-dayjs.extend(weekOfYear)
-dayjs.extend(isToday)
 
 type MessageSchema = typeof enUS
 
@@ -39,21 +35,42 @@ const getPreferredLanguage = (): 'en-US' | 'de-DE' => {
   return 'en-US'
 }
 
-const i18n = createI18n<[MessageSchema], 'en-US' | 'de-DE'>({
-  locale: getPreferredLanguage(),
-  messages: {
-    'en-US': enUS,
-    'de-DE': deDE
+// Export a function to create the app (for both client and SSG)
+export function createApp() {
+  // Initialize plugins
+  if (typeof window !== 'undefined') {
+    polyfillCountryFlagEmojis()
   }
-})
+  
+  dayjs.extend(weekOfYear)
+  dayjs.extend(isToday)
+  
+  const i18n = createI18n<[MessageSchema], 'en-US' | 'de-DE'>({
+    legacy: false,
+    locale: typeof window !== 'undefined' ? getPreferredLanguage() : 'en-US',
+    messages: {
+      'en-US': enUS,
+      'de-DE': deDE
+    }
+  })
+  
+  const pinia = createPinia()
+  const app = createVueApp(App)
+  
+  app.provide('dayjs', dayjs)
+  
+  // Register ClientOnly component globally
+  app.component('ClientOnly', ClientOnly)
+  
+  app.use(pinia)
+  app.use(router)
+  app.use(i18n)
+  
+  return { app, router, pinia }
+}
 
-
-const app = createApp(App)
-
-app.provide('dayjs', dayjs)
-
-app.use(createPinia())
-app.use(router)
-app.use(i18n)
-
-app.mount('#app')
+// For traditional client-side rendering (non-SSG)
+if (typeof window !== 'undefined' && !import.meta.env.SSR) {
+  const { app } = createApp()
+  app.mount('#app')
+}

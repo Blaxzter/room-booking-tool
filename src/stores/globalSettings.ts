@@ -4,8 +4,11 @@ import { readRoles, readSingleton } from '@directus/sdk'
 import { useUser } from '@/stores/user'
 
 export const useGlobalSettings = defineStore('globalSettings', () => {
-  const displayLegal: Ref<boolean> = ref(false)
-  const showBuyMeACoffee: Ref<boolean> = ref(true)
+  // Try to get pre-rendered settings from SSG
+  const preRenderedSettings = typeof window !== 'undefined' && window.__INITIAL_STATE__?.pinia?.globalSettings
+  
+  const displayLegal: Ref<boolean> = ref(preRenderedSettings?.displayLegal || false)
+  const showBuyMeACoffee: Ref<boolean> = ref(preRenderedSettings?.showBuyMeACoffee || true)
   const demoUser: Ref<boolean> = ref(false)
 
   const demoDialogOpen = ref(true)
@@ -13,13 +16,20 @@ export const useGlobalSettings = defineStore('globalSettings', () => {
   const { user } = storeToRefs(useUser())
 
   const fetchGlobalSetting = async () => {
+    // Skip fetching if we already have pre-rendered settings
+    if (preRenderedSettings) {
+      displayLegal.value = preRenderedSettings.displayLegal
+      showBuyMeACoffee.value = preRenderedSettings.showBuyMeACoffee
+      return
+    }
+    
+    // Otherwise fetch from API
     const { noAuthClient } = useUser()
     await noAuthClient.request(readSingleton('settings')).then((res) => {
       displayLegal.value = res.display_legal
       showBuyMeACoffee.value = res.show_buy_me_a_coffee
     })
   }
-
 
   watch(
     () => user.value,

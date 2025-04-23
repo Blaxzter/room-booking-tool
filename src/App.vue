@@ -36,10 +36,23 @@ provide(
   import.meta.env.DEV ? import.meta.env.VITE_BACKEND_URL || 'http://localhost:8055' : `${window.location.origin}/api`
 )
 
+// Try to load pre-rendered static pages if available
+let staticPages = null
+if (typeof window !== 'undefined' && window.__INITIAL_STATE__?.staticPages) {
+  staticPages = window.__INITIAL_STATE__.staticPages
+}
+
+// Provide static pages to be used by StaticPage.vue
+provide('staticPages', staticPages)
+
+const globalSettings = useGlobalSettings()
+
 // before mount get initial data
 onBeforeMount(async () => {
-  const { fetchGlobalSetting } = useGlobalSettings()
-  await fetchGlobalSetting()
+  // Only fetch global settings if not already loaded from SSG
+  if (!window.__INITIAL_STATE__?.pinia?.globalSettings) {
+    await globalSettings.fetchGlobalSetting()
+  }
 })
 </script>
 
