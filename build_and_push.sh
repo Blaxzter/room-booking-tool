@@ -24,10 +24,10 @@ IFS='.' read -r -a VERSION_PARTS <<< "$VERSION"
 NEW_VERSION="${VERSION_PARTS[0]}.${VERSION_PARTS[1]}.$((VERSION_PARTS[2] + 1))"
 
 ## Build and push directus image
-#docker build -t $REPO_DIRECTUS:$VERSION -f $DOCKERFILE_DIRECTUS .
-#docker tag $REPO_DIRECTUS:$VERSION $REPO_DIRECTUS:latest
-#docker push $REPO_DIRECTUS:$VERSION
-#docker push $REPO_DIRECTUS:latest
+docker build -t $REPO_DIRECTUS:$VERSION -f $DOCKERFILE_DIRECTUS .
+docker tag $REPO_DIRECTUS:$VERSION $REPO_DIRECTUS:latest
+docker push $REPO_DIRECTUS:$VERSION
+docker push $REPO_DIRECTUS:latest
 
 # Build and push frontend image
 docker build -t $REPO_FRONTEND:$VERSION -f $DOCKERFILE_FRONTEND .

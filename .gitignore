@@ -32,3 +32,4 @@ coverage
 .env.prod
 /uploads/
 /directus-uploads/
+directus-sync.config.cjs.prod
