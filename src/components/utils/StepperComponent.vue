@@ -1,6 +1,12 @@
 <script setup lang="ts">
 import { ref } from 'vue'
-import { TabsContent, TabsList, TabsRoot, TabsTrigger } from 'radix-vue'
+import {
+  TabsContent,
+  TabsIndicator,
+  TabsList,
+  TabsRoot,
+  TabsTrigger
+} from 'reka-ui'
 import { CircleIcon, CircleDotIcon, CircleCheckBigIcon } from 'lucide-vue-next'
 import { useI18n } from 'vue-i18n'
 
@@ -18,10 +24,18 @@ const activeStep = defineModel({ default: 0, required: true })
 
 <template>
   <TabsRoot class="stepper" v-model="activeStep">
-    <TabsList class="flex justify-between w-full px-2 py-2">
+    <TabsList class="relative flex justify-between w-full px-2 py-2">
+      <TabsIndicator
+        class="absolute px-8 left-0 h-[2px] bottom-0 w-[--reka-tabs-indicator-size] translate-x-[--reka-tabs-indicator-position] translate-y-[1px] rounded-full transition-[width,transform] duration-300"
+      >
+        <div class="bg-primary w-full h-full" />
+      </TabsIndicator>
       <template v-for="(step, index) in steps" :key="index">
         <TabsTrigger
-          :class="['stepper-trigger text-muted-foreground', { 'stepper-trigger-active': index === activeStep }]"
+          :class="[
+            'stepper-trigger text-muted-foreground',
+            { 'stepper-trigger-active': index === activeStep }
+          ]"
           :value="index"
           :disabled="activeStep <= index"
         >
@@ -36,11 +50,24 @@ const activeStep = defineModel({ default: 0, required: true })
             </div>
           </div>
         </TabsTrigger>
-        <div v-if="index < steps.length - 1" class="flex-grow h-[2px] mx-2 mt-[10px] bg-secondary"></div>
+        <div
+          v-if="index < steps.length - 1"
+          class="flex-grow h-[2px] mx-2 mt-[10px] bg-secondary"
+        ></div>
       </template>
     </TabsList>
-    <TabsContent :value="index" v-for="(step, index) in steps" :key="index" class="w-full">
-      <slot :name="`step-${index}`"> {{ t('stepper.missingContent', { index }) || `Missing content for step ${index}` }} </slot>
+    <TabsContent
+      :value="index"
+      v-for="(step, index) in steps"
+      :key="index"
+      class="w-full"
+    >
+      <slot :name="`step-${index}`">
+        {{
+          t('stepper.missingContent', { index }) ||
+          `Missing content for step ${index}`
+        }}
+      </slot>
     </TabsContent>
   </TabsRoot>
 </template>
@@ -59,6 +86,6 @@ const activeStep = defineModel({ default: 0, required: true })
 }
 
 .stepper-trigger-active {
-  color: hsl(var(--primary));
+  color: var(--primary);
 }
 </style>

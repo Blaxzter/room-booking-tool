@@ -4,7 +4,13 @@ import dayjs from 'dayjs'
 import { useField, useForm } from 'vee-validate'
 import * as z from 'zod'
 import { toTypedSchema } from '@vee-validate/zod'
-import { FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form'
+import {
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage
+} from '@/components/ui/form'
 import { Input } from '@/components/ui/input'
 import { Switch } from '@/components/ui/switch'
 import { CalendarIcon, Clock10Icon, ClockIcon } from 'lucide-vue-next'
@@ -28,10 +34,28 @@ const { t } = useI18n()
 
 const bookingSchema = z
   .object({
-    startDate: z.string().min(1, { message: t('bookingComponents.bookingRequestDialog.timeData.validation.startDateRequired') }),
+    startDate: z.string().min(1, {
+      message: t(
+        'bookingComponents.bookingRequestDialog.timeData.validation.startDateRequired'
+      )
+    }),
     isFullDay: z.boolean().optional(),
-    startTime: z.string().min(1, { message: t('bookingComponents.bookingRequestDialog.timeData.validation.startTimeRequired') }).optional(),
-    endTime: z.string().min(1, { message: t('bookingComponents.bookingRequestDialog.timeData.validation.endTimeRequired') }).optional(),
+    startTime: z
+      .string()
+      .min(1, {
+        message: t(
+          'bookingComponents.bookingRequestDialog.timeData.validation.startTimeRequired'
+        )
+      })
+      .optional(),
+    endTime: z
+      .string()
+      .min(1, {
+        message: t(
+          'bookingComponents.bookingRequestDialog.timeData.validation.endTimeRequired'
+        )
+      })
+      .optional(),
     isOnAnotherDate: z.boolean().optional(),
     endDate: z.string().optional()
   })
@@ -42,7 +66,9 @@ const bookingSchema = z
       return startDateTime > new Date()
     },
     {
-      message: t('bookingComponents.bookingRequestDialog.timeData.validation.futureDate'),
+      message: t(
+        'bookingComponents.bookingRequestDialog.timeData.validation.futureDate'
+      ),
       path: ['startDate', 'startTime']
     }
   )
@@ -56,7 +82,9 @@ const bookingSchema = z
       return endDateTime > startDateTime
     },
     {
-      message: t('bookingComponents.bookingRequestDialog.timeData.validation.endTimeAfterStart'),
+      message: t(
+        'bookingComponents.bookingRequestDialog.timeData.validation.endTimeAfterStart'
+      ),
       path: ['endTime']
     }
   ) // make sure if isOnAnotherDate is true, endDate is set and is after startDate
@@ -67,7 +95,9 @@ const bookingSchema = z
       return new Date(`${startDate}`) < new Date(`${endDate}`)
     },
     {
-      message: t('bookingComponents.bookingRequestDialog.timeData.validation.endDateAfterStart'),
+      message: t(
+        'bookingComponents.bookingRequestDialog.timeData.validation.endDateAfterStart'
+      ),
       path: ['endDate']
     }
   )
@@ -77,10 +107,14 @@ const { values, validate } = useForm({
   initialValues: {
     startDate: props.initialValues.startDate || dayjs().format('YYYY-MM-DD'),
     isFullDay: props.initialValues.isFullDay || false,
-    startTime: props.initialValues.startTime || dayjs().add(2, 'minutes').format('HH:mm'),
-    endTime: props.initialValues.endTime || dayjs().add(1, 'hour').format('HH:mm'),
+    startTime:
+      props.initialValues.startTime ||
+      dayjs().add(2, 'minutes').format('HH:mm'),
+    endTime:
+      props.initialValues.endTime || dayjs().add(1, 'hour').format('HH:mm'),
     isOnAnotherDate: props.initialValues.isOnAnotherDate || false,
-    endDate: props.initialValues.endDate || dayjs().add(1, 'day').format('YYYY-MM-DD')
+    endDate:
+      props.initialValues.endDate || dayjs().add(1, 'day').format('YYYY-MM-DD')
   }
 })
 
@@ -131,11 +165,22 @@ defineExpose({ getValues, validate })
   <form class="grid gap-5 py-4">
     <FormField v-slot="{ componentField }" name="startDate">
       <FormItem>
-        <FormLabel for="date" class="text-right"> {{ t('bookingComponents.bookingRequestDialog.timeData.startDate.label') }} </FormLabel>
+        <FormLabel for="date" class="text-right">
+          {{
+            t('bookingComponents.bookingRequestDialog.timeData.startDate.label')
+          }}
+        </FormLabel>
         <FormControl>
           <div class="relative">
-            <Input type="date" id="date" v-bind="componentField" class="pl-10" />
-            <div class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
+            <Input
+              type="date"
+              id="date"
+              v-bind="componentField"
+              class="pl-10"
+            />
+            <div
+              class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none"
+            >
               <CalendarIcon class="w-5 h-5 text-gray-400" />
             </div>
           </div>
@@ -145,13 +190,20 @@ defineExpose({ getValues, validate })
     </FormField>
 
     <FormField v-slot="{ value, handleChange }" name="isFullDay">
-      <FormItem class="flex flex-row items-center gap-x-3 space-y-0 rounded-md" :horizontal="true">
+      <FormItem
+        class="flex flex-row items-center gap-x-3 space-y-0 rounded-md"
+        :horizontal="true"
+      >
         <div class="space-y-1 leading-none">
-          <FormLabel for="saveInfo"> {{ t('bookingComponents.bookingRequestDialog.timeData.fullDay.label') }} </FormLabel>
+          <FormLabel for="saveInfo">
+            {{
+              t('bookingComponents.bookingRequestDialog.timeData.fullDay.label')
+            }}
+          </FormLabel>
           <FormMessage />
         </div>
         <FormControl>
-          <Switch :checked="value" @update:checked="handleChange" />
+          <Switch :model-value="value" @update:model-value="handleChange" />
         </FormControl>
       </FormItem>
     </FormField>
@@ -160,11 +212,24 @@ defineExpose({ getValues, validate })
       <CollapsibleContent>
         <FormField v-slot="{ componentField }" name="startTime">
           <FormItem>
-            <FormLabel for="start-time" class="text-right"> {{ t('bookingComponents.bookingRequestDialog.timeData.startTime.label') }} </FormLabel>
+            <FormLabel for="start-time" class="text-right">
+              {{
+                t(
+                  'bookingComponents.bookingRequestDialog.timeData.startTime.label'
+                )
+              }}
+            </FormLabel>
             <FormControl>
               <div class="relative">
-                <Input type="time" id="start-time" v-bind="componentField" class="pl-10" />
-                <div class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
+                <Input
+                  type="time"
+                  id="start-time"
+                  v-bind="componentField"
+                  class="pl-10"
+                />
+                <div
+                  class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none"
+                >
                   <ClockIcon class="w-5 h-5 text-gray-400" />
                 </div>
               </div>
@@ -175,11 +240,24 @@ defineExpose({ getValues, validate })
 
         <FormField v-slot="{ componentField }" name="endTime">
           <FormItem>
-            <FormLabel for="end-time" class="text-right"> {{ t('bookingComponents.bookingRequestDialog.timeData.endTime.label') }} </FormLabel>
+            <FormLabel for="end-time" class="text-right">
+              {{
+                t(
+                  'bookingComponents.bookingRequestDialog.timeData.endTime.label'
+                )
+              }}
+            </FormLabel>
             <FormControl>
               <div class="relative">
-                <Input type="time" id="end-time" v-bind="componentField" class="pl-10" />
-                <div class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
+                <Input
+                  type="time"
+                  id="end-time"
+                  v-bind="componentField"
+                  class="pl-10"
+                />
+                <div
+                  class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none"
+                >
                   <Clock10Icon class="w-5 h-5 text-gray-400" />
                 </div>
               </div>
@@ -191,13 +269,22 @@ defineExpose({ getValues, validate })
     </Collapsible>
 
     <FormField v-slot="{ value, handleChange }" name="isOnAnotherDate">
-      <FormItem class="flex flex-row items-center gap-x-3 space-y-0 rounded-md" :horizontal="true">
+      <FormItem
+        class="flex flex-row items-center gap-x-3 space-y-0 rounded-md"
+        :horizontal="true"
+      >
         <div class="space-y-1 leading-none">
-          <FormLabel for="saveInfo"> {{ t('bookingComponents.bookingRequestDialog.timeData.endsOnAnotherDate.label') }} </FormLabel>
+          <FormLabel for="saveInfo">
+            {{
+              t(
+                'bookingComponents.bookingRequestDialog.timeData.endsOnAnotherDate.label'
+              )
+            }}
+          </FormLabel>
           <FormMessage />
         </div>
         <FormControl>
-          <Switch :checked="value" @update:checked="handleChange" />
+          <Switch :model-value="value" @update:model-value="handleChange" />
         </FormControl>
       </FormItem>
     </FormField>
@@ -206,11 +293,24 @@ defineExpose({ getValues, validate })
       <CollapsibleContent>
         <FormField v-slot="{ componentField }" name="endDate">
           <FormItem>
-            <FormLabel for="end-date" class="text-right"> {{ t('bookingComponents.bookingRequestDialog.timeData.endDate.label') }} </FormLabel>
+            <FormLabel for="end-date" class="text-right">
+              {{
+                t(
+                  'bookingComponents.bookingRequestDialog.timeData.endDate.label'
+                )
+              }}
+            </FormLabel>
             <FormControl>
               <div class="relative">
-                <Input type="date" id="end-date" v-bind="componentField" class="pl-10" />
-                <div class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
+                <Input
+                  type="date"
+                  id="end-date"
+                  v-bind="componentField"
+                  class="pl-10"
+                />
+                <div
+                  class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none"
+                >
                   <CalendarIcon class="w-5 h-5 text-gray-400" />
                 </div>
               </div>
@@ -228,13 +328,15 @@ defineExpose({ getValues, validate })
 <style scoped lang="scss">
 input[type='time']::-webkit-calendar-picker-indicator,
 input[type='date']::-webkit-calendar-picker-indicator {
-  filter: invert(0%) sepia(0%) saturate(100%) hue-rotate(0deg) brightness(100%) contrast(100%);
+  filter: invert(0%) sepia(0%) saturate(100%) hue-rotate(0deg) brightness(100%)
+    contrast(100%);
   cursor: pointer;
 }
 .dark {
   input[type='time']::-webkit-calendar-picker-indicator,
   input[type='date']::-webkit-calendar-picker-indicator {
-    filter: invert(94%) sepia(7%) saturate(750%) hue-rotate(185deg) brightness(105%) contrast(100%);
+    filter: invert(94%) sepia(7%) saturate(750%) hue-rotate(185deg)
+      brightness(105%) contrast(100%);
     cursor: pointer;
   }
 }

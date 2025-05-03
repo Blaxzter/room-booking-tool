@@ -279,7 +279,7 @@ const backendUrl = inject('backendUrl')
 }
 
 .avatar-cropper-btn {
-  background: hsl(var(--primary-foreground)) !important;
+  background: var(--primary-foreground) !important;
   &:hover {
     opacity: 0.8;
   }

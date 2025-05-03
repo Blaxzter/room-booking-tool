@@ -28,7 +28,11 @@ const typeToOrigin: { [key in NotificationType]: string } = {
   telegram: t('settings.notifications.types.telegram')
 }
 
-const toggleNotification = async (setting: NotificationSetting, type: NotificationType, origin: string) => {
+const toggleNotification = async (
+  setting: NotificationSetting,
+  type: NotificationType,
+  origin: string
+) => {
   // Toggle the notification setting based on type (email or telegram)
   if (type === 'email_notification') {
     setting.email_notification = !setting.email_notification
@@ -42,7 +46,10 @@ const toggleNotification = async (setting: NotificationSetting, type: Notificati
     toast({
       variant: 'success',
       title: t('settings.notifications.toast.title'),
-      description: t('settings.notifications.toast.description', { origin, type: typeToOrigin[type] })
+      description: t('settings.notifications.toast.description', {
+        origin,
+        type: typeToOrigin[type]
+      })
     })
   })
 }
@@ -51,25 +58,33 @@ const toggleNotification = async (setting: NotificationSetting, type: Notificati
 <template>
   <div>
     <h3 class="text-lg font-medium">{{ t('settings.notifications.title') }}</h3>
-    <p class="text-sm text-muted-foreground">{{ t('settings.notifications.description') }}</p>
+    <p class="text-sm text-muted-foreground">
+      {{ t('settings.notifications.description') }}
+    </p>
   </div>
   <Separator />
   <div class="space-y-8 relative">
     <div class="space-y-4 relative">
       <template v-if="!notificationSettingsLoading">
         <!-- Column Indicators -->
-        <div class="grid gap-4 grid-cols-[1fr_50px_50px] md:grid-cols-[1fr_100px_100px] place-items-center">
+        <div
+          class="grid gap-4 grid-cols-[1fr_50px_50px] md:grid-cols-[1fr_100px_100px] place-items-center"
+        >
           <div></div>
           <div class="font-semibold">
             <div class="flex flex-col items-center space-x-1">
               <MailIcon class="h-4 w-4" />
-              <span class="hidden md:inline">{{ t('settings.notifications.types.email') }}</span>
+              <span class="hidden md:inline">{{
+                t('settings.notifications.types.email')
+              }}</span>
             </div>
           </div>
           <div class="font-semibold">
             <div class="flex flex-col items-center space-x-1">
               <SendIcon class="h-4 w-4" />
-              <span class="hidden md:inline">{{ t('settings.notifications.types.telegram') }}</span>
+              <span class="hidden md:inline">{{
+                t('settings.notifications.types.telegram')
+              }}</span>
             </div>
           </div>
         </div>
@@ -82,12 +97,20 @@ const toggleNotification = async (setting: NotificationSetting, type: Notificati
           <template v-if="userNotificationSetting">
             <div class="font-semibold place-self-start">{{ userName }}</div>
             <Checkbox
-              :checked="userNotificationSetting.email_notification"
-              @update:checked="toggleNotification(userNotificationSetting, 'email_notification', 'User')"
+              :model-value="userNotificationSetting.email_notification"
+              @update:model-value="
+                toggleNotification(
+                  userNotificationSetting,
+                  'email_notification',
+                  'User'
+                )
+              "
             />
             <Checkbox
-              :checked="userNotificationSetting.telegram"
-              @update:checked="toggleNotification(userNotificationSetting, 'telegram', 'User')"
+              :model-value="userNotificationSetting.telegram"
+              @update:model-value="
+                toggleNotification(userNotificationSetting, 'telegram', 'User')
+              "
             />
           </template>
         </div>
@@ -99,20 +122,35 @@ const toggleNotification = async (setting: NotificationSetting, type: Notificati
 
         <!-- Group Notification Settings -->
         <template v-if="Object.keys(notificationSettingsByGroup).length > 0">
-          <div class="font-semibold">{{ t('settings.notifications.groups.title') }}</div>
+          <div class="font-semibold">
+            {{ t('settings.notifications.groups.title') }}
+          </div>
           <div class="space-y-0.5 ps-3">
             <div
               v-for="group in Object.values(notificationSettingsByGroup)"
               :key="group.id"
               class="grid grid-cols-[1fr_50px_50px] md:grid-cols-[1fr_100px_100px] gap-4 items-center place-items-center"
             >
-              <template v-if="group.group_id && typeof group.group_id !== 'string'">
+              <template
+                v-if="group.group_id && typeof group.group_id !== 'string'"
+              >
                 <div class="place-self-start">{{ group.group_id.name }}</div>
                 <Checkbox
-                  :checked="group.email_notification"
-                  @update:checked="toggleNotification(group, 'email_notification', `Group ${group.group_id.name}`)"
+                  :model-value="group.email_notification"
+                  @update:model-value="
+                    toggleNotification(
+                      group,
+                      'email_notification',
+                      `Group ${group.group_id.name}`
+                    )
+                  "
                 />
-                <Checkbox :checked="group.telegram" @update:checked="toggleNotification(group, 'telegram', 'User')" />
+                <Checkbox
+                  :model-value="group.telegram"
+                  @update:model-value="
+                    toggleNotification(group, 'telegram', 'User')
+                  "
+                />
               </template>
             </div>
           </div>
@@ -123,26 +161,47 @@ const toggleNotification = async (setting: NotificationSetting, type: Notificati
         </template>
 
         <!-- Bookable Objects Notification Settings -->
-        <template v-if="Object.keys(notificationSettingsByBookableObject).length > 0">
-          <div class="font-semibold">{{ t('settings.notifications.bookableObjects.title') }}</div>
+        <template
+          v-if="Object.keys(notificationSettingsByBookableObject).length > 0"
+        >
+          <div class="font-semibold">
+            {{ t('settings.notifications.bookableObjects.title') }}
+          </div>
           <div class="space-y-0.5 ps-3">
             <div
-              v-for="object in Object.values(notificationSettingsByBookableObject)"
+              v-for="object in Object.values(
+                notificationSettingsByBookableObject
+              )"
               :key="object.id"
               class="grid grid-cols-[1fr_50px_50px] md:grid-cols-[1fr_100px_100px] gap-4 items-center place-items-center"
             >
-              <template v-if="object.bookable_object_id && typeof object.bookable_object_id !== 'string'">
-                <div class="place-self-start">{{ object.bookable_object_id.name }}</div>
+              <template
+                v-if="
+                  object.bookable_object_id &&
+                  typeof object.bookable_object_id !== 'string'
+                "
+              >
+                <div class="place-self-start">
+                  {{ object.bookable_object_id.name }}
+                </div>
                 <Checkbox
-                  :checked="object.email_notification"
-                  @update:checked="
-                    toggleNotification(object, 'email_notification', `Bookable Object ${object.bookable_object_id.name}`)
+                  :model-value="object.email_notification"
+                  @update:model-value="
+                    toggleNotification(
+                      object,
+                      'email_notification',
+                      `Bookable Object ${object.bookable_object_id.name}`
+                    )
                   "
                 />
                 <Checkbox
-                  :checked="object.telegram"
-                  @update:checked="
-                    toggleNotification(object, 'telegram', `Bookable Object ${object.bookable_object_id.name}`)
+                  :model-value="object.telegram"
+                  @update:model-value="
+                    toggleNotification(
+                      object,
+                      'telegram',
+                      `Bookable Object ${object.bookable_object_id.name}`
+                    )
                   "
                 />
               </template>

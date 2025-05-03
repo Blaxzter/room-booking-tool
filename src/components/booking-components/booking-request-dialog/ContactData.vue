@@ -3,7 +3,14 @@ import { onMounted } from 'vue'
 import { useForm } from 'vee-validate'
 import * as z from 'zod'
 import { toTypedSchema } from '@vee-validate/zod'
-import { FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form'
+import {
+  FormControl,
+  FormDescription,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage
+} from '@/components/ui/form'
 import { Input } from '@/components/ui/input'
 import { Checkbox } from '@/components/ui/checkbox'
 import { useI18n } from 'vue-i18n'
@@ -28,13 +35,19 @@ const { t } = useI18n<{ message: Record<string, string> }>()
 // Define a custom validation for requiring either email or phone
 const contactSchema = z
   .object({
-    display_name: z.string().min(1, { message: t('bookingComponents.bookingRequestDialog.contactData.validation.nameRequired') }),
+    display_name: z.string().min(1, {
+      message: t(
+        'bookingComponents.bookingRequestDialog.contactData.validation.nameRequired'
+      )
+    }),
     mail: z.string().email().optional(),
     phone: z.string().optional(),
     saveInfo: z.boolean().optional()
   })
   .refine((data) => data.mail || data.phone, {
-    message: t('bookingComponents.bookingRequestDialog.contactData.validation.emailOrPhone'),
+    message: t(
+      'bookingComponents.bookingRequestDialog.contactData.validation.emailOrPhone'
+    ),
     path: ['mail']
   })
 
@@ -78,9 +91,11 @@ onMounted(() => {
   if (user.value && user.value.id) {
     // The user is logged in, use their data
     setValues({
-      display_name: user.value.display_name || `${user.value.first_name} ${user.value.last_name}`.trim(),
+      display_name:
+        user.value.display_name ||
+        `${user.value.first_name} ${user.value.last_name}`.trim(),
       mail: user.value.email || '',
-      phone: '',  // User type doesn't seem to have a phone field
+      phone: '', // User type doesn't seem to have a phone field
       saveInfo: false
     })
     return
@@ -96,55 +111,99 @@ defineExpose({ getValues, validate })
   <form class="grid gap-5 py-4">
     <FormField name="display_name" v-slot="{ componentField }">
       <FormItem>
-        <FormLabel for="name"> {{ t('bookingComponents.bookingRequestDialog.contactData.name.label') }} </FormLabel>
+        <FormLabel for="name">
+          {{
+            t('bookingComponents.bookingRequestDialog.contactData.name.label')
+          }}
+        </FormLabel>
         <FormControl>
           <Input id="name" v-bind="componentField" />
           <FormMessage />
         </FormControl>
         <FormDescription class="col-span-4">
-          {{ t('bookingComponents.bookingRequestDialog.contactData.name.description') }}
+          {{
+            t(
+              'bookingComponents.bookingRequestDialog.contactData.name.description'
+            )
+          }}
         </FormDescription>
       </FormItem>
     </FormField>
     <FormField name="mail" v-slot="{ componentField }">
       <FormItem>
-        <FormLabel for="mail"> {{ t('bookingComponents.bookingRequestDialog.contactData.email.label') }} </FormLabel>
+        <FormLabel for="mail">
+          {{
+            t('bookingComponents.bookingRequestDialog.contactData.email.label')
+          }}
+        </FormLabel>
         <FormControl>
           <div class="relative">
             <Input id="mail" v-bind="componentField" class="pl-10" />
-            <span class="absolute inset-y-0 left-0 flex items-center pl-3 text-gray-500">
+            <span
+              class="absolute inset-y-0 left-0 flex items-center pl-3 text-gray-500"
+            >
               <MailIcon class="h-5 w-5" />
             </span>
           </div>
           <FormMessage />
         </FormControl>
-        <FormDescription> {{ t('bookingComponents.bookingRequestDialog.contactData.email.description') }} </FormDescription>
+        <FormDescription>
+          {{
+            t(
+              'bookingComponents.bookingRequestDialog.contactData.email.description'
+            )
+          }}
+        </FormDescription>
       </FormItem>
     </FormField>
     <FormField name="phone" v-slot="{ componentField }">
       <FormItem>
-        <FormLabel for="phone"> {{ t('bookingComponents.bookingRequestDialog.contactData.phone.label') }} </FormLabel>
+        <FormLabel for="phone">
+          {{
+            t('bookingComponents.bookingRequestDialog.contactData.phone.label')
+          }}
+        </FormLabel>
         <FormControl>
           <div class="relative">
             <Input id="phone" v-bind="componentField" class="pl-10" />
-            <span class="absolute inset-y-0 left-0 flex items-center pl-3 text-gray-500">
+            <span
+              class="absolute inset-y-0 left-0 flex items-center pl-3 text-gray-500"
+            >
               <PhoneIcon class="h-5 w-5" />
             </span>
           </div>
           <FormMessage />
         </FormControl>
-        <FormDescription class="col-span-4"> {{ t('bookingComponents.bookingRequestDialog.contactData.phone.description') }} </FormDescription>
+        <FormDescription class="col-span-4">
+          {{
+            t(
+              'bookingComponents.bookingRequestDialog.contactData.phone.description'
+            )
+          }}
+        </FormDescription>
       </FormItem>
     </FormField>
 
     <FormField v-slot="{ value, handleChange }" name="saveInfo">
       <FormItem class="flex flex-row items-start gap-x-3 space-y-0 rounded-md">
         <FormControl>
-          <Checkbox :checked="value" @update:checked="handleChange" />
+          <Checkbox :model-value="value" @update:model-value="handleChange" />
         </FormControl>
         <div class="space-y-1 leading-none">
-          <FormLabel for="saveInfo"> {{ t('bookingComponents.bookingRequestDialog.contactData.saveInfo.label') }} </FormLabel>
-          <FormDescription> {{ t('bookingComponents.bookingRequestDialog.contactData.saveInfo.description') }} </FormDescription>
+          <FormLabel for="saveInfo">
+            {{
+              t(
+                'bookingComponents.bookingRequestDialog.contactData.saveInfo.label'
+              )
+            }}
+          </FormLabel>
+          <FormDescription>
+            {{
+              t(
+                'bookingComponents.bookingRequestDialog.contactData.saveInfo.description'
+              )
+            }}
+          </FormDescription>
           <FormMessage />
         </div>
       </FormItem>
@@ -157,13 +216,15 @@ defineExpose({ getValues, validate })
 <style scoped lang="scss">
 input[type='time']::-webkit-calendar-picker-indicator,
 input[type='date']::-webkit-calendar-picker-indicator {
-  filter: invert(0%) sepia(0%) saturate(100%) hue-rotate(0deg) brightness(100%) contrast(100%);
+  filter: invert(0%) sepia(0%) saturate(100%) hue-rotate(0deg) brightness(100%)
+    contrast(100%);
   cursor: pointer;
 }
 .dark {
   input[type='time']::-webkit-calendar-picker-indicator,
   input[type='date']::-webkit-calendar-picker-indicator {
-    filter: invert(94%) sepia(7%) saturate(750%) hue-rotate(185deg) brightness(105%) contrast(100%);
+    filter: invert(94%) sepia(7%) saturate(750%) hue-rotate(185deg)
+      brightness(105%) contrast(100%);
     cursor: pointer;
   }
 }

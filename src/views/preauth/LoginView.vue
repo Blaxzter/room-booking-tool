@@ -11,7 +11,14 @@ import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { Checkbox } from '@/components/ui/checkbox'
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card'
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle
+} from '@/components/ui/card'
 
 import AutoLoginCard from '@/components/login/AutoLoginCard.vue'
 import BackgroundImage from '@/components/bits/BackgroundImage.vue'
@@ -29,7 +36,7 @@ const showScreenGrower = ref(false)
 const email = ref('')
 const password = ref('')
 const errorMessage = ref('')
-const keepLoggedIn = ref(false)
+const keepLoggedIn = ref(true)
 const showPassword = ref(false)
 const emailError = ref('')
 const passwordError = ref('')
@@ -38,21 +45,21 @@ const { login, isAuthenticated, getRedirect } = useUser()
 
 const validateForm = () => {
   let isValid = true
-  
+
   // Reset error messages
   emailError.value = ''
   passwordError.value = ''
-  
+
   if (!email.value.trim()) {
     emailError.value = t('login.emailRequired', 'Email is required')
     isValid = false
   }
-  
+
   if (!password.value) {
     passwordError.value = t('login.passwordRequired', 'Password is required')
     isValid = false
   }
-  
+
   return isValid
 }
 
@@ -60,7 +67,7 @@ const loginWrapper = async () => {
   if (!validateForm()) {
     return
   }
-  
+
   loading.value = true
   errorMessage.value = ''
 
@@ -85,7 +92,7 @@ const loginWrapper = async () => {
         showCross.value = false
         loading.value = false
       }, 1000)
-      
+
       console.log(error.message)
 
       // Handle error response with proper i18n
@@ -93,16 +100,21 @@ const loginWrapper = async () => {
         // We're dealing with an AuthError with a code
         // Map error codes to i18n keys
         const errorKeys: Record<string, string> = {
-          'INVALID_CREDENTIALS': 'login.errors.invalidCredentials',
-          'ACCOUNT_LOCKED': 'login.errors.accountLocked',
-          'ACCOUNT_DISABLED': 'login.errors.accountDisabled'
+          INVALID_CREDENTIALS: 'login.errors.invalidCredentials',
+          ACCOUNT_LOCKED: 'login.errors.accountLocked',
+          ACCOUNT_DISABLED: 'login.errors.accountDisabled'
           // Add more error code mappings as needed
-        };
-        
-        errorMessage.value = t(errorKeys[error.code] || 'login.errors.generic', error.message);
+        }
+
+        errorMessage.value = t(
+          errorKeys[error.code] || 'login.errors.generic',
+          error.message
+        )
       } else {
         // Generic error fallback
-        errorMessage.value = error.message ? t('login.errors.generic', error.message) : t('login.errors.unknown');
+        errorMessage.value = error.message
+          ? t('login.errors.generic', error.message)
+          : t('login.errors.unknown')
       }
     })
 }
@@ -137,7 +149,9 @@ onMounted(async () => {
                   <LogoImage />
                   <div class="text-3xl font-bold">
                     <div>BookiTool</div>
-                    <div class="text-2xl font-normal text-muted-foreground">{{ t('login.title') }}</div>
+                    <div class="text-2xl font-normal text-muted-foreground">
+                      {{ t('login.title') }}
+                    </div>
                   </div>
                 </div>
               </CardTitle>
@@ -159,7 +173,9 @@ onMounted(async () => {
                   :class="{ 'border-red-500': emailError }"
                   @keyup.enter="loginWrapper"
                 />
-                <p v-if="emailError" class="text-sm text-red-500 mt-1">{{ emailError }}</p>
+                <p v-if="emailError" class="text-sm text-red-500 mt-1">
+                  {{ emailError }}
+                </p>
               </div>
               <div class="grid gap-2">
                 <Label for="password">{{ t('login.password') }}</Label>
@@ -178,16 +194,22 @@ onMounted(async () => {
                     type="button"
                     @click="showPassword = !showPassword"
                   >
-                    <EyeOff v-if="showPassword" className="text-current" :size="18" />
+                    <EyeOff
+                      v-if="showPassword"
+                      className="text-current"
+                      :size="18"
+                    />
                     <Eye v-else className="text-current" :size="18" />
                   </Button>
                 </div>
-                <p v-if="passwordError" class="text-sm text-red-500 mt-1">{{ passwordError }}</p>
+                <p v-if="passwordError" class="text-sm text-red-500 mt-1">
+                  {{ passwordError }}
+                </p>
               </div>
 
               <!-- keep logged in -->
               <div class="flex items-center space-x-2 ms-2">
-                <Checkbox id="keep_logged_in" v-model:checked="keepLoggedIn" />
+                <Checkbox id="keep_logged_in" v-model="keepLoggedIn" />
                 <label
                   for="keep_logged_in"
                   class="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
@@ -196,7 +218,10 @@ onMounted(async () => {
                 </label>
               </div>
 
-              <div v-if="errorMessage" class="flex items-center gap-2 text-red-500">
+              <div
+                v-if="errorMessage"
+                class="flex items-center gap-2 text-red-500"
+              >
                 <ChevronRight />
                 {{ errorMessage }}
               </div>
@@ -211,12 +236,19 @@ onMounted(async () => {
               </Button>
               <div class="mt-4 text-center text-sm">
                 {{ t('login.noAccount') }}
-                <router-link to="/register" class="underline">{{ t('login.signUp') }}</router-link>
+                <router-link to="/register" class="underline">{{
+                  t('login.signUp')
+                }}</router-link>
               </div>
             </CardFooter>
           </form>
         </Card>
-        <AutoLoginCard v-else :showCheckmark="showCheckmark" :showCross="showCross" :loading="loading" />
+        <AutoLoginCard
+          v-else
+          :showCheckmark="showCheckmark"
+          :showCross="showCross"
+          :loading="loading"
+        />
       </div>
     </main>
   </div>

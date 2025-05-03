@@ -58,7 +58,12 @@ export const useUser = defineStore('user', () => {
   const authenticated = ref(false)
   const { locale } = useI18n()
 
-  const _keep_logged_in = ref(localStorage.getItem('keep_logged_in') === 'true')
+  // Default to true if not set in localStorage
+  const _keep_logged_in = ref(localStorage.getItem('keep_logged_in') === null ? true : localStorage.getItem('keep_logged_in') === 'true')
+  // Initialize localStorage if not set
+  if (localStorage.getItem('keep_logged_in') === null) {
+    localStorage.setItem('keep_logged_in', 'true')
+  }
   const auth_data = ref({} as AuthenticationData)
   const user = ref<User>({} as any)
 
@@ -86,11 +91,12 @@ export const useUser = defineStore('user', () => {
 
   const storage = {
     set(value: AuthenticationData) {
-      if (!_keep_logged_in.value) {
-        auth_data.value = value
-        auth_data.value.expires_at = new Date().getTime() + (value.expires || 0)
-        return
-      } else {
+      // Always update the in-memory auth data for the current session
+      auth_data.value = {...value}
+      auth_data.value.expires_at = new Date().getTime() + (value.expires || 0)
+      
+      // If keep_logged_in is true, also store in localStorage for persistence across sessions
+      if (_keep_logged_in.value) {
         localStorage.setItem('access_token', value.access_token || '')
         localStorage.setItem('refresh_token', value.refresh_token || '')
         localStorage.setItem('expires', value.expires?.toString() || '')
@@ -99,26 +105,41 @@ export const useUser = defineStore('user', () => {
     },
     get(key: string | undefined): AuthenticationData | string | number | null {
       if (key === undefined) {
-        if (!_keep_logged_in.value) {
+        // First, check if we have valid in-memory auth data
+        if (auth_data.value && auth_data.value.access_token) {
           return auth_data.value
         }
-        // get all
-        return {
-          access_token: localStorage.getItem('access_token') || '',
-          refresh_token: localStorage.getItem('refresh_token') || '',
-          expires: Number(localStorage.getItem('expires')),
-          expires_at: Number(localStorage.getItem('expires_at'))
+        
+        // If not found in memory or session is new but keep_logged_in was true previously,
+        // try to get from localStorage
+        if (_keep_logged_in.value) {
+          return {
+            access_token: localStorage.getItem('access_token') || '',
+            refresh_token: localStorage.getItem('refresh_token') || '',
+            expires: Number(localStorage.getItem('expires')),
+            expires_at: Number(localStorage.getItem('expires_at'))
+          }
         }
+        
+        // Return empty auth data if nothing found
+        return auth_data.value
       }
 
-      if (!_keep_logged_in.value) {
-        const keys: (keyof AuthenticationData)[] = ['access_token', 'refresh_token', 'expires', 'expires_at']
-        if (keys.includes(key as keyof AuthenticationData)) {
-          return auth_data.value[key as keyof AuthenticationData] // TypeScript knows key is valid
+      // For specific keys, check in-memory first, then localStorage
+      const keys: (keyof AuthenticationData)[] = ['access_token', 'refresh_token', 'expires', 'expires_at']
+      if (keys.includes(key as keyof AuthenticationData)) {
+        // If we have the key in memory, return it
+        if (auth_data.value && auth_data.value[key as keyof AuthenticationData]) {
+          return auth_data.value[key as keyof AuthenticationData]
         }
-        return null
+        
+        // Otherwise, if keep_logged_in is true, try localStorage
+        if (_keep_logged_in.value) {
+          return localStorage.getItem(key)
+        }
       }
-      return localStorage.getItem(key)
+      
+      return null
     }
   }
 
@@ -209,6 +230,12 @@ export const useUser = defineStore('user', () => {
       .login(email, password)
       .then(async () => {
         authenticated.value = true
+        
+        // Force storage update when authenticated to apply keep_logged_in preference
+        const currentAuthData = storage.get(undefined) as AuthenticationData;
+        storage.set(currentAuthData);
+        
+        await getCurrentUserData();
       })
       .catch((error) => {
         if (error?.errors?.length > 0) {
@@ -227,6 +254,12 @@ export const useUser = defineStore('user', () => {
   }
 
   const checkAuth = async () => {
+    // Check for existing keep_logged_in setting, default to true
+    _keep_logged_in.value = localStorage.getItem('keep_logged_in') === null ? true : localStorage.getItem('keep_logged_in') === 'true'
+    if (localStorage.getItem('keep_logged_in') === null) {
+      localStorage.setItem('keep_logged_in', 'true')
+    }
+    
     const access_token = storage.get('access_token')
     const expires_at = Number(storage.get('expires_at'))
 
@@ -246,7 +279,7 @@ export const useUser = defineStore('user', () => {
       authenticated.value = true
       return true
     } else {
-      // Access token exist, has expired, or expires in less than 5 minutes
+      // Access token exists but has expired, or expires in less than 5 minutes
       if (access_token && currentTime > expires_at - 5 * 60 * 1000) {
         try {
           await client.refresh()
@@ -254,7 +287,7 @@ export const useUser = defineStore('user', () => {
           authenticated.value = true
           return true
         } catch (error) {
-          console.error(error)
+          console.error('Failed to refresh token:', error)
           authenticated.value = false
           return false
         }
@@ -267,10 +300,16 @@ export const useUser = defineStore('user', () => {
   }
 
   const resetState = () => {
+    // Only clear localStorage items related to authentication
     localStorage.removeItem('access_token')
     localStorage.removeItem('refresh_token')
+    localStorage.removeItem('expires')
+    localStorage.removeItem('expires_at')
     localStorage.removeItem('user')
-
+    
+    // Don't remove keep_logged_in preference
+    // We'll keep this setting even after logout
+    
     const stores = [
       useRequests,
       useNotificationSetting,

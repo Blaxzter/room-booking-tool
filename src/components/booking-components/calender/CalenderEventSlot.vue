@@ -10,7 +10,12 @@ import { useToast } from '@/components/ui/toast'
 
 import ConfirmationIcon from '@/components/booking-components/calender/ConfirmationIcon.vue'
 import { useUser } from '@/stores/user'
-import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip'
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger
+} from '@/components/ui/tooltip'
 import EditEvent from '@/components/booking-components/EditEvent.vue'
 import { useLocalUser } from '@/stores/localUser'
 const { t } = useI18n()
@@ -38,7 +43,6 @@ const updateConfirmed = (state: boolean) => {
   confirmed.value = state
 }
 
-
 const event = computed(() => {
   return { ...props.arg.event.extendedProps, confirmed: confirmed.value }
 })
@@ -46,33 +50,39 @@ const event = computed(() => {
 const eventClick = (arg: any) => {
   // Save the isPast value to show in the toast
   const isPast = arg.isPast
-  
+
   const { userHasCreatedBooking } = useLocalUser()
   const canEdit = userHasCreatedBooking(arg.event.extendedProps.booking_id)
 
   console.log(canEdit)
 
   // If no user or past event, just show toast
-  if (!canEdit && (user.value === null || Object.keys(user.value).length === 0 || isPast)) {
+  if (
+    !canEdit &&
+    (user.value === null || Object.keys(user.value).length === 0 || isPast)
+  ) {
     toast({
       title: t('bookingComponents.calender.calenderEventSlot.eventData'),
       description: `${t('bookingComponents.calender.calenderEventSlot.event')}: ${arg.event.title} \n ${t('bookingComponents.calender.calenderEventSlot.date')}: ${arg.event.start} \n ${t('bookingComponents.calender.calenderEventSlot.confirmed')}: ${
-        arg.event.extendedProps.confirmed ? t('bookingComponents.calender.calenderEventSlot.yes') : t('bookingComponents.calender.calenderEventSlot.no')
+        arg.event.extendedProps.confirmed
+          ? t('bookingComponents.calender.calenderEventSlot.yes')
+          : t('bookingComponents.calender.calenderEventSlot.no')
       }`
     })
   } else {
     console.log('confirmed', confirmed.value)
     console.log('arg.event.extendedProps', arg.event.extendedProps)
     // Just pass the event data
-    selectedEvent.value = { ...arg.event.extendedProps, confirmed: confirmed.value }
+    selectedEvent.value = {
+      ...arg.event.extendedProps,
+      confirmed: confirmed.value
+    }
   }
 }
-
 
 const closeDialog = () => {
   selectedEvent.value = undefined
 }
-
 
 onMounted(() => {
   confirmed.value = props.arg.event.extendedProps.confirmed
@@ -80,7 +90,11 @@ onMounted(() => {
 </script>
 
 <template>
-  <div class="w-full h-full" :class="cn(confirmed && 'event-confirmed')" @click="eventClick(arg)">
+  <div
+    class="w-full h-full"
+    :class="cn(confirmed && 'event-confirmed')"
+    @click="eventClick(arg)"
+  >
     <template v-if="arg.view.type == 'dayGridFourWeek'">
       <div class="relative" v-if="arg.event.allDay">
         <a
@@ -99,14 +113,20 @@ onMounted(() => {
       <div class="relative" v-else>
         <a
           class="decoration-0 cursor-pointer fc-event-resizable fc-daygrid-event lg:mx-0.5 lg:py-0.5 flex items-center"
-          :class="[arg.isPast && 'fc-event-past', !confirmed && 'text-muted-foreground', mobile && 'event-mobile']"
+          :class="[
+            arg.isPast && 'fc-event-past',
+            !confirmed && 'text-muted-foreground',
+            mobile && 'event-mobile'
+          ]"
         >
           <div
             class="fc-daygrid-event-dot"
             :class="[confirmed && 'confirmed', !confirmed && 'not-confirmed']"
             v-if="!mobile"
           ></div>
-          <div class="overflow-hidden flex-shrink overflow-ellipsis">{{ arg.event.title }}</div>
+          <div class="overflow-hidden flex-shrink overflow-ellipsis">
+            {{ arg.event.title }}
+          </div>
           <div class="flex-grow" />
           <template v-if="!arg.isPast">
             <div class="me-[1px]" v-if="!mobile">
@@ -120,14 +140,19 @@ onMounted(() => {
       <div class="relative" v-if="arg.event.allDay">
         <a
           :class="
-            cn('cursor-pointer mx-0.5 fc-daygrid-event fc-daygrid-block-event block', arg.isPast && 'fc-event-past')
+            cn(
+              'cursor-pointer mx-0.5 fc-daygrid-event fc-daygrid-block-event block',
+              arg.isPast && 'fc-event-past'
+            )
           "
         >
           <div class="flex">
             <div class="ms-0.5">
               {{ arg.event.title }}
             </div>
-            <div v-if="arg.isPast">{{ t('bookingComponents.calender.calenderEventSlot.pastEvent') }}</div>
+            <div v-if="arg.isPast">
+              {{ t('bookingComponents.calender.calenderEventSlot.pastEvent') }}
+            </div>
             <div class="flex-grow" />
             <template v-if="!arg.isPast">
               <TooltipProvider v-if="false">
@@ -136,12 +161,22 @@ onMounted(() => {
                     <PencilIcon :size="mobile ? 15 : 20" class="me-2" />
                   </TooltipTrigger>
                   <TooltipContent>
-                    <p>{{ t('bookingComponents.calender.calenderEventSlot.canEdit') }}</p>
+                    <p>
+                      {{
+                        t(
+                          'bookingComponents.calender.calenderEventSlot.canEdit'
+                        )
+                      }}
+                    </p>
                   </TooltipContent>
                 </Tooltip>
               </TooltipProvider>
 
-              <ConfirmationIcon :confirmed="confirmed" :size="mobile ? 15 : 20" class="me-3" />
+              <ConfirmationIcon
+                :confirmed="confirmed"
+                :size="mobile ? 15 : 20"
+                class="me-3"
+              />
             </template>
           </div>
         </a>
@@ -162,7 +197,11 @@ onMounted(() => {
                   <PencilIcon :size="mobile ? 15 : 20" class="me-2" />
                 </TooltipTrigger>
                 <TooltipContent>
-                  <p>{{ t('bookingComponents.calender.calenderEventSlot.canEdit') }}</p>
+                  <p>
+                    {{
+                      t('bookingComponents.calender.calenderEventSlot.canEdit')
+                    }}
+                  </p>
                 </TooltipContent>
               </Tooltip>
             </TooltipProvider>
@@ -176,7 +215,11 @@ onMounted(() => {
                   <HistoryIcon :size="mobile ? 15 : 20" />
                 </TooltipTrigger>
                 <TooltipContent>
-                  <p>{{ t('bookingComponents.calender.calenderEventSlot.isPast') }}</p>
+                  <p>
+                    {{
+                      t('bookingComponents.calender.calenderEventSlot.isPast')
+                    }}
+                  </p>
                 </TooltipContent>
               </Tooltip>
             </TooltipProvider>
@@ -188,7 +231,10 @@ onMounted(() => {
       <div class="relative" v-if="arg.event.allDay">
         <a
           :class="
-            cn('cursor-pointer mx-0.5 fc-daygrid-event fc-daygrid-block-event block', arg.isPast && 'fc-event-past')
+            cn(
+              'cursor-pointer mx-0.5 fc-daygrid-event fc-daygrid-block-event block',
+              arg.isPast && 'fc-event-past'
+            )
           "
         >
           <div class="flex">
@@ -203,12 +249,21 @@ onMounted(() => {
                     <PencilIcon :size="mobile ? 15 : 20" class="sm:me-2" />
                   </TooltipTrigger>
                   <TooltipContent>
-                    <p>{{ t('bookingComponents.calender.calenderEventSlot.canEdit') }}</p>
+                    <p>
+                      {{
+                        t(
+                          'bookingComponents.calender.calenderEventSlot.canEdit'
+                        )
+                      }}
+                    </p>
                   </TooltipContent>
                 </Tooltip>
               </TooltipProvider>
 
-              <ConfirmationIcon :confirmed="confirmed" :size="mobile ? 15 : 20" />
+              <ConfirmationIcon
+                :confirmed="confirmed"
+                :size="mobile ? 15 : 20"
+              />
             </div>
           </div>
         </a>
@@ -226,7 +281,11 @@ onMounted(() => {
                   <PencilIcon :size="mobile ? 15 : 20" class="sm:me-2" />
                 </TooltipTrigger>
                 <TooltipContent>
-                  <p>{{ t('bookingComponents.calender.calenderEventSlot.canEdit') }}</p>
+                  <p>
+                    {{
+                      t('bookingComponents.calender.calenderEventSlot.canEdit')
+                    }}
+                  </p>
                 </TooltipContent>
               </Tooltip>
             </TooltipProvider>
@@ -249,7 +308,11 @@ onMounted(() => {
                 <PencilIcon :size="20" class="sm:me-2" />
               </TooltipTrigger>
               <TooltipContent>
-                <p>{{ t('bookingComponents.calender.calenderEventSlot.canEdit') }}</p>
+                <p>
+                  {{
+                    t('bookingComponents.calender.calenderEventSlot.canEdit')
+                  }}
+                </p>
               </TooltipContent>
             </Tooltip>
           </TooltipProvider>
@@ -280,17 +343,17 @@ onMounted(() => {
   height: 0.5rem;
   min-width: 0.5rem;
   min-height: 0.5rem;
-  background: hsl(var(--primary));
+  background: var(--primary);
   border-radius: 50%;
   margin-right: 0.5rem;
   border: none;
 
   &.confirmed {
-    background: hsl(var(--success));
+    background: var(--success);
   }
 
   &.not-confirmed {
-    background: hsl(var(--destructive));
+    background: var(--destructive);
   }
 
   @media (max-width: 768px) {
@@ -306,10 +369,10 @@ onMounted(() => {
 
 .fc-daygrid-block-event,
 .fc-timegrid-event {
-  background: var(--primary-rgb);
-  border: var(--primary-rgb) solid 0px;
+  background: var(--primary);
+  border: var(--primary) solid 0px;
   padding: 1px;
-  color: hsl(var(--primary-foreground)) !important;
+  color: var(--primary-foreground) !important;
 
   &:hover {
     filter: brightness(95%);
@@ -335,7 +398,7 @@ onMounted(() => {
 
 .fc-v-event .fc-event-main {
   padding: 0.25rem;
-  color: hsl(var(--primary-foreground));
+  color: var(--primary-foreground);
 }
 
 .event-mobile {
@@ -376,16 +439,16 @@ onMounted(() => {
 }
 
 .fc-list-day-cushion.fc-cell-shaded {
-  color: hsl(var(--primary-foreground));
+  color: var(--primary-foreground);
 }
 
 .fc-event.fc-event-start.fc-event-end.fc-list-event {
   padding: 1px;
-  color: hsl(var(--foreground)) !important;
+  color: var(--foreground) !important;
 
   &:hover {
-    color: hsl(var(--primary-foreground)) !important;
-    background-color: hsl(var(--primary)) !important;
+    color: var(--primary-foreground) !important;
+    background-color: var(--primary) !important;
   }
 }
 </style>

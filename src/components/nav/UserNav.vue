@@ -3,7 +3,13 @@ import { onMounted, ref } from 'vue'
 import { storeToRefs } from 'pinia'
 import { useDark, useToggle } from '@vueuse/core'
 import router from '@/router'
-import { MailIcon, LogOutIcon, CogIcon, PersonStandingIcon, SunMoonIcon } from 'lucide-vue-next'
+import {
+  MailIcon,
+  LogOutIcon,
+  CogIcon,
+  PersonStandingIcon,
+  SunMoonIcon
+} from 'lucide-vue-next'
 
 import {
   DropdownMenu,
@@ -46,8 +52,8 @@ onMounted(async () => {
 })
 
 import { useGlobalSettings } from '@/stores/globalSettings'
-const { displayLegal, showBuyMeACoffee, isDemoUser, demoDialogOpen  } = storeToRefs(useGlobalSettings())
-
+const { displayLegal, showBuyMeACoffee, isDemoUser, demoDialogOpen } =
+  storeToRefs(useGlobalSettings())
 </script>
 
 <template>
@@ -64,12 +70,17 @@ const { displayLegal, showBuyMeACoffee, isDemoUser, demoDialogOpen  } = storeToR
       <DropdownMenuLabel class="font-normal flex">
         <div class="flex flex-col space-y-1">
           <p class="text-sm font-medium leading-none">{{ name }}</p>
-          <p class="text-xs leading-none text-muted-foreground" v-if="hasName">{{ email }}</p>
+          <p class="text-xs leading-none text-muted-foreground" v-if="hasName">
+            {{ email }}
+          </p>
         </div>
       </DropdownMenuLabel>
       <DropdownMenuSeparator />
       <DropdownMenuGroup>
-        <DropdownMenuItem @click="router.push({ name: 'settings', params: { tab: 'profile' } })" class="cursor-pointer">
+        <DropdownMenuItem
+          @click="router.push({ name: 'settings', params: { tab: 'profile' } })"
+          class="cursor-pointer"
+        >
           <PersonStandingIcon class="mr-2 h-4 w-4" />
           Profile
           <DropdownMenuShortcut>⇧⌘P</DropdownMenuShortcut>
@@ -84,9 +95,15 @@ const { displayLegal, showBuyMeACoffee, isDemoUser, demoDialogOpen  } = storeToR
           <span v-if="isDark">Light mode</span>
           <span v-else>Dark mode</span>
           <div class="flex-grow" />
-          <DarkscreenToggle :height="30" :toggle-animation="toggleDarkmodeAnimation" />
+          <DarkscreenToggle
+            :height="30"
+            :toggle-animation="toggleDarkmodeAnimation"
+          />
         </DropdownMenuItem>
-        <DropdownMenuItem @click="router.push({ name: 'settings', params: { tab: 'account' } })" class="cursor-pointer">
+        <DropdownMenuItem
+          @click="router.push({ name: 'settings', params: { tab: 'account' } })"
+          class="cursor-pointer"
+        >
           <CogIcon class="mr-2 h-4 w-4" />
           Settings
           <DropdownMenuShortcut>⌘S</DropdownMenuShortcut>
@@ -101,8 +118,17 @@ const { displayLegal, showBuyMeACoffee, isDemoUser, demoDialogOpen  } = storeToR
       </template>
       <template v-if="showBuyMeACoffee">
         <DropdownMenuItem>
-          <a href="https://www.buymeacoffee.com/fabraham" target="_blank" rel="noopener noreferrer" class="flex">
-            <img src="https://www.buymeacoffee.com/assets/img/BMC-btn-logo.svg" alt="Buy Freddy a coffee" class="buy-me-a-coffee-icon" />
+          <a
+            href="https://www.buymeacoffee.com/fabraham"
+            target="_blank"
+            rel="noopener noreferrer"
+            class="flex gap-2"
+          >
+            <img
+              src="https://www.buymeacoffee.com/assets/img/BMC-btn-logo.svg"
+              alt="Buy Freddy a coffee"
+              class="buy-me-a-coffee-icon"
+            />
             Buy me a coffee
           </a>
         </DropdownMenuItem>
@@ -114,10 +140,17 @@ const { displayLegal, showBuyMeACoffee, isDemoUser, demoDialogOpen  } = storeToR
         <DropdownMenuShortcut>⇧⌘Q</DropdownMenuShortcut>
       </DropdownMenuItem>
       <DropdownMenuSeparator />
-      <div class="text-[10px] text-muted-foreground py-1 text-center" v-if="displayLegal">
-        <router-link to="/terms-of-service" class="underline"> Terms of Service </router-link>
+      <div
+        class="text-[10px] text-muted-foreground py-1 text-center"
+        v-if="displayLegal"
+      >
+        <router-link to="/terms-of-service" class="underline">
+          Terms of Service
+        </router-link>
         &
-        <router-link to="/privacy" class="underline"> Privacy Policy </router-link>
+        <router-link to="/privacy" class="underline">
+          Privacy Policy
+        </router-link>
       </div>
     </DropdownMenuContent>
   </DropdownMenu>

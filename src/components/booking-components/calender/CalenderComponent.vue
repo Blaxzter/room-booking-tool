@@ -21,7 +21,9 @@ import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardHeader } from '@/components/ui/card'
 import CalenderRemote from '@/components/booking-components/calender/CalenderRemote.vue'
 
-import CalenderTabs, { type CalendarViewType } from '@/components/booking-components/calender/CalenderTabs.vue'
+import CalenderTabs, {
+  type CalendarViewType
+} from '@/components/booking-components/calender/CalenderTabs.vue'
 
 import BookingRequestWrapper from '@/components/booking-components/booking-request-dialog/BookingRequestWrapper.vue'
 import { useBookings } from '@/stores/booking'
@@ -57,7 +59,13 @@ const startTime = ref('')
 const endTime = ref('')
 const allDay = ref(false)
 
-const bookingToEvent = ({ booking, editable = false }: { booking: Booking; editable?: boolean }) => {
+const bookingToEvent = ({
+  booking,
+  editable = false
+}: {
+  booking: Booking
+  editable?: boolean
+}) => {
   let start_date = booking.start_date
   let end_date = booking.end_date
   if (booking.is_full_day) {
@@ -70,7 +78,10 @@ const bookingToEvent = ({ booking, editable = false }: { booking: Booking; edita
   const date = dayjs(booking.start_date).format('DD.MM')
 
   // create a alternative name: "Event: 2024-07-18 10:00 - 12:00"
-  const title = t('bookingComponents.calender.calenderComponent.eventTitleFormat', { date, start_time, end_time })
+  const title = t(
+    'bookingComponents.calender.calenderComponent.eventTitleFormat',
+    { date, start_time, end_time }
+  )
 
   return {
     ...booking,
@@ -92,7 +103,9 @@ const fullCalenderInitialEvents = currentBookings.value.map((booking) => {
   return bookingToEvent({ booking })
 })
 
-const currentLocale = computed(() => currentLanguage.value.code === 'de-DE' ? 'de' : 'en-gb')
+const currentLocale = computed(() =>
+  currentLanguage.value.code === 'de-DE' ? 'de' : 'en-gb'
+)
 
 const calendarOptions = {
   timeZone: 'local',
@@ -144,7 +157,9 @@ const calendarOptions = {
     if (dayjs(arg.start).isBefore(dayjs())) {
       toast({
         title: t('bookingComponents.calender.calenderComponent.errors.title'),
-        description: t('bookingComponents.calender.calenderComponent.errors.pastEventCreation'),
+        description: t(
+          'bookingComponents.calender.calenderComponent.errors.pastEventCreation'
+        ),
         variant: 'destructive'
       })
       return
@@ -253,7 +268,9 @@ watch(currentLocale, (newLocale) => {
 
 <template>
   <Card class="calender-content overflow-hidden" :style="styleProps">
-    <CardHeader class="flex flex-col sm:flex-row sm:items-center space-y-1 p-2 sm:p-4 sm:space-y-0 sm:space-x-4">
+    <CardHeader
+      class="flex flex-col sm:flex-row sm:items-center space-y-1 p-2 sm:p-4 sm:space-y-0 sm:space-x-4"
+    >
       <div class="flex items-center">
         <CalendarIcon class="mr-2" />
         <h2 class="text-lg font-semibold" v-if="fullCalenderRef">
@@ -262,9 +279,16 @@ watch(currentLocale, (newLocale) => {
       </div>
       <div class="flex-grow"></div>
       <div class="flex items-center gap-2 sm:gap-3 justify-end">
-        <Button @click="selectToday" :variant="isToday ? 'outline' : 'default'">{{ t('bookingComponents.calender.calenderComponent.today') }}</Button>
+        <Button
+          @click="selectToday"
+          :variant="isToday ? 'outline' : 'default'"
+          >{{ t('bookingComponents.calender.calenderComponent.today') }}</Button
+        >
         <calender-remote @prev="togglePrev" @next="toggleNext" />
-        <calender-tabs v-model="selectedTab" @update:model-value="switchTab($event as CalendarViewType)" />
+        <calender-tabs
+          v-model="selectedTab"
+          @update:model-value="switchTab($event as CalendarViewType)"
+        />
       </div>
     </CardHeader>
     <CardContent class="calender-wrapper p-0">
@@ -291,7 +315,7 @@ watch(currentLocale, (newLocale) => {
 :root {
   --top-padding: 0;
 
-  --fc-border-color: hsl(var(--border));
+  --fc-border-color: var(--border);
 }
 
 .calender-content {
@@ -324,7 +348,7 @@ watch(currentLocale, (newLocale) => {
 }
 
 .fc-day-highlight {
-  background: hsl(var(--secondary)) !important;
+  background: var(--secondary) !important;
   // create a inset border
   box-shadow: inset 0 0 0 2px var(--primary-color-rgb);
 }
@@ -337,7 +361,7 @@ watch(currentLocale, (newLocale) => {
 }
 .fc-col-header-cell {
   border: none !important;
-  border-bottom: 1px solid hsl(var(--border)) !important;
+  border-bottom: 1px solid var(--border) !important;
 }
 
 .fc-scrollgrid td:last-of-type {
@@ -345,13 +369,13 @@ watch(currentLocale, (newLocale) => {
 }
 
 .fc .fc-list-empty {
-  background: hsl(var(--secondary));
+  background: var(--secondary);
 }
 
 .fc-daygrid-day {
   height: calc((100vh - 15rem) / 4);
   &:hover {
-    background: hsl(var(--secondary));
+    background: var(--secondary);
     cursor: pointer;
 
     .fc-daygrid-day-top {

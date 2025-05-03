@@ -103,14 +103,21 @@ router.beforeEach(async (to, from, next) => {
   const { checkAuth, setRedirect } = useUser()
 
   try {
+    // Skip auth check for non-protected routes
+    if (!to.matched.some((record) => record.meta.requiresAuth)) {
+      next();
+      return;
+    }
+    
     const isAuthenticated = await checkAuth()
-    if (to.matched.some((record) => record.meta.requiresAuth) && !isAuthenticated) {
+    if (!isAuthenticated) {
       setRedirect(to.fullPath)
       next({ name: 'login' })
     } else {
       next() // Proceed to the next route
     }
-  } catch {
+  } catch (error) {
+    console.error('Authentication check failed:', error);
     setRedirect(to.fullPath)
     next({ name: 'login' })
   }

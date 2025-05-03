@@ -1,17 +1,11 @@
-<script lang="ts">
-import type { HTMLAttributes, InjectionKey } from 'vue'
-
-export const FORM_ITEM_INJECTION_KEY = Symbol() as InjectionKey<string>
-</script>
-
 <script lang="ts" setup>
-import { provide } from 'vue'
-import { useId } from 'radix-vue'
 import { cn } from '@/lib/utils'
+import { useId } from 'reka-ui'
+import { type HTMLAttributes, provide } from 'vue'
+import { FORM_ITEM_INJECTION_KEY } from './injectionKeys'
 
 const props = defineProps<{
   class?: HTMLAttributes['class']
-  horizontal?: boolean
 }>()
 
 const id = useId()
@@ -19,7 +13,7 @@ provide(FORM_ITEM_INJECTION_KEY, id)
 </script>
 
 <template>
-  <div :class="cn(horizontal ? '' : 'space-y-2', props.class)">
+  <div :class="cn('space-y-2', props.class)">
     <slot />
   </div>
 </template>
