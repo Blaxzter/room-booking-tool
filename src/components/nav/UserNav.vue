@@ -6,9 +6,9 @@ import router from '@/router'
 import {
   MailIcon,
   LogOutIcon,
-  CogIcon,
-  PersonStandingIcon,
-  SunMoonIcon
+  SettingsIcon,
+  SunMoonIcon,
+  UserIcon
 } from 'lucide-vue-next'
 
 import {
@@ -81,7 +81,7 @@ const { displayLegal, showBuyMeACoffee, isDemoUser, demoDialogOpen } =
           @click="router.push({ name: 'settings', params: { tab: 'profile' } })"
           class="cursor-pointer"
         >
-          <PersonStandingIcon class="mr-2 h-4 w-4" />
+          <UserIcon class="mr-2 h-4 w-4" />
           Profile
           <DropdownMenuShortcut>⇧⌘P</DropdownMenuShortcut>
         </DropdownMenuItem>
@@ -104,7 +104,7 @@ const { displayLegal, showBuyMeACoffee, isDemoUser, demoDialogOpen } =
           @click="router.push({ name: 'settings', params: { tab: 'account' } })"
           class="cursor-pointer"
         >
-          <CogIcon class="mr-2 h-4 w-4" />
+          <SettingsIcon class="mr-2 h-4 w-4" />
           Settings
           <DropdownMenuShortcut>⌘S</DropdownMenuShortcut>
         </DropdownMenuItem>

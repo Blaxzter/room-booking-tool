@@ -33,7 +33,9 @@ const darkModeVar = computed(() => {
 
 provide(
   'backendUrl',
-  import.meta.env.DEV ? import.meta.env.VITE_BACKEND_URL || 'http://localhost:8055' : `${window.location.origin}/api`
+  import.meta.env.DEV
+    ? import.meta.env.VITE_BACKEND_URL || 'http://localhost:8055'
+    : `${window.location.origin}/api`
 )
 
 // before mount get initial data
@@ -50,8 +52,8 @@ onBeforeMount(async () => {
         <CalenderLoader :height="400" />
       </div>
     </div>
-    <RouterView v-show="!showLoading" />
     <GlobalDialog />
+    <RouterView v-show="!showLoading" />
   </div>
   <Toaster />
   <VersionDisplay class="version-display" />

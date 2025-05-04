@@ -340,7 +340,7 @@ export const useUser = defineStore('user', () => {
       })
   }
 
-  const updateUserData = async (data: UpdateUserRequest) => {
+  const updateUserData = async (data: Partial<UpdateUserRequest>) => {
     const result = (await client.request(
       updateUser<UpdateUserRequest, Query<UpdateUserRequest, DirectusUser<User>>>(user.value.id, data)
     )) as DirectusUser<User>
