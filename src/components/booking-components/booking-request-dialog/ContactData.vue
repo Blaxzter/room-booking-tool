@@ -17,7 +17,7 @@ import { useI18n } from 'vue-i18n'
 import { useUser } from '@/stores/user'
 import { storeToRefs } from 'pinia'
 
-import { MailIcon, PhoneIcon } from 'lucide-vue-next'
+import { MailIcon, PhoneIcon } from '@lucide/vue'
 
 interface InitialValues {
   display_name: string

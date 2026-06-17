@@ -1,11 +1,12 @@
 <script setup lang="ts">
 import { type Table } from '@tanstack/vue-table'
 import type { Booking } from '@/types'
-import { ChevronsRightIcon, ChevronsLeftIcon, ChevronLeftIcon, ChevronRightIcon } from 'lucide-vue-next'
+import { ChevronsRightIcon, ChevronsLeftIcon, ChevronLeftIcon, ChevronRightIcon } from '@lucide/vue'
 import { useI18n } from 'vue-i18n'
 
 import { Button } from '@/components/ui/button'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
+import type { AcceptableValue } from 'reka-ui'
 
 const { t } = useI18n()
 
@@ -14,7 +15,8 @@ interface DataTablePaginationProps {
 }
 const props = defineProps<DataTablePaginationProps>()
 
-const selectPageSize = (value: string) => {
+const selectPageSize = (value: AcceptableValue) => {
+  if (value == null) return
   props.table.setPageSize(Number(value))
 }
 </script>

@@ -2,6 +2,7 @@
 import { onMounted, ref } from 'vue'
 import { storeToRefs } from 'pinia'
 import { useDark, useToggle } from '@vueuse/core'
+import { useI18n } from 'vue-i18n'
 import router from '@/router'
 import {
   MailIcon,
@@ -9,7 +10,7 @@ import {
   SettingsIcon,
   SunMoonIcon,
   UserIcon
-} from 'lucide-vue-next'
+} from '@lucide/vue'
 
 import {
   DropdownMenu,
@@ -26,6 +27,9 @@ import { Button } from '@/components/ui/button'
 
 import { useUser } from '@/stores/user'
 import DarkscreenToggle from '@/components/animations/DarkscreenToggle.vue'
+import LegalLinks from '@/components/utils/LegalLinks.vue'
+
+const { t } = useI18n()
 
 const isDark = useDark()
 const toggleDark = useToggle(isDark)
@@ -82,7 +86,7 @@ const { displayLegal, showBuyMeACoffee, isDemoUser, demoDialogOpen } =
           class="cursor-pointer"
         >
           <UserIcon class="mr-2 h-4 w-4" />
-          Profile
+          {{ t('userNav.profile') }}
           <DropdownMenuShortcut>⇧⌘P</DropdownMenuShortcut>
         </DropdownMenuItem>
         <DropdownMenuItem
@@ -92,8 +96,8 @@ const { displayLegal, showBuyMeACoffee, isDemoUser, demoDialogOpen } =
           @mouseleave="toggleDarkmodeAnimation = false"
         >
           <SunMoonIcon class="mr-2 h-4 w-4" />
-          <span v-if="isDark">Light mode</span>
-          <span v-else>Dark mode</span>
+          <span v-if="isDark">{{ t('userNav.lightMode') }}</span>
+          <span v-else>{{ t('userNav.darkMode') }}</span>
           <div class="flex-grow" />
           <DarkscreenToggle
             :height="30"
@@ -105,7 +109,7 @@ const { displayLegal, showBuyMeACoffee, isDemoUser, demoDialogOpen } =
           class="cursor-pointer"
         >
           <SettingsIcon class="mr-2 h-4 w-4" />
-          Settings
+          {{ t('userNav.settings') }}
           <DropdownMenuShortcut>⌘S</DropdownMenuShortcut>
         </DropdownMenuItem>
       </DropdownMenuGroup>
@@ -113,7 +117,7 @@ const { displayLegal, showBuyMeACoffee, isDemoUser, demoDialogOpen } =
       <template v-if="isDemoUser">
         <DropdownMenuItem class="cursor-pointer" @click="demoDialogOpen = true">
           <MailIcon class="mr-2 h-4 w-4" />
-          Request Full Access
+          {{ t('userNav.requestFullAccess') }}
         </DropdownMenuItem>
       </template>
       <template v-if="showBuyMeACoffee">
@@ -129,29 +133,20 @@ const { displayLegal, showBuyMeACoffee, isDemoUser, demoDialogOpen } =
               alt="Buy Freddy a coffee"
               class="buy-me-a-coffee-icon"
             />
-            Buy me a coffee
+            {{ t('userNav.buyMeACoffee') }}
           </a>
         </DropdownMenuItem>
       </template>
       <DropdownMenuSeparator />
       <DropdownMenuItem @click="logout" class="cursor-pointer">
         <LogOutIcon class="mr-2 h-4 w-4" />
-        Log out
+        {{ t('userNav.logout') }}
         <DropdownMenuShortcut>⇧⌘Q</DropdownMenuShortcut>
       </DropdownMenuItem>
-      <DropdownMenuSeparator />
-      <div
-        class="text-[10px] text-muted-foreground py-1 text-center"
-        v-if="displayLegal"
-      >
-        <router-link to="/terms-of-service" class="underline">
-          Terms of Service
-        </router-link>
-        &
-        <router-link to="/privacy" class="underline">
-          Privacy Policy
-        </router-link>
-      </div>
+      <template v-if="displayLegal">
+        <DropdownMenuSeparator />
+        <LegalLinks class="py-1" />
+      </template>
     </DropdownMenuContent>
   </DropdownMenu>
 </template>

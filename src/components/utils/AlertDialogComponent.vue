@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { CheckIcon } from 'lucide-vue-next'
+import { CheckIcon } from '@lucide/vue'
 import { useI18n } from 'vue-i18n'
 import { computed } from 'vue'
 

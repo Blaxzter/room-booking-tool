@@ -4,7 +4,7 @@ import { storeToRefs } from 'pinia'
 import _ from 'lodash'
 import { useI18n } from 'vue-i18n'
 
-import { UsersIcon, BoxIcon, SendIcon, CheckIcon, XIcon } from 'lucide-vue-next'
+import { UsersIcon, BoxIcon, SendIcon, CheckIcon, XIcon } from '@lucide/vue'
 import { TooltipProvider, Tooltip, TooltipTrigger, TooltipContent } from '@/components/ui/tooltip'
 import { Badge } from '@/components/ui/badge'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'

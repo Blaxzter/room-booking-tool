@@ -5,7 +5,7 @@ import { cn } from '@/lib/utils'
 import { breakpointsTailwind, useBreakpoints } from '@vueuse/core'
 import { useI18n } from 'vue-i18n'
 
-import { PencilIcon, HistoryIcon } from 'lucide-vue-next'
+import { PencilIcon, HistoryIcon } from '@lucide/vue'
 import { useToast } from '@/components/ui/toast'
 
 import ConfirmationIcon from '@/components/booking-components/calender/ConfirmationIcon.vue'

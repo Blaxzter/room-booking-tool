@@ -24,7 +24,7 @@
 <script setup lang="ts">
 import { onMounted, ref, computed } from 'vue'
 import { storeToRefs } from 'pinia'
-import { CheckIcon, TrashIcon } from 'lucide-vue-next'
+import { CheckIcon, TrashIcon } from '@lucide/vue'
 import { useI18n } from 'vue-i18n'
 
 import { Button } from '@/components/ui/button'

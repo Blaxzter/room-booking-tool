@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { CheckIcon, CircleHelpIcon } from 'lucide-vue-next'
+import { CheckIcon, CircleHelpIcon } from '@lucide/vue'
 import { useI18n } from 'vue-i18n'
 
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip'

@@ -13,7 +13,7 @@ import {
 } from '@/components/ui/form'
 import { Input } from '@/components/ui/input'
 import { Switch } from '@/components/ui/switch'
-import { CalendarIcon, Clock10Icon, ClockIcon } from 'lucide-vue-next'
+import { CalendarIcon, Clock10Icon, ClockIcon } from '@lucide/vue'
 import { Collapsible, CollapsibleContent } from '@/components/ui/collapsible'
 import { useI18n } from 'vue-i18n'
 

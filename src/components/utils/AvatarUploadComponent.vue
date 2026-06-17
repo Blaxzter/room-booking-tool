@@ -3,7 +3,7 @@ import { computed, inject, onMounted, ref, watch } from 'vue'
 import { uploadFiles } from '@directus/sdk'
 import { useI18n } from 'vue-i18n'
 
-import { UploadIcon, XIcon, TrashIcon } from 'lucide-vue-next'
+import { UploadIcon, XIcon, TrashIcon } from '@lucide/vue'
 // @ts-expect-error - AvatarCropper is not typed
 import AvatarCropper from 'vue-avatar-cropper'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'

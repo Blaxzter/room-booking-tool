@@ -85,8 +85,7 @@ const { handleSubmit } = useForm({
     last_name: user.value?.last_name ?? '',
     display_name:
       user.value?.display_name ??
-      user.value?.first_name + ' ' + user.value?.last_name ??
-      ''
+      user.value?.first_name + ' ' + user.value?.last_name
   }
 })
 

@@ -1,10 +1,12 @@
 <script setup lang="ts">
 import { onMounted, ref } from 'vue'
 import router from '@/router'
-import { ChevronRight, Eye, EyeOff, Loader2 } from 'lucide-vue-next'
+import { ChevronRight, Eye, EyeOff, Loader2 } from '@lucide/vue'
 
+import { storeToRefs } from 'pinia'
 import { useI18n } from 'vue-i18n'
 import { useUser } from '@/stores/user'
+import { useGlobalSettings } from '@/stores/globalSettings'
 import { randomEmail } from '@/assets/ts/constants'
 
 import { Button } from '@/components/ui/button'
@@ -24,8 +26,10 @@ import AutoLoginCard from '@/components/login/AutoLoginCard.vue'
 import BackgroundImage from '@/components/bits/BackgroundImage.vue'
 import LogoImage from '@/components/bits/LogoImage.vue'
 import LanguageSwitcher from '@/components/i18n/LanguageSwitcher.vue'
+import LegalLinks from '@/components/utils/LegalLinks.vue'
 
 const { t } = useI18n()
+const { displayLegal } = storeToRefs(useGlobalSettings())
 
 const loading = ref(false)
 const showCheckmark = ref(false)
@@ -240,6 +244,7 @@ onMounted(async () => {
                   t('login.signUp')
                 }}</router-link>
               </div>
+              <LegalLinks v-if="displayLegal" class="mt-4" />
             </CardFooter>
           </form>
         </Card>

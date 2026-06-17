@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { storeToRefs } from 'pinia'
 import { useI18n } from 'vue-i18n'
-import { MailIcon, SendIcon } from 'lucide-vue-next'
+import { MailIcon, SendIcon } from '@lucide/vue'
 
 import { Separator } from '@/components/ui/separator'
 import { Checkbox } from '@/components/ui/checkbox'

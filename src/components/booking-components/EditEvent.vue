@@ -6,7 +6,7 @@ import { useRoute } from 'vue-router'
 import { useI18n } from 'vue-i18n'
 
 // import icons
-import { CheckIcon, TrashIcon, LoaderIcon, XIcon } from 'lucide-vue-next'
+import { CheckIcon, TrashIcon, LoaderIcon, XIcon } from '@lucide/vue'
 
 import { Button } from '@/components/ui/button'
 import {

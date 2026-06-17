@@ -4,7 +4,7 @@ import { storeToRefs } from 'pinia'
 import _ from 'lodash'
 import { useI18n } from 'vue-i18n'
 
-import { LoaderIcon, Edit2Icon } from 'lucide-vue-next'
+import { LoaderIcon, Edit2Icon } from '@lucide/vue'
 import { CaretSortIcon, CheckIcon, PlusCircledIcon } from '@radix-icons/vue'
 import router from '@/router'
 

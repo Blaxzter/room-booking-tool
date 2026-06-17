@@ -12,11 +12,6 @@ export default defineConfig({
   css: {
     postcss: {
       plugins: [autoprefixer()]
-    },
-    preprocessorOptions: {
-      scss: {
-        api: 'modern-compiler' // or "modern"
-      }
     }
   },
   plugins: [vue(), tailwindcss(), VueDevTools()],

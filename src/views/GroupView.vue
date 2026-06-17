@@ -2,7 +2,7 @@
 import _ from 'lodash'
 import { onMounted, ref, computed } from 'vue'
 import { storeToRefs } from 'pinia'
-import { TrashIcon, ArrowLeftIcon, PlusCircleIcon } from 'lucide-vue-next'
+import { TrashIcon, ArrowLeftIcon, PlusCircleIcon } from '@lucide/vue'
 import { useMediaQuery } from '@vueuse/core'
 import { useI18n } from 'vue-i18n'
 
