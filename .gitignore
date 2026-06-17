@@ -28,6 +28,10 @@ coverage
 *.sw?
 
 *.tsbuildinfo
+
+# Build-time data pulled from Directus (see scripts/pre-render-static-pages.js)
+src/assets/*.generated.json
+
 .env
 .env.prod
 /uploads/

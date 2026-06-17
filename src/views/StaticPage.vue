@@ -1,73 +1,76 @@
 <script setup lang="ts">
-// before mount get the client and get the static page that matches the route from backend
-import { onBeforeMount, ref, watch } from 'vue'
+// Static/legal pages. Content comes from Directus, pre-rendered into the build by
+// scripts/pre-render-static-pages.js so the page renders during static generation
+// and works without a live backend. On the client we refresh from the backend.
+import { computed, onMounted, ref, watch } from 'vue'
 import axios, { type AxiosResponse } from 'axios'
-import { useRoute } from 'vue-router'
-import router from '@/router'
+import { useRoute, useRouter } from 'vue-router'
 import type { StaticPage } from '@/types'
 import { useI18n } from 'vue-i18n'
+import { getPrerenderedPage } from '@/lib/prerendered-data'
 
 import LogoImage from '@/components/bits/LogoImage.vue'
 import LanguageSwitcher from '@/components/i18n/LanguageSwitcher.vue'
 import LegalLinks from '@/components/utils/LegalLinks.vue'
 
 const route = useRoute()
-const page = ref<StaticPage | null>(null)
-const loading = ref(false)
+const router = useRouter()
 const { locale } = useI18n()
 
-export interface StaticPageResponse {
+const slug = computed(() => route.path.replace(/^\//, ''))
+const language = computed(() => locale.value.split('-')[0])
+
+// Seed from build-time data so the content is present during SSG and first paint.
+const page = ref<StaticPage | null>(getPrerenderedPage(slug.value, language.value))
+const loading = ref(false)
+
+interface StaticPageResponse {
   data: StaticPage[]
 }
 
 const fetchStaticPage = async () => {
-  loading.value = true
+  // SSG relies on the pre-rendered data; only hit the network in the browser.
+  if (typeof window === 'undefined') return
+
+  loading.value = page.value === null
 
   const backendUrl = import.meta.env.DEV
     ? import.meta.env.VITE_BACKEND_URL || 'http://localhost:8055'
     : `${window.location.origin}/api`
 
-  let path = route.path
-  // remove leading slash
-  if (path.charAt(0) === '/') {
-    path = path.slice(1)
-  }
+  const path = slug.value
+  const lang = language.value
 
-  // ISO 639-1 language code
-  const language = locale.value.split('-')[0]
+  try {
+    let res: AxiosResponse<StaticPageResponse> = await axios.get(
+      `${backendUrl}/items/staticpages?filter[slug][_eq]=${path}&filter[language][_eq]=${lang}`
+    )
+    if (res.data.data.length === 0) {
+      // Fall back to any language version of this slug
+      res = await axios.get(`${backendUrl}/items/staticpages?filter[slug][_eq]=${path}`)
+    }
 
-  await axios
-    .get(`${backendUrl}/items/staticpages?filter[slug][_eq]=${path}&filter[language][_eq]=${language}`)
-    .then(async (res: AxiosResponse<StaticPageResponse>) => {
-      if (res.data.data.length > 0) {
-        page.value = res.data.data[0]
-      } else {
-        // Try to fetch the default language version if the current language version doesn't exist
-        return axios.get(`${backendUrl}/items/staticpages?filter[slug][_eq]=${path}`)
-          .then((defaultRes: AxiosResponse<StaticPageResponse>) => {
-            if (defaultRes.data.data.length > 0) {
-              page.value = defaultRes.data.data[0]
-            } else {
-              // if no static page is found, redirect to 404
-              router.push('/404')
-            }
-          })
-      }
-    })
-    .catch(() => {
-      // if there's an error, redirect to 404
+    if (res.data.data.length > 0) {
+      page.value = res.data.data[0]
+    } else if (page.value === null) {
+      // Unknown page and nothing pre-rendered -> 404
       router.push('/404')
-    })
-
-  loading.value = false
+    }
+  } catch {
+    if (page.value === null) router.push('/404')
+  } finally {
+    loading.value = false
+  }
 }
 
-onBeforeMount(async () => {
-  await fetchStaticPage()
+// Swap to the matching language version from build-time data when locale changes.
+watch(language, () => {
+  const fromBundle = getPrerenderedPage(slug.value, language.value)
+  if (fromBundle) page.value = fromBundle
+  fetchStaticPage()
 })
 
-// Re-fetch the localized content when the user switches language
-watch(locale, () => {
+onMounted(() => {
   fetchStaticPage()
 })
 </script>

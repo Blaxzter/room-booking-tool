@@ -8,6 +8,8 @@
     "build": "run-p type-check \"build-only {@}\" --",
     "preview": "vite preview",
     "build-only": "vite build",
+    "pre-render": "node scripts/pre-render-static-pages.js",
+    "build:baked": "pnpm pre-render && pnpm build",
     "type-check": "vue-tsc --noEmit -p tsconfig.app.json && vue-tsc --noEmit -p tsconfig.node.json",
     "lint": "eslint .",
     "format": "prettier --write src/"
