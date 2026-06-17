@@ -77,7 +77,9 @@ bot.on('callback_query:data', async (ctx) => {
   }
 
   // Check if booking is still available and not confirmed yet
-  const booking = await client.request(readItem('booking', bookingId))
+  const booking = await client.request(readItem('booking', bookingId, {
+    fields: ['id', 'confirmed', 'bookable_object_id', 'start_date', 'end_date', 'is_full_day', 'display_name', 'mail', 'phone', 'description']
+  }))
 
   if (!booking) {
     await ctx.editMessageText('Booking has already been rejected.')
@@ -89,7 +91,9 @@ bot.on('callback_query:data', async (ctx) => {
     return
   }
 
-  const bookable_object = await client.request(readItem('bookable_object', booking.bookable_object_id))
+  const bookable_object = await client.request(readItem('bookable_object', booking.bookable_object_id, {
+    fields: ['id', 'name']
+  }))
 
   // format start_date and end_date to german human readable date with time
   const options = {
