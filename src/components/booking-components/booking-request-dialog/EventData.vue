@@ -2,27 +2,57 @@
   <form class="grid gap-5 py-4">
     <FormField name="description" v-slot="{ componentField }">
       <FormItem>
-        <FormLabel for="description"> {{ t('bookingComponents.bookingRequestDialog.eventData.description.label') }} </FormLabel>
+        <FormLabel for="description">
+          {{
+            t(
+              'bookingComponents.bookingRequestDialog.eventData.description.label'
+            )
+          }}
+        </FormLabel>
         <FormControl class="col-span-3">
           <Textarea id="description" v-bind="componentField" />
           <FormMessage />
         </FormControl>
-        <FormDescription class="col-span-4"> {{ t('bookingComponents.bookingRequestDialog.eventData.description.description') }} </FormDescription>
+        <FormDescription class="col-span-4">
+          {{
+            t(
+              'bookingComponents.bookingRequestDialog.eventData.description.description'
+            )
+          }}
+        </FormDescription>
       </FormItem>
     </FormField>
     <template v-if="displayLegal && publicBookableObjectId">
       <FormField v-slot="{ value, handleChange }" type="checkbox" name="legal">
-        <FormItem class="flex flex-row items-start gap-x-3 space-y-0 rounded-md">
+        <FormItem
+          class="flex flex-row items-start gap-x-3 space-y-0 rounded-md"
+        >
           <FormControl>
-            <Checkbox :checked="value" @update:checked="handleChange" />
+            <Checkbox :model-value="value" @update:model-value="handleChange" />
           </FormControl>
           <div class="space-y-1 leading-none">
-            <FormLabel>{{ t('bookingComponents.bookingRequestDialog.eventData.legal.label') }}</FormLabel>
+            <FormLabel>{{
+              t('bookingComponents.bookingRequestDialog.eventData.legal.label')
+            }}</FormLabel>
             <FormDescription>
-              {{ t('bookingComponents.bookingRequestDialog.eventData.legal.description') }}
-              <router-link to="/terms-of-service" class="underline">{{ t('bookingComponents.bookingRequestDialog.eventData.legal.termsOfService') }}</router-link>
-              {{ t('bookingComponents.bookingRequestDialog.eventData.legal.and') }}
-              <router-link to="/privacy" class="underline">{{ t('bookingComponents.bookingRequestDialog.eventData.legal.privacyPolicy') }}</router-link>
+              {{
+                t(
+                  'bookingComponents.bookingRequestDialog.eventData.legal.description'
+                )
+              }}
+              <router-link to="/terms-of-service" class="underline">{{
+                t(
+                  'bookingComponents.bookingRequestDialog.eventData.legal.termsOfService'
+                )
+              }}</router-link>
+              {{
+                t('bookingComponents.bookingRequestDialog.eventData.legal.and')
+              }}
+              <router-link to="/privacy" class="underline">{{
+                t(
+                  'bookingComponents.bookingRequestDialog.eventData.legal.privacyPolicy'
+                )
+              }}</router-link>
             </FormDescription>
             <FormMessage />
           </div>
@@ -37,7 +67,14 @@
 import { useForm } from 'vee-validate'
 import * as z from 'zod'
 import { toTypedSchema } from '@vee-validate/zod'
-import { FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form'
+import {
+  FormControl,
+  FormDescription,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage
+} from '@/components/ui/form'
 import { Textarea } from '@/components/ui/textarea'
 import { useI18n } from 'vue-i18n'
 
@@ -61,14 +98,26 @@ const props = defineProps<{
 
 const bookingSchema = z.object({
   description: z.string().optional(),
-  ...(displayLegal.value && publicBookableObjectId.value ? { legal: z.literal(true, { errorMap: () => ({ message: t('bookingComponents.bookingRequestDialog.eventData.legal.required') }) }) } : {})
+  ...(displayLegal.value && publicBookableObjectId.value
+    ? {
+        legal: z.literal(true, {
+          errorMap: () => ({
+            message: t(
+              'bookingComponents.bookingRequestDialog.eventData.legal.required'
+            )
+          })
+        })
+      }
+    : {})
 })
 
 const { values, validate } = useForm({
   validationSchema: toTypedSchema(bookingSchema),
   initialValues: {
     description: props.initialValues.description || '',
-    ...(displayLegal.value && publicBookableObjectId.value ? { legal: props.initialValues.legal || false } : {})
+    ...(displayLegal.value && publicBookableObjectId.value
+      ? { legal: props.initialValues.legal || false }
+      : {})
   }
 })
 

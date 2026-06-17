@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import MainNav from '@/components/nav/MainNav.vue'
 import GroupSwitcher from '@/components/groups/GroupSwitcher.vue'
-import { Search } from 'lucide-vue-next'
+import { Search } from '@lucide/vue'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import UserNav from '@/components/nav/UserNav.vue'

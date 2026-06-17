@@ -1,4 +1,19 @@
 {
+  "legal": {
+    "ariaLabel": "Rechtliche Links",
+    "termsOfService": "Nutzungsbedingungen",
+    "privacyPolicy": "Datenschutzrichtlinie",
+    "impressum": "Impressum"
+  },
+  "userNav": {
+    "profile": "Profil",
+    "lightMode": "Heller Modus",
+    "darkMode": "Dunkler Modus",
+    "settings": "Einstellungen",
+    "requestFullAccess": "Vollzugriff anfragen",
+    "buyMeACoffee": "Kauf mir einen Kaffee",
+    "logout": "Abmelden"
+  },
   "login": {
     "title": "Anmelden",
     "description": "Geben Sie Ihre E-Mail ein, um sich in Ihrem Konto anzumelden.",
@@ -95,6 +110,7 @@
       "removed": "Anfrage entfernt",
       "rejected": "Anfrage abgelehnt",
       "error": "Bei der Aktualisierung des Buchungszustands trat ein Fehler auf",
+      "unauthorized": "Sie sind nicht berechtigt, diese Buchung zu aktualisieren",
       "reject_error": "Bei der Entfernung der Anforderung trat ein Fehler auf"
     }
   },

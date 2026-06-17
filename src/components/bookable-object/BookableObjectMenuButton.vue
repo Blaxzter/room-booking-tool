@@ -2,7 +2,7 @@
 import { useRouter } from 'vue-router'
 import { useI18n } from 'vue-i18n'
 
-import { EllipsisVertical, LinkIcon, EditIcon, TrashIcon } from 'lucide-vue-next'
+import { EllipsisVertical, LinkIcon, EditIcon, TrashIcon } from '@lucide/vue'
 
 import { Button } from '@/components/ui/button'
 import {

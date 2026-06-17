@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ChevronRight, ChevronLeft } from 'lucide-vue-next'
+import { ChevronRight, ChevronLeft } from '@lucide/vue'
 import { Button } from '@/components/ui/button'
 import { useI18n } from 'vue-i18n'
 

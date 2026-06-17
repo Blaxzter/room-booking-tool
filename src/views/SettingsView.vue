@@ -71,9 +71,9 @@ onMounted(async () => {
     <Separator class="my-6" />
     <div
       class="flex flex-col space-y-8 md:flex-row md:space-x-12 md:space-y-0 h-full"
-      style="max-height: calc(100% - 74px);"
+      style="max-height: calc(100% - 74px)"
     >
-      <aside class="md:-mx-4 md:w-1/5">
+      <aside class="md:w-1/5">
         <SidebarNav v-model="selectedPage" />
       </aside>
       <div class="h-full overflow-hidden flex-grow">

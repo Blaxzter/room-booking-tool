@@ -2,10 +2,13 @@ import { ref, type Ref, computed, watch } from 'vue'
 import { defineStore, storeToRefs } from 'pinia'
 import { readRoles, readSingleton } from '@directus/sdk'
 import { useUser } from '@/stores/user'
+import { prerenderedSettings } from '@/lib/prerendered-data'
 
 export const useGlobalSettings = defineStore('globalSettings', () => {
-  const displayLegal: Ref<boolean> = ref(false)
-  const showBuyMeACoffee: Ref<boolean> = ref(true)
+  // Seed from build-time data so pre-rendered pages have the correct values;
+  // fetchGlobalSetting() refreshes from the live backend on the client.
+  const displayLegal: Ref<boolean> = ref(prerenderedSettings.displayLegal ?? false)
+  const showBuyMeACoffee: Ref<boolean> = ref(prerenderedSettings.showBuyMeACoffee ?? true)
   const demoUser: Ref<boolean> = ref(false)
 
   const demoDialogOpen = ref(true)

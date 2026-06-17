@@ -33,7 +33,7 @@ services:
       - postgres_data:/var/lib/postgresql/data
     networks:
       - directus-net
-    restart: always
+    restart: unless-stopped
     environment:
       POSTGRES_USER: '${POSTGRES_USER}'
       POSTGRES_PASSWORD: '${POSTGRES_PASSWORD}'
@@ -43,7 +43,7 @@ services:
 
   cache:
     image: redis:6
-    restart: always
+    restart: unless-stopped
     networks:
       - directus-net
 
@@ -52,7 +52,7 @@ services:
     build:
       context: ./
       dockerfile: Dockerfile.directus
-    restart: always
+    restart: unless-stopped
     ports:
       - ${BACKEND_PUBLIC_PORT}:8055
     volumes:
@@ -129,9 +129,9 @@ services:
     # build:
     #   context: ./telegram-bot/
     environment:
-      VITE_BACKEND_URL: "${TELEGRAM_BACKEND_ADDRESS}"
-      TELEGRAM_DIRECTUS_API_KEY: "${TELEGRAM_DIRECTUS_API_KEY}"
-      TELEGRAM_BOT_TOKEN: "${TELEGRAM_BOT_TOKEN}"
+      VITE_BACKEND_URL: '${TELEGRAM_BACKEND_ADDRESS}'
+      TELEGRAM_DIRECTUS_API_KEY: '${TELEGRAM_DIRECTUS_API_KEY}'
+      TELEGRAM_BOT_TOKEN: '${TELEGRAM_BOT_TOKEN}'
       PORT: 3000
 
       # VIRTUAL_HOST: "${TELEGRAM_VIRTUAL_HOST}"
@@ -139,8 +139,8 @@ services:
       # LETSENCRYPT_HOST: "${TELEGRAM_VIRTUAL_HOST}"
       # LETSENCRYPT_EMAIL: "${LETSENCRYPT_EMAIL}"
     ports:
-      - "12000:3000"
-    restart: always
+      - '12000:3000'
+    restart: unless-stopped
     networks:
       - directus-net
       # - nginx-net

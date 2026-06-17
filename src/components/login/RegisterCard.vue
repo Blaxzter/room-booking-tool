@@ -6,7 +6,6 @@ import { toTypedSchema } from '@vee-validate/zod'
 import * as z from 'zod'
 import { storeToRefs } from 'pinia'
 
-
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import {
@@ -43,11 +42,9 @@ const signupSchema = z.object({
     .email('Email must be valid')
     .min(1, { message: 'Email is required' }),
   legal: displayLegal.value
-    ? z
-        .boolean()
-        .refine((value) => value === true, {
-          message: 'You must agree to the terms and conditions'
-        })
+    ? z.boolean().refine((value) => value === true, {
+        message: 'You must agree to the terms and conditions'
+      })
     : z.boolean().optional(),
   password: z
     .string()
@@ -117,7 +114,9 @@ const onSubmit = async () => {
         <div class="grid grid-cols-2 gap-4">
           <FormField name="first_name" v-slot="{ componentField }">
             <FormItem>
-              <FormLabel for="first-name">{{ t('register.firstName') }}*</FormLabel>
+              <FormLabel for="first-name"
+                >{{ t('register.firstName') }}*</FormLabel
+              >
               <FormControl class="col-span-3">
                 <Input id="first-name" v-bind="componentField" />
                 <FormMessage />
@@ -126,7 +125,9 @@ const onSubmit = async () => {
           </FormField>
           <FormField name="last_name" v-slot="{ componentField }">
             <FormItem>
-              <FormLabel for="last-name">{{ t('register.lastName') }}*</FormLabel>
+              <FormLabel for="last-name"
+                >{{ t('register.lastName') }}*</FormLabel
+              >
               <FormControl class="col-span-3">
                 <Input id="last-name" v-bind="componentField" />
                 <FormMessage />
@@ -162,7 +163,10 @@ const onSubmit = async () => {
               class="flex flex-row items-start gap-x-3 space-y-0 rounded-md"
             >
               <FormControl>
-                <Checkbox :checked="value" @update:checked="handleChange" />
+                <Checkbox
+                  :model-value="value"
+                  @update:model-value="handleChange"
+                />
               </FormControl>
               <div class="space-y-1 leading-none">
                 <FormLabel>{{ t('register.legal.agree') }}</FormLabel>
@@ -187,8 +191,8 @@ const onSubmit = async () => {
       </form>
       <div class="mt-4 text-center text-sm max-w-sm m-auto">
         {{ t('register.haveAccount') }}
-        <router-link to="/login" class="underline"> 
-          {{ t('register.signIn') }} 
+        <router-link to="/login" class="underline">
+          {{ t('register.signIn') }}
         </router-link>
       </div>
     </CardContent>

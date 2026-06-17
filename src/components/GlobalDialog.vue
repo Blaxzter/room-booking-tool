@@ -1,6 +1,6 @@
 <template>
   <Dialog v-model:open="isOpen" @close="handleClose">
-    <DialogContent :trap-focus="true" :is-global="true">
+    <DialogContent :trap-focus="true" :isGlobal="true">
       <DialogHeader>
         <DialogTitle :class="[`text-${options?.type || 'default'}`]">
           {{ options?.title }}
@@ -13,11 +13,12 @@
         <Button variant="outline" @click="handleCancel">
           {{ options?.cancelText || 'Cancel' }}
         </Button>
-        <Button 
-          :variant="getConfirmButtonVariant()" 
-          @click="handleConfirm"
-        >
-          <component :is="options?.confirmIcon" v-if="options?.confirmIcon" class="h-4 w-4 mr-2" />
+        <Button :variant="getConfirmButtonVariant()" @click="handleConfirm">
+          <component
+            :is="options?.confirmIcon"
+            v-if="options?.confirmIcon"
+            class="h-4 w-4 mr-2"
+          />
           {{ options?.confirmText || 'Confirm' }}
         </Button>
       </DialogFooter>
@@ -34,7 +35,7 @@ import {
   DialogContent,
   DialogHeader,
   DialogTitle,
-  DialogFooter,
+  DialogFooter
 } from '@/components/ui/dialog'
 
 import { Button } from '@/components/ui/button'
@@ -73,4 +74,4 @@ const handleCancel = async () => {
 .drawer-content {
   z-index: 1000 !important;
 }
-</style> 
+</style>

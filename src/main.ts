@@ -1,4 +1,4 @@
-import './assets/main.scss'
+import './assets/main.css'
 
 import { createApp } from 'vue'
 import { createI18n } from 'vue-i18n'
@@ -39,7 +39,8 @@ const getPreferredLanguage = (): 'en-US' | 'de-DE' => {
   return 'en-US'
 }
 
-const i18n = createI18n<[MessageSchema], 'en-US' | 'de-DE'>({
+const i18n = createI18n<[MessageSchema], 'en-US' | 'de-DE', false>({
+  legacy: false,
   locale: getPreferredLanguage(),
   messages: {
     'en-US': enUS,

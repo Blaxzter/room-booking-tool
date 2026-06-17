@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { ref, computed, inject } from 'vue'
 import { storeToRefs } from 'pinia'
-import { SendIcon, TrashIcon } from 'lucide-vue-next'
+import { SendIcon, TrashIcon } from '@lucide/vue'
 import _ from 'lodash'
 import { useMediaQuery } from '@vueuse/core'
 import { useI18n } from 'vue-i18n'

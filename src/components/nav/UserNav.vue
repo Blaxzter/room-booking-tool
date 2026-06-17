@@ -2,8 +2,15 @@
 import { onMounted, ref } from 'vue'
 import { storeToRefs } from 'pinia'
 import { useDark, useToggle } from '@vueuse/core'
+import { useI18n } from 'vue-i18n'
 import router from '@/router'
-import { MailIcon, LogOutIcon, CogIcon, PersonStandingIcon, SunMoonIcon } from 'lucide-vue-next'
+import {
+  MailIcon,
+  LogOutIcon,
+  SettingsIcon,
+  SunMoonIcon,
+  UserIcon
+} from '@lucide/vue'
 
 import {
   DropdownMenu,
@@ -20,6 +27,9 @@ import { Button } from '@/components/ui/button'
 
 import { useUser } from '@/stores/user'
 import DarkscreenToggle from '@/components/animations/DarkscreenToggle.vue'
+import LegalLinks from '@/components/utils/LegalLinks.vue'
+
+const { t } = useI18n()
 
 const isDark = useDark()
 const toggleDark = useToggle(isDark)
@@ -46,8 +56,8 @@ onMounted(async () => {
 })
 
 import { useGlobalSettings } from '@/stores/globalSettings'
-const { displayLegal, showBuyMeACoffee, isDemoUser, demoDialogOpen  } = storeToRefs(useGlobalSettings())
-
+const { displayLegal, showBuyMeACoffee, isDemoUser, demoDialogOpen } =
+  storeToRefs(useGlobalSettings())
 </script>
 
 <template>
@@ -64,14 +74,19 @@ const { displayLegal, showBuyMeACoffee, isDemoUser, demoDialogOpen  } = storeToR
       <DropdownMenuLabel class="font-normal flex">
         <div class="flex flex-col space-y-1">
           <p class="text-sm font-medium leading-none">{{ name }}</p>
-          <p class="text-xs leading-none text-muted-foreground" v-if="hasName">{{ email }}</p>
+          <p class="text-xs leading-none text-muted-foreground" v-if="hasName">
+            {{ email }}
+          </p>
         </div>
       </DropdownMenuLabel>
       <DropdownMenuSeparator />
       <DropdownMenuGroup>
-        <DropdownMenuItem @click="router.push({ name: 'settings', params: { tab: 'profile' } })" class="cursor-pointer">
-          <PersonStandingIcon class="mr-2 h-4 w-4" />
-          Profile
+        <DropdownMenuItem
+          @click="router.push({ name: 'settings', params: { tab: 'profile' } })"
+          class="cursor-pointer"
+        >
+          <UserIcon class="mr-2 h-4 w-4" />
+          {{ t('userNav.profile') }}
           <DropdownMenuShortcut>⇧⌘P</DropdownMenuShortcut>
         </DropdownMenuItem>
         <DropdownMenuItem
@@ -81,14 +96,20 @@ const { displayLegal, showBuyMeACoffee, isDemoUser, demoDialogOpen  } = storeToR
           @mouseleave="toggleDarkmodeAnimation = false"
         >
           <SunMoonIcon class="mr-2 h-4 w-4" />
-          <span v-if="isDark">Light mode</span>
-          <span v-else>Dark mode</span>
+          <span v-if="isDark">{{ t('userNav.lightMode') }}</span>
+          <span v-else>{{ t('userNav.darkMode') }}</span>
           <div class="flex-grow" />
-          <DarkscreenToggle :height="30" :toggle-animation="toggleDarkmodeAnimation" />
+          <DarkscreenToggle
+            :height="30"
+            :toggle-animation="toggleDarkmodeAnimation"
+          />
         </DropdownMenuItem>
-        <DropdownMenuItem @click="router.push({ name: 'settings', params: { tab: 'account' } })" class="cursor-pointer">
-          <CogIcon class="mr-2 h-4 w-4" />
-          Settings
+        <DropdownMenuItem
+          @click="router.push({ name: 'settings', params: { tab: 'account' } })"
+          class="cursor-pointer"
+        >
+          <SettingsIcon class="mr-2 h-4 w-4" />
+          {{ t('userNav.settings') }}
           <DropdownMenuShortcut>⌘S</DropdownMenuShortcut>
         </DropdownMenuItem>
       </DropdownMenuGroup>
@@ -96,29 +117,36 @@ const { displayLegal, showBuyMeACoffee, isDemoUser, demoDialogOpen  } = storeToR
       <template v-if="isDemoUser">
         <DropdownMenuItem class="cursor-pointer" @click="demoDialogOpen = true">
           <MailIcon class="mr-2 h-4 w-4" />
-          Request Full Access
+          {{ t('userNav.requestFullAccess') }}
         </DropdownMenuItem>
       </template>
       <template v-if="showBuyMeACoffee">
         <DropdownMenuItem>
-          <a href="https://www.buymeacoffee.com/fabraham" target="_blank" rel="noopener noreferrer" class="flex">
-            <img src="https://www.buymeacoffee.com/assets/img/BMC-btn-logo.svg" alt="Buy Freddy a coffee" class="buy-me-a-coffee-icon" />
-            Buy me a coffee
+          <a
+            href="https://www.buymeacoffee.com/fabraham"
+            target="_blank"
+            rel="noopener noreferrer"
+            class="flex gap-2"
+          >
+            <img
+              src="https://www.buymeacoffee.com/assets/img/BMC-btn-logo.svg"
+              alt="Buy Freddy a coffee"
+              class="buy-me-a-coffee-icon"
+            />
+            {{ t('userNav.buyMeACoffee') }}
           </a>
         </DropdownMenuItem>
       </template>
       <DropdownMenuSeparator />
       <DropdownMenuItem @click="logout" class="cursor-pointer">
         <LogOutIcon class="mr-2 h-4 w-4" />
-        Log out
+        {{ t('userNav.logout') }}
         <DropdownMenuShortcut>⇧⌘Q</DropdownMenuShortcut>
       </DropdownMenuItem>
-      <DropdownMenuSeparator />
-      <div class="text-[10px] text-muted-foreground py-1 text-center" v-if="displayLegal">
-        <router-link to="/terms-of-service" class="underline"> Terms of Service </router-link>
-        &
-        <router-link to="/privacy" class="underline"> Privacy Policy </router-link>
-      </div>
+      <template v-if="displayLegal">
+        <DropdownMenuSeparator />
+        <LegalLinks class="py-1" />
+      </template>
     </DropdownMenuContent>
   </DropdownMenu>
 </template>

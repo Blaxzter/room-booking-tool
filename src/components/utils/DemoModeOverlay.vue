@@ -8,12 +8,12 @@ import {
   DialogDescription,
   DialogFooter,
   DialogHeader,
-  DialogTitle,
+  DialogTitle
 } from '@/components/ui/dialog'
 import { Textarea } from '@/components/ui/textarea'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
-import { Checkbox  } from '@/components/ui/checkbox'
+import { Checkbox } from '@/components/ui/checkbox'
 import { useI18n } from 'vue-i18n'
 
 import { useGlobalSettings } from '@/stores/globalSettings'
@@ -35,12 +35,12 @@ defineEmits(['close', 'created'])
 const props = defineProps({
   startOpen: {
     type: Boolean,
-    default: true,
+    default: true
   },
   identifier: {
     type: String,
-    default: '1',
-  },
+    default: '1'
+  }
 })
 
 const dontShowAgainChange = () => {
@@ -72,7 +72,7 @@ const validateEmail = () => {
     .toLowerCase()
     .match(
       /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|.(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
-    );
+    )
 }
 
 const sendMemberRequest = async () => {
@@ -84,7 +84,9 @@ const sendMemberRequest = async () => {
   }
 
   if (!validateEmail()) {
-    error_message_contact.value = t('demoMode.contactRequest.validation.invalidEmail')
+    error_message_contact.value = t(
+      'demoMode.contactRequest.validation.invalidEmail'
+    )
     isError = true
   }
 
@@ -93,45 +95,52 @@ const sendMemberRequest = async () => {
   }
 
   await axios
-    .post(`${backendUrl}/flows/trigger/67797215-97a3-4e68-8191-547fcae7a23d`, {
-      message: message.value,
-      contactEmail: contactEmail.value,
-    }, {
-      headers: {
-        'Content-Type': 'application/json',
-        Authorization: `Bearer ${localStorage.getItem('access_token')}`,
+    .post(
+      `${backendUrl}/flows/trigger/67797215-97a3-4e68-8191-547fcae7a23d`,
+      {
+        message: message.value,
+        contactEmail: contactEmail.value
       },
-    })
+      {
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${localStorage.getItem('access_token')}`
+        }
+      }
+    )
     .then(async (res: AxiosResponse<any>) => {
       console.log('res:', res)
-      if (res.data.name === "DirectusError") {
+      if (res.data.name === 'DirectusError') {
         toast({
           title: t('demoMode.contactRequest.toast.error.title'),
-          description: res.data.code === '400' ? t('demoMode.contactRequest.toast.error.userExists') : t('demoMode.contactRequest.toast.error.description'),
-          variant: 'destructive',
+          description:
+            res.data.code === '400'
+              ? t('demoMode.contactRequest.toast.error.userExists')
+              : t('demoMode.contactRequest.toast.error.description'),
+          variant: 'destructive'
         })
         return
       }
       toast({
         title: t('demoMode.contactRequest.toast.requestSent.title'),
         description: t('demoMode.contactRequest.toast.requestSent.description'),
-        variant: 'success',
+        variant: 'success'
       })
-    }).catch((err) => {
+    })
+    .catch((err) => {
       console.error('err:', err)
       toast({
         title: t('demoMode.contactRequest.toast.error.title'),
         description: t('demoMode.contactRequest.toast.error.description'),
-        variant: 'destructive',
+        variant: 'destructive'
       })
     })
   demoDialogOpen.value = false
 }
-
 </script>
 
 <template>
-  <Dialog v-model:open="demoDialogOpen" v-if="isDemoUser" >
+  <Dialog v-model:open="demoDialogOpen" v-if="isDemoUser">
     <DialogContent class="sm:max-w-[450px]">
       <DialogHeader>
         <DialogTitle>{{ t('demoMode.title') }}</DialogTitle>
@@ -139,15 +148,9 @@ const sendMemberRequest = async () => {
           <div>
             {{ t('demoMode.description') }}
           </div>
-          <div>
-            - {{ t('demoMode.limits.objects') }}
-          </div>
-          <div>
-            - {{ t('demoMode.limits.requests') }}
-          </div>
-          <div>
-            - {{ t('demoMode.limits.groups') }}
-          </div>
+          <div>- {{ t('demoMode.limits.objects') }}</div>
+          <div>- {{ t('demoMode.limits.requests') }}</div>
+          <div>- {{ t('demoMode.limits.groups') }}</div>
 
           <div class="mt-2">
             {{ t('demoMode.contactRequest.intro') }}
@@ -170,7 +173,12 @@ const sendMemberRequest = async () => {
         <Label for="message">
           {{ t('demoMode.contactRequest.messageLabel') }}
         </Label>
-        <Textarea id="message" :placeholder="t('demoMode.contactRequest.messagePlaceholder')" class="col-span-3" v-model="message" />
+        <Textarea
+          id="message"
+          :placeholder="t('demoMode.contactRequest.messagePlaceholder')"
+          class="col-span-3"
+          v-model="message"
+        />
         <div class="text-muted-foreground text-sm mt-2">
           {{ t('demoMode.contactRequest.messageHelp') }}
         </div>
@@ -183,8 +191,8 @@ const sendMemberRequest = async () => {
           <Checkbox
             id="demo-checkbox"
             type="checkbox"
-            :checked="dontShowAgain"
-            @update:checked="dontShowAgainChange"
+            :model-value="dontShowAgain"
+            @update:model-value="dontShowAgainChange"
           />
           <span>{{ t('demoMode.contactRequest.dontShowAgain') }}</span>
         </Label>

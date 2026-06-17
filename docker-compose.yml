@@ -1,31 +1,29 @@
 networks:
   directus-net:
-  # Only required when running behind a reverse proxy like nginx-proxy: I use this one https://github.com/evertramos/nginx-proxy-automation?tab=readme-ov-file
-  # nginx-net:
-  #   external:
-  #     name: nginx-net
+  traefik:
+    external: true
 
 services:
   frontend:
     image: blaxzter/bookitool-frontend:latest
     depends_on:
       - directus
-    restart: "unless-stopped"
+    restart: 'unless-stopped'
     networks:
       - directus-net
-    #  - nginx-net
+      - traefik
     env_file:
       - .env
     environment:
-      VITE_BACKEND_URL: "${VITE_BACKEND_URL}"
-      VITE_FRONTEND_URL: "${VITE_FRONTEND_URL}"
-
-      # Only required when running behind a reverse proxy like nginx-proxy
-      # VIRTUAL_HOST: "${VIRTUAL_HOST}"
-      # LETSENCRYPT_HOST: "${LETSENCRYPT_HOST}"
-      # LETSENCRYPT_EMAIL: "${LETSENCRYPT_EMAIL}"
-    ports:
-      - ${FRONTEND_PUBLIC_PORT}:80
+      VITE_BACKEND_URL: '${VITE_BACKEND_URL}'
+      VITE_FRONTEND_URL: '${VITE_FRONTEND_URL}'
+    # Traefik labels for routing
+    labels:
+      - 'traefik.enable=true'
+      - 'traefik.http.routers.frontend.rule=Host(`${VIRTUAL_HOST}`)'
+      - 'traefik.http.routers.frontend.entrypoints=web'
+      - 'traefik.http.services.frontend.loadbalancer.server.port=80'
+    # ports removed; handled by external Traefik
 
   database:
     image: postgis/postgis:13-master
@@ -52,8 +50,7 @@ services:
   directus:
     image: blaxzter/bookitool-directus:latest
     restart: always
-    ports:
-      - ${BACKEND_PUBLIC_PORT}:8055
+    # ports removed; handled by external Traefik
     volumes:
       - directus_uploads:/directus/uploads
       # If you want to load extensions from the host
@@ -63,7 +60,7 @@ services:
       - database
     networks:
       - directus-net
-      # - nginx-net
+      - traefik
     environment:
       KEY: '${KEY}'
       SECRET: '${SECRET}'
@@ -121,6 +118,13 @@ services:
 
       TELEGRAM_URL: '${TELEGRAM_URL}'
 
+    # Traefik labels for routing
+    labels:
+      - 'traefik.enable=true'
+      - 'traefik.http.routers.directus.rule=Host(`${PUBLIC_URL}`)'
+      - 'traefik.http.routers.directus.entrypoints=web'
+      - 'traefik.http.services.directus.loadbalancer.server.port=8055'
+
   booki-tool-telegram-bot:
     profiles:
       - telegram
@@ -128,21 +132,22 @@ services:
     # build:
     #   context: ./telegram-bot/
     environment:
-      VITE_BACKEND_URL: "${TELEGRAM_BACKEND_ADDRESS}"
-      TELEGRAM_DIRECTUS_API_KEY: "${TELEGRAM_DIRECTUS_API_KEY}"
-      TELEGRAM_BOT_TOKEN: "${TELEGRAM_BOT_TOKEN}"
+      VITE_BACKEND_URL: '${TELEGRAM_BACKEND_ADDRESS}'
+      TELEGRAM_DIRECTUS_API_KEY: '${TELEGRAM_DIRECTUS_API_KEY}'
+      TELEGRAM_BOT_TOKEN: '${TELEGRAM_BOT_TOKEN}'
       PORT: 3000
-
-      # VIRTUAL_HOST: "${TELEGRAM_VIRTUAL_HOST}"
-      # VIRTUAL_PORT: 3000
-      # LETSENCRYPT_HOST: "${TELEGRAM_VIRTUAL_HOST}"
-      # LETSENCRYPT_EMAIL: "${LETSENCRYPT_EMAIL}"
-    ports:
-      - "12000:3000"
+    # Traefik labels for routing
+    labels:
+      - 'traefik.enable=true'
+      - 'traefik.http.routers.telegram-bot.rule=Host(`${TELEGRAM_VIRTUAL_HOST}`)'
+      - 'traefik.http.routers.telegram-bot.entrypoints=web'
+      - 'traefik.http.services.telegram-bot.loadbalancer.server.port=3000'
+    # ports removed; handled by external Traefik
     restart: always
     networks:
       - directus-net
-      # - nginx-net
+      - traefik
+  # No internal Traefik service; handled by external reverse proxy
 
 volumes:
   postgres_data:

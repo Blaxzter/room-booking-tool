@@ -3,7 +3,7 @@ import { computed, type PropType, ref, onMounted, inject } from 'vue'
 import { PlusCircledIcon, CopyIcon } from '@radix-icons/vue'
 import { useRoute } from 'vue-router'
 import { useI18n } from 'vue-i18n'
-import { EllipsisVertical, EditIcon } from 'lucide-vue-next'
+import { EllipsisVertical, EditIcon } from '@lucide/vue'
 import {
   DropdownMenu,
   DropdownMenuContent,

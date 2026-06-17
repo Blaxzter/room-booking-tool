@@ -175,13 +175,13 @@ export type NotificationSetting = {
 }
 
 export type UpdateUserRequest = {
-  first_name: string
-  last_name: string
-  email: string
-  avatar: string | null
-  display_name: string
-  telegram_user_id: string | null
-  telegram_user_name: string | null
+  first_name?: string
+  last_name?: string
+  email?: string
+  avatar?: string | null
+  display_name?: string
+  telegram_user_id?: string | null
+  telegram_user_name?: string | null
 }
 
 export type CreateUserRequest = {

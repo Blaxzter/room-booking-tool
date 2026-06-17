@@ -1,4 +1,19 @@
 {
+  "legal": {
+    "ariaLabel": "Legal links",
+    "termsOfService": "Terms of Service",
+    "privacyPolicy": "Privacy Policy",
+    "impressum": "Imprint"
+  },
+  "userNav": {
+    "profile": "Profile",
+    "lightMode": "Light mode",
+    "darkMode": "Dark mode",
+    "settings": "Settings",
+    "requestFullAccess": "Request Full Access",
+    "buyMeACoffee": "Buy me a coffee",
+    "logout": "Log out"
+  },
   "login": {
     "title": "Login",
     "description": "Enter your email below to login to your account.",
